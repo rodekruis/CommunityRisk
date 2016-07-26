@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <button class="btn btn-primary pull-right" ng-click="ok()">X</button>
+    <h3 class="modal-title" translate>Info</h3>
+</div>
+<div class="modal-body">
+        <div>
+            <label><span translate>Map</span>: {{infos.title}}</label>
+            <div>{{infos.info}}</div>
+            <br />
+        </div>
+        <div ng-repeat="info in infos.layers">
+            <label><span translate>Layer</span>: {{info.title}}</label>
+            <div>{{info.info}}</div>
+            <br />
+        </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>

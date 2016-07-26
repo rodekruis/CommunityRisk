@@ -1,0 +1,231 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: im\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_EN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.7\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Change Password"
+msgstr "Change Password"
+
+#: public/modules/users/views/signin.client.view.html
+msgid "Click here to access digidoc with your red cross account"
+msgstr "Click here to access digidoc with your red cross account"
+
+#: public/modules/users/views/settings/social-accounts.client.view.html
+msgid "Connect other social accounts:"
+msgstr "Connect other social accounts:"
+
+#: public/modules/users/views/signup.client.view.html
+msgid "Create an account"
+msgstr "Create an account"
+
+#: public/modules/dashboards/config/dashboards.client.config.js
+msgid "Dashboards"
+msgstr "Dashboards"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Edit Profile"
+msgstr "Edit Profile"
+
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Edit your profile"
+msgstr "Edit your profile"
+
+#: public/modules/users/views/signup.client.view.html
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Email"
+msgstr "Email"
+
+#: public/modules/users/views/signup.client.view.html
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "First Name"
+msgstr "First Name"
+
+#: public/modules/users/views/signin.client.view.html
+msgid ""
+"For @redcross.nl addresses, enter your @redcross.nl email address. You will "
+"be redirected to another page. On this page, use your redcross\\username and "
+"password to sign in"
+msgstr ""
+"For @redcross.nl addresses, enter your @redcross.nl email address. You will "
+"be redirected to another page. On this page, use your redcross\\username and "
+"password to sign in"
+
+#: public/modules/users/views/signin.client.view.html
+msgid ""
+"For @rodekruis.nl addresses, simply enter your emailaddress and password to "
+"sign in"
+msgstr ""
+"For @rodekruis.nl addresses, simply enter your emailaddress and password to "
+"sign in"
+
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Language"
+msgstr "Language"
+
+#: public/modules/users/views/signup.client.view.html
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Last Name"
+msgstr "Last Name"
+
+#: public/modules/users/views/signin.client.view.html
+msgid "Login explanation"
+msgstr "Login explanation"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Manage Social Accounts"
+msgstr "Manage Social Accounts"
+
+#: public/modules/users/views/signup.client.view.html
+msgid "Password"
+msgstr "Password"
+
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Profile Saved Successfully"
+msgstr "Profile Saved Successfully"
+
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Save Profile"
+msgstr "Save Profile"
+
+#: public/modules/core/views/header.client.view.html
+#: public/modules/users/views/signup.client.view.html
+msgid "Signin"
+msgstr "Signin"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Signout"
+msgstr "Signout"
+
+#: public/modules/users/views/signup.client.view.html
+msgid "Signup"
+msgstr "Signup"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Toggle navigation"
+msgstr "Toggle navigation"
+
+#: public/modules/users/views/signup.client.view.html
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Username"
+msgstr "Username"
+
+#: public/modules/users/views/signin.client.view.html
+msgid ""
+"You are being directed to a microsoft login page. Please use it as follows:"
+msgstr ""
+"You are being directed to a microsoft login page. Please use it as follows:"
+
+#~ msgid "All"
+#~ msgstr "All"
+
+#~ msgid "Create map"
+#~ msgstr "Create map"
+
+#~ msgid "Data management"
+#~ msgstr "Data management"
+
+#~ msgid "Edit Source"
+#~ msgstr "Edit Source"
+
+#~ msgid "Edit map"
+#~ msgstr "Edit map"
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Info"
+#~ msgstr "Info"
+
+#~ msgid "Layer"
+#~ msgstr "Layer"
+
+#~ msgid "Layers"
+#~ msgstr "Layers"
+
+#~ msgid "Legend"
+#~ msgstr "Legend"
+
+#~ msgid "Map"
+#~ msgstr "Map"
+
+#~ msgid "Map name"
+#~ msgstr "Map name"
+
+#~ msgid "Maps"
+#~ msgstr "Maps"
+
+#~ msgid "Name"
+#~ msgstr "Name"
+
+#~ msgid "New Source"
+#~ msgstr "New Source"
+
+#~ msgid "No Sources yet, why don't you"
+#~ msgstr "No Sources yet, why don't you"
+
+#~ msgid "No maps yet, why don't you"
+#~ msgstr "No maps yet, why don't you"
+
+#~ msgid "Select a awesome font icon"
+#~ msgstr "Select a awesome font icon"
+
+#~ msgid "Select a bootstrap icon"
+#~ msgstr "Select a bootstrap icon"
+
+#~ msgid "Select a humanitarian font icon"
+#~ msgstr "Select a humanitarian font icon"
+
+#~ msgid "Select a relief-web font icon"
+#~ msgstr "Select a relief-web font icon"
+
+#~ msgid "Share"
+#~ msgstr "Share"
+
+#~ msgid "Sources"
+#~ msgstr "Sources"
+
+#~ msgid "Use this link to share the map in its current view"
+#~ msgstr "Use this link to share the map in its current view"
+
+#~ msgid "Web monitor"
+#~ msgstr "Web monitor"
+
+#~ msgid "create"
+#~ msgstr "create"
+
+#~ msgid "make"
+#~ msgstr "make"
+
+#~ msgid "next"
+#~ msgstr "next"
+
+#~ msgid "one"
+#~ msgstr "one"
+
+#~ msgid "previous"
+#~ msgstr "previous"
+
+#~ msgid "rotate"
+#~ msgstr "rotate"
+
+#~ msgid "@redcross.nl email"
+#~ msgstr "@redcross.nl email"
+
+#~ msgid "Access your account with your @rodekruis.nl account"
+#~ msgstr "Access your account with your @rodekruis.nl account"
+
+#~ msgid "Or with your account"
+#~ msgstr "Or with your account"
+
+#~ msgid "Map: {{map.title}}"
+#~ msgstr "Map: {{map.title}}"

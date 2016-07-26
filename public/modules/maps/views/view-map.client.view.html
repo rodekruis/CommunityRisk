@@ -1,0 +1,37 @@
+ <section data-ng-controller="MapsController" data-ng-init="findOne()">
+       <div class="mapHeader">	      
+	      <div class="btn-toolbar" role="toolbar">
+		     <div class="btn-group hidden-xs">
+			    <button type="button" class="btn btn-default">{{map.title}}</button>
+		     </div>
+			 <div class="btn-group">
+				  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					 <span translate>Layers</span> <span class="caret"></span>
+				  </button>
+				  <div class="dropdown-menu">
+				    <div class="btn-group btn-wide">
+					     <nav id='menu-ui-layers' class='menu-ui'>
+						 <a href="#" ng-repeat="layer in overlayLayers" class="active_{{layer.options.visible}}" ng-click="toggleLayer(layer, $event)">{{layer.layer_name}}</a>
+					     </nav>
+					</div>
+				  </div>
+			 </div>
+			<div class="btn-group">
+			<div class="btn btn-default" ng-legend-click size="lg"><span class="glyphicon glyphicon-list-alt"></span></div>
+			<div class="btn btn-default" ng-info-click size="lg"><span class="glyphicon glyphicon-info-sign"></span></div>
+			<div id="findbox" class="btn btn-default"></div>
+			<div class="btn btn-default" ng-share-click size="lg"><span class="glyphicon glyphicon glyphicon-share"></span></div>
+		     </div>
+
+	       </div>
+       </div>
+       <div>
+	      <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+       </div>
+       	<div cg-busy="{promise:loading, message:'Loading'}"></div>
+        <div>
+	      <p class="lead" data-ng-init="loadLayers();">
+		    <leaflet defaults="defaults" heightresize class="mapView"></leaflet>
+	      </p>
+        </div>
+</section>

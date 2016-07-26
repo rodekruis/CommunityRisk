@@ -1,0 +1,33 @@
+ [{
+    "District":"Groningen",
+    "Activity":"Bevolkingszorg",
+	"DistrictCode":"1",
+	"RefugeesHelped": 29500,
+	"Deployments" : 45,
+	"Beds": 200
+  },
+  {
+    "District":"Groningen",
+    "Activity":"Bevolkingszorg",
+	"DistrictCode":"1",
+	"RefugeesHelped": 500,
+	"Deployments" : 30,
+	"Beds": 100
+  },
+  {
+    "District":"Drenthe",
+    "Activity":"Bevolkingszorg",
+	"DistrictCode":"3",
+	"RefugeesHelped": 5000,	
+	"Deployments" : 45,
+	"Beds": 10000
+  },
+  {
+    "District":"Utrecht",
+    "Activity":"Bevolkingszorg",
+	"DistrictCode":"9",
+	"RefugeesHelped": 4200,	
+	"Deployments" : 15,
+	"Beds": 100
+  }
+  ]

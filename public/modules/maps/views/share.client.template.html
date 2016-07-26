@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <button class="btn btn-primary pull-right" ng-click="ok()">X</button>
+    <h3 class="modal-title" translate>Share</h3>
+</div>
+<div class="modal-body">
+        <div class="row row-no-padding">
+            <span translate>Use this link to share the map in its current view</span>
+            <input type="text" onFocus="this.select()" value="{{baseUrl}}{{mapParameters}}/{{mapCenter.lat}}/{{mapCenter.lng}}/{{mapCenter.zoom}}/{{activeLayers}}" class="form-control">
+        </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>

@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <button class="btn btn-primary pull-right" ng-click="ok()">X</button>
+    <h3 class="modal-title" translate>Legend</h3>
+</div>
+<div class="modal-body">
+        <div ng-repeat="legend in visualisationLegends">
+            <label>{{legend.name}}</label>
+            <div ng-bind-html="legend.html | unsafehtml"></div>
+            <br />
+        </div>
+        <div ng-repeat="legend in wmsLegends">
+            <label>{{legend.name}}</label>
+            <div><img src="{{legend.url}}" alt="{{legend.name}}"></div>
+            <br />
+        </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>

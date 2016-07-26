@@ -1,0 +1,238 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: im\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.7\n"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Change Password"
+msgstr "Wachtwoord wijzigen"
+
+#: public/modules/users/views/signin.client.view.html
+msgid "Click here to access digidoc with your red cross account"
+msgstr "Klik hier om aan te melden met uw Rode Kruis account"
+
+#: public/modules/users/views/settings/social-accounts.client.view.html
+msgid "Connect other social accounts:"
+msgstr "Account koppelen"
+
+#: public/modules/users/views/signup.client.view.html
+msgid "Create an account"
+msgstr "Een account aanmaken"
+
+#: public/modules/dashboards/config/dashboards.client.config.js
+msgid "Dashboards"
+msgstr "Dashboards"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Edit Profile"
+msgstr "Profiel aanpassen"
+
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Edit your profile"
+msgstr "Profiel aanpassen"
+
+#: public/modules/users/views/signup.client.view.html
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Email"
+msgstr "Email"
+
+#: public/modules/users/views/signup.client.view.html
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "First Name"
+msgstr "Voornaam"
+
+#: public/modules/users/views/signin.client.view.html
+msgid ""
+"For @redcross.nl addresses, enter your @redcross.nl email address. You will "
+"be redirected to another page. On this page, use your redcross\\username and "
+"password to sign in"
+msgstr ""
+"Voor @redcross.nl adressen, voer uw @redcross.nl emailadres in. U wordt dan "
+"doorgestuurd naar een andere pagina. Op deze pagina, gebruik uw redcross"
+"\\gebruikersnaam en wachtwoord om in te loggen."
+
+#: public/modules/users/views/signin.client.view.html
+msgid ""
+"For @rodekruis.nl addresses, simply enter your emailaddress and password to "
+"sign in"
+msgstr ""
+"Voor @rodekruis.nl adressen, voer uw @rodekruis.nl emailadres en wachtwoord "
+"in om in te loggen"
+
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Language"
+msgstr "Taal"
+
+#: public/modules/users/views/signup.client.view.html
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Last Name"
+msgstr "Achternaam"
+
+#: public/modules/users/views/signin.client.view.html
+msgid "Login explanation"
+msgstr "Uitleg voor het inloggen"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Manage Social Accounts"
+msgstr "Account koppelen"
+
+#: public/modules/users/views/signup.client.view.html
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Profile Saved Successfully"
+msgstr "Profiel opgeslagen"
+
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Save Profile"
+msgstr "Profiel opslaan"
+
+#: public/modules/core/views/header.client.view.html
+#: public/modules/users/views/signup.client.view.html
+msgid "Signin"
+msgstr "Aanmelden"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Signout"
+msgstr "Afmelden"
+
+#: public/modules/users/views/signup.client.view.html
+msgid "Signup"
+msgstr "Inschrijven"
+
+#: public/modules/core/views/header.client.view.html
+msgid "Toggle navigation"
+msgstr "Navigatie uitvouwen"
+
+#: public/modules/users/views/signup.client.view.html
+#: public/modules/users/views/settings/edit-profile.client.view.html
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: public/modules/users/views/signin.client.view.html
+msgid ""
+"You are being directed to a microsoft login page. Please use it as follows:"
+msgstr ""
+"U wordt doorgestuurd naar een login pagina van Microsoft. Gebruik het als "
+"volgt."
+
+#~ msgid "All"
+#~ msgstr "Alle"
+
+#~ msgid "Create map"
+#~ msgstr "Kaart maken"
+
+#~ msgid "Data management"
+#~ msgstr "Beheer"
+
+#~ msgid "Edit Source"
+#~ msgstr "Tabel bewerken"
+
+#~ msgid "Edit map"
+#~ msgstr "Kaart bewerken"
+
+#~ msgid "Filter"
+#~ msgstr "Filteren"
+
+#~ msgid "Info"
+#~ msgstr "Informatie"
+
+#~ msgid "Layer"
+#~ msgstr "Kaartlaag"
+
+#~ msgid "Layers"
+#~ msgstr "Kaartlagen"
+
+#~ msgid "Legend"
+#~ msgstr "Legenda"
+
+#~ msgid "Map"
+#~ msgstr "Kaart"
+
+#~ msgid "Map name"
+#~ msgstr "Kaartnaam"
+
+#~ msgid "Maps"
+#~ msgstr "Kaarten"
+
+#~ msgid "Name"
+#~ msgstr "Naam"
+
+#~ msgid "New Source"
+#~ msgstr "Nieuwe tabel"
+
+#~ msgid "No Sources yet, why don't you"
+#~ msgstr "Nog geen tabellen, waarom"
+
+#~ msgid "No maps yet, why don't you"
+#~ msgstr "Nog geen kaarten, waarom"
+
+#~ msgid "Select a awesome font icon"
+#~ msgstr "Kies een icoon (font-awesome)"
+
+#~ msgid "Select a bootstrap icon"
+#~ msgstr "Kies een icoon (bootstrap)"
+
+#~ msgid "Select a humanitarian font icon"
+#~ msgstr "Kies een icoon (UNHCR)"
+
+#~ msgid "Select a relief-web font icon"
+#~ msgstr "Kies een icoon (relief-web)"
+
+#~ msgid "Share"
+#~ msgstr "Delen"
+
+#~ msgid "Sources"
+#~ msgstr "Tabellen"
+
+#~ msgid "Use this link to share the map in its current view"
+#~ msgstr "Kopieer deze link om de kaart te delen in de huidige weergave"
+
+#~ msgid "Web monitor"
+#~ msgstr "Web monitor"
+
+#~ msgid "create"
+#~ msgstr "maak"
+
+#~ msgid "make"
+#~ msgstr "maak"
+
+#~ msgid "next"
+#~ msgstr "volgende"
+
+#~ msgid "one"
+#~ msgstr "je er geen"
+
+#~ msgid "previous"
+#~ msgstr "vorige"
+
+#~ msgid "rotate"
+#~ msgstr "roteren"
+
+#~ msgid "@redcross.nl email"
+#~ msgstr "@redcross.nl emailadres"
+
+#~ msgid "Access your account with your @rodekruis.nl account"
+#~ msgstr "Aanmelden met uw @rodekruis.nl account"
+
+#~ msgid "Or with your account"
+#~ msgstr "Of met uw account"
+
+#~ msgid "Map: {{map.title}}"
+#~ msgstr "Kaart: {{map.title}}"
+
+#~ msgid "<em class=\"glyphicon glyphicon-chevron-left\"></em> previous"
+#~ msgstr "<em class=\"glyphicon glyphicon-chevron-left\"></em> vorige"
+
+#~ msgid "<em class=\"glyphicon glyphicon-chevron-right\"></em> next"
+#~ msgstr "<em class=\"glyphicon glyphicon-chevron-right\"></em> volgende"

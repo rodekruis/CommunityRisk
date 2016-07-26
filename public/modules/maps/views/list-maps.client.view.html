@@ -1,0 +1,15 @@
+<section data-ng-controller="MapsController" data-ng-init="find()">
+
+    <div class="page-header">
+        <h1 translate>Maps</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="map in maps" data-ng-href="#!/maps/{{map._id}}" class="list-group-item">
+           <h3 class="list-group-item-heading">{{map.title}}</h3>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!maps.$resolved || maps.length">
+    	<span translate>No maps yet, why don't you</span> <a href="/#!/maps/create" translate>create</a><span translate>one</span>?
+    </div>
+	
+</section>

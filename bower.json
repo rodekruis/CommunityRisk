@@ -1,0 +1,163 @@
+{
+  "name": "Private dashboards",
+  "version": "0.0.1",
+  "description": "Dashboard ",
+  "dependencies": {
+    "bootstrap": "~3.3",
+    "jquery": "~2.2.3",
+    "leaflet": "~0.7.7",
+    "cartodb.js": "~3.15.9",
+    "angular": "1.5.5",
+    "materialize": "*",
+    "mdi": "~1.5.54",
+    "dcjs": "2.0.0-beta.3",
+    "lodash": "2.4.2",
+    "angular-lodash": "*",
+    "angular-route": "*",
+	"angular-loading-bar" : "*",
+    "angular-resource": "*",
+    "angular-cookies": "*",
+    "angular-touch": "*",
+    "angular-sanitize": "*",
+    "angular-ui-router": "~0.2.10",
+    "angular-ui-bootstrap-bower": "*",
+    "angular-leaflet-directive": "0.10.0",
+    "leaflet-search": "1.9.7",
+    "leaflet-ajax": "~2.0.0",
+    "angular-gettext": "*",
+    "Snap.svg": "*",
+    "d3": "*",
+    "crossfilter": "*",
+    "forms-angular": "^0.6.0",
+	"angular-messages": "1.5.*",
+	"ngInfiniteScroll": "1.2.*",
+	"angular-elastic": "2.5.*",
+    "underscore": "1.8.*",
+	"leaflet-gps": "1.0.*"
+  },
+  "resolutions": {
+	"angular": "1.5.5",
+	"angular-messages": "1.4.8"
+  },
+  "install": {
+    "base": "public/build/bower",
+    "path": {
+      "js": "{name}/js",
+      "css": "{name}/css",
+      "scss": "{name}/css",
+      "map": "{name}/css",
+      "eot": "{name}/fonts",
+      "svg": "{name}/fonts",
+      "ttf": "{name}/fonts",
+      "woff": "{name}/fonts",
+      "woff2": "{name}/fonts",
+      "png": "{name}/img"
+    },
+    "sources": {
+      "bootstrap": [
+        "public/lib/bootstrap/dist/js/bootstrap.min.js",
+        "public/lib/bootstrap/dist/css/bootstrap.min.css",
+		"public/lib/bootstrap/dist/css/bootstrap.min.css.map",
+        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.eot",
+        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.svg",
+        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf",
+        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff",
+		"public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2"
+      ],
+      "jquery": [
+        "public/lib/jquery/dist/jquery.min.js"
+      ],
+      "cartodb.js": [
+        "public/lib/cartodb.js/cartodb_noleaflet.js",
+        "public/lib/cartodb.js/themes/css/cartodb.css"
+      ],
+      "angular": [
+        "public/lib/angular/angular.min.js",
+        "public/lib/angular/angular.js",
+        "public/lib/angular/angular-csp.css"
+      ],
+	  "angular-ui-bootstrap-bower": [
+        "public/lib/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js",
+        "public/lib/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"
+      ],
+	  "angular-route": [
+        "public/lib/angular-route/angular-route.min.js",
+        "public/lib/angular-route/angular-route.js"
+      ],
+	  "angular-resource": [
+        "public/lib/angular-resource/angular-resource.min.js",
+        "public/lib/angular-resource/angular-resource.js"
+      ],
+	  "angular-cookies": [
+        "public/lib/angular-cookies/angular-cookies.min.js",
+        "public/lib/angular-cookies/angular-cookies.js"
+      ],
+	  "angular-touch": [
+        "public/lib/angular-touch/angular-touch.min.js",
+        "public/lib/angular-touch/angular-touch.js"
+      ],
+	  "angular-loading-bar": [
+        "public/lib/angular-loading-bar/build/loading-bar.js",
+        "public/lib/angular-loading-bar/build/loading-bar.min.js",
+		"public/lib/angular-loading-bar/build/loading-bar.min.css",
+		"public/lib/angular-loading-bar/build/loading-bar.css"
+      ],
+	  "angular-sanitize": [
+        "public/lib/angular-sanitize/angular-sanitize.min.js",
+        "public/lib/angular-sanitize/angular-sanitize.js"
+      ],
+	  "angular-leaflet-directive": [
+        "public/lib/angular-leaflet-directive/dist/angular-leaflet-directive.js",
+        "public/lib/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"
+      ], 
+      "angular-ui-router": [
+        "public/lib/angular-ui-router/release/angular-ui-router.min.js"
+      ],
+      "crossfilter": [
+        "public/lib/crossfilter/crossfilter.min.js"
+      ],
+      "lodash": [
+        "public/lib/lodash/dist/lodash.underscore.min.js"
+      ],
+	  "leaflet": [
+        "public/lib/leaflet/dist/leaflet.js",
+        "public/lib/leaflet/dist/leaflet-src.js"
+      ],
+	  "leaflet-search": [
+        "public/lib/leaflet-search/dist/leaflet-search.min.js",
+        "public/lib/leaflet-search/dist/leaflet-search.min.css",
+		"public/lib/leaflet-search/dist/leaflet-search.src.js",
+        "public/lib/leaflet-search/dist/leaflet-search.src.css"
+      ],
+      "mdi": [
+        "public/lib/mdi/css/materialdesignicons.min.css",
+        "public/lib/mdi/css/materialdesignicons.min.css.map",
+        "public/lib/mdi/fonts/materialdesignicons-webfont.eot",
+        "public/lib/mdi/fonts/materialdesignicons-webfont.svg",
+        "public/lib/mdi/fonts/materialdesignicons-webfont.ttf",
+        "public/lib/mdi/fonts/materialdesignicons-webfont.woff",
+        "public/lib/mdi/fonts/materialdesignicons-webfont.woff2"
+      ],
+	  "forms-angular": [
+        "public/lib/forms-angular/dist/forms-angular-with-bs3.css"
+      ],
+	  "angular-messages": [
+        "public/lib/angular-messages/angular-messages.js",
+        "public/lib/angular-messages/angular-messages.min.js"
+      ],
+	  "ngInfiniteScroll": [
+        "public/lib/ngInfiniteScroll/build/ng-infinite-scroll.js",
+        "public/lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"
+      ],
+	  "d3": [
+        "public/lib/d3/d3.min.js",
+        "public/lib/d3/d3.js"
+      ],
+	  "dcjs": [
+        "public/lib/dcjs/dc.min.js",
+        "public/lib/dcjs/dc.js",
+        "public/lib/dcjs/dc.css"
+      ]
+    }
+  }
+}

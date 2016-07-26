@@ -1,0 +1,54 @@
+<div class="container" data-ng-controller="HeaderController">
+	<div class="navbar-header navbar-default">
+		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
+			<span class="sr-only" translate>Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<div class="navbar-logo navbar-left">
+			<a class="navbar-brand" rel="home" title="Digital operations center">
+			   <img src="modules/core/img/brand/redcross.png" class="img-responsive">
+			</a>
+		</div>
+		<a href="/#!/" class="navbar-brand"><strong>Rode Kruis Dashboards</strong></a>
+	</div>
+	<nav class="collapse navbar-collapse  navbar-default" collapse="!isCollapsed" role="navigation">
+		<ul class="nav navbar-nav" data-ng-if="menu.shouldRender(authentication.user);">
+			<li data-ng-repeat="item in menu.items" data-ng-if="item.shouldRender(authentication.user);" ui-route="{{item.uiRoute}}" ng-class="{active: $uiRoute}">
+				<a href="/#!/{{item.link}}"><strong>{{item.title}}</strong></a>
+			</li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
+			<!--<li ui-route="/signup" ng-class="{active: $uiRoute}">
+				<a href="/#!/signup"><strong translate>Signup</strong></a>
+			</li>-->
+			<li class="divider-vertical"></li>
+			<li ui-route="/signin" ng-class="{active: $uiRoute}">
+				<a href="/#!/signin"><strong translate>Signin</strong></a>
+			</li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <strong>{{authentication.user.displayName}}</strong> <b class="caret"></b>
+                </a>
+				<ul class="dropdown-menu">
+					<li>
+						<a href="/#!/settings/profile" translate>Edit Profile</a>
+					</li>
+					<li>
+						<a href="/#!/settings/accounts" translate>Manage Social Accounts</a>
+					</li>
+					<li data-ng-show="authentication.user.provider === 'local'">
+						<a href="/#!/settings/password" translate>Change Password</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="/auth/signout" translate>Signout</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</nav>
+</div>

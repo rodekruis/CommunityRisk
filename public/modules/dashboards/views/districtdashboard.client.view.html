@@ -3,109 +3,105 @@
 		<div cg-busy="{promise:promise,templateUrl:templateUrl,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}">
 			<div id="header" class="row">
 				<div class="col-md-8">
-					<div id="title"><h3>District Dashboard</h3></div>
+					<div id="title"><h3>Community Profiles Philippines</h3></div>
 				</div>
 				<div id="count-info" class="col-md-8">
 					<span class="filter-count "></span> selected out of <span class="total-count "></span> records:   
 					<a href="javascript:dc.filterAll(); dc.redrawAll()">Reset All</a>
 				</div>
-				<div >
-					<b>Jaar en maand</b><br/>
-					<select id="yearselector"></select><select id="monthselector"></select>
-				</div>	          
 			</div>
 			<div class="row">
 				<div class="col-md-4 colheight">
-					<b>Rode Kruis districten in Nederland</b>
-					<div id="map-chart" style="width:350px; height:80%;"></div>
+					<b>{{admlevel_text}} of the Philippines</b>
+					<div id="map-chart" style="width:600px; height:150%;"></div>
 					
 				</div>	
 				
-				<div class="col-md-4 colheight">
-					<div class="col-xs-12 removepadding" id="row-chart">
-						<b style="position: relative; left: 10px"><span>{{metric}}</span> per district</b>
-					</div>       
-			    </div>
+				<div class="col-md-3 colheight"></div>
 				
-				<div class="col-md-4 colheight">
+				<div class="col-md-5 colheight">
+					<div style="background-color: #E6E6FA">
+						<b> General information</b><hr>
+						<b> Community name:</b> {{name_selection}}<br>
+						<!--<b>Community level:</b> {{admlevel_text}}<br>-->
+						<table class="table-condensed table-dashboard table-hover" id="data-table6" ng-click="go('population')"></table>
+						<table class="table-condensed table-dashboard table-hover" id="data-table7" ng-click="go('land_area')"></table>
+						<table class="table-condensed table-dashboard table-hover" id="data-table8" ng-click="go('mun_city')"></table>
+					</div>
+					<hr>
 					<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-					  <!-- Wrapper for slides -->
-					  <div class="carousel-inner" role="listbox">
+						<div class="carousel-inner" role="listbox">
 						
-						<div class="active item">
-							<b style="position: relative; left: 20px">Vrijwilligersmanagement</b><hr>
-							<table class="table-condensed table-dashboard table-hover" id="data-table5" ng-click="go('R2HaantalActief')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table6" ng-click="go('ALGaantalbestuursleden')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table4" ng-click="go('TotaalaantalVW')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table7" ng-click="go('GeslachtMan')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table8" ng-click="go('GeslachtVrouw')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table9" ng-click="go('LeeftijdOnder18')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table10" ng-click="go('Leeftijd18tot30')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table11" ng-click="go('Leeftijd30tot50')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table12" ng-click="go('Leeftijd50tot65')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table13" ng-click="go('Leeftijd65tot85')"></table>
-						</div>
-						
-						<div class="item">
-						  <b style="position: relative; left: 20px">Noodhulp</b><hr>
-							<table class="table-condensed table-dashboard table-hover" id="data-table14" ng-click="go('NHTotaal')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table15" ng-click="go('NHBestuur')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table16" ng-click="go('NHCoordinator')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table17" ng-click="go('NHBZO')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table18" ng-click="go('NHEVH')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table19" ng-click="go('NHNHT')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table20" ng-click="go('NHOverig')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table21" ng-click="go('NHOverlap')"></table>
-                        </div>                             
-
-						<div class="item">
-							<b style="position: relative; left: 20px">Fondsenwerving</b><hr>
-							<table class="table-condensed table-dashboard table-hover" id="data-table22" ng-click="go('FWTotaal')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table23" ng-click="go('FWBestuur')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table24" ng-click="go('FWCoordinator')"></table>
-							<hr>
-							<b style="position: relative; left: 20px">Communicatie</b><hr>
-							<table class="table-condensed table-dashboard table-hover" id="data-table25" ng-click="go('COMTotaal')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table26" ng-click="go('COMBestuur')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table27" ng-click="go('COMCoordinator')"></table>
-						</div>
-						
-						<div class="item">
-							<b style="position: relative; left: 20px">Respect & Hulpbereidheid</b><hr>
-							<table class="table-condensed table-dashboard table-hover" id="data-table28" ng-click="go('RHTotaal')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table29" ng-click="go('RHBestuur')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table30" ng-click="go('RHCoordinator')"></table>
-							<hr>
-							<b style="position: relative; left: 20px">Zelfredzaamheid</b><hr>
-							<table class="table-condensed table-dashboard table-hover" id="data-table31" ng-click="go('ZELFTotaal')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table32" ng-click="go('ZELFBestuur')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table33" ng-click="go('ZELFCoordinator')"></table>
-						</div>
-						
-						<div class="item">
-							<b style="position: relative; left: 20px">Algemene districtsinformatie</b><hr>
-							<table class="table-condensed table-dashboard table-hover" id="data-table2" ng-click="go('ALGaantalinwoners')"></table>									
-							<table class="table-condensed table-dashboard table-hover" id="data-table3" ng-click="go('ALGaantalgemeenten')"></table>
-						</div>
-						
-					  </div>
-					  <div class="controlsBlock">
-						<div class="controls">
-							<a class="left carousel-control" href="#myCarousel" data-slide="prev" ng-click="go_left()" ng-non-bindable><span class="glyphicon glyphicon-chevron-left"><span class="sr-only">Previous</span></span></a>
-							<div class="carousel-indicators">
-								<li data-target="#myCarousel" data-slide-to="0" ng-click="go('R2HaantalActief')" class="active" ></li>
-								<li data-target="#myCarousel" data-slide-to="1" ng-click="go('NHTotaal')"></li>
-								<li data-target="#myCarousel" data-slide-to="2" ng-click="go('FWTotaal')"></li>
-								<li data-target="#myCarousel" data-slide-to="3" ng-click="go('RHTotaal')"></li>
-								<li data-target="#myCarousel" data-slide-to="4" ng-click="go('ALGaantalinwoners')"></li>
+							<div class="active item">
+								<b style="position: relative; left: 20px">Risk score</b><hr>
+								<table class="table-condensed table-dashboard table-hover" id="data-table2" ng-click="go('risk_score')"></table>
+								<!--<hr>
+								<b style="position: relative; left: 20px">Risk components:</b><hr>-->
+								<table class="table-condensed table-dashboard table-hover" id="data-table3" ng-click="go('vulnerability_score')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table4" ng-click="go('hazard_score')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table5" ng-click="go('coping_capacity_score')"></table>
 							</div>
-							<a class="right carousel-control" href="#myCarousel" data-slide="next" ng-click="go_right()" ng-non-bindable><span class="glyphicon glyphicon-chevron-right"><span class="sr-only">Next</span></span></a>
+							<!--
+							<div class="item">
+							  <b style="position: relative; left: 20px">General information</b><hr>
+								<table class="table-condensed table-dashboard table-hover" id="data-table6" ng-click="go('population')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table7" ng-click="go('land_area')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table8" ng-click="go('mun_city')"></table>
+							</div>                             
+							-->
+							<div class="item">
+								<b style="position: relative; left: 20px">Vulnerability</b><hr>
+								<table class="table-condensed table-dashboard table-hover" id="data-table9" ng-click="go('poverty_incidence')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table10" ng-click="go('income_class')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table11" ng-click="go('gdp_per_capita')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table12" ng-click="go('hdi')"></table>
+							</div>
+							
+							<div class="item">
+								<b style="position: relative; left: 20px">Hazards</b><hr>
+								<table class="table-condensed table-dashboard table-hover" id="data-table13" ng-click="go('flood_risk')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table14" ng-click="go('cyclone_risk')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table15" ng-click="go('landslide_risk')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table16" ng-click="go('earthquake7_phys_exp')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table17" ng-click="go('tsunami_phys_exp')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table18" ng-click="go('cyclone_surge_2m_phys_exp')"></table>
+							</div>
+							
+							<div class="item">
+								<b style="position: relative; left: 20px">Coping capacity</b><hr>
+								<table class="table-condensed table-dashboard table-hover" id="data-table19" ng-click="go('nr_facilities')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table20" ng-click="go('nr_doctors')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table21" ng-click="go('good_governance_index')"></table>
+								<table class="table-condensed table-dashboard table-hover" id="data-table22" ng-click="go('traveltime')"></table>
+							</div>
 							
 						</div>
+						<div class="controlsBlock">
+							<div class="controls">
+								<a class="left carousel-control" href="#myCarousel" data-slide="prev" ng-click="go_left()" ng-non-bindable><span class="glyphicon glyphicon-chevron-left"><span class="sr-only">Previous</span></span></a>
+								<div class="carousel-indicators">
+									<li data-target="#myCarousel" data-slide-to="0" ng-click="go('risk_score')" class="active" ></li>
+									<li data-target="#myCarousel" data-slide-to="1" ng-click="go('population')"></li>
+									<li data-target="#myCarousel" data-slide-to="2" ng-click="go('poverty_incidence')"></li>
+									<li data-target="#myCarousel" data-slide-to="3" ng-click="go('flood_risk')"></li>
+									<li data-target="#myCarousel" data-slide-to="4" ng-click="go('nr_facilities')"></li>
+								</div>
+								<a class="right carousel-control" href="#myCarousel" data-slide="next" ng-click="go_right()" ng-non-bindable><span class="glyphicon glyphicon-chevron-right"><span class="sr-only">Next</span></span></a>
+							</div>
+						</div>
+					
 					</div>
 				</div>
-				
 			</div>
+			<!--
+			<div class="row">
+				<div class="col-md-4 colheight">
+					<div class="col-xs-12 removepadding" id="row-chart">
+						<b style="position: relative; left: 10px"><span>{{metric}}</span> per province</b>
+					</div>       
+				</div>
+			</div>
+			-->
 		</div>
 	</div>
 </section>

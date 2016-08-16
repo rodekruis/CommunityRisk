@@ -5926,7 +5926,7 @@ button.close {
   	}
 }
 
-/* Addition for dc-data-tables in dashboard */
+/* Addition for dc-data-tables in dashboar
 .table-dashboard > thead > tr > th,
 .table-dashboard > tbody > tr > th,
 .table-dashboard > tfoot > tr > th,
@@ -5934,6 +5934,6 @@ button.close {
 .table-dashboard > tbody > tr > td,
 .table-dashboard > tfoot > tr > td {
   width: 180px;
-}
+}*/
 
 .dc-table-group {visibility: collapse; height: 0px}

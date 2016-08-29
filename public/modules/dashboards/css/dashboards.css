@@ -48,6 +48,24 @@
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
  }
+ 
+.hdx-3w-info {
+	padding:5px;
+    background-color:white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.general-info {
+	padding:5px;
+    background-color:#E6E6FA;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+	width:450px;
+	height:200px;
+}
 
 #loading-bar-spinner {
   display: block;
@@ -75,6 +93,20 @@
 .table-dashboard > tfoot > tr > td:nth-child(2) {
   width: 200px;
 }
+
+.tooltip {   
+  position: absolute;           
+  text-align: center;                  
+  font: 12px sans-serif;        
+  background: #f3f3f3;
+  padding:10px;
+  border-radius:5px;
+}
+
+a:hover {
+ cursor:pointer;
+}
+
 
 
 

@@ -1,16 +1,23 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('DistrictDashboardsController', ['$scope', '$q', 'Authentication', 'Dashboards', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($scope, $q, Authentication, Dashboards, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('DistrictDashboardsController', ['$scope', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($scope, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 
 		$scope.authentication = Authentication;
 		$scope.geom = null;
 		$scope.metric = 'risk_score';
+		$scope.metric_label = '';
+		$scope.metric_year = '';
+		$scope.metric_source = '';
+		$scope.metric_desc = '';
 		$scope.admlevel = 2;
 		$scope.admlevel_text = 'Provinces';
-		$scope.name_selection = 'Philippines';
+		$scope.name_selection = 'The Philippines';
+		$scope.type_selection = 'Country';
+		$scope.subtype_selection = 'Provinces'; 
 		$scope.parent_code = '';
+		var data_input = '';//$scope.admlevel + ',\'' + $scope.parent_code;
 		var filters;
 		var map;
 
@@ -36,45 +43,44 @@ angular.module('dashboards')
 				
 			// start loading bar
 		    $scope.start();
-		  
+			
+			data_input = $scope.admlevel + ',\'' + $scope.parent_code;
+
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
-			    function(data) {		
+			    function(dashboard) {		
 					// get the data
-					$scope.prepare(data);
-			    },
+					//console.log(data_input);
+					Data.get({adminLevel: data_input}, //$scope.admlevel || ',' || $scope.parent_code)},
+						function(pgData){
+							$scope.prepare(dashboard, pgData);
+						});					
+				},
 			    function(error) {
 					console.log(error);
 				//$scope.addAlert('danger', error.data.message);
 			    });
-				
-					
+			
 		};  
 		
 		/**
 		 * get the data from the files as defined in the config.
 		 * load  them with ajax and if both are finished, generate the charts
 		 */
-		$scope.prepare = function(dashboard) {
+		$scope.prepare = function(dashboard, pgData) {
 		  // set the title
 		  $scope.title = $scope.config.title;
 				
 		  // create the map chart (NOTE: this has to be done before the ajax call)
 		  $scope.mapChartType = 'leafletChoroplethChart';	
 		  
-		  
-		  // The resp returns the data in another array, so use index 0 		  
+		  // load data
+		  //console.log(pgData);
+		  $scope.geom = pgData.usp_data.geo;
 		  var d = {};
-		  if ($scope.admlevel === 2) {
-			  $scope.geom = dashboard.sources.GeoProvinces.data;
-			  d.Districts = dashboard.sources.GeoProvinces.data;
-			  d.Rapportage = dashboard.sources.IndProvinces.data;
-		  } else if ($scope.admlevel === 3) {
-			  $scope.geom = dashboard.sources.GeoMunicipalities.data;
-			  d.Districts = dashboard.sources.GeoMunicipalities.data;
-			  d.Rapportage = dashboard.sources.IndMunicipalities.data;
-		  }
+		  d.Districts = pgData.usp_data.geo;
+		  d.Rapportage = pgData.usp_data.ind;
 		  d.Metadata = dashboard.sources.Metadata.data;
-		
+			
 		  $scope.generateCharts(d);
 		  
 		  // end loading bar
@@ -84,12 +90,20 @@ angular.module('dashboards')
 
 		
 		// fill the lookup table with the name attributes
-		$scope.genLookup = function (){
+		$scope.genLookup = function (field){
 			var lookup = {};
 			$scope.geom.features.forEach(function(e){
-				lookup[e.properties[$scope.config.joinAttribute]] = String(e.properties[$scope.config.nameAttribute]);
+				lookup[e.properties[$scope.config.joinAttribute]] = String(e.properties[field]);
 			});
 			return lookup;
+		};
+		// fill the lookup table with the name attributes
+		$scope.genLookup_ind = function (d,field){
+			var lookup_ind = {};
+			d.Rapportage.forEach(function(e){
+				lookup_ind[e.pcode] = String(e[field]);
+			});
+			return lookup_ind;
 		};
 		// fill the lookup table with the name attributes
 		$scope.genLookup_meta = function (d,field){
@@ -134,12 +148,28 @@ angular.module('dashboards')
 			//define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
 			var mapChart = dc.leafletChoroplethChart('#map-chart');
 						
-			// get the lookup table
-			var lookup = $scope.genLookup();
+			// get the lookup tables
+			var lookup = $scope.genLookup($scope.config.nameAttribute);
+			var lookup_muncity = $scope.genLookup_ind(d,'mun_city');
 			var meta_label = $scope.genLookup_meta(d,'label');
 			var meta_format = $scope.genLookup_meta(d,'format');
 			var meta_icon = $scope.genLookup_meta(d,'icon_src');
-			//if (mapChart.filters().length > 0) { $scope.name_selection = lookup[$scope.parent_code]; };		
+			var meta_year = $scope.genLookup_meta(d,'year');
+			var meta_source = $scope.genLookup_meta(d,'source_link');
+			var meta_desc = $scope.genLookup_meta(d,'description');
+			
+			if ($scope.admlevel === 2) {
+				$scope.type_selection = 'Country';
+				$scope.subtype_selection = 'Provinces'; 
+			} else if ($scope.admlevel === 3) {
+				$scope.type_selection = 'Province';
+				$scope.subtype_selection = 'Municipalities'; 
+			} else if ($scope.admlevel === 4) {
+				$scope.type_selection = 'Municipality';
+				$scope.subtype_selection = 'Barangays'; 
+			}
+			
+			
 			
 		 
 			//var cf = crossfilter(d3.range(0, data.Districts.features.length));
@@ -239,7 +269,8 @@ angular.module('dashboards')
 				.colors(d3.scale.quantile()
 								.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
 								.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
-				.colorAccessor(function (d) {if(d>0){return d;} else {return 0;}})     
+				//.colorAccessor(function (d) {if(d>0){return d;} else {return 0;}})  
+				.colorCalculator(function (d) { return (d > 0) ? mapChart.colors()(d) : '#cccccc'; })
 				.featureKeyAccessor(function(feature){
 					return feature.properties.pcode;
 				})
@@ -250,13 +281,13 @@ angular.module('dashboards')
 				.turnOnControls(true)
 				.on('filtered',function(chart,filters){
 					filters = chart.filters();
-					if ($scope.admlevel === 2 && filters.length>0) {
+					if (filters.length>0 && $scope.admlevel < 4) {
+						$scope.admlevel = $scope.admlevel + 1;
+						$scope.parent_code_prev = $scope.parent_code;
 						$scope.parent_code = filters[0];
-						//$scope.name_selection = lookup[$scope.parent_code];
-						$scope.admlevel = 3;
-						$scope.admlevel_text = 'Municipalities';
+						if ($scope.admlevel === 4) {$scope.metric = 'population';}
+						$scope.name_selection = lookup[$scope.parent_code];
 						$scope.initiate();
-						//$scope.prepare(data);
 					}
 				})
 				;
@@ -265,6 +296,11 @@ angular.module('dashboards')
 			//It differentiates on type of metric (percentage or absolute count)
 			$scope.go = function(id) {
 				$scope.metric = id;	
+				$scope.metric_label = meta_label[$scope.metric];
+				$scope.metric_year = meta_year[$scope.metric];
+				$scope.metric_source = meta_source[$scope.metric];
+				$scope.metric_desc = meta_desc[$scope.metric];
+				$('#myModal').modal('show');
 				whereGroupSum.dispose();
 				whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[id];});	
 				mapChart
@@ -277,6 +313,14 @@ angular.module('dashboards')
 				dc.redrawAll();
 			};
 			
+			$scope.level_up = function() {
+				if ($scope.admlevel > 2) {
+					$scope.admlevel = $scope.admlevel - 1;
+					$scope.parent_code = $scope.parent_code_prev;
+					$scope.initiate();
+				}
+			};
+				
 			//This is needed for changing the metric of the row-chart when using the carousel arrows
 			//NOTE: this does not work yet at the moment
 			$scope.go_left = function() {
@@ -317,7 +361,8 @@ angular.module('dashboards')
 							{id: '#data-table21', name: 'good_governance_index', datatype: 'decimal2', group: 'capacity', propertyPath: 'value.finalVal', dimension: good_governance_index},
 							{id: '#data-table22', name: 'traveltime', datatype: 'integer', group: 'capacity', propertyPath: 'value.finalVal', dimension: traveltime}								
 						 ];
-						 
+			
+				
 			// create the data tables: because metrics are in columns in the data set and not in rows, we need one data-table per metric
 			tables.forEach(function(t) {
 				dc.dataTable(t.id)
@@ -332,7 +377,9 @@ angular.module('dashboards')
 									function(d){return meta_label[t.name];}, 
 									// the value
 									function(d){
-										if(meta_format[t.name] === 'decimal0'){
+										if (isNaN($scope.deepFind(d, t.propertyPath))) {
+											return 'N.A. on this level';
+										} else if(meta_format[t.name] === 'decimal0'){
 											return dec0Format($scope.deepFind(d, t.propertyPath));
 										} else if(meta_format[t.name] === 'percentage'){
 											return percFormat($scope.deepFind(d, t.propertyPath));
@@ -341,9 +388,7 @@ angular.module('dashboards')
 										}
 									}
 							])
-						.title(function(d){
-							return lookup[t.name];
-						})	
+						.title(function(d){return lookup[t.name];})	
 						.order(d3.descending);
 			});												
 			
@@ -359,7 +404,6 @@ angular.module('dashboards')
 			function zoomToGeom(geom){
 				var bounds = d3.geo.bounds(geom);
 				map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
-				//$scope.requestPostgisData(bounds);
 			}
 			zoomToGeom($scope.geom);
 			

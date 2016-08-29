@@ -18,7 +18,6 @@ var mongoose = require('mongoose'),
 	secrets = require('../../config/secrets'),
 	dbClient = new Dropbox.Client(secrets.dropbox),
 	fs = require('fs'),
-	//pg = require('pg'),
 	request =   require('request');
 
 /**
@@ -421,39 +420,6 @@ exports.getFileUrl = function(source){
 			});
 	  };
 };
-/*
-// GeoJSON Feature Collection
-var FeatureCollection = function() {
-    this.type = 'FeatureCollection';
-    this.features = []; //new Array();
-};
-
-exports.PostgisData = function(bounds, res){
-
-    var connString = 'postgres://postgres@localhost:5432/Community_Profiling';
-
-    pg.connect(connString, function(err, client) {
-
-        var sql = 'select ST_AsGeoJSON(geom) as shape from 1_datamodel.Geo_2_provinces';
-
-        
-        var vals = [bounds._southWest.lng, bounds._southWest.lat, bounds._northEast.lng, bounds._southWest.lat, bounds._northEast.lng, bounds._northEast.lat, bounds._southWest.lng, bounds._northEast.lat, bounds._southWest.lng, bounds._southWest.lat];
-        vals = vals.concat(vals);
-        
-        client.query(sql, vals, function(err, result) {
-            var featureCollection = new FeatureCollection();
-
-            for (var i = 0; i < result.rows.length; i++)
-            {
-                featureCollection.features[i] = JSON.parse(result.rows[i].shape);
-            }
-
-            res.send(featureCollection);
-        });
-    });
-};
-*/
-
 
 /**
  * Dashboard middleware

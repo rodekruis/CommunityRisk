@@ -49,6 +49,7 @@
     "passport-local": "1.0.x",
     "passport-twitter": "1.0.x",
     "path": "0.12.x",
+	"pg": "6.1.x",
     "request": "2.38.x",
     "swig": "1.4.x",
     "url": "0.11.x"

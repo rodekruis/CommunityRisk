@@ -377,7 +377,9 @@ angular.module('dashboards')
 									function(d){return meta_label[t.name];}, 
 									// the value
 									function(d){
-										if (isNaN($scope.deepFind(d, t.propertyPath))) {
+										if (t.name === 'mun_city') {
+											return lookup_muncity[t.key];
+										} else if (isNaN($scope.deepFind(d, t.propertyPath))) {
 											return 'N.A. on this level';
 										} else if(meta_format[t.name] === 'decimal0'){
 											return dec0Format($scope.deepFind(d, t.propertyPath));

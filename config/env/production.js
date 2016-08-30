@@ -4,6 +4,7 @@ var secrets = require('../secrets');
 
 module.exports = {
 	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/dashboards',
+	postgres: 'postgres://profiles@localhost/profiles',
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'combined',

@@ -5,6 +5,7 @@
  */
 
 var _ = require('lodash'),
+    config = require('./config/config'),
 	pg = require('pg');
 
 /**
@@ -47,7 +48,15 @@ exports.getData = function(req, res, next, adminLevel) {
 	//if (err) return {next(err);};
 	//if (!adminLevel) return {res.send(400, { message: 'Failed to load adminLevel'});};
 	
-	var connString = 'postgres://postgres@localhost/Community_Profiling';
+	var connString = config.postgres; //'postgres://postgres@localhost/Community_Profiling';
+	
+	/* TO DO: make the connection string dependent
+	if (local) {
+		var connString = 'postgres://postgres@localhost/Community_Profiling';
+	} else if (remote) {
+		var connString = 'postgres://profiles@localhost/profiles';
+	} */
+	
     pg.connect(connString, function(err, client) {
 
         var sql1 = 'SELECT usp_data(';

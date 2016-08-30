@@ -50,14 +50,7 @@ exports.getData = function(req, res, next, adminLevel) {
 	
 	var connString = config.postgres; //'postgres://postgres@localhost/Community_Profiling';
 	
-	/* TO DO: make the connection string dependent
-	if (local) {
-		var connString = 'postgres://postgres@localhost/Community_Profiling';
-	} else if (remote) {
-		var connString = 'postgres://profiles@localhost/profiles';
-	} */
-	
-    pg.connect(connString, function(err, client) {
+	pg.connect(connString, function(err, client) {
 
         var sql1 = 'SELECT usp_data(';
 		var sql2 = '\');';

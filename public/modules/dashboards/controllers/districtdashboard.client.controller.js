@@ -153,6 +153,7 @@ angular.module('dashboards')
 			var lookup_muncity = $scope.genLookup_ind(d,'mun_city');
 			var meta_label = $scope.genLookup_meta(d,'label');
 			var meta_format = $scope.genLookup_meta(d,'format');
+			var meta_unit = $scope.genLookup_meta(d,'unit');
 			var meta_icon = $scope.genLookup_meta(d,'icon_src');
 			var meta_year = $scope.genLookup_meta(d,'year');
 			var meta_source = $scope.genLookup_meta(d,'source_link');
@@ -388,6 +389,9 @@ angular.module('dashboards')
 										} else if(meta_format[t.name] === 'decimal2'){
 											return dec2Format($scope.deepFind(d, t.propertyPath));
 										}
+									},
+									function(d){
+										return meta_unit[t.name];
 									}
 							])
 						.title(function(d){return lookup[t.name];})	

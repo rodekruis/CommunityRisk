@@ -5,7 +5,7 @@
  */
 
 var _ = require('lodash'),
-    config = require('./config/config'),
+    config = require('../../config/config'),
 	pg = require('pg');
 
 /**

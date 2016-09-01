@@ -171,8 +171,6 @@ angular.module('dashboards')
 			}
 			
 			
-			
-		 
 			//var cf = crossfilter(d3.range(0, data.Districts.features.length));
 			var cf = crossfilter(d.Rapportage);
 			var parentDim = cf.dimension(function(d) { return d.pcode_parent; });

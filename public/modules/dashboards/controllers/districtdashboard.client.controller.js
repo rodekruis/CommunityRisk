@@ -75,16 +75,11 @@ angular.module('dashboards')
 		  
 		  // load data
 		  var d = {};
-		  if ($scope.admlevel === 2) {
-			  var topo = dashboard.sources.GeoProvinces.data;
-			  d.Districts = topojson.feature(topo,topo.objects.provinces);
-		  } else {
-			  d.Districts = pgData.usp_data.geo;
-		  };
+		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
 		  d.Metadata = dashboard.sources.Metadata.data;
-
-		  $scope.geom = d.Districts; //pgData.usp_data.geo;
+		  $scope.geom = pgData.usp_data.geo;
+		  
 		  $scope.generateCharts(d);
 		  
 		  // end loading bar
@@ -278,7 +273,7 @@ angular.module('dashboards')
 					return feature.properties.pcode;
 				})
 				.popup(function(d){
-					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',d.value);
+					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',intFormat(d.value));
 				})
 				.renderPopup(true)
 				.turnOnControls(true)

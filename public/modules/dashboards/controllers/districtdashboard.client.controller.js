@@ -74,13 +74,17 @@ angular.module('dashboards')
 		  $scope.mapChartType = 'leafletChoroplethChart';	
 		  
 		  // load data
-		  //console.log(pgData);
-		  $scope.geom = pgData.usp_data.geo;
 		  var d = {};
-		  d.Districts = pgData.usp_data.geo;
+		  if ($scope.admlevel === 2) {
+			  var topo = dashboard.sources.GeoProvinces.data;
+			  d.Districts = topojson.feature(topo,topo.objects.provinces);
+		  } else {
+			  d.Districts = pgData.usp_data.geo;
+		  };
 		  d.Rapportage = pgData.usp_data.ind;
 		  d.Metadata = dashboard.sources.Metadata.data;
-			
+
+		  $scope.geom = d.Districts; //pgData.usp_data.geo;
 		  $scope.generateCharts(d);
 		  
 		  // end loading bar
@@ -361,13 +365,14 @@ angular.module('dashboards')
 							{id: '#data-table22', name: 'traveltime', datatype: 'integer', group: 'capacity', propertyPath: 'value.finalVal', dimension: traveltime}								
 						 ];
 						 
-			var tables2 = [];
-			for (var i=2; i < d.Metadata.length; i++) {
-				var record = {};
-				record.name = d.Metadata[i.variable];
-				tables2[i-2] = record;
-			}
-			console.log(tables2);
+			// var tables2 = [];
+			// for (var i=2; i < d.Metadata.length; i++) {
+				// var record = {};
+				// console.log(d.Metadata[i])
+				// record.name = d.Metadata[i.variable];
+				// tables2[i-2] = record;
+			// }
+			// console.log(tables2);
 				
 			// create the data tables: because metrics are in columns in the data set and not in rows, we need one data-table per metric
 			tables.forEach(function(t) {

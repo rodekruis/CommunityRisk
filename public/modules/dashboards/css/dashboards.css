@@ -94,18 +94,17 @@
   width: 200px;
 }
 
-.tooltip {   
-  position: absolute;           
-  text-align: center;                  
-  font: 12px sans-serif;        
-  background: #f3f3f3;
-  padding:10px;
-  border-radius:5px;
+.table-dashboard > tbody > tr {
+	cursor:pointer;
 }
 
 a:hover {
  cursor:pointer;
 }
+
+
+
+
 
 
 

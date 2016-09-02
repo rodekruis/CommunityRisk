@@ -68,7 +68,8 @@ module.exports = {
 				'public/build/bower/angular-loading-bar/js/loading-bar.js',
 				'public/build/bower/leaflet-gps/js/leaflet-gps.min.js', // in bower.json
 				'https://maps.googleapis.com/maps/api/js?v=3&sensor=true',
-				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js' // in bower,json
+				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js', // in bower.json
+				'public/build/bower/topojson/js/topojson.js' // in bower.json
 			]
 		},
 		css: [

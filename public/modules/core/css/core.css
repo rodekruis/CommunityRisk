@@ -77,17 +77,6 @@ body {
   top: 0; left: 0; bottom: 0; right: 0;
 }
 
-/* .landing-block {
-	padding:5px;
-    background-color:#E6E6FA;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-	width:450px;
-	height:200px;
-	position: fixed;
-} */
-
 .image { 
    position: relative; 
    width: 100%; /* for IE 6 */
@@ -95,17 +84,18 @@ body {
 
 .landing-block { 
     position: absolute; 
-    top: 25%; 
+    top: 10%; 
     left: 25%; 
     width: 50%; 
-	height: 50%;
-	padding:15px;
+	height: 55%;
+	padding: 15px;
     background-color:#E6E6FA;
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
 	}
-	
+
+
 a.btn {
   background: #3498db;
   background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
@@ -131,4 +121,8 @@ a.btn:hover {
   background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
+}
+
+li {
+	margin: 5px;
 }

@@ -4,7 +4,12 @@ var secrets = require('../secrets');
 
 module.exports = {
 	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/dashboards',
-	postgres: 'postgres://profiles@localhost/profiles',
+	postgres: {
+		db: 'profiles',
+		user: 'profiles',
+		password: secrets.postgres.password,
+		host: 'localhost'
+	},
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'combined',
@@ -74,7 +79,8 @@ module.exports = {
 				'public/build/bower/angular-loading-bar/js/loading-bar.min.js',
 				'public/build/bower/leaflet-gps/js/leaflet-gps.min.js', // in bower.json
 				'https://maps.googleapis.com/maps/api/js?v=3&sensor=true',
-				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js' // in bower,json
+				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js', // in bower,json
+				'public/build/bower/topojson/js/topojson.js' // in bower.json
 				
 			]
 		},

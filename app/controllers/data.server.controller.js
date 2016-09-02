@@ -45,12 +45,11 @@ exports.read = function(req, res) {
  */
 exports.getData = function(req, res, next, adminLevel) {
 	
-	//if (err) return {next(err);};
-	//if (!adminLevel) return {res.send(400, { message: 'Failed to load adminLevel'});};
-	
-	var connString = config.postgres; //'postgres://postgres@localhost/Community_Profiling';
-	
+	var connString = 'postgres://'+config.postgres.user+':'+config.postgres.password+'@'+config.postgres.host+'/'+config.postgres.db;
+	console.log(connString);
+
 	pg.connect(connString, function(err, client) {
+		if (err) return next(err);
 
         var sql1 = 'SELECT usp_data(';
 		var sql2 = '\');';
@@ -58,17 +57,12 @@ exports.getData = function(req, res, next, adminLevel) {
 		console.log(sql);
         
 		client.query(sql, function(err, result) {
+			if (err) return next(err);
 			req.pgData = result.rows[0];
-			//console.log(req.pgData);
 			next();
         });
     });
 	
-		//if(adminLevel !== null){}
-		
-		//if (err) return next(err);
-		//if (err) return res.json(500); //return next(err);
-		
 };
 
 /**

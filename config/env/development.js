@@ -4,7 +4,12 @@ var secrets = require('../secrets');
 
 module.exports = {
 	db: 'mongodb://localhost/im-dev',
-	postgres: 'postgres://postgres@localhost/profiles',
+	postgres: {
+		db: 'profiles',
+		user: 'postgres',
+		password: '',//secrets.postgres.password,
+		host: 'localhost'
+	},
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'combined',

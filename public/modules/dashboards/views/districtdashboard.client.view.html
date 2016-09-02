@@ -25,8 +25,8 @@
 						<div id="count-info" class="general-info">
 							<b> Community Profile for: </b>{{name_selection}}<br>
 							{{type_selection}} with <span class="total-count "></span> {{subtype_selection}} (<span class="filter-count "></span> selected, <a href="javascript:dc.filterAll(); dc.redrawAll()">Select All</a>)<hr>
-							<table class="table-condensed table-dashboard table-hover" id="data-table6" ng-click="go('population')"></table>
-							<table class="table-condensed table-dashboard table-hover" id="data-table7" ng-click="go('land_area')"></table>
+							<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table6" ng-click="go('population')"></table>
+							<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table7" ng-click="go('land_area')"></table>
 							<!--<table class="table-condensed table-dashboard table-hover" id="data-table8" ng-click="go('mun_city')"></table>-->
 						</div>
 					</div>
@@ -37,45 +37,37 @@
 							
 								<div class="active item">
 									<b style="position: relative; left: 20px">Risk score</b><hr>
-									<table class="table-condensed table-dashboard table-hover" id="data-table2" ng-click="go('risk_score')"></table>
-									<!--<hr>
-									<b style="position: relative; left: 20px">Risk components:</b><hr>-->
-									<table class="table-condensed table-dashboard table-hover" id="data-table3" ng-click="go('vulnerability_score')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table4" ng-click="go('hazard_score')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table5" ng-click="go('coping_capacity_score')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table2" ng-click="go('risk_score')"></table>
+									<hr>
+									<b style="position: relative; left: 20px">Components:</b><hr>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table3" ng-click="go('vulnerability_score')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table4" ng-click="go('hazard_score')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table5" ng-click="go('coping_capacity_score')"></table>
 								</div>
-								<!--
-								<div class="item">
-								  <b style="position: relative; left: 20px">General information</b><hr>
-									<table class="table-condensed table-dashboard table-hover" id="data-table6" ng-click="go('population')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table7" ng-click="go('land_area')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table8" ng-click="go('mun_city')"></table>
-								</div>                             
-								-->
 								<div class="item">
 									<b style="position: relative; left: 20px">Vulnerability</b><hr>
-									<table class="table-condensed table-dashboard table-hover" id="data-table9" ng-click="go('poverty_incidence')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table10" ng-click="go('income_class')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table11" ng-click="go('gdp_per_capita')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table12" ng-click="go('hdi')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table9" ng-click="go('poverty_incidence')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table10" ng-click="go('income_class')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table11" ng-click="go('gdp_per_capita')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table12" ng-click="go('hdi')"></table>
 								</div>
 								
 								<div class="item">
 									<b style="position: relative; left: 20px">Hazards</b><hr>
-									<table class="table-condensed table-dashboard table-hover" id="data-table13" ng-click="go('flood_risk')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table14" ng-click="go('cyclone_risk')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table15" ng-click="go('landslide_risk')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table16" ng-click="go('earthquake7_phys_exp')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table17" ng-click="go('tsunami_phys_exp')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table18" ng-click="go('cyclone_surge_2m_phys_exp')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table13" ng-click="go('flood_risk')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table14" ng-click="go('cyclone_risk')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table15" ng-click="go('landslide_risk')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table16" ng-click="go('earthquake7_phys_exp')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table17" ng-click="go('tsunami_phys_exp')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table18" ng-click="go('cyclone_surge_2m_phys_exp')"></table>
 								</div>
 								
 								<div class="item">
 									<b style="position: relative; left: 20px">Coping capacity</b><hr>
-									<table class="table-condensed table-dashboard table-hover" id="data-table19" ng-click="go('nr_facilities')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table20" ng-click="go('nr_doctors')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table21" ng-click="go('good_governance_index')"></table>
-									<table class="table-condensed table-dashboard table-hover" id="data-table22" ng-click="go('traveltime')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table19" ng-click="go('nr_facilities')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table20" ng-click="go('nr_doctors')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table21" ng-click="go('good_governance_index')"></table>
+									<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table22" ng-click="go('traveltime')"></table>
 								</div>
 								
 							</div>

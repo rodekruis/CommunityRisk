@@ -360,7 +360,14 @@ angular.module('dashboards')
 							{id: '#data-table21', name: 'good_governance_index', datatype: 'decimal2', group: 'capacity', propertyPath: 'value.finalVal', dimension: good_governance_index},
 							{id: '#data-table22', name: 'traveltime', datatype: 'integer', group: 'capacity', propertyPath: 'value.finalVal', dimension: traveltime}								
 						 ];
-			
+						 
+			var tables2 = [];
+			for (var i=2; i < d.Metadata.length; i++) {
+				var record = {};
+				record.name = d.Metadata[i.variable];
+				tables2[i-2] = record;
+			}
+			console.log(tables2);
 				
 			// create the data tables: because metrics are in columns in the data set and not in rows, we need one data-table per metric
 			tables.forEach(function(t) {

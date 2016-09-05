@@ -85,6 +85,7 @@
     width: 40%;
 }
 
+/*Give the second column of all data tables a fixed width so that the third column starts at a fixed position */
 .table-dashboard > thead > tr > th:nth-child(2),
 .table-dashboard > tbody > tr > th:nth-child(2),
 .table-dashboard > tfoot > tr > th:nth-child(2),
@@ -94,14 +95,37 @@
   width: 200px;
 }
 
-.table-dashboard > tbody > tr {
-	cursor:pointer;
-}
-
+/*Make sure the a-elements (such as: level_up) get a pointer-cursor when hovered */
 a:hover {
  cursor:pointer;
 }
 
+
+a.btn {
+  background: #3498db;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 5px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 15px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+a.btn:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
 
 
 

@@ -27,13 +27,13 @@
 							{{type_selection}} with <span class="total-count "></span> {{subtype_selection}} (<span class="filter-count "></span> selected, <a href="javascript:dc.filterAll(); dc.redrawAll()">Select All</a>)<hr>
 							<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table6" ng-click="go('population')"></table>
 							<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table7" ng-click="go('land_area')"></table>
-							<!--<table class="table-condensed table-dashboard table-hover" id="data-table8" ng-click="go('mun_city')"></table>-->
+							<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table8" ng-click="go('pop_density')"></table>
 						</div>
 					</div>
 					<hr>
 					<div class="row">
 						<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false" style="height: 600px">
-							<div class="carousel-inner" role="listbox">
+							<div class="carousel-inner" role="listbox" style="height: 350px">
 							
 								<div class="active item">
 									<b style="position: relative; left: 20px">Risk score</b><hr>
@@ -83,6 +83,9 @@
 									<a class="right carousel-control" href="#myCarousel" data-slide="next" ng-click="go_right()" ng-non-bindable><span class="glyphicon glyphicon-chevron-right"><span class="sr-only">Next</span></span></a>
 								</div>
 							</div>
+							<hr>	
+							<a class="btn" ng-href ="./data/{{data_input}}" target="_blank" >Export selected data (JSON)</a>
+							<a class="btn" id="download" ng-click="export_csv()">Export selected data (CSV)</a>
 						</div>
 					</div>
 				</div>
@@ -96,9 +99,9 @@
 							<h4 class="modal-title"><b>{{metric_label}}</b></h4>
 						</div>
 						<div class="modal-body">
-							<p><b>Year source:</b> {{metric_year}}</p><br>
-							<p><b>Source link:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></p><br>
-							<p><b>Description:</b> {{metric_desc}}</p><br>
+							<h5><b>Year source:</b> {{metric_year}}</h5><br>
+							<h5><b>Source link:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h5><br>
+							<h5><b>Description:</b> {{metric_desc}}</h5><br>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

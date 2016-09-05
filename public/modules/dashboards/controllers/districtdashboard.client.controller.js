@@ -17,7 +17,7 @@ angular.module('dashboards')
 		$scope.type_selection = 'Country';
 		$scope.subtype_selection = 'Provinces'; 
 		$scope.parent_code = '';
-		var data_input = '';//$scope.admlevel + ',\'' + $scope.parent_code;
+		$scope.data_input = '';//$scope.admlevel + ',\'' + $scope.parent_code;
 		var filters;
 		var map;
 
@@ -44,13 +44,13 @@ angular.module('dashboards')
 			// start loading bar
 		    $scope.start();
 			
-			data_input = $scope.admlevel + ',\'' + $scope.parent_code;
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.parent_code;
 
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
 			    function(dashboard) {		
 					// get the data
 					//console.log(data_input);
-					Data.get({adminLevel: data_input}, //$scope.admlevel || ',' || $scope.parent_code)},
+					Data.get({adminLevel: $scope.data_input}, //$scope.admlevel || ',' || $scope.parent_code)},
 						function(pgData){
 							$scope.prepare(dashboard, pgData);
 						});					
@@ -131,7 +131,8 @@ angular.module('dashboards')
 			  }
 			  return current;
 		};
-
+		
+		
 		
 		/**
 		 * function to generate the 3W component
@@ -169,7 +170,49 @@ angular.module('dashboards')
 				$scope.subtype_selection = 'Barangays'; 
 			}
 			
-			
+			$scope.export_csv = function() {
+				var content = d.Rapportage;
+				//console.log(content);
+
+				var finalVal = '';
+				
+				for (var i = 0; i < content.length; i++) {
+					var value = content[i];
+					
+					if (i === 0) {
+						for (var key in value) {
+							if (value.hasOwnProperty(key)) {
+								var innerValue =  key;
+								var result = innerValue.replace(/"/g, '""');
+								if (result.search(/("|,|\n)/g) >= 0)
+									result = '"' + result + '"';
+								if (key !== 'pcode') finalVal += ';';
+								finalVal += result;
+							}
+						}
+					finalVal += '\n';	
+					}
+
+					for (var key in value) { 
+						if (value.hasOwnProperty(key)) {
+							var innerValue =  JSON.stringify(value[key]);
+							var result = innerValue.replace(/"/g, '""');
+							if (result.search(/("|,|\n)/g) >= 0)
+								result = '"' + result + '"';
+							if (key !== 'pcode') finalVal += ';';
+							finalVal += result;
+						}
+					}
+
+					finalVal += '\n';
+				}
+				console.log(finalVal);
+
+				var download = document.getElementById('download');
+				download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
+				download.setAttribute('download', 'export.csv');
+			}
+		
 			//var cf = crossfilter(d3.range(0, data.Districts.features.length));
 			var cf = crossfilter(d.Rapportage);
 			var parentDim = cf.dimension(function(d) { return d.pcode_parent; });
@@ -181,18 +224,18 @@ angular.module('dashboards')
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
 				
 			// Create customized reduce-functions to be able to calculated percentages over all or multiple districts (i.e. the % of male volunteers))
-			var reduceAddAvg = function(metric) {
+			var reduceAddAvg = function(metricA,metricB) {
 				return function(p,v) {
-					p.sumOfSub += v[metric]*v.population;
-					p.sumOfTotal += v.population;
+					p.sumOfSub += v[metricA]*v[metricB];
+					p.sumOfTotal += v[metricB];
 					p.finalVal = p.sumOfSub / p.sumOfTotal;
 					return p;
 				};
 			};
-			var reduceRemoveAvg = function(metric) {
+			var reduceRemoveAvg = function(metricA,metricB) {
 				return function(p,v) {
-					p.sumOfSub -= v[metric]*v.population;
-					p.sumOfTotal -= v.population;
+					p.sumOfSub -= v[metricA]*v[metricB];
+					p.sumOfTotal -= v[metricB];
 					p.finalVal = p.sumOfSub / p.sumOfTotal;
 					return p;
 				};
@@ -201,6 +244,7 @@ angular.module('dashboards')
 				return {sumOfSub:0, sumOfTotal:0, finalVal:0 };
 			}; 
 			
+	
 			
 			//All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
 			var totaalDim = cf.dimension(function(i) { return 'Total'; });
@@ -208,31 +252,32 @@ angular.module('dashboards')
 			//For this total-dimension we create a group for each metric to calculate the sum
 			//framework scores
 			//var risk_score = totaalDim.group().reduceSum(function(d) {return d.risk_score;});
-			var risk_score = totaalDim.group().reduce(reduceAddAvg('risk_score'),reduceRemoveAvg('risk_score'),reduceInitialAvg);
-			var vulnerability_score = totaalDim.group().reduce(reduceAddAvg('vulnerability_score'),reduceRemoveAvg('vulnerability_score'),reduceInitialAvg);
-			var hazard_score = totaalDim.group().reduce(reduceAddAvg('hazard_score'),reduceRemoveAvg('hazard_score'),reduceInitialAvg);
-			var coping_capacity_score = totaalDim.group().reduce(reduceAddAvg('coping_capacity_score'),reduceRemoveAvg('coping_capacity_score'),reduceInitialAvg);
+			var risk_score = totaalDim.group().reduce(reduceAddAvg('risk_score','population'),reduceRemoveAvg('risk_score','population'),reduceInitialAvg);
+			var vulnerability_score = totaalDim.group().reduce(reduceAddAvg('vulnerability_score','population'),reduceRemoveAvg('vulnerability_score','population'),reduceInitialAvg);
+			var hazard_score = totaalDim.group().reduce(reduceAddAvg('hazard_score','population'),reduceRemoveAvg('hazard_score','population'),reduceInitialAvg);
+			var coping_capacity_score = totaalDim.group().reduce(reduceAddAvg('coping_capacity_score','population'),reduceRemoveAvg('coping_capacity_score','population'),reduceInitialAvg);
 			//general information
 			var population = totaalDim.group().reduceSum(function(d) {return d.population;});
 			var land_area = totaalDim.group().reduceSum(function(d) {return d.land_area;});
+			var pop_density = totaalDim.group().reduce(reduceAddAvg('pop_density','land_area'),reduceRemoveAvg('pop_density','land_area'),reduceInitialAvg);
 			var mun_city = totaalDim.group().reduceSum(function(d) {return d.mun_city;});
 			//vulnerability
-			var poverty_incidence = totaalDim.group().reduce(reduceAddAvg('poverty_incidence'),reduceRemoveAvg('poverty_incidence'),reduceInitialAvg);
-			var income_class = totaalDim.group().reduce(reduceAddAvg('income_class'),reduceRemoveAvg('income_class'),reduceInitialAvg);
-			var gdp_per_capita = totaalDim.group().reduce(reduceAddAvg('gdp_per_capita'),reduceRemoveAvg('gdp_per_capita'),reduceInitialAvg);
-			var hdi = totaalDim.group().reduce(reduceAddAvg('hdi'),reduceRemoveAvg('hdi'),reduceInitialAvg);
+			var poverty_incidence = totaalDim.group().reduce(reduceAddAvg('poverty_incidence','population'),reduceRemoveAvg('poverty_incidence','population'),reduceInitialAvg);
+			var income_class = totaalDim.group().reduce(reduceAddAvg('income_class','population'),reduceRemoveAvg('income_class','population'),reduceInitialAvg);
+			var gdp_per_capita = totaalDim.group().reduce(reduceAddAvg('gdp_per_capita','population'),reduceRemoveAvg('gdp_per_capita','population'),reduceInitialAvg);
+			var hdi = totaalDim.group().reduce(reduceAddAvg('hdi','population'),reduceRemoveAvg('hdi','population'),reduceInitialAvg);
 			//hazards
-			var flood_risk = totaalDim.group().reduce(reduceAddAvg('flood_risk'),reduceRemoveAvg('flood_risk'),reduceInitialAvg);
-			var cyclone_risk = totaalDim.group().reduce(reduceAddAvg('cyclone_risk'),reduceRemoveAvg('cyclone_risk'),reduceInitialAvg);
-			var landslide_risk = totaalDim.group().reduce(reduceAddAvg('landslide_risk'),reduceRemoveAvg('landslide_risk'),reduceInitialAvg);
-			var earthquake7_phys_exp = totaalDim.group().reduce(reduceAddAvg('earthquake7_phys_exp'),reduceRemoveAvg('earthquake7_phys_exp'),reduceInitialAvg);
-			var tsunami_phys_exp = totaalDim.group().reduce(reduceAddAvg('tsunami_phys_exp'),reduceRemoveAvg('tsunami_phys_exp'),reduceInitialAvg);
-			var cyclone_surge_2m_phys_exp = totaalDim.group().reduce(reduceAddAvg('cyclone_surge_2m_phys_exp'),reduceRemoveAvg('cyclone_surge_2m_phys_exp'),reduceInitialAvg);
+			var flood_risk = totaalDim.group().reduce(reduceAddAvg('flood_risk','population'),reduceRemoveAvg('flood_risk','population'),reduceInitialAvg);
+			var cyclone_risk = totaalDim.group().reduce(reduceAddAvg('cyclone_risk','population'),reduceRemoveAvg('cyclone_risk','population'),reduceInitialAvg);
+			var landslide_risk = totaalDim.group().reduce(reduceAddAvg('landslide_risk','population'),reduceRemoveAvg('landslide_risk','population'),reduceInitialAvg);
+			var earthquake7_phys_exp = totaalDim.group().reduce(reduceAddAvg('earthquake7_phys_exp','population'),reduceRemoveAvg('earthquake7_phys_exp','population'),reduceInitialAvg);
+			var tsunami_phys_exp = totaalDim.group().reduce(reduceAddAvg('tsunami_phys_exp','population'),reduceRemoveAvg('tsunami_phys_exp','population'),reduceInitialAvg);
+			var cyclone_surge_2m_phys_exp = totaalDim.group().reduce(reduceAddAvg('cyclone_surge_2m_phys_exp','population'),reduceRemoveAvg('cyclone_surge_2m_phys_exp','population'),reduceInitialAvg);
 			//coping capacity
 			var nr_facilities = totaalDim.group().reduceSum(function(d) {return d.nr_facilities;});
 			var nr_doctors = totaalDim.group().reduceSum(function(d) {return d.nr_doctors;});
-			var good_governance_index = totaalDim.group().reduce(reduceAddAvg('good_governance_index'),reduceRemoveAvg('good_governance_index'),reduceInitialAvg);
-			var traveltime = totaalDim.group().reduce(reduceAddAvg('traveltime'),reduceRemoveAvg('traveltime'),reduceInitialAvg);
+			var good_governance_index = totaalDim.group().reduce(reduceAddAvg('good_governance_index','population'),reduceRemoveAvg('good_governance_index','population'),reduceInitialAvg);
+			var traveltime = totaalDim.group().reduce(reduceAddAvg('traveltime','population'),reduceRemoveAvg('traveltime','population'),reduceInitialAvg);
 			
 			// Examples of custom reduce functions
 			// var LeeftijdOnder18Group = totaalDim.group().reduce(reduceAddAvg('LeeftijdOnder18'),reduceRemoveAvg('LeeftijdOnder18'),reduceInitialAvg);
@@ -273,7 +318,7 @@ angular.module('dashboards')
 					return feature.properties.pcode;
 				})
 				.popup(function(d){
-					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',intFormat(d.value));
+					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',dec0Format(d.value));
 				})
 				.renderPopup(true)
 				.turnOnControls(true)
@@ -343,7 +388,7 @@ angular.module('dashboards')
 							{id: '#data-table5', name: 'coping_capacity_score', datatype: 'decimal2', group: 'score', propertyPath: 'value.finalVal', dimension: coping_capacity_score},
 							{id: '#data-table6', name: 'population', datatype: 'integer', group: 'general', propertyPath: 'value', dimension: population},
 							{id: '#data-table7', name: 'land_area', datatype: 'integer', group: 'general', propertyPath: 'value', dimension: land_area},
-							{id: '#data-table8', name: 'mun_city', datatype: 'number', group: 'general', propertyPath: 'value', dimension: mun_city},
+							{id: '#data-table8', name: 'pop_density', datatype: 'decimal2', group: 'general', propertyPath: 'value.finalVal', dimension: pop_density},
 							{id: '#data-table9', name: 'poverty_incidence', datatype: 'percentage', group: 'vulnerability', propertyPath: 'value.finalVal', dimension: poverty_incidence},
 							{id: '#data-table10', name: 'income_class', datatype: 'decimal2', group: 'vulnerability', propertyPath: 'value.finalVal', dimension: income_class},
 							{id: '#data-table11', name: 'gdp_per_capita', datatype: 'integer', group: 'vulnerability', propertyPath: 'value.finalVal', dimension: gdp_per_capita},
@@ -377,15 +422,11 @@ angular.module('dashboards')
 						.columns([
 									// icon
 									function(d){return '<img src=\"modules/dashboards/img/'+meta_icon[t.name]+'\" width=\"20\">';},
-									// info button
-									//function(d){return '<button id=\"myBtn\">Open Modal</button>';}
 									// name of variable
 									function(d){return meta_label[t.name];}, 
 									// the value
 									function(d){
-										if (t.name === 'mun_city') {
-											return lookup_muncity[t.key];
-										} else if (isNaN($scope.deepFind(d, t.propertyPath))) {
+										if (isNaN($scope.deepFind(d, t.propertyPath))) {
 											return 'N.A. on this level';
 										} else if(meta_format[t.name] === 'decimal0'){
 											return dec0Format($scope.deepFind(d, t.propertyPath));

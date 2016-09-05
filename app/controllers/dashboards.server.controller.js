@@ -363,7 +363,7 @@ exports.getFileLocal = function(source){
 				return cb(null, source);
 			} else {
 				
-				var converter = new Converter({delimiter: ',', eol: '\n'});
+				var converter = new Converter({delimiter: ';', eol: '\n'});
 				converter.fromString(data, function(err,result){
 					if (err){
 						return cb(new Error(err));

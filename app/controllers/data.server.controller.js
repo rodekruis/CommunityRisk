@@ -46,7 +46,7 @@ exports.read = function(req, res) {
 exports.getData = function(req, res, next, adminLevel) {
 	
 	var connString = 'postgres://'+config.postgres.user+':'+config.postgres.password+'@'+config.postgres.host+'/'+config.postgres.db;
-	console.log(connString);
+	//console.log(connString);
 
 	pg.connect(connString, function(err, client) {
 		if (err) return next(err);

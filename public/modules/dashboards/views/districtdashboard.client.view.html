@@ -3,7 +3,7 @@
 		<div cg-busy="{promise:promise,templateUrl:templateUrl,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}">
 			<div id="header" class="row">
 				<div class="col-md-8">
-					<div id="title"><h3>Community Profiles Philippines</h3></div>
+					<div id="title"><h3><b>Community Profiles Philippines</b></h3></div>
 				</div>
 				<!--<div id="count-info" class="col-md-8">
 					<span class="filter-count "></span> selected out of <span class="total-count "></span> records:   
@@ -12,10 +12,10 @@
 			</div>
 			<div class="row">
 				<div class="col-md-4 colheight">
-					<b>{{subtype_selection}} of {{type_selection}}: {{name_selection}}</b>
-					<a ng-click="level_up()">(Level up)</a>
-					<div id="map-chart" style="width:600px; height:150%;"></div>
-					
+					<div id="flag1" ng-click="level_up(2)">{{country_selection}}</div>
+					<div id="flag2" ng-click="level_up(3)">{{prov_selection}}</div>
+					<div id="flag3">{{mun_selection}}</div>
+					<div id="map-chart" style="width:600px; height:150%; top:-50px;"></div>
 				</div>	
 				
 				<div class="col-md-3 colheight"></div>
@@ -24,7 +24,8 @@
 					<div class="row">
 						<div id="count-info" class="general-info">
 							<b> Community Profile for: </b>{{name_selection}}<br>
-							{{type_selection}} with <span class="total-count "></span> {{subtype_selection}} (<span class="filter-count "></span> selected, <a href="javascript:dc.filterAll(); dc.redrawAll()">Select All</a>)<hr>
+							{{type_selection}} with <span class="total-count "></span> {{subtype_selection}} (<span class="filter-count "></span> selected, <a href="javascript:dc.filterAll(); dc.redrawAll()">Select All</a>)
+							<hr style="padding:0px; margin:5px">
 							<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table6" ng-click="go('population')"></table>
 							<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table7" ng-click="go('land_area')"></table>
 							<table style="cursor:pointer" class="table-condensed table-dashboard table-hover" id="data-table8" ng-click="go('pop_density')"></table>

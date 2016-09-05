@@ -14,6 +14,11 @@ angular.module('dashboards')
 		$scope.admlevel = 2;
 		$scope.admlevel_text = 'Provinces';
 		$scope.name_selection = 'The Philippines';
+		$scope.country_selection = 'The Philippines';
+		$scope.prov_selection = undefined;
+		$scope.mun_selection = undefined;
+		$scope.prov_code = '';
+		$scope.mun_code = '';
 		$scope.type_selection = 'Country';
 		$scope.subtype_selection = 'Provinces'; 
 		$scope.parent_code = '';
@@ -162,12 +167,22 @@ angular.module('dashboards')
 			if ($scope.admlevel === 2) {
 				$scope.type_selection = 'Country';
 				$scope.subtype_selection = 'Provinces'; 
+				$scope.prov_selection = undefined;
+				$scope.mun_selection = undefined;
+				$scope.prov_code = '';
+				$scope.mun_code = '';
 			} else if ($scope.admlevel === 3) {
 				$scope.type_selection = 'Province';
 				$scope.subtype_selection = 'Municipalities'; 
+				$scope.prov_selection = $scope.name_selection;
+				$scope.prov_code = $scope.parent_code;
+				$scope.mun_selection = undefined;
+				$scope.mun_code = '';
 			} else if ($scope.admlevel === 4) {
 				$scope.type_selection = 'Municipality';
 				$scope.subtype_selection = 'Barangays'; 
+				$scope.mun_selection = $scope.name_selection;
+				$scope.mun_code = $scope.parent_code;
 			}
 			
 			$scope.export_csv = function() {
@@ -293,8 +308,9 @@ angular.module('dashboards')
 			//Define number formats for absolute numbers and for percentage metrics
 			var intFormat = d3.format(',');
 			var dec0Format = d3.format(',.0f');
+			var dec1Format = d3.format(',.1f');
 			var dec2Format = d3.format('.2f');
-			var percFormat = d3.format(',.1%');
+			var percFormat = d3.format(',.2%');
 			
 			//Create the map-chart
 			if ($scope.admlevel === 3) {
@@ -312,13 +328,12 @@ angular.module('dashboards')
 				.colors(d3.scale.quantile()
 								.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
 								.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
-				//.colorAccessor(function (d) {if(d>0){return d;} else {return 0;}})  
-				.colorCalculator(function (d) { return (d > 0) ? mapChart.colors()(d) : '#cccccc'; })
+				.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
 				.featureKeyAccessor(function(feature){
 					return feature.properties.pcode;
 				})
 				.popup(function(d){
-					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',dec0Format(d.value));
+					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',dec1Format(d.value));
 				})
 				.renderPopup(true)
 				.turnOnControls(true)
@@ -356,11 +371,16 @@ angular.module('dashboards')
 				dc.redrawAll();
 			};
 			
-			$scope.level_up = function() {
-				if ($scope.admlevel > 2) {
-					$scope.admlevel = $scope.admlevel - 1;
-					$scope.parent_code = $scope.parent_code_prev;
+			$scope.level_up = function(dest_level) {
+				if (dest_level === 2) {
+					$scope.admlevel = 2;
+					$scope.parent_code = '';
 					$scope.initiate();
+				} else if (dest_level === 3) {
+					$scope.admlevel = 3;
+					$scope.parent_code = $scope.prov_code;
+					$scope.initiate();
+					
 				}
 			};
 				

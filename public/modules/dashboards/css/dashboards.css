@@ -60,11 +60,10 @@
 .general-info {
 	padding:5px;
     background-color:#E6E6FA;
-    background: rgba(255,255,255,0.8);
+    background: #bdc9e1; /*rgba(255,255,255,0.8);*/
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
-	width:450px;
-	height:200px;
+	width:500px;
 }
 
 #loading-bar-spinner {
@@ -96,7 +95,7 @@
 }
 
 /*Make sure the a-elements (such as: level_up) get a pointer-cursor when hovered */
-a:hover {
+a:hover, #flag1:hover, #flag2:hover {
  cursor:pointer;
 }
 
@@ -126,6 +125,71 @@ a.btn:hover {
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
 }
+
+#flag1, #flag2, #flag3 { 
+  width: 180px; height: 30px; position: relative;
+  margin-left: 10px;
+  color: white;
+  line-height: 30px;
+  text-align: center;
+}
+#flag1 {
+  background: #2b8cbe;
+  margin-left: 0px;
+}
+#flag2 {
+  left: 190px;
+  top: -30px;
+  background: #74a9cf;
+  margin-left: 10px;
+}
+#flag3 {
+  left: 390px;
+  top: -60px;
+  background: #bdc9e1;
+  margin-left: 10px;
+}
+
+#flag2:before,#flag3:before { 
+  content: ""; 
+  position: absolute; 
+  top: 0; 
+  left: -15px;
+  width: 0; 
+  height: 0; 
+  border-left: 15px solid transparent;
+
+}
+#flag2:before {
+  border-top: 15px solid #74a9cf; 
+  border-bottom: 15px solid #74a9cf; 
+}
+#flag3:before {
+  border-top: 15px solid #bdc9e1; 
+  border-bottom: 15px solid #bdc9e1; 
+}
+
+#flag1:after,#flag2:after,#flag3:after { 
+  content: ""; 
+  position: absolute; 
+  left: 180px; 
+  bottom: 0; 
+  width: 0; 
+  height: 0; 
+  border-top: 15px solid transparent;
+
+  border-bottom: 15px solid transparent;
+
+  border-left: 15px solid #2b8cbe;
+}
+#flag2:after {
+  border-left: 15px solid #74a9cf;
+}
+#flag3:after {
+  border-left: 15px solid #bdc9e1;
+}
+
+
 
 
 

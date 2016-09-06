@@ -4,7 +4,8 @@ module.exports = {
 	app: {
 		title: 'Rode Kruis Dashboards',
 		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
-		keywords: 'MongoDB, Express, AngularJS, Node.js'
+		keywords: 'MongoDB, Express, AngularJS, Node.js',
+		googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'UA-83697955-2' // <-- Here
 	},
 	port: process.env.PORT || 3000,
 	sslport: process.env.SSLPORT || 444,

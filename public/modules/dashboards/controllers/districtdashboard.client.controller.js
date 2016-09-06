@@ -208,10 +208,10 @@ angular.module('dashboards')
 					finalVal += '\n';	
 					}
 
-					for (key in value) { 
+					for (var key in value) { 
 						if (value.hasOwnProperty(key)) {
-							innerValue =  JSON.stringify(value[key]);
-							result = innerValue.replace(/"/g, '""');
+							var innerValue =  JSON.stringify(value[key]);
+							var result = innerValue.replace(/"/g, '""');
 							if (result.search(/("|,|\n)/g) >= 0)
 								result = '"' + result + '"';
 							if (key !== 'pcode') finalVal += ';';

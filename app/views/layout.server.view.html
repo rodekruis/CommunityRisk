@@ -31,6 +31,25 @@
 
 	<!-- Fav Icon -->
 	<link href="/modules/core/img/brand/favicon.ico" rel="shortcut icon" type="image/x-icon">
+	
+	<!-- Stylesheets -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" rel="stylesheet" type="text/css" media="screen, projection"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css" rel="stylesheet" type="text/css" media="screen, projection"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" media="screen, projection"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" type="text/css" media="screen, projection"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css" rel="stylesheet" type="text/css" media="screen, projection"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.css"/>
+
+    <link href='https://fonts.googleapis.com/css?family=Raleway:300,400,700,500,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu:400,400italic,300,500,700' rel='stylesheet' type='text/css'>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen, projection"/>
+    
+	<link href="/public/modules/core/css/site.css" rel="stylesheet" type="text/css" media="screen, projection" />
+	<link href="/public/modules/core/css/profile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+	<link href="/public/modules/core/css/jquery.cookiebar.css" rel="stylesheet" type="text/css" media="screen, projection" />
+    <link href="/public/modules/core/css/home.css" rel="stylesheet" type="text/css" media="screen, projection" />
+
 
 	<!--Application CSS Files-->
 	{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">
@@ -49,6 +68,8 @@
 			{% block content %}{% endblock %}
 		</section>
 	</section>
+	<div id="ribbon1"><img class="share" src="modules/core/img/ribbon.png" width="70" height="105" alt="now in beta"/></div>
+	<div id="ribbon2"><a class="btn" href="https://gitter.im/community_profiles/Lobby#" target="_blank">Give feedback!</a></div>
 
 	<!--Embedding The User Object-->
 	<script type="text/javascript">
@@ -75,6 +96,162 @@
 		ga('send', 'pageview');
 
 	  </script>
+	
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet-src.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.7/d3.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw-src.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-signals/1.0.0/js-signals.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hasher/1.2.0/hasher.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossroads/0.12.2/crossroads.min.js"></script>
+
+
+	<script type="text/javascript" src="/public/js_temp/mousewheel.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/easing.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/jquery.countto.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/utilities.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/custom-functions.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/cookie-bar.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/custom-jquery.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/csrf-ajax.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/nav-bar.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/google-analytics.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/cluster-layer.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/locality-sidebar.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/map-functionality.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/_app.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/public/js_temp/index-page.js" charset="utf-8"></script>
+
+	<script>
+		var chart = c3.generate({
+			bindto: '#chart1',
+			size: {
+				height: 220
+			},
+			bar: {
+				width: 18
+			},
+			data: {
+				x: 'x',
+				y: 'percent',
+				columns: [
+					//the healthsites names
+					['x', 'Hospitals', 'Medical clinic', 'Orthopaedic clinic'],
+					//the healthsites number
+					['number', 0, 0, 0],
+					//the healthsites percentgage
+					['percent', 0, 0, 0]
+				],
+				axes: {
+					number: 'y2'
+				},
+				types: {
+					percent: 'bar',
+					number: 'bar'
+				},
+				order: 'asc',
+
+				labels: {
+					format: {
+						number: function (v, id, i, j) {
+							return v;
+						},
+					}
+				},
+
+
+			},
+			axis: {
+				rotated: true,
+				x: {
+					type: 'category',
+
+				},
+				y: {
+					max: 1,
+					tick: {
+						values: [0, 0.5, 1],
+						format: d3.format('%,')
+
+					}
+				}
+			},
+			legend: {
+				show: false
+			},
+			color: {
+				pattern: ['#b6cccc', '#f89ea1']
+			}
+		});
+
+		var piechart = c3.generate({
+			bindto: '#piechart',
+			size: {
+				height: 220
+			},
+			data: {
+				// iris data from R
+				columns: [
+					['complete', 0],
+					['partial', 0],
+					['basic', 0],
+				],
+				colors: {
+					complete: '#f89ea1',
+					partial: '#b6cccc',
+					basic: '#8698a4'
+				},
+				type: 'pie',
+				onclick: function (d, i) {
+					console.log("onclick", d, i);
+				},
+				onmouseover: function (d, i) {
+					console.log("onmouseover", d, i);
+				},
+				onmouseout: function (d, i) {
+					console.log("onmouseout", d, i);
+				}
+			}
+		});
+	</script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<script>
+		$(document).ready(function () {
+			var map = new MAP();
+			renderCredit();
+			$("#country-search-box").autocomplete({
+				source: function (request, response) {
+					$.ajax({
+						url: "/countries",
+						dataType: 'json',
+						data: {
+							q: request.term
+						},
+						success: function (data) {
+							response(data);
+						}
+					});
+				},
+				minLength: 3,
+				select: function (event, ui) {
+				},
+				open: function () {
+					$(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+				},
+				close: function () {
+					$(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+				}
+			});
+
+			
+			gettingData("");
+		});
+	</script>
+  
   
 </body>
 

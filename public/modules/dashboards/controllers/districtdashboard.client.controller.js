@@ -65,7 +65,21 @@ angular.module('dashboards')
 				//$scope.addAlert('danger', error.data.message);
 			    });
 			
-		};  
+		}; 
+
+		$scope.reload = function(d) {	    
+				
+			// start loading bar
+		    $scope.start();
+			
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.parent_code;
+
+			Data.get({adminLevel: $scope.data_input}, //$scope.admlevel || ',' || $scope.parent_code)},
+				function(pgData){
+					$scope.prepare_reload(d,pgData);
+			});	
+		
+		};
 		
 		/**
 		 * get the data from the files as defined in the config.
@@ -83,6 +97,27 @@ angular.module('dashboards')
 		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
 		  d.Metadata = dashboard.sources.Metadata.data;
+		  $scope.geom = pgData.usp_data.geo;
+		  
+		  $scope.generateCharts(d);
+		  
+		  // end loading bar
+		  $scope.complete();	   
+
+		};
+		
+		$scope.prepare_reload = function(d,pgData) {
+		  // set the title
+		  $scope.title = $scope.config.title;
+				
+		  // create the map chart (NOTE: this has to be done before the ajax call)
+		  $scope.mapChartType = 'leafletChoroplethChart';	
+		  
+		  // load data
+		  //var d = {};
+		  d.Districts = pgData.usp_data.geo;
+		  d.Rapportage = pgData.usp_data.ind;
+		  //d.Metadata = dashboard.sources.Metadata.data;
 		  $scope.geom = pgData.usp_data.geo;
 		  
 		  $scope.generateCharts(d);
@@ -345,7 +380,7 @@ angular.module('dashboards')
 						$scope.parent_code = filters[0];
 						if ($scope.admlevel === 4) {$scope.metric = 'population';}
 						$scope.name_selection = lookup[$scope.parent_code];
-						$scope.initiate();
+						$scope.reload(d);
 					}
 				})
 				;
@@ -364,22 +399,22 @@ angular.module('dashboards')
 				mapChart
 					.group(whereGroupSum)
 					.colors(d3.scale.quantile()
-									.domain([d3.min(d.Rapportage,function(d) {return d[id];}),d3.max(d.Rapportage,function(d) {return d[id];})])
+									.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
 									.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
-					.colorAccessor(function (d) {if(d>0){return d;} else {return 0;}});
+					.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
 				dc.filterAll();
 				dc.redrawAll();
 			};
 			
 			$scope.level_up = function(dest_level) {
-				if (dest_level === 2) {
+				if (dest_level === 2 && $scope.admlevel) {
 					$scope.admlevel = 2;
 					$scope.parent_code = '';
-					$scope.initiate();
-				} else if (dest_level === 3) {
+					$scope.reload(d);
+				} else if (dest_level === 3 && $scope.admlevel > 2) {
 					$scope.admlevel = 3;
 					$scope.parent_code = $scope.prov_code;
-					$scope.initiate();
+					$scope.reload(d);
 					
 				}
 			};

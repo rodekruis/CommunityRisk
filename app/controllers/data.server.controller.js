@@ -46,9 +46,8 @@ exports.read = function(req, res) {
 exports.getData = function(req, res, next, adminLevel) {
 	
 	var connString = 'postgres://'+config.postgres.user+':'+config.postgres.password+'@'+config.postgres.host+'/'+config.postgres.db;
-	//console.log(connString);
 
-	pg.connect(connString, function(err, client) {
+	pg.connect(connString, function(err, client, release) {
 		if (err) return next(err);
 
         var sql1 = 'SELECT usp_data(';
@@ -59,6 +58,7 @@ exports.getData = function(req, res, next, adminLevel) {
 		client.query(sql, function(err, result) {
 			if (err) return next(err);
 			req.pgData = result.rows[0];
+			release();
 			next();
         });
     });

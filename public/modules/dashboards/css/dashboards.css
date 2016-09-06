@@ -189,6 +189,10 @@ a.btn:hover {
   border-left: 15px solid #bdc9e1;
 }
 
+.leaflet-clickable {
+	fill-opacity: .7;
+}
+
 
 
 

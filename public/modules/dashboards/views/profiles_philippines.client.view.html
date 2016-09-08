@@ -11,15 +11,16 @@
 				</div>-->
 			</div>
 			<div class="row">
-				<div class="col-md-4 colheight">
-					<div id="flag1" ng-click="level_up(2)">{{country_selection}}</div>
-					<div id="flag2" ng-click="level_up(3)">{{prov_selection}}</div>
-					<div id="flag3">{{mun_selection}}</div>
-					<div id="map-chart" style="width:600px; height:150%; top:-50px;"></div>
+				<div class="col-md-7 colheight">
+					<div class="flag-container">
+						<div id="flag1" ng-click="level_up(2)">{{country_selection}}</div>
+						<div id="flag2" ng-click="level_up(3)">{{prov_selection}}</div>
+						<div id="flag3">{{mun_selection}}</div>
+					</div>
+					<div id="color-selection">Communities currently color-coded by <b>{{metric_label}}</b></div>
+					<div id="map-chart" style="width:90%; height:150%"></div>
 				</div>	
-				
-				<div class="col-md-3 colheight"></div>
-				
+								
 				<div class="col-md-5 colheight">
 					<div class="row">
 						<div id="count-info" class="general-info">
@@ -74,14 +75,14 @@
 							</div>
 							<div class="controlsBlock">
 								<div class="controls">
-									<a class="left carousel-control" href="#myCarousel" data-slide="prev" ng-click="go_left()" ng-non-bindable><span class="glyphicon glyphicon-chevron-left"><span class="sr-only">Previous</span></span></a>
+									<a class="left carousel-control" href="#myCarousel" data-slide="prev" ng-non-bindable><span class="glyphicon glyphicon-chevron-left"><span class="sr-only">Previous</span></span></a>
 									<div class="carousel-indicators">
-										<li data-target="#myCarousel" data-slide-to="0" ng-click="go('risk_score')" class="active" ></li>
-										<li data-target="#myCarousel" data-slide-to="1" ng-click="go('poverty_incidence')"></li>
-										<li data-target="#myCarousel" data-slide-to="2" ng-click="go('flood_risk')"></li>
-										<li data-target="#myCarousel" data-slide-to="3" ng-click="go('nr_facilities')"></li>
+										<li data-target="#myCarousel" data-slide-to="0" class="active" ></li>
+										<li data-target="#myCarousel" data-slide-to="1" ></li>
+										<li data-target="#myCarousel" data-slide-to="2" ></li>
+										<li data-target="#myCarousel" data-slide-to="3" ></li>
 									</div>
-									<a class="right carousel-control" href="#myCarousel" data-slide="next" ng-click="go_right()" ng-non-bindable><span class="glyphicon glyphicon-chevron-right"><span class="sr-only">Next</span></span></a>
+									<a class="right carousel-control" href="#myCarousel" data-slide="next" ng-non-bindable><span class="glyphicon glyphicon-chevron-right"><span class="sr-only">Next</span></span></a>
 								</div>
 							</div>
 							<hr>	

@@ -1,3 +1,4 @@
+
 html, body {
     min-height:100%;
     height: 100%;
@@ -57,10 +58,10 @@ body {
     z-index: 100;    
 }
 
-/*.logo img {
+.logo img {
     padding: 50px;
     position:relative;
-}*/
+}
 
 .angular-leaflet-map {
     position:absolute;
@@ -116,4 +117,129 @@ a.btn:hover {
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
 }
+
+#ribbon1,#ribbon2 {
+    position: fixed;
+    right: 0;
+    bottom: 60px;
+}
+#ribbon2 {
+	bottom: 10px;
+}
+
+/* Base candidates
+
+-------------------------------------------------- */
+
+a:focus {
+    outline: none;
+}
+
+.dark .stroke {
+    border: 2px solid rgba(255, 255, 255, .25);
+}
+
+label.inline {
+    margin: 0 10px;
+    line-height: 40px;
+}
+
+.center-v {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.load-container {
+    position: relative;
+    min-height: 400px;
+}
+
+.pad0x {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.pad10x {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.center {
+    text-align: center;
+}
+
+.button {
+	font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: #3498db;
+    text-align: center;
+}
+
+.button:hover, .button:focus {
+    text-decoration: none;
+    color: #fff;
+    opacity: 0.8;
+}
+
+.button.white {
+    color: #3498db;
+    background: #fff;
+}
+
+.button.blue {
+    color: #3c4c57;
+    background: none;
+}
+
+.button.stroke {
+    border: 3px solid #fff;
+}
+
+.button.stroke.blue {
+    border: 3px solid #3c4c57;
+    line-height: 38px;
+    color: #3c4c57;
+}
+
+.scroll {
+    clear: both;
+    display: block;
+    height: 53px;
+    margin-top: -53px;
+}
+
+.search-toggle {
+    display: none;
+}
+
+.ui-autocomplete {
+    z-index: 1200;
+}
+
+/* Prevents animation on initial page load. See lib.app.js */
+
+body:not(.animate) .animate {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    transition: none;
+}
+
+.text-aqua {
+    color: #3bb2d0;
+}
+
+/* Deprecated, replaced with input.clean in base */
+
+input.minimal {
+    border: none;
+}
+
+input[type=text].transparent, input[type=text].transparent:active, input[type=text].transparent:focus, input[type=text].transparent:hover {
+    background: transparent;
+	
+
 

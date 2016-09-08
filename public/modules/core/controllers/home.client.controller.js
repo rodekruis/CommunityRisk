@@ -45,5 +45,10 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     leafletData.getMap().then(function(cartomap) {	
             cartomap.invalidateSize();
     });
+	
+
+	$(document).ready(function() {
+		$('.timer').countTo();
+	});
                         
 }]);

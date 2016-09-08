@@ -5,6 +5,7 @@
   "dependencies": {
     "bootstrap": "~3.3",
     "jquery": "~2.2.3",
+	"jquery-countTo": "*",
     "leaflet": "~0.7.7",
     "cartodb.js": "~3.15.9",
     "angular": "1.5.5",

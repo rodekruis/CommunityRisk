@@ -127,27 +127,25 @@ a.btn:hover {
 }
 
 #flag1, #flag2, #flag3 { 
-  width: 180px; height: 30px; position: relative;
-  margin-left: 10px;
+  vertical-align: top;
+  display: inline-block;
+  width: 27%; 
+  height: 30px; 
+  position: relative;
   color: white;
   line-height: 30px;
   text-align: center;
 }
 #flag1 {
   background: #2b8cbe;
-  margin-left: 0px;
 }
 #flag2 {
-  left: 190px;
-  top: -30px;
   background: #74a9cf;
-  margin-left: 10px;
+  margin-left: 3%;
 }
 #flag3 {
-  left: 390px;
-  top: -60px;
   background: #bdc9e1;
-  margin-left: 10px;
+  margin-left: 3%;
 }
 
 #flag2:before,#flag3:before { 
@@ -172,7 +170,7 @@ a.btn:hover {
 #flag1:after,#flag2:after,#flag3:after { 
   content: ""; 
   position: absolute; 
-  left: 180px; 
+  left: 100%; 
   bottom: 0; 
   width: 0; 
   height: 0; 
@@ -187,6 +185,19 @@ a.btn:hover {
 }
 #flag3:after {
   border-left: 15px solid #bdc9e1;
+}
+
+#color-selection {
+  width: 90%; 
+  height: 20px; 
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: black;
+  background-color: #ccc;
+  text-align: center;
+  vertical-align: middle;
+	
 }
 
 .leaflet-clickable {

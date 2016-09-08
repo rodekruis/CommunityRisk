@@ -25,7 +25,7 @@
 }
 #tophome {
     padding-top: 72px;
-    background: #f44a52;
+    background: #3498db;
     color: #fff;
     font-family: "Raleway", sans-serif;
     min-height: 600px;
@@ -48,7 +48,8 @@ h2.fancy {
 }
 .isopad {
     position: relative;
-    overflow: hidden
+	left: 40%;
+	top: -100%;
 }
  @media only screen and (max-width: 991px) {
 .isopad {

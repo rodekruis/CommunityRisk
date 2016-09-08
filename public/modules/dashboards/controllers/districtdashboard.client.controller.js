@@ -4,10 +4,11 @@ angular.module('dashboards')
 	.controller('DistrictDashboardsController', ['$scope', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
 	function($scope, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 
+		//Define variables
 		$scope.authentication = Authentication;
 		$scope.geom = null;
 		$scope.metric = 'risk_score';
-		$scope.metric_label = '';
+		$scope.metric_label = 'Risk score';
 		$scope.metric_year = '';
 		$scope.metric_source = '';
 		$scope.metric_desc = '';
@@ -23,9 +24,9 @@ angular.module('dashboards')
 		$scope.subtype_selection = 'Provinces'; 
 		$scope.parent_code = '';
 		$scope.data_input = '';//$scope.admlevel + ',\'' + $scope.parent_code;
-		var filters;
+		$scope.filters = [];
+		var d_prev = '';
 		var map;
-
 		$scope.config =  {
 							whereFieldName:'pcode',
 							joinAttribute:'pcode',
@@ -33,7 +34,7 @@ angular.module('dashboards')
 							color:'#0080ff'
 						};	
 		
-		//functions needed for loading bar while waiting for data
+		//Define functions needed for loading bar while waiting for data
 		$scope.start = function() {
 		  cfpLoadingBar.start();
 		};
@@ -66,7 +67,10 @@ angular.module('dashboards')
 			    });
 			
 		}; 
-
+		
+		/**
+		 * Reload the dashboard with new data (upon filtering the map). This will only get new data, but will not get the dashboard info again.
+		 */
 		$scope.reload = function(d) {	    
 				
 			// start loading bar
@@ -99,13 +103,15 @@ angular.module('dashboards')
 		  d.Metadata = dashboard.sources.Metadata.data;
 		  $scope.geom = pgData.usp_data.geo;
 		  
+		  // generate the actual content of the dashboard
 		  $scope.generateCharts(d);
 		  
 		  // end loading bar
 		  $scope.complete();	   
 
 		};
-		
+		//Slightly adjusted version of prepare function upon reload. Needed because the d.Metadata could not be loaded again when the dashboard itself was not re-initiated.
+		//Therefore the d-object needed to be saved, instead of completely re-created.
 		$scope.prepare_reload = function(d,pgData) {
 		  // set the title
 		  $scope.title = $scope.config.title;
@@ -128,7 +134,7 @@ angular.module('dashboards')
 		};
 
 		
-		// fill the lookup table with the name attributes
+		// fill the lookup table which finds the community name with the community code
 		$scope.genLookup = function (field){
 			var lookup = {};
 			$scope.geom.features.forEach(function(e){
@@ -136,15 +142,7 @@ angular.module('dashboards')
 			});
 			return lookup;
 		};
-		// fill the lookup table with the name attributes
-		$scope.genLookup_ind = function (d,field){
-			var lookup_ind = {};
-			d.Rapportage.forEach(function(e){
-				lookup_ind[e.pcode] = String(e[field]);
-			});
-			return lookup_ind;
-		};
-		// fill the lookup table with the name attributes
+		// fill the lookup table with the metadata-information per variable
 		$scope.genLookup_meta = function (d,field){
 			var lookup_meta = {};
 			d.Metadata.forEach(function(e){
@@ -190,7 +188,6 @@ angular.module('dashboards')
 						
 			// get the lookup tables
 			var lookup = $scope.genLookup($scope.config.nameAttribute);
-			var lookup_muncity = $scope.genLookup_ind(d,'mun_city');
 			var meta_label = $scope.genLookup_meta(d,'label');
 			var meta_format = $scope.genLookup_meta(d,'format');
 			var meta_unit = $scope.genLookup_meta(d,'unit');
@@ -198,6 +195,8 @@ angular.module('dashboards')
 			var meta_year = $scope.genLookup_meta(d,'year');
 			var meta_source = $scope.genLookup_meta(d,'source_link');
 			var meta_desc = $scope.genLookup_meta(d,'description');
+			
+			$scope.metric_label = meta_label[$scope.metric];
 			
 			if ($scope.admlevel === 2) {
 				$scope.type_selection = 'Country';
@@ -220,56 +219,10 @@ angular.module('dashboards')
 				$scope.mun_code = $scope.parent_code;
 			}
 			
-			$scope.export_csv = function() {
-				var content = d.Rapportage;
-				//console.log(content);
-
-				var finalVal = '';
-				
-				for (var i = 0; i < content.length; i++) {
-					var value = content[i];
-					
-					if (i === 0) {
-						for (var key in value) {
-							if (value.hasOwnProperty(key)) {
-								var innerValue =  key;
-								var result = innerValue.replace(/"/g, '""');
-								if (result.search(/("|,|\n)/g) >= 0)
-									result = '"' + result + '"';
-								if (key !== 'pcode') finalVal += ';';
-								finalVal += result;
-							}
-						}
-					finalVal += '\n';	
-					}
-
-					for (var key in value) { 
-						if (value.hasOwnProperty(key)) {
-							var innerValue =  JSON.stringify(value[key]);
-							var result = innerValue.replace(/"/g, '""');
-							if (result.search(/("|,|\n)/g) >= 0)
-								result = '"' + result + '"';
-							if (key !== 'pcode') finalVal += ';';
-							finalVal += result;
-						}
-					}
-
-					finalVal += '\n';
-				}
-				console.log(finalVal);
-
-				var download = document.getElementById('download');
-				download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
-				download.setAttribute('download', 'export.csv');
-			}
-		
 			//var cf = crossfilter(d3.range(0, data.Districts.features.length));
 			var cf = crossfilter(d.Rapportage);
-			var parentDim = cf.dimension(function(d) { return d.pcode_parent; });
-					
 			// The wheredimension returns the unique identifier of the geo area
 			var whereDimension = cf.dimension(function(d) { return d.pcode; });
-								
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
 				
@@ -294,14 +247,11 @@ angular.module('dashboards')
 				return {sumOfSub:0, sumOfTotal:0, finalVal:0 };
 			}; 
 			
-	
-			
 			//All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
 			var totaalDim = cf.dimension(function(i) { return 'Total'; });
 
 			//For this total-dimension we create a group for each metric to calculate the sum
 			//framework scores
-			//var risk_score = totaalDim.group().reduceSum(function(d) {return d.risk_score;});
 			var risk_score = totaalDim.group().reduce(reduceAddAvg('risk_score','population'),reduceRemoveAvg('risk_score','population'),reduceInitialAvg);
 			var vulnerability_score = totaalDim.group().reduce(reduceAddAvg('vulnerability_score','population'),reduceRemoveAvg('vulnerability_score','population'),reduceInitialAvg);
 			var hazard_score = totaalDim.group().reduce(reduceAddAvg('hazard_score','population'),reduceRemoveAvg('hazard_score','population'),reduceInitialAvg);
@@ -329,9 +279,6 @@ angular.module('dashboards')
 			var good_governance_index = totaalDim.group().reduce(reduceAddAvg('good_governance_index','population'),reduceRemoveAvg('good_governance_index','population'),reduceInitialAvg);
 			var traveltime = totaalDim.group().reduce(reduceAddAvg('traveltime','population'),reduceRemoveAvg('traveltime','population'),reduceInitialAvg);
 			
-			// Examples of custom reduce functions
-			// var LeeftijdOnder18Group = totaalDim.group().reduce(reduceAddAvg('LeeftijdOnder18'),reduceRemoveAvg('LeeftijdOnder18'),reduceInitialAvg);
-			
 			// group with all, needed for data-count
 			var all = cf.groupAll();
 
@@ -346,11 +293,6 @@ angular.module('dashboards')
 			var dec1Format = d3.format(',.1f');
 			var dec2Format = d3.format('.2f');
 			var percFormat = d3.format(',.2%');
-			
-			//Create the map-chart
-			if ($scope.admlevel === 3) {
-				parentDim.filter(function(d) { if (d === $scope.parent_code) {return d;}});
-			}
 			
 			mapChart
 				.width($('#map-chart').width())
@@ -373,69 +315,25 @@ angular.module('dashboards')
 				.renderPopup(true)
 				.turnOnControls(true)
 				.on('filtered',function(chart,filters){
-					filters = chart.filters();
-					if (filters.length>0 && $scope.admlevel < 4) {
+					$scope.filters = chart.filters();
+					if ($scope.filters.length>0 && $scope.admlevel < 4) {
 						$scope.admlevel = $scope.admlevel + 1;
 						$scope.parent_code_prev = $scope.parent_code;
-						$scope.parent_code = filters[0];
-						if ($scope.admlevel === 4) {$scope.metric = 'population';}
+						$scope.parent_code = $scope.filters[0];
 						$scope.name_selection = lookup[$scope.parent_code];
+						if ($scope.admlevel === 4) {
+							$scope.metric = 'population';
+							for (var i=0;i<d.Rapportage.length;i++) {
+								var record = d.Rapportage[i];
+								if (record.pcode === $scope.filters[0]) {d_prev = record; break;}
+							}
+						}
+						$scope.filters = [];
 						$scope.reload(d);
 					}
 				})
 				;
 				
-			//Function that initiates ng-click event for changing the metric in the row-chart when clicking on a metric
-			//It differentiates on type of metric (percentage or absolute count)
-			$scope.go = function(id) {
-				$scope.metric = id;	
-				$scope.metric_label = meta_label[$scope.metric];
-				$scope.metric_year = meta_year[$scope.metric];
-				$scope.metric_source = meta_source[$scope.metric];
-				$scope.metric_desc = meta_desc[$scope.metric];
-				$('#myModal').modal('show');
-				whereGroupSum.dispose();
-				whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[id];});	
-				mapChart
-					.group(whereGroupSum)
-					.colors(d3.scale.quantile()
-									.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
-									.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
-					.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
-				dc.filterAll();
-				dc.redrawAll();
-			};
-			
-			$scope.level_up = function(dest_level) {
-				if (dest_level === 2 && $scope.admlevel) {
-					$scope.admlevel = 2;
-					$scope.parent_code = '';
-					$scope.reload(d);
-				} else if (dest_level === 3 && $scope.admlevel > 2) {
-					$scope.admlevel = 3;
-					$scope.parent_code = $scope.prov_code;
-					$scope.reload(d);
-					
-				}
-			};
-				
-			//This is needed for changing the metric of the row-chart when using the carousel arrows
-			//NOTE: this does not work yet at the moment
-			$scope.go_left = function() {
-				if ($('div.active').index() === 0) {$scope.go('nr_facilities');}
-				else if ($('div.active').index() === 1) {$scope.go('risk_score');}
-				else if ($('div.active').index() === 2) {$scope.go('population');}
-				else if ($('div.active').index() === 3) {$scope.go('poverty_incidence');}
-				else if ($('div.active').index() === 4) {$scope.go('flood_risk');}
-			};
-			$scope.go_right = function() {
-				if ($('div.active').index() === 3) {$scope.go('nr_facilities');}
-				else if ($('div.active').index() === 4) {$scope.go('risk_score');}
-				else if ($('div.active').index() === 0) {$scope.go('population');}
-				else if ($('div.active').index() === 1) {$scope.go('poverty_incidence');}
-				else if ($('div.active').index() === 2) {$scope.go('flood_risk');}
-			};
-			
 			var tables = [
 							{id: '#data-table2', name: 'risk_score', datatype: 'decimal2', group: 'score', propertyPath: 'value.finalVal', dimension: risk_score},
 							{id: '#data-table3', name: 'vulnerability_score', datatype: 'decimal2', group: 'score', propertyPath: 'value.finalVal', dimension: vulnerability_score},
@@ -468,7 +366,7 @@ angular.module('dashboards')
 				// tables2[i-2] = record;
 			// }
 			// console.log(tables2);
-				
+			
 			// create the data tables: because metrics are in columns in the data set and not in rows, we need one data-table per metric
 			tables.forEach(function(t) {
 				dc.dataTable(t.id)
@@ -481,30 +379,117 @@ angular.module('dashboards')
 									function(d){return meta_label[t.name];}, 
 									// the value
 									function(d){
-										if (isNaN($scope.deepFind(d, t.propertyPath))) {
-											return 'N.A. on this level';
-										} else if(meta_format[t.name] === 'decimal0'){
-											return dec0Format($scope.deepFind(d, t.propertyPath));
-										} else if(meta_format[t.name] === 'percentage'){
-											return percFormat($scope.deepFind(d, t.propertyPath));
-										} else if(meta_format[t.name] === 'decimal2'){
-											return dec2Format($scope.deepFind(d, t.propertyPath));
+										// This makes sure that once the barangay-level is loaded, but no further subselection  is made yet, 
+										// the profile of the whole municipality is still shown. Otherwise it would show 'N.A.' sooner than necessary.
+										if ($scope.admlevel === 4 && $scope.filters.length === 0) {
+											if(meta_format[t.name] === 'decimal0'){
+												return dec0Format(d_prev[t.name]);
+											} else if(meta_format[t.name] === 'percentage'){
+												return percFormat(d_prev[t.name]);
+											} else if(meta_format[t.name] === 'decimal2'){
+												return dec2Format(d_prev[t.name]);
+											}
+										} else {
+											if (isNaN($scope.deepFind(d, t.propertyPath))) {
+												return 'N.A. on this level'; 
+											} else if(meta_format[t.name] === 'decimal0'){
+												return dec0Format($scope.deepFind(d, t.propertyPath));
+											} else if(meta_format[t.name] === 'percentage'){
+												return percFormat($scope.deepFind(d, t.propertyPath));
+											} else if(meta_format[t.name] === 'decimal2'){
+												return dec2Format($scope.deepFind(d, t.propertyPath));
+											}
 										}
 									},
 									function(d){
-										return meta_unit[t.name];
+										if (isNaN($scope.deepFind(d, t.propertyPath))) {
+											return '';
+										} else {return meta_unit[t.name]; }
 									}
 							])
 						.title(function(d){return lookup[t.name];})	
 						.order(d3.descending);
 			});												
 			
-		
+			//Function that initiates ng-click event for changing the metric in the row-chart when clicking on a metric
+			//It differentiates on type of metric (percentage or absolute count)
+			$scope.go = function(id) {
+				$scope.metric = id;	
+				$scope.metric_label = meta_label[$scope.metric];
+				$scope.metric_year = meta_year[$scope.metric];
+				$scope.metric_source = meta_source[$scope.metric];
+				$scope.metric_desc = meta_desc[$scope.metric];
+				$('#myModal').modal('show');
+				whereGroupSum.dispose();
+				whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[id];});	
+				mapChart
+					.group(whereGroupSum)
+					.colors(d3.scale.quantile()
+									.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
+									.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
+					.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
+					;
+				dc.filterAll();
+				dc.redrawAll();
+			};
+			
+			$scope.level_up = function(dest_level) {
+				if (dest_level === 2 && $scope.admlevel) {
+					$scope.admlevel = 2;
+					$scope.parent_code = '';
+					$scope.reload(d);
+				} else if (dest_level === 3 && $scope.admlevel > 2) {
+					$scope.admlevel = 3;
+					$scope.parent_code = $scope.prov_code;
+					$scope.reload(d);
+					
+				}
+			};
+			
+			$scope.export_csv = function() {
+				var content = d.Rapportage;
+				//console.log(content);
+
+				var finalVal = '';
+				
+				for (var i = 0; i < content.length; i++) {
+					var value = content[i];
+					var key,innerValue,result;
+					if (i === 0) {
+						for (key in value) {
+							if (value.hasOwnProperty(key)) {
+								innerValue =  key;
+								result = innerValue.replace(/"/g, '""');
+								if (result.search(/("|,|\n)/g) >= 0)
+									result = '"' + result + '"';
+								if (key !== 'pcode') finalVal += ';';
+								finalVal += result;
+							}
+						}
+					finalVal += '\n';	
+					}
+
+					for (key in value) { 
+						if (value.hasOwnProperty(key)) {
+							innerValue =  JSON.stringify(value[key]);
+							result = innerValue.replace(/"/g, '""');
+							if (result.search(/("|,|\n)/g) >= 0)
+								result = '"' + result + '"';
+							if (key !== 'pcode') finalVal += ';';
+							finalVal += result;
+						}
+					}
+
+					finalVal += '\n';
+				}
+				console.log(finalVal);
+
+				var download = document.getElementById('download');
+				download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
+				download.setAttribute('download', 'export.csv');
+			};
+			
 			//Render all dc-charts and -tables
-			//parentDim.filter(function(d) { if ($scope.admlevel === 2) { return d;} else if ($scope.admlevel === 3 && d === parent_code) {return d;}});
-			if ($scope.admlevel === 3) {
-				parentDim.filter(function(d) { if (d === $scope.parent_code) {return d;}});
-			}
 			dc.renderAll(); 
 			
 			map = mapChart.map();

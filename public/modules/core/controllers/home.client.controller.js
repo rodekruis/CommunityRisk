@@ -48,7 +48,20 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 	
 
 	$(document).ready(function() {
+		
 		$('.timer').countTo();
+		
+		if ($('#slider').length !== 0) {
+        $('#slider').slick({
+            dots: true,
+            infinite: false,
+            speed: 300,
+            slidesToShow: 1,
+            adaptiveHeight: true,
+            fade: true,
+            centerMode: true,
+        });
+    }
 	});
                         
 }]);

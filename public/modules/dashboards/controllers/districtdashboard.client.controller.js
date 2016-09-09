@@ -294,6 +294,12 @@ angular.module('dashboards')
 			var dec2Format = d3.format('.2f');
 			var percFormat = d3.format(',.2%');
 			
+			var currentFormat = function(value) {
+				if (meta_format[$scope.metric] === 'decimal0') { return dec0Format(value);}
+				else if (meta_format[$scope.metric] === 'decimal2') { return dec2Format(value);}
+				else if (meta_format[$scope.metric] === 'percentage') { return percFormat(value);}
+			};
+			
 			mapChart
 				.width($('#map-chart').width())
 				.height(800)
@@ -310,7 +316,7 @@ angular.module('dashboards')
 					return feature.properties.pcode;
 				})
 				.popup(function(d){
-					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',dec1Format(d.value));
+					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value));
 				})
 				.renderPopup(true)
 				.turnOnControls(true)

@@ -35,83 +35,11 @@
 </div>
 -->
 
-<!--
-<img src="http://healthsites.mashastudio.net/img/healthsites-fb.png" itemprop="image" width="0" height="0"/>
 
-<nav id="navbar-wrapper" class="navbar navbar-fixed-top masthead">
-    <div class="container-fluid">
-        <div class="navbar-header">
-
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span> <span
-                    class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
-            <button type="button" class="search-toggle collapsed"><span class="sr-only">Search</span><a
-                    class="navbar-search" href="#"><i class="fa fa-search"></i></a></button>
-            <a class="navbar-brand" href="#"><span class="hs-logo"></span>healthsites.io</a>
-            <a class="navbar-share closed" href="#"><img class="share" src="static/img/share.svg" width="20"/><img
-                    class="close" src="static/img/close.svg" width="16"/></a>
-
-            <div class="hidden" id="site-social">
-                <i class="medium-size-icon mdi-content-clear" id="site-social-icon-open"></i>
-                <a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
-                   class="withripple twitter-href" target="_blank">
-                    <i class="fa fa-twitter"></i></a>
-                <a class="facebook-hs-share withripple facebook-href" target="_blank">
-                    <i class="fa fa-facebook"></i></a>
-                <a class="googleplus-href"
-                   onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
-                   target="_blank">
-                    <i class="fa fa-google-plus"></i>
-                </a>
-                <a class="linkedin-href"
-                   href="https://www.linkedin.com/shareArticle?mini=true&url=http://healthsites.io&title=Healthsites&summary=Building%20a%20free,%20curated,%20canonical%20source%20of%20healthcare%20location%20data"
-                   target="_blank">
-                    <i class="fa fa-linkedin"></i>
-                </a>
-            </div>
-            <span class="tagline" itemprop="description">Building a free, curated, canonical source of healthcare location data</span>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse pull-right">
-            <ul class="nav navbar-nav">
-                <li><a href="#about">About</a></li>
-                <li><a href="/map">Map</a></li>
-                <li><a href="#country-data">Country data</a></li>
-                <li><a href="#lifecycle">How it works</a></li>
-                <li><a href="#share-data">Share data</a></li>
-                <li><a href="#partners">Partners</a></li>
-                <li class="nav-search-wrap"><a class="navbar-search" href="#"><i class="fa fa-search"></i></a></li>
-                <li><a href="https://gitter.im/healthsites/healthsites" class="navbar-chat" target="_blank"><i
-                        class="fa fa-comments"></i></a></li>
-            </ul>
-
-        </div>
-
-    </div>
-    <div class="nav-searchbar container-fluid">
-        <form action="map" method="POST">
-            <div class="option-group">
-                <div class="option"><span></span><input type="radio" name="option" id="radio-healthsite"
-                                                        value="healthsite" checked><span></span><label class="option"
-                                                                                                       for="radio-healthsite">healthsite</label>
-                </div>
-                <div class="option"><span></span><input type="radio" name="option" id="radio-place"
-                                                        value="place"><span></span><label class="option"
-                                                                                          for="radio-healthsite">place</label>
-                </div>
-                <div class="option"><span></span><input type="radio" name="option" id="radio-what3words"
-                                                        value="what3words"><span></span><label class="option"
-                                                                                               for="radio-what3words">what3words</label>
-                </div>
-            </div>
-            <input id="search-box" type="search" name="q" placeholder="search..."><input type="submit" value="search">
-        </form>
-    </div>
-</nav>
--->
 <section id="tophome" class="slideshow js-fullheight fluid-container" style="background-image: url(modules/core/img/comprof_landing.png); background-repeat: no-repeat">
     <div class="slideshow-container limiter pin-top pin-bottom clearfix" >
         <div class="z1 slideshow-text pad4y col-md-5 prose prose-big dark">
-            <h2 class="fancy " background="black">
+            <h2 class="fancy">
 				<span class="timer" data-speed="2000" data-to="41912"></span>
 				<br/>
                 communities profiled
@@ -122,13 +50,13 @@
 					<a href="#!/dashboards/5724a3e6af4258443e0f9bc6/profiles_philippines" class="col-xs-11 button white ">Go to prototype</a>
 				</div>
                 <div class="col-xs-6 pad0x">
-                    <a href="#!/#about" class="col-xs-11 button stroke pad0x">How it works</a>
+                    <a href="#!/#walkthrough" class="col-xs-11 button stroke pad0x">How it works</a>
                 </div>
             </div>
         </div>
         <div class="col-md-7">
             <div class="isopad">
-                <img src="modules/core/img/comprof_screenshot.png" class="col-md-12">
+                <img src="modules/core/img/comprof_screenshot.png" style="width: 75%" class="col-md-12">
             </div>
         </div>
     </div>
@@ -198,65 +126,19 @@
         </div>
     </div>
 </section>
-<!--
-<span class="scroll" id="share-data"></span>
-<section id="share-data" class="navi">
-    <div class="container-fluid pad0x">
-        <div class="center col-md-3 pad0x">
-            <div class="content">
-                <div class="icon-holder"><i class="fa fa-cog"></i></div>
-                <h3 class="col-md-12">Data model</h3>
-                <span class="col-md-12 text">Each healthsite is stored as a geometry object in the database</span>
-                <span class="col-md-12 links"><a
-                        href="https://github.com/healthsites/healthsites/wiki/Healthsite-attributes" target="_blank">Healthsites
-                    attributes</a> <a href="https://github.com/healthsites/healthsites/wiki/Healthsites-data-model"
-                                      target="_blank">Data model</a></span>
-            </div>
-        </div>
-        <div class="center col-md-3 pad0x">
-            <div class="content">
-                <div class="icon-holder"><i class="fa fa-map-marker"></i></div>
-                <h3 class="col-md-12">Share healthsite data</h3>
-                <span class="col-md-12 text">Please contact us should you wish to share data and we will assist you. </span>
-                <span class="col-md-12 links"> <a
-                        href="/contact">Contact
-                    us</a></span></div>
-        </div>
-        <div class="center col-md-3 pad0x">
-            <div class="content">
-                <div class="icon-holder"><i class="fa fa-pencil"></i></div>
-                <h3 class="col-md-12">Developers</h3>
-                <span class="col-md-12 text">We welcome new contributions to this project - see our github page for details.</span>
-                <span class="col-md-12 links"><a href="https://github.com/healthsites/healthsites/" target="_blank">GitHub</a> <a
-                        href="https://github.com/healthsites/healthsites/wiki/Healthsites-roadmap" target="_blank">Road
-                    Map</a></span>
-            </div>
-        </div>
-        <div class="center col-md-3 pad0x">
-            <div class="content">
-                <div class="icon-holder"><i class="fa fa-comments"></i></div>
-                <h3 class="col-md-12">Chat live</h3>
-                <span class="col-md-12 text">We've established a chatroom where we'll do our best to respond and share project knowledge.</span>
-                <span class="col-md-12 links"><a href="https://gitter.im/healthsites/healthsites" target="_blank">Chat
-                    space</a></span></div>
-        </div>
-    </div>
-</section>
-<span class="scroll" id="lifecycle"></span>
-<section class="lifecycle">
+<span class="scroll" id="walkthrough"></span>
+<section class="walkthrough">
     <div class="container">
-        <h2>Healthsites data lifecycle</h2>
+        <h2>Community Profiles: walkthrough</h2>
 
         <div class="main-img">
             <ul id="slider">
-                <li><img src="/static/img/step-1.png"/></li>
-                <li><img src="/static/img/step-2.png"/></li>
-                <li><img src="/static/img/step-3.png"/></li>
-                <li><img src="/static/img/step-4.png"/></li>
-                <li><img src="/static/img/step-5.png"/></li>
-                <li><img src="/static/img/step-6.png"/></li>
-                <li><img src="/static/img/step-7.png"/></li>
-                <li><img src="/static/img/step-8.png"/></li>
+                <li><img src="modules/core/img/demo_slide/Slide1.png" style="width: 100%"/></li>
+                <li><img src="modules/core/img/demo_slide/Slide2.png" style="width: 100%"/></li>
+                <li><img src="modules/core/img/demo_slide/Slide3.png" style="width: 100%"/></li>
+                <li><img src="modules/core/img/demo_slide/Slide4.png" style="width: 100%"/></li>
+                <li><img src="modules/core/img/demo_slide/Slide5.png" style="width: 100%"/></li>
+                <li><img src="modules/core/img/demo_slide/Slide6.png" style="width: 100%"/></li>
             </ul>
         </div>
         <div class="steps">
@@ -264,6 +146,7 @@
         </div>
     </div>
 </section>
+<!--
 <span class="scroll" id="partners"></span>
 <section class="partners">
     <div class="container">

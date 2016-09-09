@@ -1,9 +1,10 @@
 <section class="section-expand" data-ng-controller="HomeController">
-<!--<leaflet heightresize id='homeMap' center="center" defaults="defaults" layers="layers"></leaflet>
+<!-- OLD LANDING PAGE: Districtdashboard
+<leaflet heightresize id='homeMap' center="center" defaults="defaults" layers="layers"></leaflet>
 <div class="logo">
     <center><img class="Absolute-Center" ng-src='modules/core/img/comprof_landing.png' /></center>
 </div>-->
-<!--
+<!-- Temp version landing page
 <div class="image">
 
     <img style="min-width:100%; min-height:100%" ng-src='modules/core/img/comprof_landing.png' />
@@ -56,7 +57,7 @@
         </div>
         <div class="col-md-7">
             <div class="isopad">
-                <img src="modules/core/img/comprof_screenshot.png" style="width: 75%" class="col-md-12">
+                <img src="modules/core/img/comprof_screenshot.png" style="width: 75%" class="col-md-7">
             </div>
         </div>
     </div>
@@ -68,8 +69,7 @@
             <h2>About Community Profiles</h2>
 
             <div class="hazard block">
-                <div class="icon col-md-2"><img src="/static/img/hazard.svg"
-                                                onerror="this.onerror=null; this.src='image.png'">
+                <div class="icon col-md-2"><img src="modules/dashboards/img/flood.png" width="30%" onerror="this.onerror=null; this.src='image.png'">
                 </div>
                 <div class="col-md-10 pad0x">
                     Humanitarian organizations cannot help all out of their scarce resources, when a disaster relief or disaster
@@ -79,48 +79,44 @@
 					This solution aims to fill this information gap by finding and integrating all relevant open or closed data sources 
 					on a detailed geographical level, on indicators ranging from hazard exposure to vulnerability to coping capacity. 
 					Having these data together and easily accessible saves invaluable time when a disaster strikes. Furthermore, the 
-					indicators are combined into index scores, enabling decision-makers to compare communities, thereby contributing to 
+					indicators are combined into composite scores, enabling decision-makers to compare communities, thereby contributing to 
 					the process of beneficiary selection.
-                </div>
-            </div>
-            <div class="col-md-6 pad0x block">
-                <div class="icon col-md-4"><img src="/static/img/globe.svg"
-                                                onerror="this.onerror=null; this.src='image.png'">
-                </div>
-                <div class="col-md-8 pad0x">
-                    <strong>Global scope</strong><br/>
-                    The Global Healthsites Mapping Project is an initiative to create an online map of every health
-                    facility in the world and make the details of each location easily accessible.
-                </div>
-            </div>
-            <div class="col-md-6 pad0x block">
-                <div class="icon col-md-4"><img src="/static/img/open-data.svg"
-                                                onerror="this.onerror=null; this.src='image.png'"></div>
-                <div class="col-md-8 pad0x">
-                    <strong>Open data collaboration</strong><br/>
-                    Through collaborations with users, trusted partners and OpenStreepMap we will capture and validate
-                    the location and contact details of every facility and make this data freely available under an Open
-                    Data License (ODBL)'
                 </div>
             </div>
             <div style="clear: both"></div>
             <div class="col-md-6 pad0x block">
-                <div class="icon col-md-4"><img src="/static/img/accessible.svg"
-                                                onerror="this.onerror=null; this.src='image.png'"></div>
+                <div class="icon col-md-4"><img src="modules/core/img/detail_level.png" width="30%" onerror="this.onerror=null; this.src='image.png'"></div>
                 <div class="col-md-8 pad0x">
-                    <strong>Accessible</strong><br/>
-                    We will make the data accessible over the Internet through an API and other formats such as GeoJSON,
-                    Shape files, KML, CSV
+                    <strong>Detail level</strong><br/>
+                    This project aims to profile on a very detailed geographical or administrative level. Whereas similar initiatives might
+					profile on a national or maybe regional level, we really go as deep as neighborhood or community level.
                 </div>
             </div>
             <div class="col-md-6 pad0x block">
-                <div class="icon col-md-4"><img src="/static/img/location.svg"
-                                                onerror="this.onerror=null; this.src='image.png'"></div>
+                <div class="icon col-md-4"><img src="modules/core/img/indicator.png" width="30%" onerror="this.onerror=null; this.src='image.png'"></div>
                 <div class="col-md-8 pad0x">
-                    <strong>Focus on health care location data</strong><br/>
-                    Our design philosophy is the long term curation and validation of health care location data. The
-                    healthsites.io map will enable users to discover what healthcare facilities exist at any global
-                    location and the associated services and resources.
+                    <strong>Indicators</strong><br/>
+                    The range of indicators included is meant to serve two purposes. First, to provide any basic and practical information
+					that is needed when a disaster relief or disaster risk reduction program is being started. Second, we combine all relevant
+					indicators in a composite score which enables decision-makers to compare communities. This can greatly contribute to the process
+					of beneficiary selection (on a community level).
+                </div>
+            </div>
+            <div class="col-md-6 pad0x block">
+                <div class="icon col-md-4"><img src="modules/core/img/global.png" width="30%" onerror="this.onerror=null; this.src='image.png'">
+                </div>
+                <div class="col-md-8 pad0x">
+                    <strong>Global scope</strong><br/>
+                    The scope of the Community Profiling project is global. Using global data sources as much as possible and
+					using global definitions as much as possible. For now, the Philippines are chosen as the first pilot country.
+                </div>
+            </div>
+            <div class="col-md-6 pad0x block">
+                <div class="icon col-md-4"><img src="modules/core/img/open_data.png" width="30%" onerror="this.onerror=null; this.src='image.png'"></div>
+                <div class="col-md-8 pad0x">
+                    <strong>Open data</strong><br/>
+                    This project integrates a lot of open and closed data sources. The open data that is used is freely accessible.
+					Please feel free to notify us of any data sources you think should be included. It will only make the product better.
                 </div>
             </div>
         </div>
@@ -146,22 +142,6 @@
         </div>
     </div>
 </section>
-<!--
-<span class="scroll" id="partners"></span>
-<section class="partners">
-    <div class="container">
-        <h3>Partners</h3>
-        <ul class="partners-list">
-            <li><a href="http://healthcareindanger.org/hcid-project/" target="_blank"><img
-                    src="/static/img/hcid-logo.png"/></a></li>
-            <li><a href="https://www.icrc.org/" target="_blank"><img src="/static/img/icrc-logo.png"/></a></li>
-            <li><a href="https://www.ihf-fih.org/" target="_blank"><img src="/static/img/ihf-logo.png"/></a></li>
-            <li><a href="https://hotosm.org/" target="_blank"><img src="/static/img/hot-logo.png"/></a></li>
-            <li><a href="https://www.msf.org/" target="_blank"><img src="/static/img/msf-logo.png"/></a></li>
-        </ul>
-    </div>
-</section>
--->
 
 
 </section>

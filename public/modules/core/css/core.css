@@ -294,8 +294,8 @@ h2.fancy {
 }
 .isopad {
     position: relative;
-	left: 40%;
-	top: -150px;
+	left: 70%;
+	top: 0%;
 }
  @media only screen and (max-width: 991px) {
 .isopad {

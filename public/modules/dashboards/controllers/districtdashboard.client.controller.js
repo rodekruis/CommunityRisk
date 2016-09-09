@@ -482,8 +482,7 @@ angular.module('dashboards')
 
 					finalVal += '\n';
 				}
-				console.log(finalVal);
-
+				
 				var download = document.getElementById('download');
 				download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
 				download.setAttribute('download', 'export.csv');

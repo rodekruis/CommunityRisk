@@ -240,6 +240,202 @@ input.minimal {
 
 input[type=text].transparent, input[type=text].transparent:active, input[type=text].transparent:focus, input[type=text].transparent:hover {
     background: transparent;
+}	
+	
+/* From home.css */
+	
+.limiter {
+    max-width: 1140px;
+    width: 83.3333%;
+}
+ @media only screen and (max-width: 940px) {
+.limiter {
+    width: 90%;
+}
+}
+.pin-top, .pin-right, .pin-bottom, .pin-left, .pin-topleft, .pin-topright, .pin-bottomleft, .pin-bottomright {
+    position: absolute;
+}
+.pin-top {
+    left: 0;
+    right: 0;
+    top: 0;
+}
+.pin-bottom {
+    bottom: 0;
+}
+.slideshow-container {
+    margin: auto;
+    height: 480px;
+    padding: 80px 0;
+}
+#tophome {
+    padding-top: 72px;
+    background: #3498db;
+    color: #fff;
+    font-family: "Raleway", sans-serif;
+    min-height: 600px;
+}
+ @media only screen and (max-width: 640px) {
+#tophome {
+    padding-top: 53px;
+}
+}
+.slideshow-container {
+    margin: auto;
+}
+h2.fancy {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 58px;
+}
+.link-left {
+    margin-right: 20px;
+}
+.isopad {
+    position: relative;
+	left: 40%;
+	top: -100%;
+}
+ @media only screen and (max-width: 991px) {
+.isopad {
+    margin-top: 50px;
+}
+.slideshow-container {
+    padding: 20px 0;
+}
+}
+.isopad img {
+    max-width: 100%;
+    height: auto;
+}
+.pin {
+    position: absolute;
+    width: 54px;
+    height: 65px;
+    background-image: url(../img/pin.png);
+    background-repeat: no-repeat;
+    z-index: 8;
+    opacity: 0;
+    animation-name: bounceInDown;
+    -moz-animation-name: bounceInDown;
+    animation-duration: 0.8s;
+    -moz-animation-duration: 0.8s;
+    animation-timing-function: linear;
+    -moz-animation-timing-function: linear;
+    animation-direction: alternate;
+    -moz-animation-direction: alternate;
+    animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+}
+.pin-1 {
+    top: 40%;
+    left: 35%;
+    animation-delay: 0.2s;
+}
+.pin-2 {
+    top: 40%;
+    left: 50%;
+    animation-delay: 0.4s;
+}
+.pin-3 {
+    top: 50%;
+    left: 48%;
+    animation-delay: 0.5s;
+}
+.pin-4 {
+    top: 25%;
+    left: 65%;
+    animation-delay: 0.55s;
+}
+ @media only screen and (max-width: 640px) {
+h2.fancy {
+    font-size: 38px;
+    line-height: 46px;
+}
+.pin {
+    width: 30px;
+    height: 38px;
+    background-size: 30px 38px;
+}
+}
+ @keyframes bounceInDown {
+ from, 60%, 75%, 90%, to {
+ -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+ -moz-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+ animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+ 0% {
+ opacity: 0;
+ -webkit-transform: translate3d(0, -3000px, 0);
+ -moz-transform: translate3d(0, -3000px, 0);
+ transform: translate3d(0, -3000px, 0);
+}
+ 60% {
+ opacity: 1;
+ -webkit-transform: translate3d(0, 25px, 0);
+ -moz-transform: translate3d(0, 25px, 0);
+ transform: translate3d(0, 25px, 0);
+ opacity: 1;
+}
+ 75% {
+ -webkit-transform: translate3d(0, -10px, 0);
+ -moz-transform: translate3d(0, -10px, 0);
+ transform: translate3d(0, -10px, 0);
+}
+ 90% {
+ -webkit-transform: translate3d(0, 5px, 0);
+ -moz-transform: translate3d(0, 5px, 0);
+ transform: translate3d(0, 5px, 0);
+}
+to {
+    -webkit-transform: none;
+    -moz-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+.bounceInDown {
+    -webkit-animation-name: bounceInDown;
+    animation-name: bounceInDown;
+}
+/* About
+
+-------------------------------------------------- */
+.about {
+    font-family: "Raleway", sans-serif;
+    padding: 85px 0;
+    font-size: 16px;
+    line-height: 24px;
+}
+.about h2 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+.about .icon {
+    text-align: right;
+}
+.about .block {
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+ @media only screen and (max-width: 991px) {
+.about {
+    padding: 40px 0;
+}
+.about .block, .about .icon {
+    text-align: center;
+}
+.about .block {
+    margin-bottom: 40px;
+}
+.about .icon {
+    margin-bottom: 20px;
+}
+}
 	
 
 

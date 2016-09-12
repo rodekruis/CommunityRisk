@@ -119,13 +119,23 @@ a.btn:hover {
   color: black;
 } */
 
-#ribbon1,#ribbon2 {
+#ribbon1,#ribbon2,#ribbon3 {
     position: fixed;
     right: 0;
     bottom: 60px;
 }
 #ribbon2 {
-	bottom: 10px;
+	bottom: 20px;
+	width: 140px;
+	text-align: center;
+}
+#ribbon3 {
+	bottom: 0px;
+	background: #ccc;
+	padding: 5px 5px 5px 5px;
+	border-radius: 5px;
+	width: 140px;
+	text-align: center;
 }
 #ribbon2:hover {
 	color: black;

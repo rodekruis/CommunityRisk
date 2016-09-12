@@ -31,8 +31,8 @@
 
 	<!-- Fav Icon -->
 	<link href="/modules/core/img/brand/favicon.ico" rel="shortcut icon" type="image/x-icon">
-	
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.css"/>
+	<!-- 
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.css"/> -->
 
 	<!--Application CSS Files-->
 	{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">
@@ -52,7 +52,7 @@
 		</section>
 	</section>
 	<div id="ribbon1"><img class="share" src="modules/core/img/ribbon.png" width="70" height="105" alt="now in beta"/></div>
-	<div id="ribbon2"><a style="background: #F89A0D" class="btn" href="https://gitter.im/community_profiles/Lobby#" target="_blank">Give feedback!</a></div>
+	<div id="ribbon2"><a class="btn" href="https://gitter.im/community_profiles/Lobby#" target="_blank">Give feedback!</a></div>
 
 	<!--Embedding The User Object-->
 	<script type="text/javascript">
@@ -75,13 +75,10 @@
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-		ga('create', '{{googleAnalyticsTrackingID}}', 'auto');
+		ga('create', 'UA-83697955-2', 'auto');
 		ga('send', 'pageview');
 
 	  </script>
-	  
-	  
-		<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.min.js"></script>
 	
 
   

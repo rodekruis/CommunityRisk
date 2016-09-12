@@ -127,6 +127,7 @@ a.btn:hover {
   text-decoration: none;
 }
 
+/* Style the community-hierarchy arrows */
 #flag1, #flag2, #flag3 { 
   vertical-align: top;
   display: inline-block;
@@ -201,6 +202,7 @@ a.btn:hover {
 	
 }
 
+/* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
 .leaflet-clickable {
 	fill-opacity: .7;
 }

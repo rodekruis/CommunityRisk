@@ -6,10 +6,11 @@ module.exports = {
 	db: 'mongodb://localhost/dashboards', //im-dev',
 	postgres: {
 		db: 'profiles',
-		user: 'postgres',
-		password: '',//secrets.postgres.password,
+		user: 'profiles',
+		password: secrets.postgres.password,
 		host: 'localhost'
 	},
+	//email_address: secrets.email.email_address,
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'combined',

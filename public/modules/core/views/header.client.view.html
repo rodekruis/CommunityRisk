@@ -11,11 +11,11 @@
 			   <img src="modules/core/img/brand/redcross.png" class="img-responsive">
 			</a>
 		</div>
-		<a href="/#!/" class="navbar-brand"><strong>Rode Kruis Dashboards</strong></a>
+		<a href="/#!/" class="navbar-brand"><strong>Community Profiles</strong></a>
 	</div>
 	<nav class="collapse navbar-collapse  navbar-default" collapse="!isCollapsed" role="navigation">
 		<ul class="nav navbar-nav" data-ng-if="menu.shouldRender(authentication.user);">
-			<li data-ng-repeat="item in menu.items" data-ng-if="item.shouldRender(authentication.user);" ui-route="{{item.uiRoute}}" ng-class="{active: $uiRoute}">
+			<li data-ng-repeat="item in menu.items" data-ng-if="item.shouldRender(authentication.user) && item.title == 'Dashboards';" ui-route="{{item.uiRoute}}" ng-class="{active: $uiRoute}">
 				<a href="/#!/{{item.link}}"><strong>{{item.title}}</strong></a>
 			</li>
 		</ul>
@@ -24,9 +24,9 @@
 				<a href="/#!/signup"><strong translate>Signup</strong></a>
 			</li>-->
 			<li class="divider-vertical"></li>
-			<li ui-route="/signin" ng-class="{active: $uiRoute}">
+			<!-- <li ui-route="/signin" ng-class="{active: $uiRoute}">
 				<a href="/#!/signin"><strong translate>Signin</strong></a>
-			</li>
+			</li> -->
 		</ul>
 		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
 			<li class="dropdown">

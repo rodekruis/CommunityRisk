@@ -35,6 +35,7 @@ module.exports = function(db) {
 	app.locals.description = config.app.description;
 	app.locals.keywords = config.app.keywords;
     app.locals.googleAnalyticsTrackingID = config.app.googleAnalyticsTrackingID; // <-- Here
+	//app.locals.email_address = config.email_address;
 	app.locals.facebookAppId = config.facebook.clientID;
 	app.locals.jsFiles = config.getJavaScriptAssets();
 	app.locals.cssFiles = config.getCSSAssets();

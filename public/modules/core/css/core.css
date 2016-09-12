@@ -68,7 +68,7 @@ body {
     width: 100%;   
 }
 
-.Absolute-Center {
+/* .Absolute-Center {
   min-height:40%;
   max-height: 80%;
   min-width: 30%;
@@ -94,16 +94,16 @@ body {
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
-	}
+	} */
 
 
-a.btn {
+/* a.btn {
   background: #cccccc;
   -webkit-border-radius: 28;
   -moz-border-radius: 28;
   border-radius: 5px;
   font-family: Arial;
-  color: #ffffff;
+  color: white;
   font-size: 10px;
   padding: 5 15 5 15;
   text-decoration: none;
@@ -116,7 +116,8 @@ a.btn:hover {
   background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
-}
+  color: black;
+} */
 
 #ribbon1,#ribbon2 {
     position: fixed;
@@ -125,6 +126,9 @@ a.btn:hover {
 }
 #ribbon2 {
 	bottom: 10px;
+}
+#ribbon2:hover {
+	color: black;
 }
 
 /* Base candidates
@@ -294,7 +298,7 @@ h2.fancy {
 }
 .isopad {
     position: relative;
-	left: 70%;
+	right: 0%;
 	top: 0%;
 }
  @media only screen and (max-width: 991px) {

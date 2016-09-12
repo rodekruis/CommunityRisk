@@ -2,10 +2,10 @@
 
 module.exports = {
 	app: {
-		title: 'Rode Kruis Dashboards',
+		title: 'Community Profiles Dashboard',
 		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
-		keywords: 'MongoDB, Express, AngularJS, Node.js',
-		googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'UA-83697955-2' // <-- Here
+		keywords: 'MongoDB, Express, AngularJS, Node.js'//,
+		//googleAnalyticsTrackingID: 'UA-83697955-2' // process.env.GOOGLE_ANALYTICS_TRACKING_ID || 
 	},
 	port: process.env.PORT || 3000,
 	sslport: process.env.SSLPORT || 444,

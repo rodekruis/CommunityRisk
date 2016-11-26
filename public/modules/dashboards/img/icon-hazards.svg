@@ -1,0 +1,16 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 61 64" style="enable-background:new 0 0 61 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#010101;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
+</style>
+<g>
+	<path class="st0" d="M37.1,8c5.1,0,9.3,4.1,9.3,9.3v0c0,5.1-4.2,9.3-9.3,9.3H19.7h-8.1c-5.1,0-9.3,4.2-9.3,9.3v0"/>
+	<path class="st0" d="M45.2,59c5.1,0,9.3-4.1,9.3-9.3v0c0-5.1-4.2-9.3-9.3-9.3H27.8H22"/>
+	<path class="st0" d="M32.5,17.3c0-2.6,2.1-4.6,4.6-4.6c2.6,0,4.6,2.1,4.6,4.6s-2.1,4.6-4.6,4.6"/>
+	<path class="st0" d="M45.2,45.1c2.6,0,4.6,2.1,4.6,4.6c0,2.6-2.1,4.6-4.6,4.6c-2.6,0-4.6-2.1-4.6-4.6"/>
+	<line class="st0" x1="31.3" y1="45.1" x2="38.3" y2="45.1"/>
+	<line class="st0" x1="25.5" y1="21.9" x2="32.5" y2="21.9"/>
+	<line class="st0" x1="11.6" y1="31.2" x2="47.6" y2="31.2"/>
+	<line class="st0" x1="16.2" y1="35.8" x2="58" y2="35.8"/>
+</g>
+</svg>

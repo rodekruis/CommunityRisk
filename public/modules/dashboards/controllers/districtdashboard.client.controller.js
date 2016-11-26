@@ -1,30 +1,34 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('DistrictDashboardsController', ['$scope', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($scope, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('DistrictDashboardsController', ['$scope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($scope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 
 		//Define variables
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.metric = 'risk_score';
-		$scope.metric_label = 'Risk score';
+		$scope.country_code = 'PH';
+		$scope.admlevel = 2;
+		$scope.metric = '';
+		$scope.metric_label = '';
 		$scope.metric_year = '';
 		$scope.metric_source = '';
 		$scope.metric_desc = '';
-		$scope.admlevel = 2;
-		$scope.admlevel_text = 'Provinces';
-		$scope.name_selection = 'The Philippines';
-		$scope.country_selection = 'The Philippines';
-		$scope.prov_selection = undefined;
-		$scope.mun_selection = undefined;
-		$scope.prov_code = '';
-		$scope.mun_code = '';
-		$scope.type_selection = 'Country';
-		$scope.subtype_selection = 'Provinces'; 
+		$scope.metric_icon = '';
+		$scope.admlevel_text = '';
+		$scope.name_selection = '';
+		$scope.name_selection_prev = '';
+		$scope.country_selection = '';
+		$scope.level2_selection = undefined;
+		$scope.level3_selection = undefined;
+		$scope.level2_code = '';
+		$scope.level3_code = '';
+		$scope.type_selection = '';
+		$scope.subtype_selection = ''; 
 		$scope.parent_code = '';
-		$scope.data_input = '';//$scope.admlevel + ',\'' + $scope.parent_code;
+		$scope.data_input = '';
 		$scope.filters = [];
+		$scope.tables = [];
 		var d_prev = '';
 		var map;
 		$scope.config =  {
@@ -45,18 +49,21 @@ angular.module('dashboards')
 		/**
 		 * Initiate the dashboard
 		 */
-		$scope.initiate = function() {	    
+		$scope.initiate = function(country) {	    
 				
 			// start loading bar
 		    $scope.start();
 			
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.parent_code;
+			$scope.metric = ''
+			$scope.country_code = country;
+			$scope.admlevel = 2;
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code;
 
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
 			    function(dashboard) {		
 					// get the data
 					//console.log(data_input);
-					Data.get({adminLevel: $scope.data_input}, //$scope.admlevel || ',' || $scope.parent_code)},
+					Data.get({adminLevel: $scope.data_input}, 
 						function(pgData){
 							$scope.prepare(dashboard, pgData);
 						});					
@@ -76,9 +83,9 @@ angular.module('dashboards')
 			// start loading bar
 		    $scope.start();
 			
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.parent_code;
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code;
 
-			Data.get({adminLevel: $scope.data_input}, //$scope.admlevel || ',' || $scope.parent_code)},
+			Data.get({adminLevel: $scope.data_input}, 
 				function(pgData){
 					$scope.prepare_reload(d,pgData);
 			});	
@@ -100,7 +107,8 @@ angular.module('dashboards')
 		  var d = {};
 		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
-		  d.Metadata = dashboard.sources.Metadata.data;
+		  d.Metadata = pgData.usp_data.meta; //dashboard.sources.Metadata.data;
+		  d.Country_meta = dashboard.sources.Country_meta.data;
 		  $scope.geom = pgData.usp_data.geo;
 		  
 		  // generate the actual content of the dashboard
@@ -123,6 +131,7 @@ angular.module('dashboards')
 		  //var d = {};
 		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
+		  d.Metadata = pgData.usp_data.meta;
 		  //d.Metadata = dashboard.sources.Metadata.data;
 		  $scope.geom = pgData.usp_data.geo;
 		  
@@ -150,6 +159,14 @@ angular.module('dashboards')
 			});
 			return lookup_meta;
 		};
+		// fill the lookup table with the metadata-information per variable
+		$scope.genLookup_country_meta = function (d,field){
+			var lookup_country_meta = {};
+			d.Country_meta.forEach(function(e){
+				lookup_country_meta[e.country_code] = String(e[field]);
+			});
+			return lookup_country_meta;
+		};
 		
 		/**
 		 * function to find object property value by path
@@ -171,23 +188,42 @@ angular.module('dashboards')
 		};
 		
 		
-		
 		/**
 		 * function to generate the 3W component
 		 * data is loaded from the data set
 		 * geom is geojson file
 		 */
 		$scope.generateCharts = function (d){
-				
+			
 			// Clear the charts
 			dc.chartRegistry.clear();
 			if (map !== undefined) { map.remove(); }
-	
+			
 			//define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
 			var mapChart = dc.leafletChoroplethChart('#map-chart');
-						
+
+			//set up country metadata
+			var country_name = $scope.genLookup_country_meta(d,'country_name');
+			var country_level2 = $scope.genLookup_country_meta(d,'level2_name');
+			var country_level3 = $scope.genLookup_country_meta(d,'level3_name');
+			var country_level4 = $scope.genLookup_country_meta(d,'level4_name');
+			var country_zoom_min = $scope.genLookup_country_meta(d,'zoomlevel_min');
+			var country_zoom_max = $scope.genLookup_country_meta(d,'zoomlevel_max');
+			var country_default_metric = $scope.genLookup_country_meta(d,'default_metric');
+
+			$scope.country_selection = country_name[$scope.country_code];
+			var zoom_min = country_zoom_min[$scope.country_code]; 
+			var zoom_max = country_zoom_max[$scope.country_code]; 
+			if ($scope.metric === '') { 
+				$scope.metric = country_default_metric[$scope.country_code]; 
+			};
+			if ($scope.admlevel === 2) { 
+				$scope.name_selection = country_name[$scope.country_code]; 
+			};  
+			
 			// get the lookup tables
 			var lookup = $scope.genLookup($scope.config.nameAttribute);
+			
 			var meta_label = $scope.genLookup_meta(d,'label');
 			var meta_format = $scope.genLookup_meta(d,'format');
 			var meta_unit = $scope.genLookup_meta(d,'unit');
@@ -200,23 +236,37 @@ angular.module('dashboards')
 			
 			if ($scope.admlevel === 2) {
 				$scope.type_selection = 'Country';
-				$scope.subtype_selection = 'Provinces'; 
-				$scope.prov_selection = undefined;
-				$scope.mun_selection = undefined;
-				$scope.prov_code = '';
-				$scope.mun_code = '';
+				$scope.subtype_selection = country_level2[$scope.country_code]; 
+				$scope.level2_selection = undefined;
+				$scope.level3_selection = undefined;
+				$scope.level2_code = '';
+				$scope.level3_code = '';
 			} else if ($scope.admlevel === 3) {
-				$scope.type_selection = 'Province';
-				$scope.subtype_selection = 'Municipalities'; 
-				$scope.prov_selection = $scope.name_selection;
-				$scope.prov_code = $scope.parent_code;
-				$scope.mun_selection = undefined;
-				$scope.mun_code = '';
+				$scope.type_selection = country_level2[$scope.country_code]; 
+				$scope.subtype_selection = country_level3[$scope.country_code]; 
+				$scope.level2_selection = $scope.name_selection;
+				$scope.level2_code = $scope.parent_code;
+				$scope.level3_selection = undefined;
+				$scope.level3_code = '';
 			} else if ($scope.admlevel === 4) {
-				$scope.type_selection = 'Municipality';
-				$scope.subtype_selection = 'Barangays'; 
-				$scope.mun_selection = $scope.name_selection;
-				$scope.mun_code = $scope.parent_code;
+				$scope.type_selection = country_level3[$scope.country_code]; 
+				$scope.subtype_selection = country_level4[$scope.country_code]; 
+				$scope.level3_selection = $scope.name_selection;
+				$scope.level3_code = $scope.parent_code;
+			}
+			
+			$scope.tables = [];
+			for (var i=0; i < d.Metadata.length; i++) {
+				var record = {};
+				var record_temp = d.Metadata[i];
+				record.id = 'data-table' + [i+1];
+				record.name = record_temp.variable;
+				record.group = record_temp.group;
+				record.propertyPath = record_temp.agg_method === 'sum' ? 'value' : 'value.finalVal';
+				record.dimension = undefined;
+				record.weight_var = record_temp.weight_var;
+				record.scorevar_name = record_temp.scorevar_name;
+				$scope.tables[i] = record;
 			}
 			
 			//var cf = crossfilter(d3.range(0, data.Districts.features.length));
@@ -249,35 +299,37 @@ angular.module('dashboards')
 			
 			//All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
 			var totaalDim = cf.dimension(function(i) { return 'Total'; });
-
-			//For this total-dimension we create a group for each metric to calculate the sum
-			//framework scores
-			var risk_score = totaalDim.group().reduce(reduceAddAvg('risk_score','population'),reduceRemoveAvg('risk_score','population'),reduceInitialAvg);
-			var vulnerability_score = totaalDim.group().reduce(reduceAddAvg('vulnerability_score','population'),reduceRemoveAvg('vulnerability_score','population'),reduceInitialAvg);
-			var hazard_score = totaalDim.group().reduce(reduceAddAvg('hazard_score','population'),reduceRemoveAvg('hazard_score','population'),reduceInitialAvg);
-			var coping_capacity_score = totaalDim.group().reduce(reduceAddAvg('coping_capacity_score','population'),reduceRemoveAvg('coping_capacity_score','population'),reduceInitialAvg);
-			//general information
-			var population = totaalDim.group().reduceSum(function(d) {return d.population;});
-			var land_area = totaalDim.group().reduceSum(function(d) {return d.land_area;});
-			var pop_density = totaalDim.group().reduce(reduceAddAvg('pop_density','land_area'),reduceRemoveAvg('pop_density','land_area'),reduceInitialAvg);
-			var mun_city = totaalDim.group().reduceSum(function(d) {return d.mun_city;});
-			//vulnerability
-			var poverty_incidence = totaalDim.group().reduce(reduceAddAvg('poverty_incidence','population'),reduceRemoveAvg('poverty_incidence','population'),reduceInitialAvg);
-			var income_class = totaalDim.group().reduce(reduceAddAvg('income_class','population'),reduceRemoveAvg('income_class','population'),reduceInitialAvg);
-			var gdp_per_capita = totaalDim.group().reduce(reduceAddAvg('gdp_per_capita','population'),reduceRemoveAvg('gdp_per_capita','population'),reduceInitialAvg);
-			var hdi = totaalDim.group().reduce(reduceAddAvg('hdi','population'),reduceRemoveAvg('hdi','population'),reduceInitialAvg);
-			//hazards
-			var flood_risk = totaalDim.group().reduce(reduceAddAvg('flood_risk','population'),reduceRemoveAvg('flood_risk','population'),reduceInitialAvg);
-			var cyclone_risk = totaalDim.group().reduce(reduceAddAvg('cyclone_risk','population'),reduceRemoveAvg('cyclone_risk','population'),reduceInitialAvg);
-			var landslide_risk = totaalDim.group().reduce(reduceAddAvg('landslide_risk','population'),reduceRemoveAvg('landslide_risk','population'),reduceInitialAvg);
-			var earthquake7_phys_exp = totaalDim.group().reduce(reduceAddAvg('earthquake7_phys_exp','population'),reduceRemoveAvg('earthquake7_phys_exp','population'),reduceInitialAvg);
-			var tsunami_phys_exp = totaalDim.group().reduce(reduceAddAvg('tsunami_phys_exp','population'),reduceRemoveAvg('tsunami_phys_exp','population'),reduceInitialAvg);
-			var cyclone_surge_2m_phys_exp = totaalDim.group().reduce(reduceAddAvg('cyclone_surge_2m_phys_exp','population'),reduceRemoveAvg('cyclone_surge_2m_phys_exp','population'),reduceInitialAvg);
-			//coping capacity
-			var nr_facilities = totaalDim.group().reduceSum(function(d) {return d.nr_facilities;});
-			var nr_doctors = totaalDim.group().reduceSum(function(d) {return d.nr_doctors;});
-			var good_governance_index = totaalDim.group().reduce(reduceAddAvg('good_governance_index','population'),reduceRemoveAvg('good_governance_index','population'),reduceInitialAvg);
-			var traveltime = totaalDim.group().reduce(reduceAddAvg('traveltime','population'),reduceRemoveAvg('traveltime','population'),reduceInitialAvg);
+			
+			//Create the appropriate crossfilter dimension-group for each element of Tables
+			var dimensions = [];
+			$scope.tables.forEach(function(t) {
+				var name = t.name;
+				if (t.propertyPath === 'value.finalVal') {
+					var weight_var = t.weight_var;
+					dimensions[name] = totaalDim.group().reduce(reduceAddAvg([name],[weight_var]),reduceRemoveAvg([name],[weight_var]),reduceInitialAvg);
+				} else if (t.propertyPath === 'value') {
+					dimensions[name] = totaalDim.group().reduceSum(function(d) {return d[name];});
+				};
+			});
+			//Now attach the dimension to the tables-array						
+			for (var i=0; i < d.Metadata.length; i++) {
+				var name = $scope.tables[i].name;
+				$scope.tables[i].dimension = dimensions[name];
+			}
+			// Make a separate one for the filling of the bar charts (based on 0-10 score per indicator)
+			var dimensions_scores = [];
+			$scope.tables.forEach(function(t) {
+				if (t.scorevar_name !== "null") {
+					var name = t.name;
+					var name_score = t.scorevar_name;
+					if (t.propertyPath === 'value.finalVal') {
+						var weight_var = t.weight_var;
+						dimensions_scores[name] = totaalDim.group().reduce(reduceAddAvg([name_score],[weight_var]),reduceRemoveAvg([name_score],[weight_var]),reduceInitialAvg);
+					} else if (t.propertyPath === 'value') {
+						dimensions_scores[name] = totaalDim.group().reduceSum(function(d) {return d[name_score];});
+					}
+				}
+			});
 			
 			// group with all, needed for data-count
 			var all = cf.groupAll();
@@ -311,6 +363,7 @@ angular.module('dashboards')
 				.colors(d3.scale.quantile()
 								.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
 								.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
+								//.range(['#1a9641','#a6d96a','#ffffbf','#fdae61','#d7191c']))
 				.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
 				.featureKeyAccessor(function(feature){
 					return feature.properties.pcode;
@@ -321,10 +374,17 @@ angular.module('dashboards')
 				.renderPopup(true)
 				.turnOnControls(true)
 				.on('filtered',function(chart,filters){
+					$scope.metric_label = meta_label[$scope.metric];
+					var popup = document.getElementById('mapPopup');
+					popup.style.visibility = 'visible';
+					
+					//popup.setAttribute('style','visibility:visible; margin-left:440px;margin-top: 300px; z-index:-1;position:relative');
+					/*
 					$scope.filters = chart.filters();
-					if ($scope.filters.length>0 && $scope.admlevel < 4) {
+					if ($scope.filters.length>0 && $scope.admlevel < zoom_max) {
 						$scope.admlevel = $scope.admlevel + 1;
 						$scope.parent_code_prev = $scope.parent_code;
+						$scope.name_selection_prev = $scope.name_selection;
 						$scope.parent_code = $scope.filters[0];
 						$scope.name_selection = lookup[$scope.parent_code];
 						if ($scope.admlevel === 4) {
@@ -336,96 +396,196 @@ angular.module('dashboards')
 						}
 						$scope.filters = [];
 						$scope.reload(d);
+						document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
+						document.getElementById('level' + ($scope.admlevel - 1)).setAttribute('class','btn btn-secondary');
 					}
+					*/
 				})
 				;
+			
+			// tooltips for map
+            // var mapTip = d3.tip()
+                  // .attr('class', 'd3-tip')
+                  // .offset([-10, 0])
+                  // .html(function (d) { return "<span style='color: #f0027f'>" + d.key + "</span> : " + dec2Format(d.value);});
+
+			//Create table with current crossfilter-selection output, so that you can also access this in other ways than through DC.js
+			var keyvalue = [];
+			$scope.tables.forEach(function(t) {
+				var key = t.name;
+				if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+					if(meta_format[t.name] === 'decimal0'){
+						keyvalue[key] =  dec0Format(d_prev[t.name]);
+					} else if(meta_format[t.name] === 'percentage'){
+						keyvalue[key] =  percFormat(d_prev[t.name]);
+					} else if(meta_format[t.name] === 'decimal2'){
+						keyvalue[key] =  dec2Format(d_prev[t.name]);
+					}
+				} else {
+					if (t.propertyPath === 'value.finalVal') {
+						if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
+							keyvalue[key] =  'N.A. on this level'; 
+						} else if(meta_format[t.name] === 'decimal0'){
+							keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value.finalVal);
+						} else if(meta_format[t.name] === 'percentage'){
+							keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value.finalVal);
+						} else if(meta_format[t.name] === 'decimal2'){
+							keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value.finalVal);
+						}
+					} else if(t.propertyPath === 'value') {
+						if (isNaN(dimensions[t.name].top(1)[0].value)) {
+							keyvalue[key] =  'N.A. on this level'; 
+						} else if(meta_format[t.name] === 'decimal0'){
+							keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
+						} else if(meta_format[t.name] === 'percentage'){
+							keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value);
+						} else if(meta_format[t.name] === 'decimal2'){
+							keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value);
+						}
+					}
+				}
+			});
+			
+
+
+			var high_med_low = function(ind) {
+				if (dimensions_scores[ind].top(1)[0].value.finalVal < 4) { return 'good';}
+				else if (dimensions_scores[ind].top(1)[0].value.finalVal > 6) { return 'bad';}
+				else {return 'medium';};
+			};	
+			
+			var risk = document.getElementById('risk_score');
+				risk.textContent = keyvalue.risk_score;
+				risk.setAttribute('class','component-score ' + high_med_low('risk_score'));
+			var vulnerability = document.getElementById('vulnerability_score');
+				vulnerability.textContent = keyvalue.vulnerability_score;
+				vulnerability.setAttribute('class','component-score ' + high_med_low('vulnerability_score'));
+			var hazard = document.getElementById('hazard_score');
+				hazard.textContent = keyvalue.hazard_score;
+				hazard.setAttribute('class','component-score ' + high_med_low('hazard_score'));
+			var coping = document.getElementById('coping_capacity_score');
+				coping.textContent = keyvalue.coping_capacity_score;
+				coping.setAttribute('class','component-score ' + high_med_low('coping_capacity_score'));
+
+			
+			//Dynamically create HTML-elements for all indicator tables
+ 			var general = document.getElementById('general');
+			var scores = document.getElementById('scores');
+			var vulnerability = document.getElementById('vulnerability');
+			var hazard = document.getElementById('hazard');
+			var coping = document.getElementById('coping');
+			//var other = document.getElementById('other');
+			while (general.firstChild) { general.removeChild(general.firstChild); }
+			while (scores.firstChild) { scores.removeChild(scores.firstChild); }
+			while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); }
+			while (hazard.firstChild) { hazard.removeChild(hazard.firstChild); }
+			while (coping.firstChild) { coping.removeChild(coping.firstChild); }
+			//while (other.firstChild) { other.removeChild(other.firstChild); }
+			for (var i=0;i<$scope.tables.length;i++) {
+				var record = $scope.tables[i];
 				
-			var tables = [
-							{id: '#data-table2', name: 'risk_score', datatype: 'decimal2', group: 'score', propertyPath: 'value.finalVal', dimension: risk_score},
-							{id: '#data-table3', name: 'vulnerability_score', datatype: 'decimal2', group: 'score', propertyPath: 'value.finalVal', dimension: vulnerability_score},
-							{id: '#data-table4', name: 'hazard_score', datatype: 'decimal2', group: 'score', propertyPath: 'value.finalVal', dimension: hazard_score},
-							{id: '#data-table5', name: 'coping_capacity_score', datatype: 'decimal2', group: 'score', propertyPath: 'value.finalVal', dimension: coping_capacity_score},
-							{id: '#data-table6', name: 'population', datatype: 'integer', group: 'general', propertyPath: 'value', dimension: population},
-							{id: '#data-table7', name: 'land_area', datatype: 'integer', group: 'general', propertyPath: 'value', dimension: land_area},
-							{id: '#data-table8', name: 'pop_density', datatype: 'decimal2', group: 'general', propertyPath: 'value.finalVal', dimension: pop_density},
-							{id: '#data-table9', name: 'poverty_incidence', datatype: 'percentage', group: 'vulnerability', propertyPath: 'value.finalVal', dimension: poverty_incidence},
-							{id: '#data-table10', name: 'income_class', datatype: 'decimal2', group: 'vulnerability', propertyPath: 'value.finalVal', dimension: income_class},
-							{id: '#data-table11', name: 'gdp_per_capita', datatype: 'integer', group: 'vulnerability', propertyPath: 'value.finalVal', dimension: gdp_per_capita},
-							{id: '#data-table12', name: 'hdi', datatype: 'decimal2', group: 'vulnerability', propertyPath: 'value.finalVal', dimension: hdi},
-							{id: '#data-table13', name: 'flood_risk', datatype: 'decimal2', group: 'hazard', propertyPath: 'value.finalVal', dimension: flood_risk},
-							{id: '#data-table14', name: 'cyclone_risk', datatype: 'decimal2', group: 'hazard', propertyPath: 'value.finalVal', dimension: cyclone_risk},
-							{id: '#data-table15', name: 'landslide_risk', datatype: 'decimal2', group: 'hazard', propertyPath: 'value.finalVal', dimension: landslide_risk},
-							{id: '#data-table16', name: 'earthquake7_phys_exp', datatype: 'decimal2', group: 'hazard', propertyPath: 'value.finalVal', dimension: earthquake7_phys_exp},
-							{id: '#data-table17', name: 'tsunami_phys_exp', datatype: 'decimal2', group: 'hazard', propertyPath: 'value.finalVal', dimension: tsunami_phys_exp},
-							{id: '#data-table18', name: 'cyclone_surge_2m_phys_exp', datatype: 'decimal2', group: 'hazard', propertyPath: 'value.finalVal', dimension: cyclone_surge_2m_phys_exp},
-							{id: '#data-table19', name: 'nr_facilities', datatype: 'integer', group: 'capacity', propertyPath: 'value', dimension: nr_facilities},
-							{id: '#data-table20', name: 'nr_doctors', datatype: 'integer', group: 'capacity', propertyPath: 'value', dimension: nr_doctors},
-							{id: '#data-table21', name: 'good_governance_index', datatype: 'decimal2', group: 'capacity', propertyPath: 'value.finalVal', dimension: good_governance_index},
-							{id: '#data-table22', name: 'traveltime', datatype: 'integer', group: 'capacity', propertyPath: 'value.finalVal', dimension: traveltime}								
-						 ];
-						 
-			// var tables2 = [];
-			// for (var i=2; i < d.Metadata.length; i++) {
-				// var record = {};
-				// console.log(d.Metadata[i])
-				// record.name = d.Metadata[i.variable];
-				// tables2[i-2] = record;
-			// }
-			// console.log(tables2);
+				if (record.group === 'general') {
+				
+					var div = document.createElement('div');
+					div.setAttribute('class','row profile-item');
+					var parent = document.getElementById(record.group);
+					parent.appendChild(div);
+					var div1 = document.createElement('div');
+					div1.setAttribute('class','col col-md-6');
+					div.appendChild(div1);	
+					var img = document.createElement('img');
+					img.setAttribute('class','community-icon');
+					img.setAttribute('src','modules/dashboards/img/' + meta_icon[record.name]);
+					div1.appendChild(img);
+					div1.innerHTML = meta_label[record.name];
+					var div2 = document.createElement('div');
+					div2.setAttribute('class','col col-md-4');
+					div2.innerHTML = keyvalue[record.name] + ' ' + meta_unit[record.name];// === "null" ? '' : meta_unit[record.name];
+					div.appendChild(div2);
+					var div3 = document.createElement('div');
+					div3.setAttribute('class','col col-md-2');
+					div.appendChild(div3);
+					var button = document.createElement('button');
+					button.setAttribute('type','button');
+					button.setAttribute('class','btn-modal');
+					button.setAttribute('data-toggle','modal');
+					button.setAttribute('ng-click','info(\'' + record.name + '\')');
+					div3.appendChild(button);
+					$compile(button)($scope);
+					var img = document.createElement('img');
+					img.setAttribute('src','modules/dashboards/img/icon-popup.svg');
+					button.appendChild(img);
+				
+				} else {
+				
+					var div = document.createElement('div');
+					div.setAttribute('class','component-section');
+					var parent = document.getElementById(record.group);
+					parent.appendChild(div);
+					var div0 = document.createElement('div');
+					div0.setAttribute('class','col-md-2');
+					div.appendChild(div0);	
+					var img1 = document.createElement('img');
+					img1.setAttribute('src','modules/dashboards/img/' + meta_icon[record.name]);
+					//img1.setAttribute('style','width:20px');
+					div0.appendChild(img1);
+					var div1 = document.createElement('div');
+					div1.setAttribute('class','col-md-3 component-label');
+					div1.setAttribute('ng-click','go_map(\''+record.name+'\')');
+					div1.innerHTML = meta_label[record.name];
+					$compile(div1)($scope);
+					div.appendChild(div1);	
+					var div1a = document.createElement('div');
+					div1a.setAttribute('class','component-score ' + high_med_low(record.name));
+					div1a.innerHTML = keyvalue[record.name];
+					div1.appendChild(div1a);
+					var div2 = document.createElement('div');
+					div2.setAttribute('class','col-md-5');
+					div.appendChild(div2);
+					var div2a = document.createElement('div');
+					div2a.setAttribute('class','component-scale');
+					div2.appendChild(div2a);
+					var div2a1 = document.createElement('div');
+					div2a1.setAttribute('class','score-bar ' + high_med_low(record.name));
+					div2a1.setAttribute('style','width:'+(dimensions_scores[record.name].top(1)[0].value.finalVal*10) + '%');
+					div2a.appendChild(div2a1);
+					var img2 = document.createElement('img');
+					img2.setAttribute('class','scale-icon');
+					img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
+					div2a.appendChild(img2);
+					var div3 = document.createElement('div');
+					div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+					div.appendChild(div3);
+					var button = document.createElement('button');
+					button.setAttribute('type','button');
+					button.setAttribute('class','btn-modal');
+					button.setAttribute('data-toggle','modal');
+					button.setAttribute('ng-click','info(\'' + record.name + '\')');
+					div3.appendChild(button);
+					$compile(button)($scope);
+					var img3 = document.createElement('img');
+					img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
+					button.appendChild(img3);
+				}		
+				;
+			}; 
 			
-			// create the data tables: because metrics are in columns in the data set and not in rows, we need one data-table per metric
-			tables.forEach(function(t) {
-				dc.dataTable(t.id)
-						.dimension(t.dimension)                
-						.group(function (i) {return ''; })
-						.columns([
-									// icon
-									function(d){return '<img src=\"modules/dashboards/img/'+meta_icon[t.name]+'\" width=\"20\">';},
-									// name of variable
-									function(d){return meta_label[t.name];}, 
-									// the value
-									function(d){
-										// This makes sure that once the barangay-level is loaded, but no further subselection  is made yet, 
-										// the profile of the whole municipality is still shown. Otherwise it would show 'N.A.' sooner than necessary.
-										if ($scope.admlevel === 4 && $scope.filters.length === 0) {
-											if(meta_format[t.name] === 'decimal0'){
-												return dec0Format(d_prev[t.name]);
-											} else if(meta_format[t.name] === 'percentage'){
-												return percFormat(d_prev[t.name]);
-											} else if(meta_format[t.name] === 'decimal2'){
-												return dec2Format(d_prev[t.name]);
-											}
-										} else {
-											if (isNaN($scope.deepFind(d, t.propertyPath))) {
-												return 'N.A. on this level'; 
-											} else if(meta_format[t.name] === 'decimal0'){
-												return dec0Format($scope.deepFind(d, t.propertyPath));
-											} else if(meta_format[t.name] === 'percentage'){
-												return percFormat($scope.deepFind(d, t.propertyPath));
-											} else if(meta_format[t.name] === 'decimal2'){
-												return dec2Format($scope.deepFind(d, t.propertyPath));
-											}
-										}
-									},
-									function(d){
-										if (isNaN($scope.deepFind(d, t.propertyPath))) {
-											return '';
-										} else {return meta_unit[t.name]; }
-									}
-							])
-						.title(function(d){return lookup[t.name];})	
-						.order(d3.descending);
-			});												
-			
+
+
 			//Function that initiates ng-click event for changing the metric in the row-chart when clicking on a metric
 			//It differentiates on type of metric (percentage or absolute count)
-			$scope.go = function(id) {
+			$scope.info = function(id) {
 				$scope.metric = id;	
 				$scope.metric_label = meta_label[$scope.metric];
 				$scope.metric_year = meta_year[$scope.metric];
 				$scope.metric_source = meta_source[$scope.metric];
 				$scope.metric_desc = meta_desc[$scope.metric];
-				$('#myModal').modal('show');
+				$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];
+				$('#infoModal').modal('show');
+			};
+			
+			$scope.go_map = function(id) {
+				$scope.metric = id;	
 				whereGroupSum.dispose();
 				whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[id];});	
 				mapChart
@@ -437,24 +597,33 @@ angular.module('dashboards')
 					;
 				dc.filterAll();
 				dc.redrawAll();
-			};
+			};;
 			
+			
+		
+			//Functions for zooming out
 			$scope.level_up = function(dest_level) {
+				var admlevel_old = $scope.admlevel;
 				if (dest_level === 2 && $scope.admlevel) {
-					$scope.admlevel = 2;
+					$scope.admlevel = dest_level;
 					$scope.parent_code = '';
 					$scope.reload(d);
 				} else if (dest_level === 3 && $scope.admlevel > 2) {
 					$scope.admlevel = 3;
-					$scope.parent_code = $scope.prov_code;
+					$scope.parent_code = $scope.level2_code;
+					$scope.name_selection = $scope.name_selection_prev;
 					$scope.reload(d);
-					
 				}
+				document.getElementById('level' + admlevel_old).setAttribute('class','btn btn-secondary');
+				document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
 			};
 			
+			//Export to CSV function
 			$scope.export_csv = function() {
 				var content = d.Rapportage;
-				//console.log(content);
+				for (var i=0;i<content.length;i++){
+					content[i].name = lookup[content[i].pcode];
+				};
 
 				var finalVal = '';
 				
@@ -497,6 +666,11 @@ angular.module('dashboards')
 			//Render all dc-charts and -tables
 			dc.renderAll(); 
 			
+			
+			// d3.selectAll(".leaflet-clickable").call(mapTip);
+			// d3.selectAll(".leaflet-clickable").on('mouseover', mapTip.show)
+				// .on('mouseout', mapTip.hide);  
+			
 			map = mapChart.map();
 			function zoomToGeom(geom){
 				var bounds = d3.geo.bounds(geom);
@@ -508,8 +682,58 @@ angular.module('dashboards')
 			
 			
 		};
-	
+
 	}
 ])
 
 ;
+
+/* 
+			// create the data tables: because metrics are in columns in the data set and not in rows, we need one data-table per metric
+			$scope.tables.forEach(function(t) {
+				dc.dataTable('#' + t.id)
+						.dimension(t.dimension)             
+						.group(function (i) {return ''; })
+						.columns([
+									// icon
+									function(d){
+										if (meta_icon[t.name] === "null") {return '<img src=\"modules/dashboards/img/undefined.png\" width=\"20\">';}
+										else {return '<img src=\"modules/dashboards/img/'+meta_icon[t.name]+'\" width=\"20\">';}
+									},
+									// name of variable
+									function(d){return meta_label[t.name];}, 
+									// the value
+									function(d){
+										// This makes sure that once the barangay-level is loaded, but no further subselection  is made yet, 
+										// the profile of the whole municipality is still shown. Otherwise it would show 'N.A.' sooner than necessary.
+										if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+											if(meta_format[t.name] === 'decimal0'){
+												return dec0Format(d_prev[t.name]);
+											} else if(meta_format[t.name] === 'percentage'){
+												return percFormat(d_prev[t.name]);
+											} else if(meta_format[t.name] === 'decimal2'){
+												return dec2Format(d_prev[t.name]);
+											}
+										} else {
+											if (isNaN($scope.deepFind(d, t.propertyPath))) {
+												return 'N.A. on this level'; 
+											} else if(meta_format[t.name] === 'decimal0'){
+												return dec0Format($scope.deepFind(d, t.propertyPath));
+											} else if(meta_format[t.name] === 'percentage'){
+												return percFormat($scope.deepFind(d, t.propertyPath));
+											} else if(meta_format[t.name] === 'decimal2'){
+												return dec2Format($scope.deepFind(d, t.propertyPath));
+											}
+										}
+									},
+									function(d){
+										if (isNaN($scope.deepFind(d, t.propertyPath))) {
+											return '';
+										} else if (meta_unit[t.name] === "null") {return '';} 
+										else {return meta_unit[t.name]; }
+									}
+							])
+						.title(function(d){return lookup[t.name];})	
+						.order(d3.descending);
+			});
+			 */

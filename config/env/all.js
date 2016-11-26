@@ -28,6 +28,7 @@ module.exports = {
 				'public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css', // NOT in bower.json
 				//'public/build/bower/materialize/css/materialize.css', // in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.css', // in bower.json
+				'public/build/bower/font-awesome/css/font-awesome.min.css', // in bower.json
 				'public/build/bower/leaflet-search/js/leaflet-search.src.css' // in bower.json
 				
 			],
@@ -63,6 +64,7 @@ module.exports = {
 				'public/build/custom/leaflet-stamen/tile.stamen.js', // NOT in bower.json
 				'public/build/custom/angular-dc/js/angular-dc.js', //in bower.json
 				'public/build/custom/forms-angular/js/forms-angular.js', //in bower.json
+				'public/build/custom/d3-tip/js/d3-tip.js', //NOT in bower.json
 				'public/build/bower/angular-messages/js/angular-messages.js', //in bower.json
 				'public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.js',//in bower.json
 				'public/build/bower/angular-elastic/js/elastic.js', //in bower.json

@@ -1,0 +1,18 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#4D799D;stroke-width:4;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#4D799D;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}
+</style>
+<g>
+
+		<rect x="173.6" y="166.5" transform="matrix(-1 9.011668e-11 -9.011668e-11 -1 450.8206 436.6811)" class="st0" width="103.7" height="103.7"/>
+	<line class="st0" x1="225.4" y1="166.5" x2="225.4" y2="241.9"/>
+	<polyline class="st0" points="197.1,213.6 225.4,241.9 253.7,213.6 	"/>
+	<line class="st1" x1="107.6" y1="29.8" x2="154.7" y2="95.7"/>
+	<line class="st0" x1="154.7" y1="95.8" x2="286.7" y2="95.8"/>
+	<g>
+		<polyline class="st0" points="286.7,147.6 286.7,62.8 131.1,62.8 107.6,29.8 13.3,29.8 13.3,62.8 13.3,270.2 135.9,270.2 		"/>
+	</g>
+</g>
+</svg>

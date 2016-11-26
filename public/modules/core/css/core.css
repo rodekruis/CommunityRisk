@@ -119,7 +119,7 @@ a.btn:hover {
   color: black;
 } */
 
-#ribbon1,#ribbon2,#ribbon3 {
+#ribbon1,#ribbon2,#ribbon3,#ribbon4,#ribbon5 {
     position: fixed;
     right: 0;
     bottom: 60px;
@@ -139,6 +139,17 @@ a.btn:hover {
 }
 #ribbon2:hover {
 	color: black;
+}
+#ribbon4 {
+	top:60px;
+	width: 140px;
+	text-align: center;
+}
+#ribbon5 {
+	top:60px;
+	right: 120px;
+	width: 140px;
+	text-align: center;
 }
 
 /* Base candidates

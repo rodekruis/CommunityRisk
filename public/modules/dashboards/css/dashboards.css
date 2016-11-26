@@ -1,69 +1,354 @@
-.dc-chart g.row text {
-    fill: black;
-    font-size:0.8em;
+body {
+}
+.content-wrapper {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+.no-padding {
+  padding: 0;
+}
+/* header styles*/
+.navbar-inverse {
+  background: #397ab2;
+  border-color: #397ab2;
+}
+.navbar-inverse .navbar-brand {
+  color: #ffffff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+}
+.logo {
+  float: left;
+  margin-right: 15px;
+  width: 25px;
+}
+.title-hightlight {
+  color: #cfe7fb;
+}
+.navbar-right {
+  background: #eceff4;
+  border: 1px solid #cad3df;
+  border-radius: 4px;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+.dropdown-toggle {
+  color: #4d799d;
+}
+.nav>li>a {
+  padding:6px 10px;
+}
+.export-items li {
+  padding: 0 14px;
+}
+.export-icon {
+  float: left;
+  margin-right: 7px;
+  margin-top: 2px;
+  width: 18px;
+}
+.export-btn-arrow {
+  margin-left: 20px;
+}
+.sidebar {
+  bottom: 0;
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+  position: fixed;
+  top: 51px;
+  width: 380px;
+  z-index: 2;
+  background-color: #ffffff;
+}
+.map-wrapper {
+  background: #accfff;
+  float: right;
+  bottom: 0;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.zoom-level-nav {
+  position: absolute;
+  left: 420px;
+  margin-top: 20px;
+  z-index: 3;
+}
+.zoom-level {
+  width: 100%;
+}
+.zoom-level button {
+  background: #f1f1f1;
+  border-radius: 4px;
+  color: #bbbbbb;
+  margin-right: 3px;
+  text-align: left;
+  width: 200px;
+}
+.zoom-level button:hover {
+  background: #397ab0;
+  color: #ffffff;
+}
+.zoom-level button.btn-active {
+  background: #397ab0;
+  color: #ffffff;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: left;
+}
+.zoom-level .button-label {
+  font-size: 12px;
+  margin-left: 5px;
+}
+.zoom-level button.btn-active .button-label {
+  display: inline-block;
+}
+.indicators-panels .card-header{
+  background: #f3f3f3;
+  border-bottom: none;
+  border-left: 1px solid #e6eaee;
+  border-right: 1px solid #e6eaee;
+  border-top: 1px solid #e6eaee;
+  border-radius: 2px;
+  overflow: hidden;
+  padding: 10px;
+}
+.indicators-panels .card-block {
+  border-bottom: none;
+  border-left: 1px solid #e6eaee;
+  border-right: 1px solid #e6eaee;
+  border-top: none;
+  padding: 10px;
+}
+.panel-header-icon {
+  background: #e8eaf1;
+  display: block;
+  float: left;
+  margin-right: 12px;
+  padding: 10px;
+}
+.panel-header-icon img {
+  width: 20px;
+}
+.panel-header-content{
+  display: inline-block;
+  width: 70%;
+}
+.panel-header-content:hover {
+  cursor: pointer;
+}
+.panel-header-title {
+  color: #000000;
+  font-weight: bold;
+  display: block;
+}
+.panel-header-description {
+  color: #b5b5b5;
+  display: block;
+  font-size: 12px;
+  font-style: italic;
+}
+.score {
+  font-weight: bold;
+}
+.component-section {
+  overflow: hidden;
+  padding: 5px 0;
+}
+.component-section:hover {
+  background: #a4d980;
+  color: #ffffff;
+  border-radius: 5px;
+}
+.component-label {
+  font-size: 11px;
+  line-height: 13px;
+  padding: 0;
 }
 
-.dc-chart .pie-slice {
-    fill:black;
+.component-label:hover {
+ cursor:pointer;
 }
 
-.x-axis-label{
-    font-size:0.8em;
+.component-scale {
+  background: #e2e7ee;
+  border-radius: 5px;
+  height: 12px;
+  margin-top: 10px;
+  position: relative;
+  width: 115%;
 }
 
-#where-chart{
-    height:360px;
-    width:100%;
+.score-bar {
+  border-radius: 5px;
+  height: 12px;
+  left: 15%;
+  margin-top: 10px;
+  position: relative;
 }
 
-#wheretitle{
-    padding-bottom:10px;
+.score-bar.good {
+  background: #94c35c;
+}
+.score-bar.medium {
+  background: #f1d121;
+}
+.score-bar.bad {
+  background: #ef4949;
 }
 
-#header{
-    padding-bottom:0px;
-    border-bottom-color: #dddddd;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    margin-bottom:20px;
+.component-score.good {
+  color: #94c35c;
+}
+.component-score.medium {
+  color: #f1d121;
+}
+.component-score.bad {
+  color: #ef4949;
 }
 
-.colheight{
-    height:450px;
+.component-score {
+	font-weight: bold;
+}
+.scale-icon {
+  background: #397ab0;
+  border-radius: 50%;
+  padding: 5px;
+  position: absolute;
+  top: -7px;
+  width: 25px;
+  border: 3px solid #ffffff;
 }
 
-.removepadding {
-    padding-right:0px;
-    padding-left:0px;
+/*community profiles*/
+.community-profiles-wrapper {
+  background: #f3faff;
+  border: 1px solid #e9e9e9;
+  border-radius: 2px;
+  margin-top: 20px;
+  padding: 10px;
 }
-    
- .where-chart {
-    width:100%;
- }
- 
- .where-info{
-    padding:5px;
-    background-color:white;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
- }
- 
-.hdx-3w-info {
-	padding:5px;
-    background-color:white;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
+.community-title {
+  color: #1d2531;
+  font-size: 13px;
+  font-weight: bold;
+}
+.total-count{
+  color: #3780bb;
+  font-size: 24px;
+}
+.filter-count {
+  color: #444444;
+  font-size: 13px;
+}
+.score-helptext {
+  font-size: 11px;s
+}
+.profile-item {
+  border-radius: 3px;
+  color: #354052;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: -5px;
+  margin-right: -5px;
+  padding: 7px;
+}
+.profile-item:hover {
+  background: #a4d980;
+  color: #ffffff;
+}
+.profile-item .col {
+  padding: 0;
+}
+.community-icon {
+  width: 17px;
+}
+.btn-modal {
+  background: none;
+  border: none;
+  float: right;
+  margin-top: 8px;
+  opacity: 1;
+  padding: 0;
+  width: 20px;
+}
+.btn-modal:hover {
+  opacity: 0.75;
+}
+.modal-dialog {
+  width: 500px;
+  z-index: 2;
+}
+.modal-backdrop {
+  z-index: 2;
+}
+.sidebar-modal .modal-header {
+  background: #269df9;
+  color: #ffffff;
+}
+.sidebar-modal .close {
+  opacity: 1;
+  color: #ffffff;
+  text-shadow: none;
+}
+.sidebar-modal h4 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+.sidebar-modal p {
+  margin-bottom: 15px;
 }
 
-.general-info {
-	padding:5px;
-    background-color:#E6E6FA;
-    background: #bdc9e1; /*rgba(255,255,255,0.8);*/
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-	width:500px;
+.map-popup {
+  background: #215784;
+  border-radius: 4px;
+  color: #ffffff;
+  padding: 15px;
+  width: 200px;
+  visibility: hidden;
+}
+.map-popup .popup-header {
+  color: #daeaf7;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+.map-popup .popup-score {
+  font-size: 35px;
+  text-transform: uppercase;
+}
+.map-popup .score-label {
+  color: #daeaf7;
+  font-size: 11px;
+}
+
+
+
+/* Own CSS Jannis */
+
+
+/*Give the second column of all data tables a fixed width so that the third column starts at a fixed position */
+/* .table-dashboard > thead > tr > th:nth-child(2),
+.table-dashboard > tbody > tr > th:nth-child(2),
+.table-dashboard > tfoot > tr > th:nth-child(2),
+.table-dashboard > thead > tr > td:nth-child(2),
+.table-dashboard > tbody > tr > td:nth-child(2),
+.table-dashboard > tfoot > tr > td:nth-child(2) {
+  width: 150px;
+} */
+
+/* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
+.leaflet-clickable {
+	fill-opacity: .6;
+}
+
+.leaflet-control-zoom {
+	left: 380px;
 }
 
 #loading-bar-spinner {
@@ -79,140 +364,11 @@
   height: 34px;
 }
 
-.carousel-indicators {
-    left: 75%;
-    width: 40%;
+.hdx-3w-info {
+	padding:5px;
+    background-color:white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
 }
-
-/*Give the second column of all data tables a fixed width so that the third column starts at a fixed position */
-.table-dashboard > thead > tr > th:nth-child(2),
-.table-dashboard > tbody > tr > th:nth-child(2),
-.table-dashboard > tfoot > tr > th:nth-child(2),
-.table-dashboard > thead > tr > td:nth-child(2),
-.table-dashboard > tbody > tr > td:nth-child(2),
-.table-dashboard > tfoot > tr > td:nth-child(2) {
-  width: 200px;
-}
-
-/*Make sure the a-elements (such as: level_up) get a pointer-cursor when hovered */
-a:hover, #flag1:hover, #flag2:hover {
- cursor:pointer;
-}
-
-
-a.btn {
-  background: #3498db;/* 
-  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
-  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
-  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
-  background-image: -o-linear-gradient(top, #3498db, #2980b9);
-  background-image: linear-gradient(to bottom, #3498db, #2980b9); */
-  -webkit-border-radius: 28;
-  -moz-border-radius: 28;
-  border-radius: 5px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 15px;
-  padding: 10px 20px 10px 20px;
-  text-decoration: none;
-  margin-bottom: 10px;
-}
-a.btn:hover {
-  background: #3cb0fd;/* 
-  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: linear-gradient(to bottom, #3cb0fd, #3498db); */
-  text-decoration: none;
-}
-
-/* Style the community-hierarchy arrows */
-#flag1, #flag2, #flag3 { 
-  vertical-align: top;
-  display: inline-block;
-  width: 27%; 
-  height: 30px; 
-  position: relative;
-  color: white;
-  line-height: 30px;
-  text-align: center;
-}
-#flag1 {
-  background: #2b8cbe;
-}
-#flag2 {
-  background: #74a9cf;
-  margin-left: 3%;
-}
-#flag3 {
-  background: #bdc9e1;
-  margin-left: 3%;
-}
-
-#flag2:before,#flag3:before { 
-  content: ""; 
-  position: absolute; 
-  top: 0; 
-  left: -15px;
-  width: 0; 
-  height: 0; 
-  border-left: 15px solid transparent;
-
-}
-#flag2:before {
-  border-top: 15px solid #74a9cf; 
-  border-bottom: 15px solid #74a9cf; 
-}
-#flag3:before {
-  border-top: 15px solid #bdc9e1; 
-  border-bottom: 15px solid #bdc9e1; 
-}
-
-#flag1:after,#flag2:after,#flag3:after { 
-  content: ""; 
-  position: absolute; 
-  left: 100%; 
-  bottom: 0; 
-  width: 0; 
-  height: 0; 
-  border-top: 15px solid transparent;
-
-  border-bottom: 15px solid transparent;
-
-  border-left: 15px solid #2b8cbe;
-}
-#flag2:after {
-  border-left: 15px solid #74a9cf;
-}
-#flag3:after {
-  border-left: 15px solid #bdc9e1;
-}
-
-#color-selection {
-  width: 90%; 
-  height: 20px; 
-  position: relative;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  color: black;
-  background-color: #ccc;
-  text-align: center;
-  vertical-align: middle;
-	
-}
-
-/* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
-.leaflet-clickable {
-	fill-opacity: .7;
-}
-
-
-
-
-
-
-
-
-
 

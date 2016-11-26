@@ -1,4 +1,41 @@
 <div class="container" data-ng-controller="HeaderController">
+	<!-- Navigation -->
+		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+
+		  <div class="navbar-header">
+			  <a class="navbar-brand" href="/#!/">
+				<img src="modules/dashboards/img/logo.svg" class="logo">
+				Community Profiles <span class="title-hightlight">Dashboard</span></a>
+		  </div>
+
+		  <!-- start: export nav -->
+		  <ul class="nav navbar-top-links navbar-right">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+						  <img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+						  Export Options
+						  <!-- <i class="fa fa-angle-down export-btn-arrow"></i> -->
+						</a>
+						<ul class="dropdown-menu export-items">
+							<li>
+								<a ng-href ="./data/{{data_input}}" target="_blank">
+									Export (JSON)
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a id="download" ng-click="export_csv()">
+									Export (CSV)
+								</a>
+							</li>
+						</ul>
+						<!-- /.dropdown-tasks -->
+					</li>
+				</ul>
+		  <!-- end: export nav -->
+	  </nav>
+		  <!-- end: navbar-header -->
+	<!-- 
 	<div class="navbar-header navbar-default">
 		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
 			<span class="sr-only" translate>Toggle navigation</span>
@@ -20,13 +57,13 @@
 			</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
-			<!--<li ui-route="/signup" ng-class="{active: $uiRoute}">
+			<li ui-route="/signup" ng-class="{active: $uiRoute}">
 				<a href="/#!/signup"><strong translate>Signup</strong></a>
-			</li>-->
+			</li>
 			<li class="divider-vertical"></li>
-			<!-- <li ui-route="/signin" ng-class="{active: $uiRoute}">
+			<li ui-route="/signin" ng-class="{active: $uiRoute}">
 				<a href="/#!/signin"><strong translate>Signin</strong></a>
-			</li> -->
+			</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
 			<li class="dropdown">
@@ -50,5 +87,5 @@
 				</ul>
 			</li>
 		</ul>
-	</nav>
+	</nav> -->
 </div>

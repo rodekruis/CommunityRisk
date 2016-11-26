@@ -1,0 +1,3 @@
+country_code;country_name;zoomlevel_min;zoomlevel_max;level2_name;level3_name;level4_name;default_metric
+PH;The Philippines;2;4;Provinces;Municipalities;Barangays;risk_score
+MW;Malawi;2;3;Districts;Traditional Authorities;n.a.;population

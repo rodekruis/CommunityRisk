@@ -41,7 +41,8 @@
   },
   "resolutions": {
 	"angular": "1.5.5",
-	"angular-messages": "1.4.8"
+	"angular-messages": "1.4.8",
+	"d3": "3.5.17"
   },
   "install": {
     "base": "public/build/bower",

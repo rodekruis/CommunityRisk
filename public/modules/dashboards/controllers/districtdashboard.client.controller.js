@@ -8,7 +8,7 @@ angular.module('dashboards')
 		$scope.authentication = Authentication;
 		$scope.geom = null;
 		$scope.country_code = 'PH';
-		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code};
+		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		$scope.admlevel = 2;
 		$scope.metric = '';
 		$scope.metric_label = '';
@@ -58,7 +58,7 @@ angular.module('dashboards')
 			// start loading bar
 		    $scope.start();
 			
-			$scope.metric = ''
+			$scope.metric = '';
 			//$scope.country_code = country;
 			$scope.admlevel = 2;
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code;
@@ -224,10 +224,10 @@ angular.module('dashboards')
 			var zoom_max = country_zoom_max[$scope.country_code]; 
 			if ($scope.metric === '') { 
 				$scope.metric = country_default_metric[$scope.country_code]; 
-			};
+			}
 			if ($scope.admlevel === 2) { 
 				$scope.name_selection = country_name[$scope.country_code]; 
-			};  
+			}
 			
 			// get the lookup tables
 			var lookup = $scope.genLookup($scope.config.nameAttribute);
@@ -346,12 +346,12 @@ angular.module('dashboards')
 					dimensions[name] = totaalDim.group().reduce(reduceAddAvg([name],[weight_var]),reduceRemoveAvg([name],[weight_var]),reduceInitialAvg);
 				} else if (t.propertyPath === 'value') {
 					dimensions[name] = totaalDim.group().reduceSum(function(d) {return d[name];});
-				};
+				}
 			});
 			// Make a separate one for the filling of the bar charts (based on 0-10 score per indicator)
 			var dimensions_scores = [];
 			$scope.tables.forEach(function(t) {
-				if (t.scorevar_name !== "null") {
+				if (t.scorevar_name !== 'null') {
 					var name = t.name;
 					var name_score = t.scorevar_name;
 					if (t.propertyPath === 'value.finalVal') {
@@ -363,8 +363,9 @@ angular.module('dashboards')
 				}
 			});
 			
-			//Now attach the dimension to the tables-array						
-			for (var i=0; i < d.Metadata.length; i++) {
+			//Now attach the dimension to the tables-array		
+			var i;
+			for (i=0; i < d.Metadata.length; i++) {
 				var name = $scope.tables[i].name;
 				$scope.tables[i].dimension = dimensions[name];
 			}
@@ -379,7 +380,7 @@ angular.module('dashboards')
 				var keyvalue = [];
 				$scope.tables.forEach(function(t) {
 					var key = t.name;
-					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+					if ($scope.admlevel === zoom_max && $scope.filters.length === 0) {
 						if(meta_format[t.name] === 'decimal0'){
 							keyvalue[key] =  dec0Format(d_prev[t.name]);
 						} else if(meta_format[t.name] === 'percentage'){
@@ -417,37 +418,37 @@ angular.module('dashboards')
 			
 			var high_med_low = function(ind,ind_score) {
 				if (dimensions_scores[ind]) {
-					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+					if ($scope.admlevel === zoom_max && $scope.filters.length === 0) {
 							var width = d_prev[ind_score];
 						} else {
 							var width = dimensions_scores[ind].top(1)[0].value.finalVal;
-						};
-					if (width < 4) { return 'good';} else if (width > 6) { return 'bad';} else {return 'medium';};
+						}
+					if (width < 4) { return 'good';} else if (width > 6) { return 'bad';} else {return 'medium';}
 				}				
 			};	
 
 			$scope.createHTML = function(keyvalue) {
 				
-				var risk = document.getElementById('risk_score');
-				if (risk) {
-					risk.textContent = keyvalue.risk_score;
-					risk.setAttribute('class','component-score ' + high_med_low('risk_score','risk_score'));					
-				};
-				var vulnerability = document.getElementById('vulnerability_score');
-				if (vulnerability) {
-					vulnerability.textContent = keyvalue.vulnerability_score;
-					vulnerability.setAttribute('class','component-score ' + high_med_low('vulnerability_score','vulnerability_score'));				
-				};
-				var hazard = document.getElementById('hazard_score');
-				if (hazard) {
-					hazard.textContent = keyvalue.hazard_score;
-					hazard.setAttribute('class','component-score ' + high_med_low('hazard_score','hazard_score'));				
-				};
-				var coping = document.getElementById('coping_capacity_score');
-				if (coping) {
-					coping.textContent = keyvalue.coping_capacity_score;
-					coping.setAttribute('class','component-score ' + high_med_low('coping_capacity_score','coping_capacity_score'));				
-				};
+				var risk_score = document.getElementById('risk_score');
+				if (risk_score) {
+					risk_score.textContent = keyvalue.risk_score;
+					risk_score.setAttribute('class','component-score ' + high_med_low('risk_score','risk_score'));					
+				}
+				var vulnerability_score = document.getElementById('vulnerability_score');
+				if (vulnerability_score) {
+					vulnerability_score.textContent = keyvalue.vulnerability_score;
+					vulnerability_score.setAttribute('class','component-score ' + high_med_low('vulnerability_score','vulnerability_score'));				
+				}
+				var hazard_score = document.getElementById('hazard_score');
+				if (hazard_score) {
+					hazard_score.textContent = keyvalue.hazard_score;
+					hazard_score.setAttribute('class','component-score ' + high_med_low('hazard_score','hazard_score'));				
+				}
+				var coping_score = document.getElementById('coping_capacity_score');
+				if (coping_score) {
+					coping_score.textContent = keyvalue.coping_capacity_score;
+					coping_score.setAttribute('class','component-score ' + high_med_low('coping_capacity_score','coping_capacity_score'));				
+				}
 
 				
 				//Dynamically create HTML-elements for all indicator tables
@@ -468,7 +469,7 @@ angular.module('dashboards')
 					
 					if (record.group === 'general') {
 						
-						if (meta_unit[record.name] === "null") {var unit = '';} else {var unit = meta_unit[record.name];};
+						if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
 					
 						var div = document.createElement('div');
 						div.setAttribute('class','row profile-item');
@@ -512,7 +513,7 @@ angular.module('dashboards')
 							var width = d_prev[record.scorevar_name]*10;
 						} else {
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
-						};
+						}
 					
 						var div = document.createElement('div');
 						div.setAttribute('class','component-section');
@@ -563,8 +564,8 @@ angular.module('dashboards')
 						img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
 						img3.setAttribute('style','height:17px');
 						button.appendChild(img3);
-					};
-				}; 
+					}
+				}
 			};
 			$scope.createHTML(keyvalue);
 			
@@ -795,9 +796,6 @@ angular.module('dashboards')
 				map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
 			}
 			zoomToGeom($scope.geom);
-			
-				
-			
 			
 		};
 

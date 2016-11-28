@@ -1,7 +1,57 @@
-<section class="section-expand" data-ng-controller="DistrictDashboardsController" data-ng-init="initiate('PH')">
+<section class="section-expand" data-ng-controller="DistrictDashboardsController" data-ng-init="initiate()">
+	
+	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#!/">
+				<img src="modules/dashboards/img/logo.svg" class="logo">
+				Community Profiles <span class="title-hightlight">Dashboard</span>
+			</a>
+		</div>
+
+		<!-- start: export nav -->
+		<ul class="nav navbar-top-links navbar-right">
+			<li class="dropdown">
+				<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+					<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+						  Export Options
+					<i class="fa fa-angle-down export-btn-arrow"></i>
+				</a>
+				<ul class="dropdown-menu export-items">
+					<li>
+						<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a id="download" ng-click="export_csv()">Export (CSV)</a>
+					</li>
+				</ul>
+				<!-- /.dropdown-tasks -->
+			</li>
+		</ul>
+		<!-- end: export nav -->
+	</nav>
+	<!-- end: navbar-header -->
+	
 	<div class="content-wrapper">
+	
 		<!-- start: sidebar -->
 		<div class="navbar-default sidebar" role="navigation">
+
+			<!-- start: community profiles -->
+			<div class="community-profiles-wrapper">
+				<div id="count-info" class="general-info">
+					<div>
+						<span class="community-title">{{name_selection}}</span>
+					</div>
+					<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
+					<a style="color: #3780bb; font-size: 12px" href="javascript:dc.filterAll();dc.redrawAll();">(Select all)</a>
+				</div>
+				<div class="row"></div>
+				<div class='tablearea' id='general'></div>
+				<div class="row"></div>
+			</div>
+			<!-- end: community profiles -->
 
 			<!-- start: accordion with stats  -->
 			<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
@@ -9,7 +59,7 @@
 					<div class="card-header" role="tab" id="headingOne">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/icon-risk-score.svg">
+								<img src="modules/dashboards/img/risk_score.png">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Risk Score - <span class="component-score" id="risk_score"></span>
@@ -28,7 +78,7 @@
 					<div class="card-header" role="tab" id="headingTwo">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/icon-vulnerability.svg">
+								<img src="modules/dashboards/img/vulnerability.png">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Vulnerability Score - <span class="component-score" id="vulnerability_score"></span>
@@ -48,7 +98,7 @@
 					<div class="card-header" role="tab" id="headingThree">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/icon-hazards.svg">
+								<img src="modules/dashboards/img/cyclone_wind.png">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Hazard Score - <span class="component-score" id="hazard_score"></span>
@@ -68,7 +118,7 @@
 					<div class="card-header" role="tab" id="headingThree">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/icon-coping-capacity.svg">
+								<img src="modules/dashboards/img/coping.png">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Coping Capacity Score - <span class="component-score" id="coping_capacity_score"></span>
@@ -87,18 +137,6 @@
 			</div>
 			<!-- end: accordion with stats -->
 
-			<!-- start: community profiles -->
-			<div class="community-profiles-wrapper">
-
-				<div class="community-title">{{name_selection}}</div>
-				<div id="count-info" class="general-info">
-					<span class="filter-count "></span> / <span class="total-count "></span> {{subtype_selection}} selected (<a href="javascript:dc.filterAll(); dc.redrawAll()">Select All</a>)
-				</div>
-				<hr style="padding:0px; margin:5px">
-				<div class='tablearea' id='general'></div>
-				<div class="row"></div>
-			</div>
-			<!-- end: community profiles -->
 
 		</div>
 		<!-- end: sidebar -->
@@ -111,36 +149,139 @@
 			<!-- start: zoom navigation -->
 			<div class="zoom-level-nav col-md-7">
 				<div class="btn-group zoom-level" role="group">
-					<button id="level2" type="button" class="btn btn-secondary btn-active " ng-click="level_up(2)">
+					<button id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
 						<i class="fa fa-globe" aria-hidden="true"></i>
 						<span class="button-label">{{country_selection}}</span>
 					</button>
-					<button id="level3" type="button" class="btn btn-secondary" ng-click="level_up(3)">
+					<button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)">
 						<i class="fa fa-th-large" aria-hidden="true"></i>
 						<span class="button-label">{{level2_selection}}</span>
 					</button>
 					<button id="level4" type="button" class="btn btn-secondary">
 						<i class="fa fa-th" aria-hidden="true"></i>
-						<span class="button-label">{{level3_selection}}</span></button>
-					<!-- <button type="button" class="btn btn-secondary">
-					<i class="fa fa-arrows-alt" aria-hidden="true"></i>
-					<span class="button-label">Barangays</span></button> -->
+						<span class="button-label">{{level3_selection}}</span>
+					</button>
+					<!-- <button type="button" class="btn btn-secondary" ng-click="reset()">
+						<span class="button-label">Reset to all {{subtype_selection}}</span>
+					</button> -->
 				</div>
 			</div>
 			<!-- end: zoom navigation -->
 			
-			<div style="position:absolute; margin-left:440px;margin-top: 100px;">
-			  <!-- the above div and inline styles are only for placement -->
-			  <div id="mapPopup" class="map-popup">
-				<div class="popup-header">{{name_selection}}
-				  <i class="fa fa-search-plus pull-right"></i>
+
+			<!-- the above div and inline styles are only for placement -->
+			<div id="mapPopup" class="map-popup" style="position:absolute;">
+				<div class="popup-header">{{name_popup}}
+					<button type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
+						<i class="fa fa-search-plus pull-right"></i>
+					</button>
 				</div>
 				<div class="popup-score">
 				  <div class="score-label">{{metric_label}}</div>
-				  3.00
+				  {{value_popup}}
 				</div>
 			  </div>
-			</div>
+			  
+			<!-- start: slide out tab for province selection -->
+            <!-- <div class="slide-out-tab-province">
+				<a class="handle" href="#"><span class="handle-label">{{subtype_selection}} Selection</span></a>
+				<div class="slideout-content-wrapper">
+					<h4>{{subtype_selection}}
+						<span class="selected-projects">
+							<span class="selected-count">5</span>
+								selected
+						</span>
+					</h4>
+					<ul class="select-options">
+						<li>
+							<span class="form-check">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" name="optionsRadios" id="selectall" value="option1" checked>
+									Select all
+								</label>
+							</span>
+						</li>
+						<li>
+							<span class="form-check">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" name="optionsRadios" id="diselectall" value="option1" checked>
+									Deselect all
+								</label>
+							</span>
+						</li>
+					</ul>
+					<div class="options-list">
+						<ul>
+							<li>
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input">
+									<span class="custom-control-indicator"></span>
+									<span class="list-label">Project name 1</span>
+								</label>
+							</li>
+
+							<li>
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input">
+									<span class="custom-control-indicator"></span>
+									<span class="list-label">Project name 1</span>
+								</label>
+							</li>
+
+							<li>
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input">
+									<span class="custom-control-indicator"></span>
+									<span class="list-label">Project name 1</span>
+								</label>
+							</li>
+
+							<li>
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input">
+									<span class="custom-control-indicator"></span>
+									<span class="list-label">Project name 1</span>
+								</label>
+							</li>
+
+							<li>
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input">
+									<span class="custom-control-indicator"></span>
+									<span class="list-label">Project name 1</span>
+								</label>
+							</li>
+
+							<li>
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input">
+									<span class="custom-control-indicator"></span>
+									<span class="list-label">Project name 1</span>
+								</label>
+							</li>
+
+							<li>
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input">
+									<span class="custom-control-indicator"></span>
+									<span class="list-label">Project name 1</span>
+								</label>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div> -->
+			<!-- end: slideout tab for province selection-->
+
+			<!-- start: slide out tab for legend -->
+			<!-- <div class="slide-out-tab-legend">
+				<a class="handle-legend" href="#"><span class="handle-label">Legend</span></a>
+				<div class="slideout-content-wrapper">
+					<h4>Legend</h4>
+				</div>
+			</div> -->
+			<!-- end: slideout tab for legend-->
+
 
 		</div>
 		<!-- end: map -->

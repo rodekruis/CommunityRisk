@@ -1,8 +1,14 @@
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', 'leafletData',
-	function ($scope, Authentication, leafletData) {
+angular.module('core').controller('HomeController', ['$scope','$rootScope','Authentication', 'leafletData',
+	function ($scope,$rootScope, Authentication, leafletData) {
     $scope.authentication = Authentication;
+	
+	$rootScope.country_code = '';
+	
+	$scope.choose_country = function(country) {
+		$rootScope.country_code = country;
+	}
       
     angular.extend($scope, {
                     defaults: {

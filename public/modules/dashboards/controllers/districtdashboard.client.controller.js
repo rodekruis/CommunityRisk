@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('DistrictDashboardsController', ['$scope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($scope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('DistrictDashboardsController', ['$scope','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($scope,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 
 		//Define variables
 		$scope.authentication = Authentication;
 		$scope.geom = null;
 		$scope.country_code = 'PH';
+		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code};
 		$scope.admlevel = 2;
 		$scope.metric = '';
 		$scope.metric_label = '';
@@ -18,6 +19,8 @@ angular.module('dashboards')
 		$scope.admlevel_text = '';
 		$scope.name_selection = '';
 		$scope.name_selection_prev = '';
+		$scope.name_popup = '';
+		$scope.value_popup = 0;
 		$scope.country_selection = '';
 		$scope.level2_selection = undefined;
 		$scope.level3_selection = undefined;
@@ -29,6 +32,7 @@ angular.module('dashboards')
 		$scope.data_input = '';
 		$scope.filters = [];
 		$scope.tables = [];
+		var mapfilters_length = 0;
 		var d_prev = '';
 		var map;
 		$scope.config =  {
@@ -49,13 +53,13 @@ angular.module('dashboards')
 		/**
 		 * Initiate the dashboard
 		 */
-		$scope.initiate = function(country) {	    
+		$scope.initiate = function() {	    
 				
 			// start loading bar
 		    $scope.start();
 			
 			$scope.metric = ''
-			$scope.country_code = country;
+			//$scope.country_code = country;
 			$scope.admlevel = 2;
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code;
 
@@ -201,6 +205,10 @@ angular.module('dashboards')
 			
 			//define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
 			var mapChart = dc.leafletChoroplethChart('#map-chart');
+			
+			//////////////////////////
+			// SETUP META VARIABLES //
+			//////////////////////////
 
 			//set up country metadata
 			var country_name = $scope.genLookup_country_meta(d,'country_name');
@@ -269,12 +277,41 @@ angular.module('dashboards')
 				$scope.tables[i] = record;
 			}
 			
+						
+			/////////////////////
+			// NUMBER FORMATS ///
+			/////////////////////
+			
+			//Define number formats for absolute numbers and for percentage metrics
+			var intFormat = d3.format(',');
+			var dec0Format = d3.format(',.0f');
+			var dec1Format = d3.format(',.1f');
+			var dec2Format = d3.format('.2f');
+			var percFormat = d3.format(',.2%');
+			
+			var currentFormat = function(value) {
+				if (meta_format[$scope.metric] === 'decimal0') { return dec0Format(value);}
+				else if (meta_format[$scope.metric] === 'decimal2') { return dec2Format(value);}
+				else if (meta_format[$scope.metric] === 'percentage') { return percFormat(value);}
+			};
+			
+			
+			///////////////////////
+			// CROSSFILTER SETUP //
+			///////////////////////
+			
 			//var cf = crossfilter(d3.range(0, data.Districts.features.length));
 			var cf = crossfilter(d.Rapportage);
 			// The wheredimension returns the unique identifier of the geo area
 			var whereDimension = cf.dimension(function(d) { return d.pcode; });
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
+			// group with all, needed for data-count
+			var all = cf.groupAll();
+			// get the count of the number of rows in the dataset (total and filtered)
+			dc.dataCount('#count-info')
+					.dimension(cf)
+					.group(all);
 				
 			// Create customized reduce-functions to be able to calculated percentages over all or multiple districts (i.e. the % of male volunteers))
 			var reduceAddAvg = function(metricA,metricB) {
@@ -311,11 +348,6 @@ angular.module('dashboards')
 					dimensions[name] = totaalDim.group().reduceSum(function(d) {return d[name];});
 				};
 			});
-			//Now attach the dimension to the tables-array						
-			for (var i=0; i < d.Metadata.length; i++) {
-				var name = $scope.tables[i].name;
-				$scope.tables[i].dimension = dimensions[name];
-			}
 			// Make a separate one for the filling of the bar charts (based on 0-10 score per indicator)
 			var dimensions_scores = [];
 			$scope.tables.forEach(function(t) {
@@ -331,26 +363,215 @@ angular.module('dashboards')
 				}
 			});
 			
-			// group with all, needed for data-count
-			var all = cf.groupAll();
-
-			// get the count of the number of rows in the dataset (total and filtered)
-			dc.dataCount('#count-info')
-					.dimension(cf)
-					.group(all);
+			//Now attach the dimension to the tables-array						
+			for (var i=0; i < d.Metadata.length; i++) {
+				var name = $scope.tables[i].name;
+				$scope.tables[i].dimension = dimensions[name];
+			}
 			
-			//Define number formats for absolute numbers and for percentage metrics
-			var intFormat = d3.format(',');
-			var dec0Format = d3.format(',.0f');
-			var dec1Format = d3.format(',.1f');
-			var dec2Format = d3.format('.2f');
-			var percFormat = d3.format(',.2%');
 			
-			var currentFormat = function(value) {
-				if (meta_format[$scope.metric] === 'decimal0') { return dec0Format(value);}
-				else if (meta_format[$scope.metric] === 'decimal2') { return dec2Format(value);}
-				else if (meta_format[$scope.metric] === 'percentage') { return percFormat(value);}
+			///////////////////////////////
+			// SET UP ALL INDICATOR HTML //
+			///////////////////////////////
+			
+			//Create table with current crossfilter-selection output, so that you can also access this in other ways than through DC.js
+			var fill_keyvalues = function() {
+				var keyvalue = [];
+				$scope.tables.forEach(function(t) {
+					var key = t.name;
+					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+						if(meta_format[t.name] === 'decimal0'){
+							keyvalue[key] =  dec0Format(d_prev[t.name]);
+						} else if(meta_format[t.name] === 'percentage'){
+							keyvalue[key] =  percFormat(d_prev[t.name]);
+						} else if(meta_format[t.name] === 'decimal2'){
+							keyvalue[key] =  dec2Format(d_prev[t.name]);
+						}
+					} else {
+						if (t.propertyPath === 'value.finalVal') {
+							if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
+								keyvalue[key] =  'N.A. on this level'; 
+							} else if(meta_format[t.name] === 'decimal0'){
+								keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value.finalVal);
+							} else if(meta_format[t.name] === 'percentage'){
+								keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value.finalVal);
+							} else if(meta_format[t.name] === 'decimal2'){
+								keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value.finalVal);
+							}
+						} else if(t.propertyPath === 'value') {
+							if (isNaN(dimensions[t.name].top(1)[0].value)) {
+								keyvalue[key] =  'N.A. on this level'; 
+							} else if(meta_format[t.name] === 'decimal0'){
+								keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
+							} else if(meta_format[t.name] === 'percentage'){
+								keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value);
+							} else if(meta_format[t.name] === 'decimal2'){
+								keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value);
+							}
+						}
+					}
+				});
+				return keyvalue;
 			};
+			var keyvalue = fill_keyvalues();
+			
+			var high_med_low = function(ind,ind_score) {
+				if (dimensions_scores[ind]) {
+					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+							var width = d_prev[ind_score];
+						} else {
+							var width = dimensions_scores[ind].top(1)[0].value.finalVal;
+						};
+					if (width < 4) { return 'good';} else if (width > 6) { return 'bad';} else {return 'medium';};
+				}				
+			};	
+
+			$scope.createHTML = function(keyvalue) {
+				
+				var risk = document.getElementById('risk_score');
+				if (risk) {
+					risk.textContent = keyvalue.risk_score;
+					risk.setAttribute('class','component-score ' + high_med_low('risk_score','risk_score'));					
+				};
+				var vulnerability = document.getElementById('vulnerability_score');
+				if (vulnerability) {
+					vulnerability.textContent = keyvalue.vulnerability_score;
+					vulnerability.setAttribute('class','component-score ' + high_med_low('vulnerability_score','vulnerability_score'));				
+				};
+				var hazard = document.getElementById('hazard_score');
+				if (hazard) {
+					hazard.textContent = keyvalue.hazard_score;
+					hazard.setAttribute('class','component-score ' + high_med_low('hazard_score','hazard_score'));				
+				};
+				var coping = document.getElementById('coping_capacity_score');
+				if (coping) {
+					coping.textContent = keyvalue.coping_capacity_score;
+					coping.setAttribute('class','component-score ' + high_med_low('coping_capacity_score','coping_capacity_score'));				
+				};
+
+				
+				//Dynamically create HTML-elements for all indicator tables
+				var general = document.getElementById('general');
+				var scores = document.getElementById('scores');
+				var vulnerability = document.getElementById('vulnerability');
+				var hazard = document.getElementById('hazard');
+				var coping = document.getElementById('coping');
+				//var other = document.getElementById('other');
+				while (general.firstChild) { general.removeChild(general.firstChild); }
+				while (scores.firstChild) { scores.removeChild(scores.firstChild); }
+				while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); }
+				while (hazard.firstChild) { hazard.removeChild(hazard.firstChild); }
+				while (coping.firstChild) { coping.removeChild(coping.firstChild); }
+				//while (other.firstChild) { other.removeChild(other.firstChild); }
+				for (var i=0;i<$scope.tables.length;i++) {
+					var record = $scope.tables[i];
+					
+					if (record.group === 'general') {
+						
+						if (meta_unit[record.name] === "null") {var unit = '';} else {var unit = meta_unit[record.name];};
+					
+						var div = document.createElement('div');
+						div.setAttribute('class','row profile-item');
+						var parent = document.getElementById(record.group);
+						parent.appendChild(div);
+						var div0 = document.createElement('div');
+						div0.setAttribute('class','col col-md-1');
+						div.appendChild(div0);	
+						var img = document.createElement('img');
+						img.setAttribute('class','community-icon');
+						img.setAttribute('src','modules/dashboards/img/' + meta_icon[record.name]);
+						div0.appendChild(img);
+						var div1 = document.createElement('div');
+						div1.setAttribute('class','col col-md-5 general-component-label');
+						div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
+						div1.innerHTML = meta_label[record.name];
+						div.appendChild(div1);	
+						$compile(div1)($scope);
+						var div2 = document.createElement('div');
+						div2.setAttribute('class','col col-md-4');
+						div2.innerHTML = keyvalue[record.name] + ' ' + unit;
+						div.appendChild(div2);
+						var div3 = document.createElement('div');
+						div3.setAttribute('class','col col-md-2');
+						div.appendChild(div3);
+						var button = document.createElement('button');
+						button.setAttribute('type','button');
+						button.setAttribute('class','btn-modal');
+						button.setAttribute('data-toggle','modal');
+						button.setAttribute('ng-click','info(\'' + record.name + '\')');
+						div3.appendChild(button);
+						$compile(button)($scope);
+						var img = document.createElement('img');
+						img.setAttribute('src','modules/dashboards/img/icon-popup.svg');
+						img.setAttribute('style','height:17px');
+						button.appendChild(img);
+					
+					} else if (record.group) {
+						
+						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+							var width = d_prev[record.scorevar_name]*10;
+						} else {
+							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
+						};
+					
+						var div = document.createElement('div');
+						div.setAttribute('class','component-section');
+						var parent = document.getElementById(record.group);
+						parent.appendChild(div);
+						var div0 = document.createElement('div');
+						div0.setAttribute('class','col-md-2');
+						div.appendChild(div0);	
+						var img1 = document.createElement('img');
+						img1.setAttribute('src','modules/dashboards/img/' + meta_icon[record.name]);
+						img1.setAttribute('style','width:20px height:20px');
+						div0.appendChild(img1);
+						var div1 = document.createElement('div');
+						div1.setAttribute('class','col-md-3 component-label');
+						div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
+						div1.innerHTML = meta_label[record.name];
+						$compile(div1)($scope);
+						div.appendChild(div1);	
+						var div1a = document.createElement('div');
+						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
+						div1a.innerHTML = keyvalue[record.name];
+						div1.appendChild(div1a);
+						var div2 = document.createElement('div');
+						div2.setAttribute('class','col-md-5');
+						div.appendChild(div2);
+						var div2a = document.createElement('div');
+						div2a.setAttribute('class','component-scale');
+						div2.appendChild(div2a);
+						var div2a1 = document.createElement('div');
+						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
+						div2a1.setAttribute('style','width:'+ width + '%');
+						div2a.appendChild(div2a1);
+						var img2 = document.createElement('img');
+						img2.setAttribute('class','scale-icon');
+						img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
+						div2a.appendChild(img2);
+						var div3 = document.createElement('div');
+						div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+						div.appendChild(div3);
+						var button = document.createElement('button');
+						button.setAttribute('type','button');
+						button.setAttribute('class','btn-modal');
+						button.setAttribute('data-toggle','modal');
+						button.setAttribute('ng-click','info(\'' + record.name + '\')');
+						div3.appendChild(button);
+						$compile(button)($scope);
+						var img3 = document.createElement('img');
+						img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
+						img3.setAttribute('style','height:17px');
+						button.appendChild(img3);
+					};
+				}; 
+			};
+			$scope.createHTML(keyvalue);
+			
+			
+			/////////////////////
+			// MAP CHART SETUP //
+			/////////////////////
 			
 			mapChart
 				.width($('#map-chart').width())
@@ -374,235 +595,71 @@ angular.module('dashboards')
 				.renderPopup(true)
 				.turnOnControls(true)
 				.on('filtered',function(chart,filters){
-					$scope.metric_label = meta_label[$scope.metric];
-					var popup = document.getElementById('mapPopup');
-					popup.style.visibility = 'visible';
-					
-					//popup.setAttribute('style','visibility:visible; margin-left:440px;margin-top: 300px; z-index:-1;position:relative');
-					/*
 					$scope.filters = chart.filters();
-					if ($scope.filters.length>0 && $scope.admlevel < zoom_max) {
-						$scope.admlevel = $scope.admlevel + 1;
-						$scope.parent_code_prev = $scope.parent_code;
-						$scope.name_selection_prev = $scope.name_selection;
-						$scope.parent_code = $scope.filters[0];
-						$scope.name_selection = lookup[$scope.parent_code];
-						if ($scope.admlevel === 4) {
-							$scope.metric = 'population';
+					var popup = document.getElementById('mapPopup');
+					if ($scope.filters.length > mapfilters_length) {
+						$scope.$apply(function() {
+							$scope.name_popup = lookup[$scope.filters[$scope.filters.length - 1]];
 							for (var i=0;i<d.Rapportage.length;i++) {
 								var record = d.Rapportage[i];
-								if (record.pcode === $scope.filters[0]) {d_prev = record; break;}
+								if (record.pcode === $scope.filters[$scope.filters.length - 1]) {
+									$scope.value_popup = currentFormat(record[$scope.metric]); 
+									break;
+								};
 							}
+							$scope.metric_label = meta_label[$scope.metric];
+						})
+						//In Firefox event is not a global variable >> Not figured out how to fix this, so gave the popup a fixed position in FF only
+						if (typeof event !== 'undefined') {
+							popup.style.left = event.pageX + 'px';	
+							popup.style.top = event.pageY + 'px';
+						} else {
+							popup.style.left = '400px';	
+							popup.style.top = '100px';
 						}
-						$scope.filters = [];
-						$scope.reload(d);
-						document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
-						document.getElementById('level' + ($scope.admlevel - 1)).setAttribute('class','btn btn-secondary');
+						popup.style.visibility = 'visible';
+						
+					} else {
+						popup.style.visibility = 'hidden';
 					}
-					*/
+					mapfilters_length = $scope.filters.length;
+					var keyvalue = fill_keyvalues();
+					$scope.createHTML(keyvalue);			
 				})
-				;
+			;
 			
-			// tooltips for map
-            // var mapTip = d3.tip()
-                  // .attr('class', 'd3-tip')
-                  // .offset([-10, 0])
-                  // .html(function (d) { return "<span style='color: #f0027f'>" + d.key + "</span> : " + dec2Format(d.value);});
-
-			//Create table with current crossfilter-selection output, so that you can also access this in other ways than through DC.js
-			var keyvalue = [];
-			$scope.tables.forEach(function(t) {
-				var key = t.name;
-				if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
-					if(meta_format[t.name] === 'decimal0'){
-						keyvalue[key] =  dec0Format(d_prev[t.name]);
-					} else if(meta_format[t.name] === 'percentage'){
-						keyvalue[key] =  percFormat(d_prev[t.name]);
-					} else if(meta_format[t.name] === 'decimal2'){
-						keyvalue[key] =  dec2Format(d_prev[t.name]);
-					}
-				} else {
-					if (t.propertyPath === 'value.finalVal') {
-						if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
-							keyvalue[key] =  'N.A. on this level'; 
-						} else if(meta_format[t.name] === 'decimal0'){
-							keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value.finalVal);
-						} else if(meta_format[t.name] === 'percentage'){
-							keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value.finalVal);
-						} else if(meta_format[t.name] === 'decimal2'){
-							keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value.finalVal);
-						}
-					} else if(t.propertyPath === 'value') {
-						if (isNaN(dimensions[t.name].top(1)[0].value)) {
-							keyvalue[key] =  'N.A. on this level'; 
-						} else if(meta_format[t.name] === 'decimal0'){
-							keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
-						} else if(meta_format[t.name] === 'percentage'){
-							keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value);
-						} else if(meta_format[t.name] === 'decimal2'){
-							keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value);
+			///////////////////////////
+			// MAP RELATED FUNCTIONS //
+			///////////////////////////
+			
+			$scope.zoom_in = function() {
+				
+				if ($scope.filters.length > 0 && $scope.admlevel < zoom_max) {
+					$scope.admlevel = $scope.admlevel + 1;
+					$scope.parent_code_prev = $scope.parent_code;
+					$scope.name_selection_prev = $scope.name_selection;
+					$scope.parent_code = $scope.filters[$scope.filters.length - 1];
+					$scope.name_selection = lookup[$scope.parent_code];
+					console.log($scope.name_selection);
+					if ($scope.admlevel === 4) {
+						$scope.metric = 'population';
+						for (var i=0;i<d.Rapportage.length;i++) {
+							var record = d.Rapportage[i];
+							if (record.pcode === $scope.filters[0]) {d_prev = record; break;}
 						}
 					}
+					$scope.filters = [];
+					$scope.reload(d);
+					document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
+					document.getElementById('level' + ($scope.admlevel - 1)).setAttribute('class','btn btn-secondary');
+					document.getElementById('mapPopup').style.visibility = 'hidden';
+					mapfilters_length = 0;
 				}
-			});
-			
-
-
-			var high_med_low = function(ind) {
-				if (dimensions_scores[ind].top(1)[0].value.finalVal < 4) { return 'good';}
-				else if (dimensions_scores[ind].top(1)[0].value.finalVal > 6) { return 'bad';}
-				else {return 'medium';};
-			};	
-			
-			var risk = document.getElementById('risk_score');
-				risk.textContent = keyvalue.risk_score;
-				risk.setAttribute('class','component-score ' + high_med_low('risk_score'));
-			var vulnerability = document.getElementById('vulnerability_score');
-				vulnerability.textContent = keyvalue.vulnerability_score;
-				vulnerability.setAttribute('class','component-score ' + high_med_low('vulnerability_score'));
-			var hazard = document.getElementById('hazard_score');
-				hazard.textContent = keyvalue.hazard_score;
-				hazard.setAttribute('class','component-score ' + high_med_low('hazard_score'));
-			var coping = document.getElementById('coping_capacity_score');
-				coping.textContent = keyvalue.coping_capacity_score;
-				coping.setAttribute('class','component-score ' + high_med_low('coping_capacity_score'));
-
-			
-			//Dynamically create HTML-elements for all indicator tables
- 			var general = document.getElementById('general');
-			var scores = document.getElementById('scores');
-			var vulnerability = document.getElementById('vulnerability');
-			var hazard = document.getElementById('hazard');
-			var coping = document.getElementById('coping');
-			//var other = document.getElementById('other');
-			while (general.firstChild) { general.removeChild(general.firstChild); }
-			while (scores.firstChild) { scores.removeChild(scores.firstChild); }
-			while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); }
-			while (hazard.firstChild) { hazard.removeChild(hazard.firstChild); }
-			while (coping.firstChild) { coping.removeChild(coping.firstChild); }
-			//while (other.firstChild) { other.removeChild(other.firstChild); }
-			for (var i=0;i<$scope.tables.length;i++) {
-				var record = $scope.tables[i];
 				
-				if (record.group === 'general') {
-				
-					var div = document.createElement('div');
-					div.setAttribute('class','row profile-item');
-					var parent = document.getElementById(record.group);
-					parent.appendChild(div);
-					var div1 = document.createElement('div');
-					div1.setAttribute('class','col col-md-6');
-					div.appendChild(div1);	
-					var img = document.createElement('img');
-					img.setAttribute('class','community-icon');
-					img.setAttribute('src','modules/dashboards/img/' + meta_icon[record.name]);
-					div1.appendChild(img);
-					div1.innerHTML = meta_label[record.name];
-					var div2 = document.createElement('div');
-					div2.setAttribute('class','col col-md-4');
-					div2.innerHTML = keyvalue[record.name] + ' ' + meta_unit[record.name];// === "null" ? '' : meta_unit[record.name];
-					div.appendChild(div2);
-					var div3 = document.createElement('div');
-					div3.setAttribute('class','col col-md-2');
-					div.appendChild(div3);
-					var button = document.createElement('button');
-					button.setAttribute('type','button');
-					button.setAttribute('class','btn-modal');
-					button.setAttribute('data-toggle','modal');
-					button.setAttribute('ng-click','info(\'' + record.name + '\')');
-					div3.appendChild(button);
-					$compile(button)($scope);
-					var img = document.createElement('img');
-					img.setAttribute('src','modules/dashboards/img/icon-popup.svg');
-					button.appendChild(img);
-				
-				} else {
-				
-					var div = document.createElement('div');
-					div.setAttribute('class','component-section');
-					var parent = document.getElementById(record.group);
-					parent.appendChild(div);
-					var div0 = document.createElement('div');
-					div0.setAttribute('class','col-md-2');
-					div.appendChild(div0);	
-					var img1 = document.createElement('img');
-					img1.setAttribute('src','modules/dashboards/img/' + meta_icon[record.name]);
-					//img1.setAttribute('style','width:20px');
-					div0.appendChild(img1);
-					var div1 = document.createElement('div');
-					div1.setAttribute('class','col-md-3 component-label');
-					div1.setAttribute('ng-click','go_map(\''+record.name+'\')');
-					div1.innerHTML = meta_label[record.name];
-					$compile(div1)($scope);
-					div.appendChild(div1);	
-					var div1a = document.createElement('div');
-					div1a.setAttribute('class','component-score ' + high_med_low(record.name));
-					div1a.innerHTML = keyvalue[record.name];
-					div1.appendChild(div1a);
-					var div2 = document.createElement('div');
-					div2.setAttribute('class','col-md-5');
-					div.appendChild(div2);
-					var div2a = document.createElement('div');
-					div2a.setAttribute('class','component-scale');
-					div2.appendChild(div2a);
-					var div2a1 = document.createElement('div');
-					div2a1.setAttribute('class','score-bar ' + high_med_low(record.name));
-					div2a1.setAttribute('style','width:'+(dimensions_scores[record.name].top(1)[0].value.finalVal*10) + '%');
-					div2a.appendChild(div2a1);
-					var img2 = document.createElement('img');
-					img2.setAttribute('class','scale-icon');
-					img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
-					div2a.appendChild(img2);
-					var div3 = document.createElement('div');
-					div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
-					div.appendChild(div3);
-					var button = document.createElement('button');
-					button.setAttribute('type','button');
-					button.setAttribute('class','btn-modal');
-					button.setAttribute('data-toggle','modal');
-					button.setAttribute('ng-click','info(\'' + record.name + '\')');
-					div3.appendChild(button);
-					$compile(button)($scope);
-					var img3 = document.createElement('img');
-					img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
-					button.appendChild(img3);
-				}		
-				;
-			}; 
-			
+			}
 
-
-			//Function that initiates ng-click event for changing the metric in the row-chart when clicking on a metric
-			//It differentiates on type of metric (percentage or absolute count)
-			$scope.info = function(id) {
-				$scope.metric = id;	
-				$scope.metric_label = meta_label[$scope.metric];
-				$scope.metric_year = meta_year[$scope.metric];
-				$scope.metric_source = meta_source[$scope.metric];
-				$scope.metric_desc = meta_desc[$scope.metric];
-				$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];
-				$('#infoModal').modal('show');
-			};
-			
-			$scope.go_map = function(id) {
-				$scope.metric = id;	
-				whereGroupSum.dispose();
-				whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[id];});	
-				mapChart
-					.group(whereGroupSum)
-					.colors(d3.scale.quantile()
-									.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
-									.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
-					.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
-					;
-				dc.filterAll();
-				dc.redrawAll();
-			};;
-			
-			
-		
 			//Functions for zooming out
-			$scope.level_up = function(dest_level) {
+			$scope.zoom_out = function(dest_level) {
 				var admlevel_old = $scope.admlevel;
 				if (dest_level === 2 && $scope.admlevel) {
 					$scope.admlevel = dest_level;
@@ -616,6 +673,43 @@ angular.module('dashboards')
 				}
 				document.getElementById('level' + admlevel_old).setAttribute('class','btn btn-secondary');
 				document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
+				document.getElementById('mapPopup').style.visibility = 'hidden';
+			};
+
+			$scope.map_coloring = function(id) {
+				$scope.metric = id;	
+				whereGroupSum.dispose();
+				whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[id];});	
+				mapChart
+					.group(whereGroupSum)
+					.colors(d3.scale.quantile()
+									.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
+									.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
+					.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
+					;
+				dc.filterAll();
+				dc.redrawAll();
+			};
+			
+			// $scope.reset = function() {
+				// dc.filterAll(); 
+				// dc.redrawAll();
+			// }			
+			
+			
+			/////////////////////
+			// OTHER FUNCTIONS //
+			/////////////////////		
+			
+			//Function to open the modal with information on indicator
+			$scope.info = function(id) {
+				$scope.metric = id;
+				$scope.metric_label = meta_label[$scope.metric];
+				$scope.metric_year = meta_year[$scope.metric];
+				$scope.metric_source = meta_source[$scope.metric];
+				$scope.metric_desc = meta_desc[$scope.metric];
+				$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];
+				$('#infoModal').modal('show');
 			};
 			
 			//Export to CSV function
@@ -663,13 +757,37 @@ angular.module('dashboards')
 				download.setAttribute('download', 'export.csv');
 			};
 			
+			/* Tabslide functions
+			$(function(){
+				 $('.slide-out-tab-province').tabSlideOut({
+					 tabHandle: '.handle',                              //class of the element that will be your tab
+					 tabLocation: 'left',                               //side of screen where tab lives, top, right, bottom, or left
+					 speed: 300,                                        //speed of animation
+					 action: 'click',                                   //options: 'click' or 'hover', action to trigger animation
+					 topPos: '65px',                                    //position from the top
+					 fixedPosition: false                               //options: true makes it stick(fixed position) on scroll
+				   });
+			});
+
+
+			$(function(){
+				 $('.slide-out-tab-legend').tabSlideOut({
+					 tabHandle: '.handle-legend',                       //class of the element that will be your tab
+					 tabLocation: 'left',                               //side of screen where tab lives, top, right, bottom, or left
+					 speed: 300,                                        //speed of animation
+					 action: 'click',                                   //options: 'click' or 'hover', action to trigger animation
+					 topPos: '218px',                                   //position from the top
+					 fixedPosition: false                               //options: true makes it stick(fixed position) on scroll
+				   });
+			});
+			*/
+			
+			/////////////////////////
+			// RENDER MAP AND PAGE //
+			/////////////////////////
+			
 			//Render all dc-charts and -tables
 			dc.renderAll(); 
-			
-			
-			// d3.selectAll(".leaflet-clickable").call(mapTip);
-			// d3.selectAll(".leaflet-clickable").on('mouseover', mapTip.show)
-				// .on('mouseout', mapTip.hide);  
 			
 			map = mapChart.map();
 			function zoomToGeom(geom){

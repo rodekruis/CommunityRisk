@@ -717,7 +717,7 @@ angular.module('dashboards')
 					$scope.filters = [];
 					$scope.reload(d);
 					document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
-					document.getElementById('level' + ($scope.admlevel - 1)).setAttribute('class','btn btn-secondary');
+					//document.getElementById('level' + ($scope.admlevel - 1)).setAttribute('class','btn btn-secondary');
 					document.getElementById('mapPopup').style.visibility = 'hidden';
 					mapfilters_length = 0;
 				}
@@ -737,8 +737,12 @@ angular.module('dashboards')
 					$scope.name_selection = $scope.name_selection_prev;
 					$scope.reload(d);
 				}
-				document.getElementById('level' + admlevel_old).setAttribute('class','btn btn-secondary');
-				document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
+				while (admlevel_old > dest_level) {
+					document.getElementById('level' + admlevel_old).setAttribute('class','btn btn-secondary');
+					admlevel_old = admlevel_old-1;
+				} 
+				
+				//document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
 				document.getElementById('mapPopup').style.visibility = 'hidden';
 			};
 

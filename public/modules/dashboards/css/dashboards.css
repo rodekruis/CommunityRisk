@@ -270,7 +270,7 @@ body {
   padding: 0;
 }
 .community-icon {
-  width: 17px;
+/*   width: 17px; */
   height: 17px;
 }
 .btn-modal {
@@ -479,7 +479,5 @@ a.handle:hover {
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
 }
-
-
 
 

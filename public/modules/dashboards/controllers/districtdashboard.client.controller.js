@@ -526,8 +526,8 @@ angular.module('dashboards')
 						div0.setAttribute('class','col-md-2');
 						div.appendChild(div0);	
 						var img1 = document.createElement('img');
+						img1.setAttribute('style','height:20px');
 						img1.setAttribute('src',icon);
-						img1.setAttribute('style','width:20px height:20px');
 						div0.appendChild(img1);
 						var div1 = document.createElement('div');
 						div1.setAttribute('class','col-md-3 component-label');

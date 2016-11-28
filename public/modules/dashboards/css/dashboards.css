@@ -450,6 +450,9 @@ a.handle:hover {
 .leaflet-clickable {
 	fill-opacity: .6;
 }
+.leaflet-zoom-animated {
+	fill-opacity: .6;
+}
 
 .leaflet-control-zoom {
 	left: 380px;

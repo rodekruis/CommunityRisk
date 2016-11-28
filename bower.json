@@ -7,7 +7,7 @@
     "jquery": "~2.2.3",
 	"jquery-countTo": "*",
 	"jquery-tabslideout": "*",
-    "leaflet": "~0.7.7",
+    "leaflet": "1.0.2",
     "cartodb.js": "~3.15.9",
     "angular": "1.5.5",
     "materialize": "*",
@@ -24,7 +24,6 @@
     "angular-ui-router": "~0.2.10",
     "angular-ui-bootstrap-bower": "*",
     "angular-leaflet-directive": "0.10.0",
-    "leaflet-search": "1.9.7",
     "leaflet-ajax": "~2.0.0",
     "angular-gettext": "*",
     "Snap.svg": "*",
@@ -42,6 +41,7 @@
   "resolutions": {
 	"angular": "1.5.5",
 	"angular-messages": "1.4.8",
+	"leaflet": "1.0.2",
 	"d3": "3.5.17"
   },
   "install": {

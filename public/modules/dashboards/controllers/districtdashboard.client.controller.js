@@ -380,7 +380,7 @@ angular.module('dashboards')
 				var keyvalue = [];
 				$scope.tables.forEach(function(t) {
 					var key = t.name;
-					if ($scope.admlevel === zoom_max && $scope.filters.length === 0) {
+					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
 						if(meta_format[t.name] === 'decimal0'){
 							keyvalue[key] =  dec0Format(d_prev[t.name]);
 						} else if(meta_format[t.name] === 'percentage'){
@@ -418,7 +418,7 @@ angular.module('dashboards')
 			
 			var high_med_low = function(ind,ind_score) {
 				if (dimensions_scores[ind]) {
-					if ($scope.admlevel === zoom_max && $scope.filters.length === 0) {
+					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
 							var width = d_prev[ind_score];
 						} else {
 							var width = dimensions_scores[ind].top(1)[0].value.finalVal;
@@ -515,6 +515,7 @@ angular.module('dashboards')
 						} else {
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
 						}
+
 						if (meta_icon[record.name] === 'null') {var icon = 'modules/dashboards/img/undefined.png';}
 						else {var icon = 'modules/dashboards/img/'+meta_icon[record.name];}
 					
@@ -577,22 +578,22 @@ angular.module('dashboards')
 			
 			$scope.updateHTML = function(keyvalue) {
 				
-				var risk_score = document.getElementById('risk_score');
+				var risk_score = document.getElementById('risk_score_main');
 				if (risk_score) {
 					risk_score.textContent = keyvalue.risk_score;
 					risk_score.setAttribute('class','component-score ' + high_med_low('risk_score','risk_score'));					
 				}
-				var vulnerability_score = document.getElementById('vulnerability_score');
+				var vulnerability_score = document.getElementById('vulnerability_score_main');
 				if (vulnerability_score) {
 					vulnerability_score.textContent = keyvalue.vulnerability_score;
 					vulnerability_score.setAttribute('class','component-score ' + high_med_low('vulnerability_score','vulnerability_score'));				
 				}
-				var hazard_score = document.getElementById('hazard_score');
+				var hazard_score = document.getElementById('hazard_score_main');
 				if (hazard_score) {
 					hazard_score.textContent = keyvalue.hazard_score;
 					hazard_score.setAttribute('class','component-score ' + high_med_low('hazard_score','hazard_score'));				
 				}
-				var coping_score = document.getElementById('coping_capacity_score');
+				var coping_score = document.getElementById('coping_capacity_score_main');
 				if (coping_score) {
 					coping_score.textContent = keyvalue.coping_capacity_score;
 					coping_score.setAttribute('class','component-score ' + high_med_low('coping_capacity_score','coping_capacity_score'));				

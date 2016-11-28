@@ -125,7 +125,10 @@ a.btn:hover {
     bottom: 60px;
 }
 #ribbon2 {
-	bottom: 20px;
+	bottom: 30px;
+	background: #3498db;
+	padding: 5px 5px 5px 5px;
+	border-radius: 5px;
 	width: 140px;
 	text-align: center;
 }

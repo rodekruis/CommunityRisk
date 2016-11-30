@@ -32,6 +32,8 @@ angular.module('dashboards')
 		$scope.data_input = '';
 		$scope.filters = [];
 		$scope.tables = [];
+		$scope.x = 500;
+		$scope.y = 200;
 		var mapfilters_length = 0;
 		var d_prev = '';
 		var map;
@@ -239,6 +241,7 @@ angular.module('dashboards')
 			var meta_year = $scope.genLookup_meta(d,'year');
 			var meta_source = $scope.genLookup_meta(d,'source_link');
 			var meta_desc = $scope.genLookup_meta(d,'description');
+			var meta_scorevar = $scope.genLookup_meta(d,'scorevar_name');
 			
 			$scope.metric_label = meta_label[$scope.metric];
 			
@@ -306,6 +309,7 @@ angular.module('dashboards')
 			var whereDimension = cf.dimension(function(d) { return d.pcode; });
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
+			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { return d[meta_scorevar[$scope.metric]];});
 			// group with all, needed for data-count
 			var all = cf.groupAll();
 			// get the count of the number of rows in the dataset (total and filtered)
@@ -519,6 +523,10 @@ angular.module('dashboards')
 						if (meta_icon[record.name] === 'null') {var icon = 'modules/dashboards/img/undefined.png';}
 						else {var icon = 'modules/dashboards/img/'+meta_icon[record.name];}
 					
+						// var checkbox = document.createElement('input');
+						// checkbox.setAttribute('type','checkbox');
+						// checkbox.setAttribute('id',record.name+'-checkbox');
+						// checkbox.setAttribute('class',)
 						var div = document.createElement('div');
 						div.setAttribute('class','component-section');
 						var parent = document.getElementById(record.group);
@@ -639,6 +647,11 @@ angular.module('dashboards')
 			// MAP CHART SETUP //
 			/////////////////////
 			
+			
+			
+			
+			//var mapchartColors=['#cccccc','#94c35c','#f1d121','#ef4949'];
+			
 			mapChart
 				.width($('#map-chart').width())
 				.height(800)
@@ -647,6 +660,8 @@ angular.module('dashboards')
 				.center([0,0])
 				.zoom(0)    
 				.geojson(d.Districts)
+				//.colors(mapchartColors)
+				//.colorAccessor(function(d){console.log(d); if (d==0) {return mapchartColors[0];} else if (d<4) {return mapchartColors[1];} else if (d<6) {return mapchartColors[2];} else if (d>6) {return mapchartColors[3];}})
 				.colors(d3.scale.quantile()
 								.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
 								.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
@@ -698,6 +713,8 @@ angular.module('dashboards')
 			// MAP RELATED FUNCTIONS //
 			///////////////////////////
 			
+			
+			
 			$scope.zoom_in = function() {
 				
 				if ($scope.filters.length > 0 && $scope.admlevel < zoom_max) {
@@ -719,6 +736,7 @@ angular.module('dashboards')
 					document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
 					//document.getElementById('level' + ($scope.admlevel - 1)).setAttribute('class','btn btn-secondary');
 					document.getElementById('mapPopup').style.visibility = 'hidden';
+					//if ($scope.admlevel == zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'hidden'; }
 					mapfilters_length = 0;
 				}
 				
@@ -743,18 +761,26 @@ angular.module('dashboards')
 				} 
 				
 				//document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
+				//document.getElementById('zoomin_icon').style.visibility = 'visible';
 				document.getElementById('mapPopup').style.visibility = 'hidden';
 			};
 
 			$scope.map_coloring = function(id) {
+				
+				
 				$scope.metric = id;	
 				whereGroupSum.dispose();
 				whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[id];});	
+				//whereGroupSum_scores.dispose();
+				//whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { return d[meta_scorevar[id]];});	
 				mapChart
-					.group(whereGroupSum)
+					.group(whereGroupSum)//_scores)
+					//.colors(mapchartColors)
+					//.colorAccessor(function(d){console.log(d); if (d==0) {return mapchartColors[0];} else if (d<4) {return mapchartColors[1];} else if (d<6) {return mapchartColors[2];} else if (d>6) {return mapchartColors[3];}})
 					.colors(d3.scale.quantile()
-									.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
-									.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
+								.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
+								.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
+								//.range(['#1a9641','#a6d96a','#ffffbf','#fdae61','#d7191c']))
 					.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
 					;
 				dc.filterAll();
@@ -865,6 +891,15 @@ angular.module('dashboards')
 				map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
 			}
 			zoomToGeom($scope.geom);
+			
+			// var canvasElem = document.getElementsByClassName('leaflet-zoom-animated')[0];
+			// canvasElem.on('click',function(event) {
+				// event = event || window.event;
+
+					// $scope.x = event.pageX;
+					// $scope.y = event.pageY;
+					// console.log($scope.x);
+			// });
 			
 		};
 

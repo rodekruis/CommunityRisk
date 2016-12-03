@@ -5,6 +5,7 @@ html, body {
 }
 
 body {
+	background: #0f4882;
 	padding: 0px;
 	margin: 0px;
 	overflow-x: hidden;
@@ -54,7 +55,7 @@ body {
     z-index: 0;
 }
 
-.logo {
+/* .logo {
     z-index: 100;    
 }
 
@@ -62,62 +63,11 @@ body {
     padding: 50px;
     position:relative;
 }
-
+ */
 .angular-leaflet-map {
     position:absolute;
     width: 100%;   
 }
-
-/* .Absolute-Center {
-  min-height:40%;
-  max-height: 80%;
-  min-width: 30%;
-  max-width: 80%;
-  margin: auto;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-}
-
-.image { 
-   position: relative; 
-   width: 100%; 
-}
-
-.landing-block { 
-    position: absolute; 
-    top: 10%; 
-    left: 25%; 
-    width: 50%; 
-	height: 55%;
-	padding: 15px;
-    background-color:#E6E6FA;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-	} */
-
-
-/* a.btn {
-  background: #cccccc;
-  -webkit-border-radius: 28;
-  -moz-border-radius: 28;
-  border-radius: 5px;
-  font-family: Arial;
-  color: white;
-  font-size: 10px;
-  padding: 5 15 5 15;
-  text-decoration: none;
-}
-
-a.btn:hover {
-  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
-  text-decoration: none;
-  color: black;
-} */
 
 #ribbon1,#ribbon2,#ribbon3,#ribbon4,#ribbon5 {
     position: fixed;
@@ -298,8 +248,7 @@ input[type=text].transparent, input[type=text].transparent:active, input[type=te
     padding: 80px 0;
 }
 #tophome {
-    padding-top: 72px;
-    background: #3498db;
+    padding-bottom: 72px;
     color: #fff;
     font-family: "Raleway", sans-serif;
     min-height: 600px;
@@ -468,28 +417,18 @@ to {
 /* Lifecycle
 -------------------------------------------------- */
 .walkthrough {
-    background: #e0e1e2;
-    padding: 40px 0 100px;
+    padding: 150px 0 100px;
     text-align: center;
 }
 .walkthrough h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #3c4c57;
+    color: white;
     font-weight: 700;
 }
 .rhino-item img {
     max-width: 100%;
 }
-
-/**
-  * Rhinoslider 1.05
-  * http://rhinoslider.com/
-  *
-  * Copyright 2015: Sebastian Pontow, Rene Maas (http://renemaas.de/)
-  * Dual licensed under the MIT or GPL Version 2 licenses.
-  * http://rhinoslider.com/license/
-  */
 
 #slider {
     width: 100%;
@@ -733,3 +672,66 @@ section.container {
     display: none;
 }
 
+
+
+
+/*homepage styles*/
+.homepage {
+  background: #0f4882;
+}
+.home-bg {
+  left: 0;
+  min-width: 100%;/* to preserve aspect ratio */
+  min-height: 100%;/* to preserve aspect ratio */
+  opacity: 0.2;
+  position: fixed;
+  top: 0;
+}
+.home-content {
+  color: #ffffff;
+  padding-bottom: 50px;
+  padding-top: 90px;
+}
+.home-content h2 {
+  color: #cfe7fb;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+}
+.home-content h3 {
+  font-size: 15px;
+  font-weight: bold;
+}
+.home-content p{
+  font-size: 12px;
+}
+.timer {
+  color: #ffffff;
+}
+.laptop {
+  margin-top: 18px;
+  max-width: 100%;
+}
+.title-icon {
+  margin-right: 5px;
+}
+.image-icon {
+  margin-top: -7px;
+  width: 20px;
+}
+.btn-link {
+  background: #397ab2;
+  border-radius: 4px;
+  color: #ffffff;
+  display: block;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding: 5px 20px;
+  text-align: center;
+  font-weight: bold;
+}
+.btn-link:hover {
+  background: #397ab2;
+  color: #ffffff;
+  text-decoration: none;
+}

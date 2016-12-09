@@ -5,17 +5,30 @@ Before you begin we recommend you read about the basic building blocks that asse
 * AngularJS - Angular's [Official Website](http://angularjs.org/) is a great starting point. You can also use [Thinkster Popular Guide](http://www.thinkster.io/), and the [Egghead Videos](https://egghead.io/).
 * Node.js - Start by going through [Node.js Official Website](http://nodejs.org/) and this [StackOverflow Thread](http://stackoverflow.com/questions/2353818/how-do-i-get-started-with-node-js), which should get you going with the Node.js platform in no time.
 
+# operating system
+The unix commands were tested on Ubuntu 16.04
+For windows, install the packages yourselves
+
 # for a virtualbox
 * Install ubuntu 16.04 server on a virtualbox, make sure to install openssh
 * Get the IP-address using ifconfig
 * Use putty to connect to the local IP-Address
 * this way you can copy & paste the below commands (not possible through VM terminal)
 
+In virtualbox, before launching the virtual machine, apply the following settings to the network. Then start the VM
+
+```
+Name      Protocol    HostIP               HostPort     GuestIP     GuestPort
+Rule1      TCP          [your host ip]     27017        [you VM ip]    27017
+Rule2      TCP          [your host ip]     80            [you VM ip]    80   (if you're hosting a web server)
+```
+
 # Prerequisites
 Make sure you have installed all these prerequisites on your development machine.
 * Node.js - [Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, if you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
 ```
 $ sudo apt-get install nodejs
+$ sudo apt-get install nodejs-legacy
 $ sudo apt-get install npm
 ```
 

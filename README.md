@@ -15,13 +15,17 @@ For windows, install the packages yourselves
 * Use putty to connect to the local IP-Address
 * this way you can copy & paste the below commands (not possible through VM terminal)
 
-In virtualbox, before launching the virtual machine, apply the following settings to the network. Then start the VM
+In virtualbox, before launching the virtual machine, apply the following settings to the network. 
+click Network -> Port forwarding
+Then start the VM
 
 ```
 Name      Protocol    HostIP               HostPort     GuestIP     GuestPort
 Rule1      TCP          [your host ip]     27017        [you VM ip]    27017
-Rule2      TCP          [your host ip]     80            [you VM ip]    80   (if you're hosting a web server)
+Rule2      TCP          [your host ip]     80           [you VM ip]    80   (if you're hosting a web server)
 ```
+
+To connect to these ports on the VM, use your HostIP and the HostPort
 
 # Prerequisites
 Make sure you have installed all these prerequisites on your development machine.
@@ -58,6 +62,7 @@ $ sudo apt-get install -y postgis postgresql-9.5-postgis-2.2
 
 ```
 $ sudo npm install -g bower
+$ sudo npm install -g bower-installer
 ```
 
 * Grunt - You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process, in order to install it make sure you've installed Node.js and npm, then install grunt globally using npm:

@@ -53,11 +53,12 @@ Apache will therefor serve as a proxy only.
 Use the httpd.conf in tools/ (for windows, or alter for unix).
 Rename the localhost example key and certificate in config/cert/ by removing the .example extension
 
-# DATA
+# Loading Source Data
 
 * To run this application locally, you also need to get an exact copy of the database.
 * To that end, 4 sql-files have been created which create and fill all necessary source tables. Ask us or find them on the NRK-server in /root/Profiles_db_backup/
 * Open and run the 4 scripts starting with "0_" manually via PgAdmin or via psql commandline (e.g. "psql -h localhost -d profiles -U profiles -f /root/Profiles_db_backup/0_sourcedata_geo.sql -v ON_ERROR_STOP=1")
+* NOTE that you should have already created a postgres database 'profiles' with a user 'profiles' and the required password at this point (see above)
 * When all sourcedata is loaded, run all sql-files in the folder /postgres_scripts/ in the same way.
 
 # Getting Started With the Dashboard

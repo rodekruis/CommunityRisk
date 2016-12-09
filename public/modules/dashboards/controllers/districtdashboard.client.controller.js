@@ -231,7 +231,7 @@ angular.module('dashboards')
 			if ($scope.admlevel === 2) { 
 				$scope.name_selection = country_name[$scope.country_code]; 
 			}
-			if (zoom_max < 4) {console.log(1); document.getElementById('level4').style.visibility = 'hidden'; }			
+			if (zoom_max < 4) {document.getElementById('level4').style.visibility = 'hidden'; }			
 			
 			// get the lookup tables
 			var lookup = $scope.genLookup($scope.config.nameAttribute);

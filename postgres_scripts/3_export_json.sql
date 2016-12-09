@@ -149,7 +149,7 @@ CREATE OR REPLACE FUNCTION usp_meta(country varchar) RETURNS json AS $$
 	select array_to_json(array_agg(meta))
 	from (
 		select *
-		from "tot_datamodel".metadata 
+		from "metadata".metadata 
 		where country_code in ('All',$1)
 	) meta
 	;

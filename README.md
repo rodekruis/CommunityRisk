@@ -1,4 +1,4 @@
-## Before You Begin 
+# Before You Begin 
 Before you begin we recommend you read about the basic building blocks that assemble this application 
 * MongoDB - Go through [MongoDB Official Website](http://mongodb.org/) and proceed to their [Official Manual](http://docs.mongodb.org/manual/), which should help you understand NoSQL and MongoDB better.
 * Express - The best way to understand express is through its [Official Website](http://expressjs.com/), particularly [The Express Guide](http://expressjs.com/guide.html); you can also go through this [StackOverflow Thread](http://stackoverflow.com/questions/8144214/learning-express-for-node-js) for more resources.
@@ -6,7 +6,7 @@ Before you begin we recommend you read about the basic building blocks that asse
 * Node.js - Start by going through [Node.js Official Website](http://nodejs.org/) and this [StackOverflow Thread](http://stackoverflow.com/questions/2353818/how-do-i-get-started-with-node-js), which should get you going with the Node.js platform in no time.
 
 
-## Prerequisites
+# Prerequisites
 Make sure you have installed all these prerequisites on your development machine.
 * Node.js - [Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, if you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
 ```
@@ -20,8 +20,12 @@ $ sudo apt-get install mongodb
 ```
 * Make sure mongodb is running as a service
 * Install [Robomongo](http://app.robomongo.org/download.html) on windows for a GUI to access the objects stored in mongodb
+* Open Robomongo and create a database called 'Dashboards_new', within it create a Collection called 'dashboards' and within it create a new document. 
+* Paste the content from robomongo_input/dashboard_input.json in this newly created document and save.
 
-sudo apt-get install mongodb
+* Postgres - Download and install the database software PostgresQL (AND the PostGIS extension, which should be included in the download, but checked during installation) through https://www.postgresql.org/download/.
+* Once set up, create a database called 'profiles' and a user called 'profiles' with password [ASK US].
+
 * Bower - You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
 
 ```
@@ -49,12 +53,16 @@ Apache will therefor serve as a proxy only.
 Use the httpd.conf in tools/ (for windows, or alter for unix).
 Rename the localhost example key and certificate in config/cert/ by removing the .example extension
 
-## Getting Started With the Dashboard
-Edit the config/secrets.json.template to set your project secrets and save it to config/secrets.json
+# DATA
 
-Make sure the certificates mentioned in the secrets.json are located in the config/cert/
 
-# WINDOWS
+
+
+# Getting Started With the Dashboard
+Make sure the config/secrets.json file is present (ASK US)
+Make sure all (currently 13) certificates mentioned in the secrets.json are located in the config/cert/ folder (ASK US)
+
+## WINDOWS
 windows: run apache through the xampp GUI
 application: go to the route of the dashboard app and run either of the following commands:
 - node-debug server.js (to launch node-inspector for server-side debugging)

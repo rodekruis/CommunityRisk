@@ -173,8 +173,8 @@
 			<!-- the above div and inline styles are only for placement -->
 			<div id="mapPopup" class="map-popup" style="position:absolute;">
 				<div class="popup-header">{{name_popup}}
-					<button type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
-						<i id="zoomin_icon" class="fa fa-search-plus pull-right"></i>
+					<button id="zoomin_icon" type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
+						<i class="fa fa-search-plus pull-right"></i>
 					</button>
 				</div>
 				<div class="popup-score">
@@ -183,34 +183,23 @@
 				</div>
 			  </div>
 			  
+			  <div id="count-info" class="general-info">
+					<div>
+						<span class="community-title">{{name_selection}}</span>
+					</div>
+					<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
+					<a style="color: #3780bb; font-size: 12px" href="javascript:dc.filterAll();dc.redrawAll();">(Select all)</a>
+				</div>
+				
 			<!-- start: slide out tab for province selection -->
             <!-- <div class="slide-out-tab-province">
 				<a class="handle" href="#"><span class="handle-label">{{subtype_selection}} Selection</span></a>
-				<div class="slideout-content-wrapper">
-					<h4>{{subtype_selection}}
-						<span class="selected-projects">
-							<span class="selected-count">5</span>
-								selected
-						</span>
-					</h4>
-					<ul class="select-options">
-						<li>
-							<span class="form-check">
-								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="optionsRadios" id="selectall" value="option1" checked>
-									Select all
-								</label>
-							</span>
-						</li>
-						<li>
-							<span class="form-check">
-								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="optionsRadios" id="diselectall" value="option1" checked>
-									Deselect all
-								</label>
-							</span>
-						</li>
-					</ul>
+				<div class="slideout-content-wrapper" style="height: 500px; overflow: auto">
+					<div>
+						<h4>Select {{subtype_selection}}</h4>
+						<a style="color: #3780bb; font-size: 12px" href="javascript:dc.filterAll();dc.redrawAll();">(Select all)</a>
+					</div>
+					<div id='tab-chart'></div>
 					<div class="options-list">
 						<ul>
 							<li>
@@ -288,6 +277,7 @@
 		<!-- end: map -->
 
 	</div>
+
 	<!-- start: risk score modal -->
 	<div id="infoModal" class="modal sidebar-modal" role="dialog">
 		<div class="modal-dialog">
@@ -311,99 +301,16 @@
 		</div>
 	</div>
 	<!-- end: risk score modal -->
+	
+	<!-- start: phone device message -->
+	<div class="mobile-message">
+		<p>For best experience please use a tablet device, laptop or desktop computer.
+			<a href="/#!/" class="btn link-button" role="button">Dashboard Homepage</a>
+		</p>
+	</div>
+	<!-- end: phone device message -->
 
 </section>
 
 
 
-<!--
-	<div class="container">
-		<div cg-busy="{promise:promise,templateUrl:templateUrl,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}">
-			<div id="header" class="row">
-			</div>
-			<div class="row">
-				<div class="col-md-7 colheight">
-					<div class="flag-container">
-						<div id="flag1" ng-click="level_up(2)">{{country_selection}}</div>
-						<div id="flag2" ng-click="level_up(3)">{{level2_selection}}</div>
-						<div id="flag3">{{level3_selection}}</div>
-					</div>
-					<div id="color-selection">{{subtype_selection}} currently color-coded by <b>{{metric_label}}</b></div>
-					<div id="map-chart" style="width:90%; height:150%; margin-bottom: 20px"></div>
-				</div>	
-								
-				<div class="col-md-5 colheight">
-					<div class="row">
-						<div id="count-info" class="general-info">
-							<b> Community Profile for: </b>{{name_selection}}<br>
-							{{type_selection}} with <span class="total-count "></span> {{subtype_selection}} (<span class="filter-count "></span> selected, <a href="javascript:dc.filterAll(); dc.redrawAll()">Select All</a>)
-							<hr style="padding:0px; margin:5px">		
-							<div class='tablearea' id='general'></div>
-						</div>
-					</div>
-					<hr>
-					<div class="row">
-						<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-							<div class="carousel-inner" role="listbox" style="height: 350px">
-							
-								<div class="active item">
-									<b style="position: relative; left: 20px">Risk score</b><hr>
-									<div class='tablearea' id='scores'></div></div>    
-								<div class="item">
-									<b style="position: relative; left: 20px">Vulnerability</b><hr>
-									<div class='tablearea' id='vulnerability'></div>
-								</div>
-								<div class="item">
-									<b style="position: relative; left: 20px">Hazards</b><hr>
-									<div class='tablearea' id='hazards'></div>
-								</div>
-								<div class="item">
-									<b style="position: relative; left: 20px">Coping capacity</b><hr>
-									<div class='tablearea' id='coping'></div>
-								</div>
-							</div>
-							<div class="controlsBlock">
-								<div class="controls">
-									<a class="left carousel-control" href="#myCarousel" data-slide="prev" ng-non-bindable><span class="glyphicon glyphicon-chevron-left"><span class="sr-only">Previous</span></span></a>
-									<div class="carousel-indicators">
-										<li data-target="#myCarousel" data-slide-to="0" class="active" ></li>
-										<li data-target="#myCarousel" data-slide-to="1" ></li>
-										<li data-target="#myCarousel" data-slide-to="2" ></li>
-										<li data-target="#myCarousel" data-slide-to="3" ></li>
-										<li data-target="#myCarousel" data-slide-to="4" ></li>
-									</div>
-									<a class="right carousel-control" href="#myCarousel" data-slide="next" ng-non-bindable><span class="glyphicon glyphicon-chevron-right"><span class="sr-only">Next</span></span></a>
-								</div>
-							</div>
-							<hr>	
-							<a style="width:48%; float:left" class="btn" ng-href ="./data/{{data_input}}" target="_blank" >Export selected data (JSON)</a>
-							<a style="width:48%; float:right" class="btn" id="download" ng-click="export_csv()">Export selected data (CSV)</a>
-							<br/>
-							<a style="width:100%" id="upload" class="btn" href="mailto:JannisVisser@redcross.nl?subject=Data source Community Profiling">Email us if you know of a data source that should be added!</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="myModal" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title"><b>{{metric_label}}</b></h4>
-						</div>
-						<div class="modal-body">
-							<h5><b>Year source:</b> {{metric_year}}</h5><br>
-							<h5><b>Source link:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h5><br>
-							<h5><b>Description:</b> {{metric_desc}}</h5><br>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div id="ribbon4"><a class="btn" ng-click="initiate('PH')">The Philippines</a></div>
-		<div id="ribbon5"<><a class="btn" ng-click="initiate('MW')">Malawi</a></div>
-	</div>
-	-->

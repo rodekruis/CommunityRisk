@@ -339,6 +339,9 @@ body {
   margin-left: 380px;
   min-height: 250px;
 }
+.slide-out-tab-province {
+  height: 500px;
+}
 .slide-out-tab-province.open,
 .slide-out-tab-legend.open {
   z-index: 4;
@@ -436,7 +439,7 @@ a.handle:hover {
 
 
 /* responsive styles */
-/* @media only screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) {
   .sidebar {
     padding: 10px;
     position: fixed;
@@ -468,10 +471,15 @@ a.handle:hover {
   .btn-secondary i {
     display: none;
   }
-} */
+}
+
+/* mobile message */
+.mobile-message {
+  display: none;
+}
 
 /* Extra Small Devices, Phones */
-/* @media only screen and (max-width : 480px) {
+@media only screen and (max-width : 480px) {
   .map-wrapper,
   .sidebar,
   .navbar-right {
@@ -495,11 +503,11 @@ a.handle:hover {
     position: absolute;
     top: 100px;
   }
-  .mobile-message .btn-link {
+  .mobile-message .link-button {
     margin-top: 30px;
     padding: 10px;
   }
-} */
+}
 
 
 /* Own CSS Jannis */
@@ -548,5 +556,7 @@ a.handle:hover {
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
 }
-
+.dc-chart g.row text {
+    fill: black;
+}
 

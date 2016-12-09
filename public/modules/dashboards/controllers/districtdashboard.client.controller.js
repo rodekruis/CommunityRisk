@@ -207,6 +207,7 @@ angular.module('dashboards')
 			
 			//define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
 			var mapChart = dc.leafletChoroplethChart('#map-chart');
+			//var rowChart = dc.rowChart('#tab-chart');
 			
 			//////////////////////////
 			// SETUP META VARIABLES //
@@ -230,6 +231,7 @@ angular.module('dashboards')
 			if ($scope.admlevel === 2) { 
 				$scope.name_selection = country_name[$scope.country_code]; 
 			}
+			if (zoom_max < 4) {console.log(1); document.getElementById('level4').style.visibility = 'hidden'; }			
 			
 			// get the lookup tables
 			var lookup = $scope.genLookup($scope.config.nameAttribute);
@@ -307,8 +309,10 @@ angular.module('dashboards')
 			var cf = crossfilter(d.Rapportage);
 			// The wheredimension returns the unique identifier of the geo area
 			var whereDimension = cf.dimension(function(d) { return d.pcode; });
+			//var whereDimension_tab = cf.dimension(function(d) { return d.pcode; });
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
+			//var whereGroupSum_tab = whereDimension_tab.group();
 			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { return d[meta_scorevar[$scope.metric]];});
 			// group with all, needed for data-count
 			var all = cf.groupAll();
@@ -607,14 +611,6 @@ angular.module('dashboards')
 					coping_score.setAttribute('class','component-score ' + high_med_low('coping_capacity_score','coping_capacity_score'));				
 				}
 
-				
-				//Dynamically create HTML-elements for all indicator tables
-				//var general = document.getElementById('general');
-				//var scores = document.getElementById('scores');
-				//var vulnerability = document.getElementById('vulnerability');
-				//var hazard = document.getElementById('hazard');
-				//var coping = document.getElementById('coping');
-				
 				for (var i=0;i<$scope.tables.length;i++) {
 					var record = $scope.tables[i];
 					
@@ -703,12 +699,33 @@ angular.module('dashboards')
 					} else {
 						popup.style.visibility = 'hidden';
 					}
+					if ($scope.admlevel < zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
 					mapfilters_length = $scope.filters.length;
 					var keyvalue = fill_keyvalues();
 					$scope.updateHTML(keyvalue);			
 				})
 			;
 			
+			/* rowchart for tabslideout possibly
+			rowChart
+				.width(200)
+				.height(2000)
+				.margins({top: 0, left: -5, right: 50, bottom: 20})
+				.dimension(whereDimension_tab)
+				.group(whereGroupSum_tab)
+				.colors(['#74a9cf'])
+                .colorDomain([0,0])
+                .colorAccessor(function(d, i){return 1;})
+				//.colorDomain([0, 1])
+				//.colorAccessor(function (d) {if(d.value > 0){return 1;} else {return 0;}})   
+				.ordering(function(d) {return -d.value + lookup[d.key];})
+				.label(function(d) { return lookup[d.key];})
+				.renderLabel(true)
+				.xAxis().ticks(0)
+			;	
+			*/
+			
+				
 			///////////////////////////
 			// MAP RELATED FUNCTIONS //
 			///////////////////////////
@@ -723,8 +740,7 @@ angular.module('dashboards')
 					$scope.name_selection_prev = $scope.name_selection;
 					$scope.parent_code = $scope.filters[$scope.filters.length - 1];
 					$scope.name_selection = lookup[$scope.parent_code];
-					console.log($scope.name_selection);
-					if ($scope.admlevel === 4) {
+					if ($scope.admlevel == zoom_max) {
 						$scope.metric = 'population';
 						for (var i=0;i<d.Rapportage.length;i++) {
 							var record = d.Rapportage[i];
@@ -734,9 +750,8 @@ angular.module('dashboards')
 					$scope.filters = [];
 					$scope.reload(d);
 					document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
-					//document.getElementById('level' + ($scope.admlevel - 1)).setAttribute('class','btn btn-secondary');
 					document.getElementById('mapPopup').style.visibility = 'hidden';
-					//if ($scope.admlevel == zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'hidden'; }
+					if ($scope.admlevel == zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'hidden'; }
 					mapfilters_length = 0;
 				}
 				
@@ -761,7 +776,6 @@ angular.module('dashboards')
 				} 
 				
 				//document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
-				//document.getElementById('zoomin_icon').style.visibility = 'visible';
 				document.getElementById('mapPopup').style.visibility = 'hidden';
 			};
 
@@ -804,7 +818,9 @@ angular.module('dashboards')
 				$scope.metric_year = meta_year[$scope.metric];
 				$scope.metric_source = meta_source[$scope.metric];
 				$scope.metric_desc = meta_desc[$scope.metric];
-				$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];
+				//$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];
+				if (meta_icon[$scope.metric] === 'null') {$scope.metric_icon = 'modules/dashboards/img/undefined.png';}
+				else {$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric_icon];}
 				$('#infoModal').modal('show');
 			};
 			
@@ -853,10 +869,11 @@ angular.module('dashboards')
 				download.setAttribute('download', 'export.csv');
 			};
 			
-			/* Tabslide functions
+			//Tabslide functions
 			$(function(){
 				 $('.slide-out-tab-province').tabSlideOut({
 					 tabHandle: '.handle',                              //class of the element that will be your tab
+					 clickScreenToClose: false,
 					 tabLocation: 'left',                               //side of screen where tab lives, top, right, bottom, or left
 					 speed: 300,                                        //speed of animation
 					 action: 'click',                                   //options: 'click' or 'hover', action to trigger animation
@@ -876,7 +893,7 @@ angular.module('dashboards')
 					 fixedPosition: false                               //options: true makes it stick(fixed position) on scroll
 				   });
 			});
-			*/
+			
 			
 			/////////////////////////
 			// RENDER MAP AND PAGE //

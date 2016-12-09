@@ -27,10 +27,31 @@
 									<h2><span class="timer" data-speed="1500" data-to="41912">41912</span> Communities Profiled</h2>
 								</div>
 								<div class="col-md-2">
-									<a ng-click="choose_country('PH')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" class="btn btn-link" role="button">Go to prototype</a>
+									<ul class="btn link-button">
+										<li class="dropdown">
+											<a style="color: #ffffff" class="dropdown-toggle" data-toggle="dropdown" href="#">
+											  Go to prototype
+											  <i class="fa fa-angle-down export-btn-arrow"></i>
+											</a>
+											<ul class="dropdown-menu">
+												<li>
+													<a ng-click="choose_country('PH')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" role="button">
+														Philippines
+													</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a ng-click="choose_country('MW')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" role="button">
+														Malawi
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
 								</div>
+								<!-- <a ng-click="choose_country('PH')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" class="btn btn-link" role="button"> -->
 								<div class="col-md-2">
-									<a href="#!/#walkthrough" class="btn-link" role="button">How it works</a>
+									<a href="#!/#walkthrough" class="link-button" role="button">How it works</a>
 								</div>
 								<div class="col-md-2">
 								</div>

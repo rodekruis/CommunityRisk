@@ -26,6 +26,16 @@ $ sudo apt-get install mongodb
 * Postgres - Download and install the database software PostgresQL (AND the PostGIS extension, which should be included in the download, but checked during installation) through https://www.postgresql.org/download/.
 * Once set up, create a database called 'profiles' and a user called 'profiles' with password [ASK US].
 
+```
+$ sudo -u postgres createuser -P profiles
+$ sudo -u postgres createDB profiles
+$ psql -h localhost -U profiles profiles (to test database connection)
+```
+* Install postgis 2.2
+```
+$ sudo apt-get install -y postgis postgresql-9.5-postgis-2.2
+```
+
 * Bower - You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
 
 ```

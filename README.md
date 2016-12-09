@@ -5,6 +5,11 @@ Before you begin we recommend you read about the basic building blocks that asse
 * AngularJS - Angular's [Official Website](http://angularjs.org/) is a great starting point. You can also use [Thinkster Popular Guide](http://www.thinkster.io/), and the [Egghead Videos](https://egghead.io/).
 * Node.js - Start by going through [Node.js Official Website](http://nodejs.org/) and this [StackOverflow Thread](http://stackoverflow.com/questions/2353818/how-do-i-get-started-with-node-js), which should get you going with the Node.js platform in no time.
 
+# for a virtualbox
+* Install ubuntu 16.04 server on a virtualbox, make sure to install openssh
+* Get the IP-address using ifconfig
+* Use putty to connect to the local IP-Address
+* this way you can copy & paste the below commands (not possible through VM terminal)
 
 # Prerequisites
 Make sure you have installed all these prerequisites on your development machine.
@@ -24,7 +29,7 @@ $ sudo apt-get install mongodb
 * Paste the content from robomongo_input/dashboard_input.json in this newly created document and save.
 
 * Postgres - Download and install the database software PostgresQL (AND the PostGIS extension, which should be included in the download, but checked during installation) through https://www.postgresql.org/download/.
-* Once set up, create a database called 'profiles' and a user called 'profiles' with password [ASK US].
+* Once set up, create a database called 'profiles' and a user called 'profiles' and choose a password
 
 ```
 $ sudo -u postgres createuser -P profiles
@@ -48,20 +53,37 @@ $ sudo npm install -g bower
 $ sudo npm install -g grunt-cli
 ```
 
+Install Apache
+
+* Apache - The application can run on its own on the nodejs server, however, in many cases we would need to host multiple applications on a subdomain of a server. Apache will therefor serve as a proxy only.
+
+Unix
+```
+$ sudo apt-get install apache2
+$ sudo chown -R $USER:$USER /var/www/profiles
+$ sudo chmod -R 755 /var/www
+```
+
+Windows
+
+* Make sure you install apache through [xamppserver] (https://www.apachefriends.org/download.html) for windows, or use the apache2 installer for unix. 
+Use the httpd.conf in tools/ (for windows, or alter for unix).
+Rename the localhost example key and certificate in config/cert/ by removing the .example extension
+
+* Download code
+```
+$ cd /var/www/profiles
+$ git clone https://github.com/rodekruis/communityprofiles.git .
+```
+
 * Install NPM modules -  Now you have to include all the required packages for this application. These packages are not included by default in this repository.
 The below command will install all required npm modules in package.json to node_modules/.
 After that it will run bower-installer, which uses bower.json to include all client side libraries, and puts these in public/build/bower
 
 ```
+$ cd /var/www/profiles
 $ npm install
 ```
-
-* Apache - The application can run on its own on the nodejs server, however, in many cases we would need to host multiple applications on a subdomain of a server.
-Apache will therefor serve as a proxy only.
-
-* Make sure you install apache through [xamppserver] (https://www.apachefriends.org/download.html) for windows, or use the apache2 installer for unix. 
-Use the httpd.conf in tools/ (for windows, or alter for unix).
-Rename the localhost example key and certificate in config/cert/ by removing the .example extension
 
 # Loading Source Data
 

@@ -11,6 +11,7 @@ For windows, install the packages yourselves
 
 # for a virtualbox
 * Install ubuntu 16.04 server on a virtualbox, make sure to install openssh
+* set in virtualbox network settings the network adapter to bridged adapter
 * Get the IP-address using ifconfig
 * Use putty to connect to the local IP-Address
 * this way you can copy & paste the below commands (not possible through VM terminal)
@@ -53,6 +54,23 @@ $ sudo -u postgres createuser -P profiles
 $ sudo -u postgres createDB profiles
 $ psql -h localhost -U profiles profiles (to test database connection)
 ```
+
+Use PG Admin III to connect to the database. Use the following settings
+```
+host: localhost
+port:  5432
+username: profiles
+password: your password
+```
+
+And use SSH tunneling:
+```
+Tunnel host: ip address of VM
+Tunnel port: 22
+Username: your ubuntu user
+Password: your ubuntu password
+```
+
 * Install postgis 2.2
 ```
 $ sudo apt-get install -y postgis postgresql-9.5-postgis-2.2

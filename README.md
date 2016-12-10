@@ -22,8 +22,9 @@ Then start the VM
 
 ```
 Name      Protocol    HostIP               HostPort     GuestIP     GuestPort
-Rule1      TCP          [your host ip]     27017        [you VM ip]    27017
-Rule2      TCP          [your host ip]     80           [you VM ip]    80   (if you're hosting a web server)
+Rule1      TCP          [your host ip]     22           [you VM ip]    22
+Rule2      TCP          [your host ip]     8080          [you VM ip]    80
+Rule2      TCP          [your host ip]     443           [you VM ip]    443 
 ```
 
 To connect to these ports on the VM, use your HostIP and the HostPort
@@ -101,6 +102,9 @@ Unix
 $ sudo apt-get install apache2
 $ sudo chown -R $USER:$USER /var/www/profiles
 $ sudo chmod -R 755 /var/www
+$ sudo a2enmod proxy
+$ sudo a2enmod proxy_http
+$ sudo service apache2 restart
 ```
 
 Windows
@@ -134,7 +138,20 @@ $ npm install
 
 # Getting Started With the Dashboard
 Make sure the config/secrets.json file is present (ASK US)
-Make sure all (currently 13) certificates mentioned in the secrets.json are located in the config/cert/ folder (ASK US)
+Make sure all certificates mentioned in the secrets.json are located in the config/cert/ folder (ASK US)
+* localhost-win.cert
+* localhost-win.key
+* thawte.ca
+* thawte2.ca
+
+Set up upstart script:
+```
+$ cd /var/www/profiles
+$ cp tools/upstart.conf /etc/init/profiles.conf (and edit the paths in the conf)
+$ sudo service profiles start
+```
+
+Visit https://127.0.0.1/#!/
 
 ## WINDOWS
 windows: run apache through the xampp GUI

@@ -41,11 +41,26 @@ $ sudo apt-get install npm
 * MongoDB - [Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
 ```
 $ sudo apt-get install mongodb
+$ sudo service mongodb restart (Make sure mongodb is running as a service)
 ```
-* Make sure mongodb is running as a service
-* Install [Robomongo](http://app.robomongo.org/download.html) on windows for a GUI to access the objects stored in mongodb
-* Open Robomongo and create a database called 'Dashboards_new', within it create a Collection called 'dashboards' and within it create a new document. 
+
+Install [Robomongo](http://app.robomongo.org/download.html) on windows for a GUI to access the objects stored in mongodb.
+Create a new connection with:
+```
+Address: localhost
+Port: 27017
+```
+and set in the SSH tab:
+```
+SSH address: 127.0.0.1
+SSH port: 22
+SSH username: [your ubuntu user]
+SSH password: [your ubuntu password]
+```
+
+Open the connection and create a database called 'Dashboards_new', within it create a Collection called 'dashboards' and within it create a new document. 
 * Paste the content from robomongo_input/dashboard_input.json in this newly created document and save.
+
 * if mongodb cannot run inside the virtualbox the problem might be related to disk space. Add smallfiles = true to /etc/mongodb.conf
 
 * Postgres - Download and install the database software PostgresQL (AND the PostGIS extension, which should be included in the download, but checked during installation) through https://www.postgresql.org/download/.

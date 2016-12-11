@@ -187,3 +187,9 @@ application: go to the route of the dashboard app and run either of the followin
 If for whatever reason you need to debug on the production server, use this command:
 sudo NODE_ENV="development" PATH=$PATH node-debug /var/www/dashboards/server.js
 
+# Workflow
+Use notepad++ to edit the files. Use [this tutorial](https://blog.sleeplessbeastie.eu/2015/07/27/how-to-edit-files-using-notepad-plus-plus-over-ssh-file-transfer-protocol/) to set up an SSH tunnel to the virtualbox from your host operating system.
+
+Set up [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) to get terminal access to the virtualbox.
+
+Always commit and push files to the repository from the virtualbox (to prevent line ending code errors)

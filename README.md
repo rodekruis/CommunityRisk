@@ -31,14 +31,17 @@ To connect to these ports on the VM, use your HostIP and the HostPort
 
 # Prerequisites
 Make sure you have installed all these prerequisites on your development machine.
-* Node.js - [Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, if you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
+
+
+## Node.js
+[Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, if you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
 ```
 $ sudo apt-get install nodejs
 $ sudo apt-get install nodejs-legacy
 $ sudo apt-get install npm
 ```
-
-* MongoDB - [Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
+## MongoDB
+[Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
 ```
 $ sudo apt-get install mongodb
 $ sudo service mongodb restart (Make sure mongodb is running as a service)
@@ -63,8 +66,10 @@ Open the connection and create a database called 'Dashboards_new', within it cre
 
 * if mongodb cannot run inside the virtualbox the problem might be related to disk space. Add smallfiles = true to /etc/mongodb.conf
 
-* Postgres - Download and install the database software PostgresQL (AND the PostGIS extension, which should be included in the download, but checked during installation) through https://www.postgresql.org/download/.
-* Once set up, create a database called 'profiles' and a user called 'profiles' and choose a password
+## Postgres
+Download and install the database software PostgresQL (AND the PostGIS extension, which should be included in the download, but checked during installation) through https://www.postgresql.org/download/.
+
+Once set up, create a database called 'profiles' and a user called 'profiles' and choose a password
 
 ```
 $ sudo -u postgres createuser -P profiles
@@ -90,27 +95,28 @@ Username: your ubuntu user
 Password: your ubuntu password
 ```
 
-* Install postgis 2.2
+Install postgis 2.2
 ```
 $ sudo apt-get install -y postgis postgresql-9.5-postgis-2.2
 ```
 
-* Bower - You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
+## Bower
+You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
 
 ```
 $ sudo npm install -g bower
 $ sudo npm install -g bower-installer
 ```
 
-* Grunt - You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process, in order to install it make sure you've installed Node.js and npm, then install grunt globally using npm:
+## Grunt
+You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process, in order to install it make sure you've installed Node.js and npm, then install grunt globally using npm:
 
 ```
 $ sudo npm install -g grunt-cli
 ```
 
-Install Apache
-
-* Apache - The application can run on its own on the nodejs server, however, in many cases we would need to host multiple applications on a subdomain of a server. Apache will therefor serve as a proxy only.
+## Apache
+The application can run on its own on the nodejs server, however, in many cases we would need to host multiple applications on a subdomain of a server. Apache will therefor serve as a proxy only.
 
 Unix
 ```
@@ -128,13 +134,15 @@ Windows
 Use the httpd.conf in tools/ (for windows, or alter for unix).
 Rename the localhost example key and certificate in config/cert/ by removing the .example extension
 
-* Download code
+# Community Profiles
+Now get the code for this application
 ```
 $ cd /var/www/profiles
 $ git clone https://github.com/rodekruis/communityprofiles.git .
 ```
 
-* Install NPM modules -  Now you have to include all the required packages for this application. These packages are not included by default in this repository.
+Install NPM modules -  Now you have to include all the required packages for this application. These packages are not included by default in this repository.
+
 The below command will install all required npm modules in package.json to node_modules/.
 After that it will run bower-installer, which uses bower.json to include all client side libraries, and puts these in public/build/bower
 
@@ -143,7 +151,7 @@ $ cd /var/www/profiles
 $ npm install
 ```
 
-# Loading Source Data
+## Loading Source Data
 
 * To run this application locally, you also need to get an exact copy of the database.
 * To that end, 4 sql-files have been created which create and fill all necessary source tables. Ask us or find them on the NRK-server in /root/Profiles_db_backup/
@@ -151,7 +159,7 @@ $ npm install
 * NOTE that you should have already created a postgres database 'profiles' with a user 'profiles' and the required password at this point (see above)
 * When all sourcedata is loaded, run all sql-files in the folder /postgres_scripts/ in the same way.
 
-# Getting Started With the Dashboard
+## Getting Started With the Dashboard
 Make sure the config/secrets.json file is present (ASK US)
 Make sure all certificates mentioned in the secrets.json are located in the config/cert/ folder (ASK US)
 * localhost-win.cert
@@ -174,12 +182,7 @@ application: go to the route of the dashboard app and run either of the followin
 - node-debug server.js (to launch node-inspector for server-side debugging)
 - grunt (no server side debugging)
 
-## UNIX
-The apache service needs to be running, as it is serving as a proxy: 
-unix: sudo service apache2 start|stop|restart (The apache config files are located in /etc/apache2/sites-available/)
-The dashboard upstart script needs to be running, which will start the node server: sudo start|stop digidoc
-The upstart script is located in /etc/init/dashboards.conf
-
+# DEBUG
 If for whatever reason you need to debug on the production server, use this command:
 sudo NODE_ENV="development" PATH=$PATH node-debug /var/www/dashboards/server.js
 

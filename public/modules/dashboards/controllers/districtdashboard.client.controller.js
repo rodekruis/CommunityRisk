@@ -386,7 +386,6 @@ angular.module('dashboards')
 					}
 				}
 			});
-
 			//Now attach the dimension to the tables-array		
 			var i;
 			for (i=0; i < d.Metadata.length; i++) {

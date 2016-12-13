@@ -1,4 +1,6 @@
-﻿
+﻿drop schema if exists "PH_datamodel" cascade;
+create schema "PH_datamodel";
+
 --------------------------------
 -- 1: Create datamodel tables --
 --------------------------------

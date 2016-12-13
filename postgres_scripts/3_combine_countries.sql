@@ -1,4 +1,5 @@
-﻿
+﻿drop schema if exists "tot_datamodel" cascade;
+create schema "tot_datamodel";
 
 -------------------------------
 -- 1.1: Boundary data tables --

@@ -1,4 +1,7 @@
-﻿-------------------------
+﻿drop schema if exists "MW_datamodel" cascade;
+create schema "MW_datamodel";
+
+-------------------------
 -- 0: Load source data --
 -------------------------
 /*

@@ -196,23 +196,38 @@ body {
 }
 
 .score-bar.good {
-  background: #94c35c;
+  background: #1a9641;
+}
+.score-bar.medium-good {
+  background: #a6d96a;
 }
 .score-bar.medium {
   background: #f1d121;
 }
+.score-bar.medium-bad {
+  background: #fd6161;
+}
 .score-bar.bad {
-  background: #ef4949;
+  background: #d7191c;
 }
 
 .component-score.good {
-  color: #94c35c;
+  color: #1a9641;
+}
+.component-score.medium-good {
+  color: #a6d96a;
 }
 .component-score.medium {
   color: #f1d121;
 }
+.component-score.medium-bad {
+  color: #fd6161;
+}
 .component-score.bad {
-  color: #ef4949;
+  color: #d7191c;
+}
+.component-score.notavailable {
+  color: #cccccc;
 }
 
 .component-score {
@@ -560,3 +575,23 @@ a.handle:hover {
     fill: black;
 }
 
+.big-icon {
+    font-size: 32px;
+}
+.reset-button,
+.reset-button:visited{
+	visibility:hidden;
+	background-color: #3780bb;
+	text-decoration: none;
+	font-weight: bold;
+	color: white;
+	padding: 2px 10px 2px 10px;
+    border-radius: 5px;	
+}
+.reset-button:hover,
+.reset-button:focus{
+	visibility:hidden;
+	background-color: #045a8d;
+	color: white;
+	text-decoration: none;
+}

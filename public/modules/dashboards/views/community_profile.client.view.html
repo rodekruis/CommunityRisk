@@ -45,7 +45,7 @@
 						<span class="community-title">{{name_selection}}</span>
 					</div>
 					<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
-					<a style="color: #3780bb; font-size: 12px" href="javascript:dc.filterAll();dc.redrawAll();">(Select all)</a>
+					<a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
 				</div>
 				<div class="row"></div>
 				<div class='tablearea' id='general'></div>
@@ -162,9 +162,10 @@
 						<i class="fa fa-th" aria-hidden="true"></i>
 						<span class="button-label">{{level3_selection}}</span>
 					</button>
-					<!-- <button type="button" class="btn btn-secondary" ng-click="reset()">
-						<span class="button-label">Reset to all {{subtype_selection}}</span>
-					</button> -->
+					<button style="background-color: #1a9641; color:white" type="button" class="btn btn-secondary">
+						<i class="fa fa-tachometer" aria-hidden="true"></i>
+						<span class="button-label">{{metric_label}}</span>
+					</button>
 				</div>
 			</div>
 			<!-- end: zoom navigation -->
@@ -174,7 +175,7 @@
 			<div id="mapPopup" class="map-popup" style="position:absolute;">
 				<div class="popup-header">{{name_popup}}
 					<button id="zoomin_icon" type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
-						<i class="fa fa-search-plus pull-right"></i>
+						<i class="fa fa-search-plus pull-right big-icon"></i>
 					</button>
 				</div>
 				<div class="popup-score">
@@ -183,14 +184,7 @@
 				</div>
 			  </div>
 			  
-			  <div id="count-info" class="general-info">
-					<div>
-						<span class="community-title">{{name_selection}}</span>
-					</div>
-					<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
-					<a style="color: #3780bb; font-size: 12px" href="javascript:dc.filterAll();dc.redrawAll();">(Select all)</a>
-				</div>
-				
+			
 			<!-- start: slide out tab for province selection -->
             <!-- <div class="slide-out-tab-province">
 				<a class="handle" href="#"><span class="handle-label">{{subtype_selection}} Selection</span></a>

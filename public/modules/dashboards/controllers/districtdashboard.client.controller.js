@@ -61,7 +61,6 @@ angular.module('dashboards')
 		    $scope.start();
 			
 			$scope.metric = '';
-			//$scope.country_code = country;
 			$scope.admlevel = 2;
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code;
 
@@ -313,7 +312,23 @@ angular.module('dashboards')
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
 			//var whereGroupSum_tab = whereDimension_tab.group();
-			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { return d[meta_scorevar[$scope.metric]];});
+			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (meta_scorevar[$scope.metric] === "null") { return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
+			/* var whereGroupSum_scores = whereDimension.group().reduce(
+								function(p,v) {
+									p.realVal += meta_scorevar[$scope.metric] === "null" ? v[$scope.metric] : v[meta_scorevar[$scope.metric]];
+									p.scoreVal += v[$scope.metric];
+									return p;
+								},
+								function(p,v) {
+									p.realVal -= meta_scorevar[$scope.metric] === "null" ? v[$scope.metric] : v[meta_scorevar[$scope.metric]];
+									p.scoreVal -= v[$scope.metric];
+									return p;
+								},
+								function() {
+									return {realVal:0, scoreVal:0};
+								}); */ 
+			
+			
 			// group with all, needed for data-count
 			var all = cf.groupAll();
 			// get the count of the number of rows in the dataset (total and filtered)
@@ -342,6 +357,7 @@ angular.module('dashboards')
 				return {sumOfSub:0, sumOfTotal:0, finalVal:0 };
 			}; 
 			
+		
 			//All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
 			var totaalDim = cf.dimension(function(i) { return 'Total'; });
 			
@@ -359,8 +375,8 @@ angular.module('dashboards')
 			// Make a separate one for the filling of the bar charts (based on 0-10 score per indicator)
 			var dimensions_scores = [];
 			$scope.tables.forEach(function(t) {
-				if (t.scorevar_name !== 'null') {
-					var name = t.name;
+				var name = t.name;
+				if (t.scorevar_name) { 
 					var name_score = t.scorevar_name;
 					if (t.propertyPath === 'value.finalVal') {
 						var weight_var = t.weight_var;
@@ -370,7 +386,7 @@ angular.module('dashboards')
 					}
 				}
 			});
-			
+
 			//Now attach the dimension to the tables-array		
 			var i;
 			for (i=0; i < d.Metadata.length; i++) {
@@ -425,13 +441,19 @@ angular.module('dashboards')
 			var keyvalue = fill_keyvalues();
 			
 			var high_med_low = function(ind,ind_score) {
+				
 				if (dimensions_scores[ind]) {
 					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
 							var width = d_prev[ind_score];
 						} else {
 							var width = dimensions_scores[ind].top(1)[0].value.finalVal;
 						}
-					if (width < 4) { return 'good';} else if (width > 6) { return 'bad';} else {return 'medium';}
+					if (isNaN(width)) {return 'notavailable';}
+					else if (width < 3.5) { return 'good';} 
+					else if (width <= 4.5) {return 'medium-good';}
+					else if (width <= 5.5) {return 'medium';}
+					else if (width <= 6.5) {return 'medium-bad';}
+					else if (width > 6.5) { return 'bad';} 
 				}				
 			};	
 
@@ -527,10 +549,6 @@ angular.module('dashboards')
 						if (meta_icon[record.name] === 'null') {var icon = 'modules/dashboards/img/undefined.png';}
 						else {var icon = 'modules/dashboards/img/'+meta_icon[record.name];}
 					
-						// var checkbox = document.createElement('input');
-						// checkbox.setAttribute('type','checkbox');
-						// checkbox.setAttribute('id',record.name+'-checkbox');
-						// checkbox.setAttribute('class',)
 						var div = document.createElement('div');
 						div.setAttribute('class','component-section');
 						var parent = document.getElementById(record.group);
@@ -643,37 +661,56 @@ angular.module('dashboards')
 			// MAP CHART SETUP //
 			/////////////////////
 			
+			//Define the range of all values for current metric (to be used for quantile coloring)
+			//Define the color-quantiles based on this range
+			$scope.mapchartColors = function() {
+				if (meta_scorevar[$scope.metric] === "null") {
+					var quantile_range = [];
+					for (i=0;i<d.Rapportage.length;i++) {
+						quantile_range[i] = d.Rapportage[i][$scope.metric];
+					};
+					return d3.scale.quantile()
+							.domain(quantile_range)//[d3.min(d.Rapportage,function(d) {return d[metric];}),d3.max(d.Rapportage,function(d) {return d[metric];})])
+							.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']);
+				}
+			};
+			var mapchartColors = $scope.mapchartColors();		
 			
-			
-			
-			//var mapchartColors=['#cccccc','#94c35c','#f1d121','#ef4949'];
-			
+			//Set up the map itself with all its properties
 			mapChart
 				.width($('#map-chart').width())
 				.height(800)
 				.dimension(whereDimension)
-				.group(whereGroupSum)
+				.group(whereGroupSum_scores)
 				.center([0,0])
-				.zoom(0)    
-				.geojson(d.Districts)
-				//.colors(mapchartColors)
-				//.colorAccessor(function(d){console.log(d); if (d==0) {return mapchartColors[0];} else if (d<4) {return mapchartColors[1];} else if (d<6) {return mapchartColors[2];} else if (d>6) {return mapchartColors[3];}})
-				.colors(d3.scale.quantile()
-								.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
-								.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
-								//.range(['#1a9641','#a6d96a','#ffffbf','#fdae61','#d7191c']))
-				.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
+				.zoom(0)
+				.geojson(d.Districts)				
+				.colors(mapchartColors)
+				.colorCalculator(function(d){
+					if (meta_scorevar[$scope.metric] === "null") {
+						return d ? mapChart.colors()(d) : '#cccccc';
+					} else {
+						if (d==0) {return '#cccccc';} 
+						else if (d<3.5) {return '#1a9641';} else if (d<4.5) {return '#a6d96a';} else if (d<5.5) {return '#f1d121';} else if (d<6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
+					}
+				})
+/* 				.valueAccessor(function(d) {
+					return d.value.scoreVal;
+				}) */
 				.featureKeyAccessor(function(feature){
 					return feature.properties.pcode;
 				})
 				.popup(function(d){
-					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value));
+					return lookup[d.key]; //.concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value));
 				})
 				.renderPopup(true)
 				.turnOnControls(true)
+				//Set up what happens when clicking on the map (popup appearing mainly)
 				.on('filtered',function(chart,filters){
 					$scope.filters = chart.filters();
 					var popup = document.getElementById('mapPopup');
+					popup.style.visibility = 'hidden';
+					document.getElementById('zoomin_icon').style.visibility = 'hidden';
 					if ($scope.filters.length > mapfilters_length) {
 						$scope.$apply(function() {
 							$scope.name_popup = lookup[$scope.filters[$scope.filters.length - 1]];
@@ -695,14 +732,20 @@ angular.module('dashboards')
 							popup.style.top = '100px';
 						}
 						popup.style.visibility = 'visible';
-						
-					} else {
-						popup.style.visibility = 'hidden';
-					}
-					if ($scope.admlevel < zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
+						if ($scope.admlevel < zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
+					} 
 					mapfilters_length = $scope.filters.length;
+					//Recalculate all community-profile figures
 					var keyvalue = fill_keyvalues();
-					$scope.updateHTML(keyvalue);			
+					$scope.updateHTML(keyvalue);	
+					//let reset-button (dis)appear
+					var resetbutton = document.getElementsByClassName('reset-button')[0];	
+					if ($scope.filters.length > 0) {
+						resetbutton.style.visibility = 'visible';
+					} else {
+						resetbutton.style.visibility = 'hidden';
+					}
+					
 				})
 			;
 			
@@ -730,8 +773,6 @@ angular.module('dashboards')
 			// MAP RELATED FUNCTIONS //
 			///////////////////////////
 			
-			
-			
 			$scope.zoom_in = function() {
 				
 				if ($scope.filters.length > 0 && $scope.admlevel < zoom_max) {
@@ -751,7 +792,9 @@ angular.module('dashboards')
 					$scope.reload(d);
 					document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
 					document.getElementById('mapPopup').style.visibility = 'hidden';
-					if ($scope.admlevel == zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'hidden'; }
+					document.getElementById('zoomin_icon').style.visibility = 'hidden';
+					document.getElementsByClassName('reset-button')[0].style.visibility = 'hidden';
+					//if ($scope.admlevel == zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'hidden'; }
 					mapfilters_length = 0;
 				}
 				
@@ -760,11 +803,11 @@ angular.module('dashboards')
 			//Functions for zooming out
 			$scope.zoom_out = function(dest_level) {
 				var admlevel_old = $scope.admlevel;
-				if (dest_level === 2 && $scope.admlevel) {
+				if (dest_level === 2 && $scope.admlevel > 2) {
 					$scope.admlevel = dest_level;
 					$scope.parent_code = '';
 					$scope.reload(d);
-				} else if (dest_level === 3 && $scope.admlevel > 2) {
+				} else if (dest_level === 3 && $scope.admlevel > 3) {
 					$scope.admlevel = 3;
 					$scope.parent_code = $scope.level2_code;
 					$scope.name_selection = $scope.name_selection_prev;
@@ -774,37 +817,54 @@ angular.module('dashboards')
 					document.getElementById('level' + admlevel_old).setAttribute('class','btn btn-secondary');
 					admlevel_old = admlevel_old-1;
 				} 
-				
-				//document.getElementById('level' + $scope.admlevel).setAttribute('class','btn btn-secondary btn-active');
 				document.getElementById('mapPopup').style.visibility = 'hidden';
+				document.getElementById('zoomin_icon').style.visibility = 'hidden';
 			};
 
 			$scope.map_coloring = function(id) {
-				
-				
+
 				$scope.metric = id;	
-				whereGroupSum.dispose();
-				whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[id];});	
-				//whereGroupSum_scores.dispose();
-				//whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { return d[meta_scorevar[id]];});	
+				$scope.metric_label = meta_label[id];
+				var mapchartColors = $scope.mapchartColors();	
+				whereGroupSum_scores.dispose();
+				whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (meta_scorevar[$scope.metric] === "null") {return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
 				mapChart
-					.group(whereGroupSum)//_scores)
-					//.colors(mapchartColors)
-					//.colorAccessor(function(d){console.log(d); if (d==0) {return mapchartColors[0];} else if (d<4) {return mapchartColors[1];} else if (d<6) {return mapchartColors[2];} else if (d>6) {return mapchartColors[3];}})
-					.colors(d3.scale.quantile()
-								.domain([d3.min(d.Rapportage,function(d) {return d[$scope.metric];}),d3.max(d.Rapportage,function(d) {return d[$scope.metric];})])
-								.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']))
-								//.range(['#1a9641','#a6d96a','#ffffbf','#fdae61','#d7191c']))
-					.colorCalculator(function (d) { return d ? mapChart.colors()(d) : '#cccccc'; })
+					.group(whereGroupSum_scores)
+					.colors(mapchartColors)
+					.colorCalculator(function(d){
+						if (meta_scorevar[$scope.metric] === "null") {
+							return d ? mapChart.colors()(d) : '#cccccc';
+						} else {
+							if (d==0) {return '#cccccc';} 
+							else if (d<3.5) {return '#1a9641';} else if (d<4.5) {return '#a6d96a';} else if (d<5.5) {return '#f1d121';} else if (d<6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
+						}
+					})
 					;
 				dc.filterAll();
 				dc.redrawAll();
+				document.getElementById('mapPopup').style.visibility = 'hidden';
+				document.getElementById('zoomin_icon').style.visibility = 'hidden';
 			};
 			
 			// $scope.reset = function() {
 				// dc.filterAll(); 
 				// dc.redrawAll();
-			// }			
+			// }	
+			
+			//Make sure that when opening another accordion-panel, the current one collapses
+			var acc = document.getElementsByClassName('card-header');
+			var panel = document.getElementsByClassName('collapse');
+
+			for (var i = 0; i < acc.length; i++) {
+				acc[i].onclick = function() {
+					setClass(panel, 'in', 'remove');
+				}
+			}
+			function setClass(els, className, fnName) {
+				for (var i = 0; i < els.length; i++) {
+					els[i].classList[fnName](className);
+				}
+			}
 			
 			
 			/////////////////////
@@ -818,9 +878,8 @@ angular.module('dashboards')
 				$scope.metric_year = meta_year[$scope.metric];
 				$scope.metric_source = meta_source[$scope.metric];
 				$scope.metric_desc = meta_desc[$scope.metric];
-				//$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];
 				if (meta_icon[$scope.metric] === 'null') {$scope.metric_icon = 'modules/dashboards/img/undefined.png';}
-				else {$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric_icon];}
+				else {$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];}
 				$('#infoModal').modal('show');
 			};
 			

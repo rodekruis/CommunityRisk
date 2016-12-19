@@ -112,7 +112,9 @@ angular.module('dashboards')
 		  var d = {};
 		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
-		  d.Metadata = pgData.usp_data.meta; //dashboard.sources.Metadata.data;
+		  //d.Metadata = pgData.usp_data.meta;
+		  var meta = dashboard.sources.Metadata.data;
+		  d.Metadata = $.grep(meta, function(e){ return e.country_code == 'All' || e.country_code == $scope.country_code; });
 		  d.Country_meta = dashboard.sources.Country_meta.data;
 		  $scope.geom = pgData.usp_data.geo;
 		  
@@ -136,8 +138,9 @@ angular.module('dashboards')
 		  //var d = {};
 		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
-		  d.Metadata = pgData.usp_data.meta;
-		  //d.Metadata = dashboard.sources.Metadata.data;
+		  //d.Metadata = pgData.usp_data.meta;
+		  //var meta = dashboard.sources.Metadata.data;
+		  //d.Metadata = $.grep(meta, function(e){ return e.country_code == 'All' || e.country_code == $scope.country_code; });
 		  $scope.geom = pgData.usp_data.geo;
 		  
 		  $scope.generateCharts(d);
@@ -312,7 +315,7 @@ angular.module('dashboards')
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
 			//var whereGroupSum_tab = whereDimension_tab.group();
-			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (meta_scorevar[$scope.metric] === "null") { return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
+			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (!meta_scorevar[$scope.metric]) { return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
 			/* var whereGroupSum_scores = whereDimension.group().reduce(
 								function(p,v) {
 									p.realVal += meta_scorevar[$scope.metric] === "null" ? v[$scope.metric] : v[meta_scorevar[$scope.metric]];
@@ -663,7 +666,7 @@ angular.module('dashboards')
 			//Define the range of all values for current metric (to be used for quantile coloring)
 			//Define the color-quantiles based on this range
 			$scope.mapchartColors = function() {
-				if (meta_scorevar[$scope.metric] === "null") {
+				if (!meta_scorevar[$scope.metric]){// === "null") {
 					var quantile_range = [];
 					for (i=0;i<d.Rapportage.length;i++) {
 						quantile_range[i] = d.Rapportage[i][$scope.metric];
@@ -686,7 +689,7 @@ angular.module('dashboards')
 				.geojson(d.Districts)				
 				.colors(mapchartColors)
 				.colorCalculator(function(d){
-					if (meta_scorevar[$scope.metric] === "null") {
+					if (!meta_scorevar[$scope.metric]){// === "null") {
 						return d ? mapChart.colors()(d) : '#cccccc';
 					} else {
 						if (d==0) {return '#cccccc';} 
@@ -826,12 +829,12 @@ angular.module('dashboards')
 				$scope.metric_label = meta_label[id];
 				var mapchartColors = $scope.mapchartColors();	
 				whereGroupSum_scores.dispose();
-				whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (meta_scorevar[$scope.metric] === "null") {return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
+				whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (!meta_scorevar[$scope.metric]) {return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
 				mapChart
 					.group(whereGroupSum_scores)
 					.colors(mapchartColors)
 					.colorCalculator(function(d){
-						if (meta_scorevar[$scope.metric] === "null") {
+						if (!meta_scorevar[$scope.metric]){// === "null") {
 							return d ? mapChart.colors()(d) : '#cccccc';
 						} else {
 							if (d==0) {return '#cccccc';} 

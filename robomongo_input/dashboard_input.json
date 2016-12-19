@@ -17,6 +17,17 @@
             "_id" : ObjectId("5724a4dfaf4258443e0f9bc5"),
             "format" : "CSV",
             "file" : "data/public/country_metadata.csv"
+        }, 
+        {
+            "__t" : "FileLocalSource",
+            "isActive" : true,
+            "isPublic" : true,
+            "description" : "Metadata",
+            "name" : "Metadata",
+            "sourceId" : "Metadata",
+            "_id" : ObjectId("5724a4dfaf4258443e0f9bc6"),
+            "format" : "CSV",
+            "file" : "data/public/metadata_prototype.csv"
         }
     ],
     "roles" : [ 

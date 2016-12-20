@@ -8,7 +8,7 @@
 	"jquery-countTo": "*",
 	"jquery-tabslideout": "*",
     "leaflet": "1.0.2",
-    "cartodb.js": "~3.15.9",
+    "cartodb.js": "3.15.9",
     "angular": "1.5.5",
     "materialize": "*",
     "mdi": "~1.5.54",

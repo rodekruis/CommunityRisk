@@ -17,7 +17,7 @@
     "angular-lodash": "*",
     "angular-route": "*",
 	"angular-loading-bar" : "*",
-    "angular-resource": "*",
+    "angular-resource": "1.5.6",
     "angular-cookies": "*",
     "angular-touch": "*",
     "angular-sanitize": "*",

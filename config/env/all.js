@@ -29,7 +29,7 @@ module.exports = {
 				//'public/build/bower/materialize/css/materialize.css', // in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.css', // in bower.json
 				'public/build/custom/font-awesome/css/font-awesome.min.css', // NOT in bower.json
-				'public/build/custom/leaflet-search/js/leaflet-search.src.css' // NOT in bower.json
+				'public/build/custom/leaflet-search/css/leaflet-search.src.css' // NOT in bower.json
 				
 			],
 			js: [

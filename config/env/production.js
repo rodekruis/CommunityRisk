@@ -77,7 +77,7 @@ module.exports = {
 				'public/build/bower/angular-messages/js/angular-messages.min.js', //in bower.json
 				'public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.min.js',//in bower.json
 				'public/build/bower/angular-elastic/js/elastic.js', //in bower.json
-				'public/build/bower/underscore/js/underscore-min.js',//in bower.json
+				'public/build/bower/underscore/js/underscore.js',//in bower.json
 				'public/build/bower/angular-loading-bar/js/loading-bar.min.js',
 				'public/build/bower/leaflet-gps/js/leaflet-gps.min.js', // in bower.json
 				'https://maps.googleapis.com/maps/api/js?v=3&sensor=true',

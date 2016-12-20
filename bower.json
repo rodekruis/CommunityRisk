@@ -36,7 +36,7 @@
     "underscore": "1.8.*",
 	"leaflet-gps": "1.0.*",
 	"slick": "*",	
-	"topojson": "1.6.*"
+	"topojson": "1.6.26"
   },
   "resolutions": {
 	"angular": "1.5.5",

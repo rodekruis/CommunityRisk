@@ -84,7 +84,7 @@ module.exports = {
 				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js', // in bower,json
 				'public/build/custom/jquery-tabslideout/js/tabSlideOut.js', // NOT in bower.json
 				'public/build/bower/jquery-countTo/js/jquery.countTo.js', // in bower.json
-				'public/build/bower/topojson/js/topojson.min.js' // in bower.json
+				'public/build/bower/topojson/js/topojson.js' // in bower.json
 				
 			]
 		},

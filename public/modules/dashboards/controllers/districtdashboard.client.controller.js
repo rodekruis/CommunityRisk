@@ -7,7 +7,7 @@ angular.module('dashboards')
 		//Define variables
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.country_code = 'PH';
+		$scope.country_code = 'NP';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		$scope.admlevel = 2;
 		$scope.metric = '';

@@ -118,7 +118,7 @@ CREATE OR REPLACE FUNCTION usp_ind_level2(country varchar, OUT result json) AS $
 			from (
 			select *
 			from "%s_datamodel"."Indicators_2_TOTAL" t1
-			left join "%s_datamodel"."total_scores_level2" t2	on t1.pcode = t2.pcode_level2
+			left join "PH_datamodel"."total_scores_level2" t2	on t1.pcode = t2.pcode_level2
 			) level2;',country,country)
 	INTO result;
 	END
@@ -168,7 +168,7 @@ CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode varchar) RET
 	;
 $$ LANGUAGE sql;
 
---select usp_data(2,'PH','');
+--select usp_data(2,'NP','');
 
 
 

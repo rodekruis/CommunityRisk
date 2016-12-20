@@ -20,6 +20,10 @@ union all
 select 'MW' as country_code
 	,*
 from "MW_datamodel"."Geo_level2"
+union all
+select 'NP' as country_code
+	,*
+from "NP_datamodel"."Geo_level2"
 ;
 
 --Level 3
@@ -35,6 +39,10 @@ union all
 select 'MW' as country_code
 	,*
 from "MW_datamodel"."Geo_level3"
+union all
+select 'NP' as country_code
+	,*
+from "NP_datamodel"."Geo_level3"
 ;
 
 --Level 4
@@ -46,6 +54,10 @@ select 'PH' as country_code
 	,geom
 into "tot_datamodel"."Geo_level4"
 from "PH_datamodel"."Geo_level4"
+union all
+select 'NP' as country_code
+	,*
+from "NP_datamodel"."Geo_level4"
 ;
 
 -----------------------------------------------

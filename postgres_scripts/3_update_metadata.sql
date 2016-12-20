@@ -1,5 +1,0 @@
-﻿
---Update metadata-table
-TRUNCATE TABLE "metadata".metadata;
-COPY "metadata".metadata FROM '/var/www/profiles/data/public/metadata_prototype.csv' DELIMITER ';' HEADER CSV;
---select * from "tot_datamodel".metadata; 

@@ -29,7 +29,7 @@ module.exports = {
 				//'public/build/bower/materialize/css/materialize.css', // in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.css', // in bower.json
 				'public/build/custom/font-awesome/css/font-awesome.min.css', // NOT in bower.json
-				'public/build/bower/leaflet-search/js/leaflet-search.src.css' // in bower.json
+				'public/build/custom/leaflet-search/js/leaflet-search.src.css' // NOT in bower.json
 				
 			],
 			js: [
@@ -51,7 +51,7 @@ module.exports = {
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
 				'public/build/bower/leaflet/js/leaflet-src.js',//in bower.json
 				'public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.js', // in bower.json
-				'public/build/bower/leaflet-search/js/leaflet-search.src.js',
+				'public/build/custom/leaflet-search/js/leaflet-search.src.js', //NOT in bower.json
 				'public/build/bower/leaflet-ajax/js/leaflet.ajax.js',
 				'public/build/bower/angular-gettext/js/angular-gettext.js',
 				'public/dist/translations.js',

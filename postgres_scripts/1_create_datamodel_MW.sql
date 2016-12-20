@@ -222,6 +222,8 @@ select t0.pcode_level3 as pcode
 	,t4.nr_health_facilities
 	,case when population/10000 = 0 then null else cast(t4.nr_health_facilities as float)/ (cast(population as float) / 10000) end as health_density
 	,t5.poverty_incidence
+	--ADD NEW VARIABLES HERE
+	--,t6.XXX
 into "MW_datamodel"."Indicators_3_TOTAL"
 from "MW_datamodel"."Geo_level3" t0
 left join "MW_datamodel"."Indicators_3_pop_area" 	t1	on t0.pcode_level3 = t1.pcode_level3
@@ -229,6 +231,8 @@ left join "MW_datamodel"."Indicators_3_hazards" 	t2	on t0.pcode_level3 = t2.pcod
 left join "MW_datamodel"."Indicators_3_gdp_traveltime" 	t3	on t0.pcode_level3 = t3.pcode_level3
 left join "MW_datamodel"."Indicators_3_health" 		t4	on t0.pcode_level3 = t4.pcode_level3
 left join "MW_datamodel"."Indicators_3_poverty" 	t5	on t0.pcode_level3 = t5.pcode_level3
+--ADD NEW JOINED TABLE HERE
+--left join "MW_datamodel"."Indicators_3_XXX" 		t6	on t0.pcode_level3 = t6.pcode_level3
 ;
 
 drop table if exists "MW_datamodel"."Indicators_2_TOTAL";
@@ -238,6 +242,7 @@ select t0.pcode_level2 as pcode
 		,gdp_per_capita,traveltime,nr_health_facilities,health_density,poverty_incidence
 	,t1.FCS
 	,t2.mobile_access,life_expectancy,improved_sanitation,infant_mortality,watersource_piped,construction_semipermanent
+	--ADD NEW VARIABLES HERE
 into "MW_datamodel"."Indicators_2_TOTAL"
 from "MW_datamodel"."Geo_level2" t0
 left join (
@@ -261,6 +266,7 @@ left join (
 	on t0.pcode_level2 = level3.pcode_parent
 left join "MW_datamodel"."Indicators_2_FCS" 	t1	on t0.pcode_level2 = t1.pcode_level2
 left join "MW_datamodel"."Indicators_2_knoema" 	t2	on t0.pcode_level2 = t2.pcode_level2
+--ADD NEW JOINED TABLES HERE
 ;
 --select * from "MW_datamodel"."Indicators_2_TOTAL"
 

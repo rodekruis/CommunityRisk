@@ -122,7 +122,11 @@ angular.module('dashboards')
 		  $scope.generateCharts(d);
 		  
 		  // end loading bar
-		  $scope.complete();	   
+		  $scope.complete();
+
+		  if (L_PREFER_CANVAS == true) {
+			$('#IEmodal').modal('show');
+		  }	
 
 		};
 		//Slightly adjusted version of prepare function upon reload. Needed because the d.Metadata could not be loaded again when the dashboard itself was not re-initiated.
@@ -931,7 +935,7 @@ angular.module('dashboards')
 			};
 			
 			//Tabslide functions
-			$(function(){
+/* 			$(function(){
 				 $('.slide-out-tab-province').tabSlideOut({
 					 tabHandle: '.handle',                              //class of the element that will be your tab
 					 clickScreenToClose: false,
@@ -953,7 +957,7 @@ angular.module('dashboards')
 					 topPos: '218px',                                   //position from the top
 					 fixedPosition: false                               //options: true makes it stick(fixed position) on scroll
 				   });
-			});
+			}); */
 			
 			
 			/////////////////////////
@@ -970,14 +974,7 @@ angular.module('dashboards')
 			}
 			zoomToGeom($scope.geom);
 			
-			// var canvasElem = document.getElementsByClassName('leaflet-zoom-animated')[0];
-			// canvasElem.on('click',function(event) {
-				// event = event || window.event;
-
-					// $scope.x = event.pageX;
-					// $scope.y = event.pageY;
-					// console.log($scope.x);
-			// });
+			
 			
 		};
 

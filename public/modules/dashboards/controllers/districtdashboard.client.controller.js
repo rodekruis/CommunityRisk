@@ -123,8 +123,9 @@ angular.module('dashboards')
 		  
 		  // end loading bar
 		  $scope.complete();
-
-		  if (L_PREFER_CANVAS == true) {
+			
+		  //Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)	
+		  if (typeof L_PREFER_CANVAS !== 'undefined') {
 			$('#IEmodal').modal('show');
 		  }	
 
@@ -154,6 +155,9 @@ angular.module('dashboards')
 
 		};
 
+		//////////////////////
+		// SET UP FUNCTIONS //
+		//////////////////////
 		
 		// fill the lookup table which finds the community name with the community code
 		$scope.genLookup = function (field){
@@ -852,26 +856,23 @@ angular.module('dashboards')
 				document.getElementById('zoomin_icon').style.visibility = 'hidden';
 			};
 			
-			// $scope.reset = function() {
-				// dc.filterAll(); 
-				// dc.redrawAll();
-			// }	
 			
 			//Make sure that when opening another accordion-panel, the current one collapses
 			var acc = document.getElementsByClassName('card-header');
 			var panel = document.getElementsByClassName('collapse');
-
-			for (var i = 0; i < acc.length; i++) {
-				acc[i].onclick = function() {
-					setClass(panel, 'in', 'remove');
-				}
-			}
-			function setClass(els, className, fnName) {
-				for (var i = 0; i < els.length; i++) {
-					els[i].classList[fnName](className);
-				}
-			}
+			var active = document.getElementsByClassName('collapse in')[0];
 			
+			for (var i = 0; i < acc.length; i++) {
+				acc[i].onclick = function() {				
+					console.log(active);
+					var active_new = document.getElementById(this.id.replace('heading','collapse'));
+					if (active.id !== active_new.id) {
+						active.classList.remove('in');
+					} 
+					active = active_new;
+				}
+			}
+		
 			
 			/////////////////////
 			// OTHER FUNCTIONS //
@@ -934,7 +935,7 @@ angular.module('dashboards')
 				download.setAttribute('download', 'export.csv');
 			};
 			
-			//Tabslide functions
+			//Tabslide functions (Not included yet at the moment)
 /* 			$(function(){
 				 $('.slide-out-tab-province').tabSlideOut({
 					 tabHandle: '.handle',                              //class of the element that will be your tab
@@ -983,52 +984,3 @@ angular.module('dashboards')
 
 ;
 
-/* 
-			// create the data tables: because metrics are in columns in the data set and not in rows, we need one data-table per metric
-			$scope.tables.forEach(function(t) {
-				dc.dataTable('#' + t.id)
-						.dimension(t.dimension)             
-						.group(function (i) {return ''; })
-						.columns([
-									// icon
-									function(d){
-										if (meta_icon[t.name] === "null") {return '<img src=\"modules/dashboards/img/undefined.png\" width=\"20\">';}
-										else {return '<img src=\"modules/dashboards/img/'+meta_icon[t.name]+'\" width=\"20\">';}
-									},
-									// name of variable
-									function(d){return meta_label[t.name];}, 
-									// the value
-									function(d){
-										// This makes sure that once the barangay-level is loaded, but no further subselection  is made yet, 
-										// the profile of the whole municipality is still shown. Otherwise it would show 'N.A.' sooner than necessary.
-										if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
-											if(meta_format[t.name] === 'decimal0'){
-												return dec0Format(d_prev[t.name]);
-											} else if(meta_format[t.name] === 'percentage'){
-												return percFormat(d_prev[t.name]);
-											} else if(meta_format[t.name] === 'decimal2'){
-												return dec2Format(d_prev[t.name]);
-											}
-										} else {
-											if (isNaN($scope.deepFind(d, t.propertyPath))) {
-												return 'N.A. on this level'; 
-											} else if(meta_format[t.name] === 'decimal0'){
-												return dec0Format($scope.deepFind(d, t.propertyPath));
-											} else if(meta_format[t.name] === 'percentage'){
-												return percFormat($scope.deepFind(d, t.propertyPath));
-											} else if(meta_format[t.name] === 'decimal2'){
-												return dec2Format($scope.deepFind(d, t.propertyPath));
-											}
-										}
-									},
-									function(d){
-										if (isNaN($scope.deepFind(d, t.propertyPath))) {
-											return '';
-										} else if (meta_unit[t.name] === "null") {return '';} 
-										else {return meta_unit[t.name]; }
-									}
-							])
-						.title(function(d){return lookup[t.name];})	
-						.order(d3.descending);
-			});
-			 */

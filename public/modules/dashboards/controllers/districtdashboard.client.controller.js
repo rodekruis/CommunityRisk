@@ -139,13 +139,10 @@ angular.module('dashboards')
 		  // create the map chart (NOTE: this has to be done before the ajax call)
 		  $scope.mapChartType = 'leafletChoroplethChart';	
 		  
-		  // load data
+		  // load data (metadata does not have to be reloaded)
 		  //var d = {};
 		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
-		  //d.Metadata = pgData.usp_data.meta;
-		  //var meta = dashboard.sources.Metadata.data;
-		  //d.Metadata = $.grep(meta, function(e){ return e.country_code == 'All' || e.country_code == $scope.country_code; });
 		  $scope.geom = pgData.usp_data.geo;
 		  
 		  $scope.generateCharts(d);
@@ -184,10 +181,7 @@ angular.module('dashboards')
 			return lookup_country_meta;
 		};
 		
-		/**
-		 * function to find object property value by path
-		 * separate with .
-		 */
+		// function to find object property value by path 
 		$scope.deepFind = function deepFind(obj, path) {
 			  var paths = path.split('.'),
 				  current = obj,
@@ -204,11 +198,10 @@ angular.module('dashboards')
 		};
 		
 		
-		/**
-		 * function to generate the 3W component
-		 * data is loaded from the data set
-		 * geom is geojson file
-		 */
+		///////////////////////////////////////////
+		// MAIN FUNCTION TO GENERATE ALL CONTENT //
+		///////////////////////////////////////////
+		
 		$scope.generateCharts = function (d){
 			
 			// Clear the charts
@@ -317,29 +310,16 @@ angular.module('dashboards')
 			
 			//var cf = crossfilter(d3.range(0, data.Districts.features.length));
 			var cf = crossfilter(d.Rapportage);
+			
 			// The wheredimension returns the unique identifier of the geo area
 			var whereDimension = cf.dimension(function(d) { return d.pcode; });
 			//var whereDimension_tab = cf.dimension(function(d) { return d.pcode; });
+			
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
 			//var whereGroupSum_tab = whereDimension_tab.group();
 			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (!meta_scorevar[$scope.metric]) { return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
-			/* var whereGroupSum_scores = whereDimension.group().reduce(
-								function(p,v) {
-									p.realVal += meta_scorevar[$scope.metric] === "null" ? v[$scope.metric] : v[meta_scorevar[$scope.metric]];
-									p.scoreVal += v[$scope.metric];
-									return p;
-								},
-								function(p,v) {
-									p.realVal -= meta_scorevar[$scope.metric] === "null" ? v[$scope.metric] : v[meta_scorevar[$scope.metric]];
-									p.scoreVal -= v[$scope.metric];
-									return p;
-								},
-								function() {
-									return {realVal:0, scoreVal:0};
-								}); */ 
-			
-			
+
 			// group with all, needed for data-count
 			var all = cf.groupAll();
 			// get the count of the number of rows in the dataset (total and filtered)
@@ -556,7 +536,7 @@ angular.module('dashboards')
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
 						}
 
-						if (meta_icon[record.name] === 'null') {var icon = 'modules/dashboards/img/undefined.png';}
+						if (!meta_icon[record.name]) {var icon = 'modules/dashboards/img/undefined.png';}
 						else {var icon = 'modules/dashboards/img/'+meta_icon[record.name];}
 					
 						var div = document.createElement('div');
@@ -674,13 +654,13 @@ angular.module('dashboards')
 			//Define the range of all values for current metric (to be used for quantile coloring)
 			//Define the color-quantiles based on this range
 			$scope.mapchartColors = function() {
-				if (!meta_scorevar[$scope.metric]){// === "null") {
+				if (!meta_scorevar[$scope.metric]){
 					var quantile_range = [];
 					for (i=0;i<d.Rapportage.length;i++) {
 						quantile_range[i] = d.Rapportage[i][$scope.metric];
 					};
 					return d3.scale.quantile()
-							.domain(quantile_range)//[d3.min(d.Rapportage,function(d) {return d[metric];}),d3.max(d.Rapportage,function(d) {return d[metric];})])
+							.domain(quantile_range)
 							.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']);
 				}
 			};
@@ -697,16 +677,13 @@ angular.module('dashboards')
 				.geojson(d.Districts)				
 				.colors(mapchartColors)
 				.colorCalculator(function(d){
-					if (!meta_scorevar[$scope.metric]){// === "null") {
+					if (!meta_scorevar[$scope.metric]){
 						return d ? mapChart.colors()(d) : '#cccccc';
 					} else {
 						if (d==0) {return '#cccccc';} 
 						else if (d<3.5) {return '#1a9641';} else if (d<4.5) {return '#a6d96a';} else if (d<5.5) {return '#f1d121';} else if (d<6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
 					}
 				})
-/* 				.valueAccessor(function(d) {
-					return d.value.scoreVal;
-				}) */
 				.featureKeyAccessor(function(feature){
 					return feature.properties.pcode;
 				})
@@ -804,7 +781,6 @@ angular.module('dashboards')
 					document.getElementById('mapPopup').style.visibility = 'hidden';
 					document.getElementById('zoomin_icon').style.visibility = 'hidden';
 					document.getElementsByClassName('reset-button')[0].style.visibility = 'hidden';
-					//if ($scope.admlevel == zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'hidden'; }
 					mapfilters_length = 0;
 				}
 				
@@ -842,7 +818,7 @@ angular.module('dashboards')
 					.group(whereGroupSum_scores)
 					.colors(mapchartColors)
 					.colorCalculator(function(d){
-						if (!meta_scorevar[$scope.metric]){// === "null") {
+						if (!meta_scorevar[$scope.metric]){
 							return d ? mapChart.colors()(d) : '#cccccc';
 						} else {
 							if (d==0) {return '#cccccc';} 
@@ -863,8 +839,7 @@ angular.module('dashboards')
 			var active = document.getElementsByClassName('collapse in')[0];
 			
 			for (var i = 0; i < acc.length; i++) {
-				acc[i].onclick = function() {				
-					console.log(active);
+				acc[i].onclick = function() {
 					var active_new = document.getElementById(this.id.replace('heading','collapse'));
 					if (active.id !== active_new.id) {
 						active.classList.remove('in');
@@ -885,7 +860,7 @@ angular.module('dashboards')
 				$scope.metric_year = meta_year[$scope.metric];
 				$scope.metric_source = meta_source[$scope.metric];
 				$scope.metric_desc = meta_desc[$scope.metric];
-				if (meta_icon[$scope.metric] === 'null') {$scope.metric_icon = 'modules/dashboards/img/undefined.png';}
+				if (!meta_icon[$scope.metric]) {$scope.metric_icon = 'modules/dashboards/img/undefined.png';}
 				else {$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];}
 				$('#infoModal').modal('show');
 			};

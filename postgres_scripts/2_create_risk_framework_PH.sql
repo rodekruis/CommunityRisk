@@ -10,35 +10,32 @@
 -- 2.1: Vulnerability --
 ------------------------
 
---Maybe take LOG of GDP?
---NOTE: High score = high vulnerability
-
-
 drop table if exists "PH_datamodel"."vulnerability_scores";
 
 with 
---GDP (Higher GDP = less vulnerable >> DO switch scale around)
+--PLACEHOLDER: Add new vulnerability variable to risk framework
+--1. select the right variable, name XXX (short name) and replace all XXX's by this short name (e.g. poverty).
+--2. decide whether a log-transformation is necessary
+--3. decide if the scale needs to be inverted (does high value vor this variable mean low or high vulnerability?)
 /*
-gdp as (
+XXX as (
 	select t0.pcode_level3
-			,log(sum(case when gdp_per_capita = 0 then 0.1 else gdp_per_capita end)) as gdp_per_capita
-	from "PH_datamodel"."Geo_level4" 		t0
-	left join "PH_datamodel"."Indicators_4_TOTAL"	t1 on t0.pcode_level4 = t1.pcode
-	group by 1
+		,t1.<XXX_varname> as XXX 		--POSSIBLE LOG-TRANSFORMATION HERE
+	from "PH_datamodel"."Geo_level3" 	t0
+	left join "PH_datamodel"."Indicators_3_TOTAL"	t1 on t0.pcode_level3 = t1.pcode
 	), 
-gdp_minmax as (
-	select min(gdp_per_capita) as min
-		,max(gdp_per_capita) as max
-	from gdp
-	), 
-gdp_score as (
-	select t0.*
-		,((max - gdp_per_capita) / (max - min)) * 10 as gdp_score
-	from gdp t0
-	left join gdp_minmax t1 on 1=1
+XXX_minmax as (
+	select min(XXX) as min
+		,max(XXX) as max
+	from XXX
 	),
---select * from gdp_score	order by 3 desc
-*/
+XXX_score as (
+	select t0.*
+		,((XXX - min) / (max - min)) * 10 as XXX_score		--POSSIBLE SCALE INVERSION HERE: ,((max - XXX) / (max - min)) * 10 as XXX_score
+	from XXX t0
+	left join XXX_minmax t1 on 1=1
+	),
+*/	
 
 --Poverty (Higher poverty = more vulnerable >> DO NOT switch scale around)
 poverty as (
@@ -156,40 +153,43 @@ hdi_score as (
 
 --JOINING ALL
 select t0.pcode_level3
-	--,gdp_score,gdp_per_capita
 	,pov_score,poverty_incidence
 	,inc_score,income_class
 	,hdi_score,hdi
 	,wall_score,wall
 	,roof_score,roof
 	,pantawid_score,pantawid_perc
-	,(10-power(/*coalesce((10-gdp_score)/10*9+1,1) 
-			* */coalesce((10-pov_score)/10*9+1,1) 
+	--PLACEHOLDER
+	--,XXX_score,XXX
+	,(10-power(coalesce((10-pov_score)/10*9+1,1) 
 			* coalesce((10-inc_score)/10*9+1,1) 
 			* coalesce((10-hdi_score)/10*9+1,1)
 			* coalesce((10-wall_score)/10*9+1,1)
 			* coalesce((10-roof_score)/10*9+1,1)
 			* coalesce((10-pantawid_score)/10*9+1,1)
+			--PLACEHOLDER
+			--* coalesce((10-XXX_score)/10*9+1,1)			
 			,cast(1 as float)/cast((
-				--case when gdp_score is null then 0 else 1 end +
 				case when pov_score is null then 0 else 1 end +
 				case when inc_score is null then 0 else 1 end +
 				case when wall_score is null then 0 else 1 end +
 				case when roof_score is null then 0 else 1 end +
 				case when pantawid_score is null then 0 else 1 end +
+				--PLACEHOLDER
+				--case when XXX_score is null then 0 else 1 end +				
 				case when hdi_score is null then 0 else 1 end )
 		as float)))/9*10 as vulnerability_score
 into "PH_datamodel"."vulnerability_scores"
 from "PH_datamodel"."Geo_level3" t0
---left join gdp_score t1	on t0.pcode_level3 = t1.pcode_level3
 left join pov_score t2		on t0.pcode_level3 = t2.pcode_level3
 left join inc_score t3		on t0.pcode_level3 = t3.pcode_level3
 left join hdi_score t4		on t0.pcode_level3 = t4.pcode_level3
 left join wall_score t5		on t0.pcode_level3 = t5.pcode_level3
 left join roof_score t6		on t0.pcode_level3 = t6.pcode_level3
 left join pantawid_score t7	on t0.pcode_level3 = t7.pcode_level3
+--PLACEHOLDER: add new variable here
+--left join XXX_score t8	on t0.pcode_level3 = t8.pcode_level3
 ;
-
 
 ------------------
 -- 2.2: Hazards --
@@ -198,7 +198,30 @@ left join pantawid_score t7	on t0.pcode_level3 = t7.pcode_level3
 drop table if exists "PH_datamodel"."hazard_scores";
 
 with 
---GDP (Higher GDP = less vulnerable >> DO switch scale around)
+
+--PLACEHOLDER: Add new hazard variable to risk framework
+--1. select the right variable, name XXX (short name) and replace all XXX's by this short name (e.g. poverty).
+--2. decide whether a log-transformation is necessary
+--3. decide if the scale needs to be inverted (does high value vor this variable mean low or high hazard?)
+/*
+XXX as (
+	select t0.pcode_level3
+		,t1.<XXX_varname> as XXX 		--POSSIBLE LOG-TRANSFORMATION HERE
+	from "PH_datamodel"."Geo_level3" 	t0
+	left join "PH_datamodel"."Indicators_3_TOTAL"	t1 on t0.pcode_level3 = t1.pcode
+	), 
+XXX_minmax as (
+	select min(XXX) as min
+		,max(XXX) as max
+	from XXX
+	),
+XXX_score as (
+	select t0.*
+		,((XXX - min) / (max - min)) * 10 as XXX_score		--POSSIBLE SCALE INVERSION HERE: ,((max - XXX) / (max - min)) * 10 as XXX_score
+	from XXX t0
+	left join XXX_minmax t1 on 1=1
+	),
+*/	
 haz_risk as (
 	select t0.pcode_level3
 		,log(case when flood_phys_exp = 0 then 0.00001 else flood_phys_exp end) as flood_phys_exp
@@ -232,7 +255,6 @@ haz_risk_score as (
 	from haz_risk t0
 	left join haz_risk_minmax t1 on 1=1
 	)
---select * from haz_pe_score
 
 --JOINING ALL
 select t1.pcode_level3
@@ -241,16 +263,22 @@ select t1.pcode_level3
 	,earthquake_score,earthquake7_phys_exp
 	,tsunami_score,tsunami_phys_exp
 	,drought_score,drought_phys_exp
+	--PLACEHOLDER
+	--,XXX_score,XXX
 	,(10 - power(coalesce((10-flood_score)/10*9+1,1) 
 		* coalesce((10-cyclone_score)/10*9+1,1) 
 		* coalesce((10-earthquake_score)/10*9+1,1) 
 		* coalesce((10-tsunami_score)/10*9+1,1) 
 		* coalesce((10-drought_score)/10*9+1,1)
+		--PLACEHOLDER
+		--* coalesce((10-XXX_score)/10*9+1,1)
 		,cast(1 as float)/cast(5 as float))
 		)/cast(9 as float)*cast(10 as float) as hazard_score
 into "PH_datamodel"."hazard_scores"
 from "PH_datamodel"."Geo_level3" t0
 left join haz_risk_score t1	on t0.pcode_level3 = t1.pcode_level3
+--PLACEHOLDER: add new variable here
+--left join XXX_score t2	on t0.pcode_level3 = t2.pcode_level3
 ;
 
 UPDATE "PH_datamodel"."hazard_scores"
@@ -267,6 +295,30 @@ where hazard_score < 0
 drop table if exists "PH_datamodel"."coping_capacity_scores";
 
 with
+
+--PLACEHOLDER: Add new coping capacity variable to risk framework
+--1. select the right variable, name XXX (short name) and replace all XXX's by this short name (e.g. poverty).
+--2. decide whether a log-transformation is necessary
+--3. decide if the scale needs to be inverted (does high value vor this variable mean low or high lack of coping capacity? NOTE: 10 means high LACK OF coping capacity, so LOW coping capacity)
+/*
+XXX as (
+	select t0.pcode_level3
+		,t1.<XXX_varname> as XXX 		--POSSIBLE LOG-TRANSFORMATION HERE
+	from "PH_datamodel"."Geo_level3" 	t0
+	left join "PH_datamodel"."Indicators_3_TOTAL"	t1 on t0.pcode_level3 = t1.pcode
+	), 
+XXX_minmax as (
+	select min(XXX) as min
+		,max(XXX) as max
+	from XXX
+	),
+XXX_score as (
+	select t0.*
+		,((XXX - min) / (max - min)) * 10 as XXX_score		--POSSIBLE SCALE INVERSION HERE: ,((max - XXX) / (max - min)) * 10 as XXX_score
+	from XXX t0
+	left join XXX_minmax t1 on 1=1
+	),
+*/	
 --travel time: higher travel time is lower coping capacity, so higher (Lack of Coping Capacity) score
 travel as (
 	select t0.pcode_level3
@@ -333,9 +385,18 @@ select t1.pcode_level3
 	,travel_score,traveltime
 	,hospitals_score,health_density
 	,governance_score,governance
-	,(10-power(coalesce((10-travel_score)/10*9+1,1) * coalesce((10-hospitals_score)/10*9+1,1) * coalesce((10-governance_score)/10*9+1,1),cast(1 as float)/cast(
+	--PLACEHOLDER
+	--,XXX_score,XXX
+	,(10-power(coalesce((10-travel_score)/10*9+1,1) 
+			* coalesce((10-hospitals_score)/10*9+1,1) 
+			* coalesce((10-governance_score)/10*9+1,1)
+			--PLACEHOLDER
+			--* coalesce((10-XXX_score)/10*9+1,1)			
+		,cast(1 as float)/cast(
 		(case when travel_score is null then 0 else 1 end + 
 		case when hospitals_score is null then 0 else 1 end + 
+		--PLACEHOLDER
+		--case when XXX_score is null then 0 else 1 end + 		
 		case when governance_score is null then 0 else 1 end)		
 		as float)))/9*10 as coping_capacity_score
 into "PH_datamodel"."coping_capacity_scores"
@@ -343,7 +404,8 @@ from "PH_datamodel"."Geo_level3" t0
 left join travel_score t1	on t0.pcode_level3 = t1.pcode_level3
 left join hospitals_score t2	on t0.pcode_level3 = t2.pcode_level3
 left join governance_score t3 	on t0.pcode_level3 = t3.pcode_level3
---order by 8
+--PLACEHOLDER: add new variable here
+--left join XXX_score t4	on t0.pcode_level3 = t4.pcode_level3
 ;
 
 
@@ -359,6 +421,8 @@ select t1.pcode_level3
 	,pov_score,inc_score,hdi_score,wall_score,roof_score,pantawid_score
 	,flood_score,cyclone_score,earthquake_score,tsunami_score,drought_score
 	,travel_score,hospitals_score,governance_score
+	--PLACEHOLDER
+	--XXX_score,XXX
 	,(10 - power(coalesce((10-vulnerability_score)/10*9+1,1)
 		* coalesce((10-hazard_score)/10*9+1,1)
 		* coalesce((10-coping_capacity_score)/10*9+1,1)
@@ -368,7 +432,6 @@ from "PH_datamodel"."Geo_level3" t0
 left join "PH_datamodel"."vulnerability_scores" t1	on t0.pcode_level3 = t1.pcode_level3
 left join "PH_datamodel"."hazard_scores" t2		on t0.pcode_level3 = t2.pcode_level3
 left join "PH_datamodel"."coping_capacity_scores" t3	on t0.pcode_level3 = t3.pcode_level3
---order by 7
 ;
 
 drop table if exists "PH_datamodel"."total_scores_level2";
@@ -382,24 +445,14 @@ select t1.pcode_parent as pcode_level2
 	,sum(flood_score * population) / sum(population) as flood_score,sum(cyclone_score * population) / sum(population) as cyclone_score,sum(earthquake_score * population) / sum(population) as earthquake_score
 	,sum(tsunami_score * population) / sum(population) as tsunami_score,sum(drought_score * population) / sum(population) as drought_score
 	,sum(travel_score * population) / sum(population) as travel_score,sum(hospitals_score * population) / sum(population) as hospitals_score,sum(governance_score * population) / sum(population) as governance_score
+	--PLACEHOLDER
+	--,sum(XXX_score * population)/ sum(population) as XXX_score
 into "PH_datamodel"."total_scores_level2"
 from "PH_datamodel"."total_scores_level3" t0
 join "PH_datamodel"."Indicators_3_TOTAL" t1	on t0.pcode_level3 = t1.pcode
 group by t1.pcode_parent
---order by 2 desc
 ;
 
 
---------------------------------------
--- 2.5: Export ranges per indicator --
---------------------------------------
-/*
-select --min(health_density) as min_pov
-	--,max(health_density) as max_pov
-	t1.*,t2.*,t3.*
-from "PH_datamodel"."Geo_level3" t0
-left join "PH_datamodel"."vulnerability_scores" t1	on t0.pcode_level3 = t1.pcode_level3
-left join "PH_datamodel"."hazard_scores" t2		on t0.pcode_level3 = t2.pcode_level3
-left join "PH_datamodel"."coping_capacity_scores" t3	on t0.pcode_level3 = t3.pcode_level3
-*/
+
 

@@ -5,6 +5,7 @@
 
 
 --TEMP: copy the table structure, so that it exists (errors otherwise)
+drop table if exists "NP_datamodel"."total_scores_level2";
 select *
 into "NP_datamodel"."total_scores_level2"
 from "MW_datamodel"."total_scores_level2"

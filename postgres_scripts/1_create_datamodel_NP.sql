@@ -84,13 +84,49 @@ INTO "NP_datamodel"."Indicators_3_vulnerability"
 FROM np_source."Indicators_3_evelien"
 ;
 
+--walltype
 drop table if exists "NP_datamodel"."Indicators_3_walltype";
-SELECT 'NP-' || ocha_pcode as pcode_level3
-	,walls_mudbonded, walls_cementbonded, walls_wood, 
-       walls_bamboo, walls_unbakedbrick, walls_others, walls_notstated
-INTO "NP_datamodel"."Indicators_3_walltype"
+with total as (
+SELECT ocha_pcode
+	,(walls_mudbonded+ walls_cementbonded+ walls_wood+ 
+       walls_bamboo+ walls_unbakedbrick+ walls_others+ walls_notstated) as total
 FROM np_source."Indicators_3_evelien"
+)
+select 'NP-' || t0.ocha_pcode as pcode_level3
+	,walls_mudbonded/total as walls_mudbonded
+	,walls_cementbonded/total as walls_cementbonded
+	,walls_wood/total as walls_wood
+	,walls_bamboo/total as walls_bamboo
+	,walls_unbakedbrick/total as walls_unbakedbrick
+	,walls_others/total as walls_others
+	,walls_notstated/total as walls_notstated
+INTO "NP_datamodel"."Indicators_3_walltype"
+FROM "np_source"."Indicators_3_evelien" t0
+LEFT JOIN total on t0.ocha_pcode = total.ocha_pcode
 ;
+
+--rooftype
+drop table if exists "NP_datamodel"."Indicators_3_rooftype";
+with total as (
+SELECT ocha_pcode
+	,(roof_thatch+ roof_iron+ roof_tile+ roof_rcc+ roof_wood+ roof_mud+ 
+       roof_others+ roof_notstated) as total
+FROM np_source."Indicators_3_evelien"
+)
+select 'NP-' || t0.ocha_pcode as pcode_level3
+	,roof_thatch/total as roof_thatch
+	,roof_iron/total as roof_iron
+	,roof_tile/total as roof_tile
+	,roof_rcc/total as roof_rcc
+	,roof_wood/total as roof_wood
+	,roof_mud/total as roof_mud
+	,roof_others/total as roof_others
+	,roof_notstated/total as roof_notstated
+INTO "NP_datamodel"."Indicators_3_rooftype"
+FROM "np_source"."Indicators_3_evelien" t0
+LEFT JOIN total on t0.ocha_pcode = total.ocha_pcode
+;
+
 
 /*
 SELECT index, dist_code, ocha_pcode, zone, reg_code, zone_code, dist_name, 
@@ -172,7 +208,7 @@ left join (
 	on t0.pcode_level2 = level3.pcode_parent
 ;
 
---select * from "NP_datamodel"."Indicators_3_TOTAL"
+--CREATE DUMMY RISK FRAMEWORK TABLE as it needs to exist for the stored procedures to work
 drop table if exists "NP_datamodel"."total_scores_level2";
 select *
 into "NP_datamodel"."total_scores_level2"

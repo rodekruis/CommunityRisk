@@ -129,8 +129,8 @@ CREATE OR REPLACE FUNCTION usp_geo(state int,country varchar,pcode varchar) RETU
 
 	SELECT CASE 
 		WHEN $1 = 2 THEN usp_geo_level2($2)
-		WHEN $1 = 3 THEN usp_geo_level3($3)
-		WHEN $1 = 4 THEN usp_geo_level4($3)
+		WHEN $1 = 3 THEN usp_geo_level3($2,$3)
+		WHEN $1 = 4 THEN usp_geo_level4($2,$3)
 		END
 	;	
 
@@ -205,32 +205,17 @@ $$ LANGUAGE sql;
 -- Combine Geodata and indicator-data in 1 JSON --
 --------------------------------------------------
 
-/* Metadata is no longer retrieved through PG, but the csv is loaded from the data/public folder
-DROP FUNCTION IF EXISTS usp_meta(varchar);
-CREATE OR REPLACE FUNCTION usp_meta(country varchar) RETURNS json AS $$
-	select array_to_json(array_agg(meta))
-	from (
-		select *
-		from "metadata".metadata 
-		where country_code in ('All',$1)
-	) meta
-	;
-$$ LANGUAGE sql;
-;
-*/
-
 CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode varchar) RETURNS json AS $$
 
 	SELECT row_to_json(data)
 	FROM (
 	SELECT usp_ind($1,$2,$3) as ind
 		, usp_geo($1,$2,$3) as geo
---		, usp_meta($2) as meta
 	) data
 	;
 $$ LANGUAGE sql;
 
---select usp_data(2,'NP','');
+--select usp_data(2,'MW','');
 
 
 

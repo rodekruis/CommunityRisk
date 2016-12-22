@@ -7,7 +7,7 @@ angular.module('dashboards')
 		//Define variables
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.country_code = 'PH';
+		$scope.country_code = 'NP';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		$scope.admlevel = 2;
 		$scope.metric = '';
@@ -477,20 +477,23 @@ angular.module('dashboards')
 				var vulnerability = document.getElementById('vulnerability');
 				var hazard = document.getElementById('hazard');
 				var coping = document.getElementById('coping');
-				//var other = document.getElementById('other');
+				var other = document.getElementById('other');
 				while (general.firstChild) { general.removeChild(general.firstChild); }
 				while (scores.firstChild) { scores.removeChild(scores.firstChild); }
 				while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); }
 				while (hazard.firstChild) { hazard.removeChild(hazard.firstChild); }
 				while (coping.firstChild) { coping.removeChild(coping.firstChild); }
-				//while (other.firstChild) { other.removeChild(other.firstChild); }
+				while (other.firstChild) { other.removeChild(other.firstChild); }
 				for (var i=0;i<$scope.tables.length;i++) {
 					var record = $scope.tables[i];
+					
+					if (!meta_icon[record.name]) {var icon = 'modules/dashboards/img/undefined.png';}
+					else {var icon = 'modules/dashboards/img/'+meta_icon[record.name];}
 					
 					if (record.group === 'general') {
 						
 						if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
-					
+						
 						var div = document.createElement('div');
 						div.setAttribute('class','row profile-item');
 						var parent = document.getElementById(record.group);
@@ -500,7 +503,7 @@ angular.module('dashboards')
 						div.appendChild(div0);	
 						var img = document.createElement('img');
 						img.setAttribute('class','community-icon');
-						img.setAttribute('src','modules/dashboards/img/' + meta_icon[record.name]);
+						img.setAttribute('src',icon);
 						div0.appendChild(img);
 						var div1 = document.createElement('div');
 						div1.setAttribute('class','col col-md-5 general-component-label');
@@ -528,7 +531,68 @@ angular.module('dashboards')
 						img.setAttribute('style','height:17px');
 						button.appendChild(img);
 					
-					} else if (record.group) {
+					} else if (record.group === 'other') {
+						
+						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+							var width = d_prev[record.scorevar_name]*10;
+						} else {
+							var width = dimensions[record.name].top(1)[0].value.finalVal*10;
+						}
+
+						var div = document.createElement('div');
+						div.setAttribute('class','component-section');
+						var parent = document.getElementById(record.group);
+						parent.appendChild(div);
+						var div0 = document.createElement('div');
+						div0.setAttribute('class','col-md-2');
+						div.appendChild(div0);	
+						var img1 = document.createElement('img');
+						img1.setAttribute('style','height:20px');
+						img1.setAttribute('src',icon);
+						div0.appendChild(img1);
+						var div1 = document.createElement('div');
+						div1.setAttribute('class','col-md-3 component-label');
+						div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
+						div1.innerHTML = meta_label[record.name];
+						$compile(div1)($scope);
+						div.appendChild(div1);	
+						var div1a = document.createElement('div');
+						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
+						div1a.setAttribute('id',record.name);
+						div1a.innerHTML = keyvalue[record.name];
+						div1.appendChild(div1a);
+						var div2 = document.createElement('div');
+						div2.setAttribute('class','col-md-5');
+						div.appendChild(div2);
+						var div2a = document.createElement('div');
+						div2a.setAttribute('class','component-scale');
+						div2.appendChild(div2a);
+						var div2a1 = document.createElement('div');
+						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
+						div2a1.setAttribute('id','bar-'+record.name);
+						div2a1.setAttribute('style','width:'+ width + '%');
+						div2a.appendChild(div2a1);
+						var img2 = document.createElement('img');
+						img2.setAttribute('class','scale-icon');
+						img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
+						div2a.appendChild(img2);
+						var div3 = document.createElement('div');
+						div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+						div.appendChild(div3);
+						var button = document.createElement('button');
+						button.setAttribute('type','button');
+						button.setAttribute('class','btn-modal');
+						button.setAttribute('data-toggle','modal');
+						button.setAttribute('ng-click','info(\'' + record.name + '\')');
+						div3.appendChild(button);
+						$compile(button)($scope);
+						var img3 = document.createElement('img');
+						img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
+						img3.setAttribute('style','height:17px');
+						button.appendChild(img3);
+					}
+					
+					else if (record.group) {
 						
 						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
 							var width = d_prev[record.scorevar_name]*10;
@@ -536,9 +600,6 @@ angular.module('dashboards')
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
 						}
 
-						if (!meta_icon[record.name]) {var icon = 'modules/dashboards/img/undefined.png';}
-						else {var icon = 'modules/dashboards/img/'+meta_icon[record.name];}
-					
 						var div = document.createElement('div');
 						div.setAttribute('class','component-section');
 						var parent = document.getElementById(record.group);
@@ -628,7 +689,23 @@ angular.module('dashboards')
 						var div2 = document.getElementById(record.name);
 						div2.innerHTML = keyvalue[record.name] + ' ' + unit;
 					
-					} else if (record.group) {
+					} else if (record.group === 'other') {
+						
+						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+							var width = d_prev[record.scorevar_name]*10;
+						} else {
+							var width = dimensions[record.name].top(1)[0].value.finalVal*10;
+						}
+					
+						var div1a = document.getElementById(record.name);
+						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
+						div1a.innerHTML = keyvalue[record.name];
+						var div2a1 = document.getElementById('bar-'+record.name);
+						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
+						div2a1.setAttribute('style','width:'+ width + '%');
+					}
+					
+					else if (record.group) {
 						
 						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
 							var width = d_prev[record.scorevar_name]*10;

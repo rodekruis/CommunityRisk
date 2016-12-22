@@ -92,7 +92,7 @@ INTO "NP_datamodel"."Indicators_3_walltype"
 FROM np_source."Indicators_3_evelien"
 ;
 
-
+/*
 SELECT index, dist_code, ocha_pcode, zone, reg_code, zone_code, dist_name, 
        areakm2, housing_units2011, house_density, total_buildings, total_hh2011, 
        hh_size, popdensity, pop, earlydeath, illiteracy, nosafewater, 
@@ -103,6 +103,7 @@ SELECT index, dist_code, ocha_pcode, zone, reg_code, zone_code, dist_name,
        roof_thatch, roof_iron, roof_tile, roof_rcc, roof_wood, roof_mud, 
        roof_others, roof_notstated
   FROM np_source."Indicators_3_evelien";
+  */
 
 
 ------------------
@@ -150,7 +151,7 @@ left join "NP_datamodel"."Indicators_3_vulnerability" 	t1	on t0.pcode_level3 = t
 drop table if exists "NP_datamodel"."Indicators_2_TOTAL";
 select t0.pcode_level2 as pcode
 	,level3.population,land_area,pop_density
-	,level3.illiteracy,nosafewater,malnourished,provisioning,hpi,hdi
+	,level3.earlydeath,illiteracy,nosafewater,malnourished,provisioning,hpi,hdi
 into "NP_datamodel"."Indicators_2_TOTAL"
 from "NP_datamodel"."Geo_level2" t0
 left join (
@@ -170,3 +171,11 @@ left join (
 	) level3
 	on t0.pcode_level2 = level3.pcode_parent
 ;
+
+--select * from "NP_datamodel"."Indicators_3_TOTAL"
+drop table if exists "NP_datamodel"."total_scores_level2";
+select *
+into "NP_datamodel"."total_scores_level2"
+from "MW_datamodel"."total_scores_level2"
+limit 0;
+

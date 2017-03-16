@@ -33,11 +33,11 @@ index;country_code;variable;label;unit;format;icon_src;year;source_link;descript
 31;MW;infant_mortality;Infant mortality rate;;decimal0;;2012;http://malawi.opendataforafrica.org/MLRS2016/regional-statistics-of-malawi-2014;National Statistics Office of Malawi. Infant mortality rate (<1 year) per 1,000 born infants.;vulnerability;weighted_avg;population;infant_mort_score
 32;MW;watersource_piped;% with piped water;;percentage;;2011;http://malawi.opendataforafrica.org/MLRS2016/regional-statistics-of-malawi-2014;National Statistics Office of Malawi. Percentage of households with piped water into house or communal, vs. water from open/protected wells or rivers/ponds/etc.;coping;weighted_avg;population;pipewater_score
 33;MW;construction_semipermanent;% with (semi)permanent house materials;;percentage;;2011;http://malawi.opendataforafrica.org/MLRS2016/regional-statistics-of-malawi-2014;National Statistics Office of Malawi. Percentage of households with (semi)permanent construction materials vs. traditional materials.;vulnerability;weighted_avg;population;construction_score
-34;NP;population;Population;;decimal0;population.png;;https://data.humdata.org/dataset/nepal-population-statistics-census-2011;;general;sum;;
-35;NP;earlydeath;Early death %;;percentage;;;;;other;weighted_avg;population;
-36;NP;illiteracy;Illiteracy %;;percentage;;;;;other;weighted_avg;population;
-37;NP;nosafewater;No safe water %;;percentage;;;;;other;weighted_avg;population;
-38;NP;malnourished;Malnourished %;;percentage;;;;;other;weighted_avg;population;
-39;NP;provisioning;Provisioning %;;percentage;;;;;other;weighted_avg;population;
-40;NP;hpi;Human Poverty Index;;decimal2;;;;;other;weighted_avg;population;
-41;NP;hdi;Human Development Index;;decimal2;;;;;other;weighted_avg;population;
+34;NP;population;Population;;decimal0;population.png;2011;https://data.humdata.org/dataset/nepal-population-statistics-census-2011;;general;sum;;
+35;NP;earlydeath;Early death %;;percentage;;2011;https://data.humdata.org/dataset/human-poverty-index-value-by-districts-2011;% of population not expected to survive age 40;other;weighted_avg;population;
+36;NP;illiteracy;Illiteracy %;;percentage;;2011;https://data.humdata.org/dataset/human-poverty-index-value-by-districts-2011;Adult illiteracy rate;other;weighted_avg;population;
+37;NP;nosafewater;No safe water %;;percentage;;2011;https://data.humdata.org/dataset/human-poverty-index-value-by-districts-2011;% withouth safe water;other;weighted_avg;population;
+38;NP;malnourished;Malnourished %;;percentage;;2011;https://data.humdata.org/dataset/human-poverty-index-value-by-districts-2011;% of malnourished children under 5 ;other;weighted_avg;population;
+39;NP;provisioning;Provisioning %;;percentage;;2011;https://data.humdata.org/dataset/human-poverty-index-value-by-districts-2011;Deprivation in economic provisioning;other;weighted_avg;population;
+40;NP;hpi;Human Poverty Index;;decimal2;;2011;https://data.humdata.org/dataset/human-poverty-index-value-by-districts-2011;Human Poverty Index;other;weighted_avg;population;
+41;NP;hdi;Human Development Index;;decimal2;;2011;https://data.humdata.org/dataset/district-wise-human-development-index-2011;Human Development Index;other;weighted_avg;population;

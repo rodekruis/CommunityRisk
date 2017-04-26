@@ -215,7 +215,7 @@ CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode varchar) RET
 	;
 $$ LANGUAGE sql;
 
---select usp_data(2,'NP','');
+--select usp_data(2,'INFORM','');
 
 
 

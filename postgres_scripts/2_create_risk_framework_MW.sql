@@ -291,6 +291,23 @@ XXX_score as (
 	left join XXX_minmax t1 on 1=1
 	),
 */	
+electricity as (
+	select t0.pcode_level2
+		,t1.electricity 		--POSSIBLE LOG-TRANSFORMATION HERE
+	from "MW_datamodel"."Geo_level2" 	t0
+	left join "MW_datamodel"."Indicators_2_TOTAL"	t1 on t0.pcode_level2 = t1.pcode
+	), 
+electricity_minmax as (
+	select min(electricity) as min
+		,max(electricity) as max
+	from electricity
+	),
+electricity_score as (
+	select t0.*
+		,((max - electricity) / (max - min)) * 10 as electricity_score		--POSSIBLE SCALE INVERSION HERE: ,((max - XXX) / (max - min)) * 10 as XXX_score
+	from electricity t0
+	left join electricity_minmax t1 on 1=1
+	),
 --travel time: higher travel time is lower coping capacity, so higher (Lack of Coping Capacity) score
 travel as (
 	select t0.pcode_level2
@@ -395,6 +412,7 @@ select t1.pcode_level2
 	,mobile_score,mobile
 	,sanitation_score,sanitation
 	,pipewater_score,pipewater
+	,electricity_score,electricity
 	--PLACEHOLDER
 	--,XXX_score,XXX
 	,(10-power(coalesce(
@@ -403,6 +421,7 @@ select t1.pcode_level2
 			 * coalesce((10-mobile_score)/10*9+1,1)
 			 * coalesce((10-sanitation_score)/10*9+1,1)
 			 * coalesce((10-pipewater_score)/10*9+1,1)
+			 * coalesce((10-electricity_score)/10*9+1,1)
 			 --PLACEHOLDER
 			 --* coalesce((10-XXX_score)/10*9+1,1)
 			,cast(1 as float)/cast(
@@ -410,6 +429,7 @@ select t1.pcode_level2
 		case when hospitals_score is null then 0 else 1 end + 
 		case when mobile_score is null then 0 else 1 end + 
 		case when sanitation_score is null then 0 else 1 end + 
+		case when electricity_score is null then 0 else 1 end + 
 		--PLACEHOLDER
 		--case when XXX_score is null then 0 else 1 end + 
 		case when pipewater_score is null then 0 else 1 end)		
@@ -421,6 +441,7 @@ left join hospitals_score t2	on t0.pcode_level2 = t2.pcode_level2
 left join mobile_score t3 	on t0.pcode_level2 = t3.pcode_level2
 left join sanitation_score t4 	on t0.pcode_level2 = t4.pcode_level2
 left join pipewater_score t5 	on t0.pcode_level2 = t5.pcode_level2
+left join electricity_score t6 	on t0.pcode_level2 = t6.pcode_level2
 --PLACEHOLDER
 --left join XXX_score t6 		on t0.pcode_level2 = t6.pcode_level2
 ;
@@ -437,9 +458,9 @@ select t1.pcode_level2
 	,coping_capacity_score
 	,poverty_score,life_exp_score,infant_mort_score,construction_score,fcs_score
 	,flood_score,earthquake_score,drought_score
-	,travel_score,hospitals_score,mobile_score,sanitation_score,pipewater_score
+	,travel_score,hospitals_score,mobile_score,sanitation_score,pipewater_score,electricity_score
 	--PLACEHOLDER
-	--,XXX_score,XXX
+	--,XXX_score
 	,(10 - power(coalesce((10-vulnerability_score)/10*9+1,1)
 		* coalesce((10-hazard_score)/10*9+1,1)
 		* coalesce((10-coping_capacity_score)/10*9+1,1)

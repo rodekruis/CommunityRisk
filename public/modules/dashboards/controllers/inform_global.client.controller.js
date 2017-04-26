@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('DistrictDashboardsController', ['$scope','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	.controller('InformGlobalController', ['$scope','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
 	function($scope,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 		
 		//Define variables
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.country_code = 'PH';
+		$scope.country_code = 'INFORM';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		$scope.admlevel = 2;
 		$scope.metric = '';
@@ -110,15 +110,18 @@ angular.module('dashboards')
 		  
 		  // load data
 		  var d = {};
+		  //var geo_data = dashboard.sources.Worldmap.data;
+		  //d.Districts = topojson.feature(geo_data,geo_data.objects[object_name]);
 		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
+		  
 		  //d.Metadata = pgData.usp_data.meta;
 		  var meta = dashboard.sources.Metadata.data;
-		  d.Metadata = $.grep(meta, function(e){ return e.country_code == 'All' || e.country_code == $scope.country_code; });
+		  d.Metadata = $.grep(meta, function(e){ return e.country_code == $scope.country_code; });
 		  d.Country_meta = dashboard.sources.Country_meta.data;
-		  $scope.geom = pgData.usp_data.geo;
-		  console.log(d);
+		  $scope.geom = d.Districts //pgData.usp_data.geo;
 		  
+		  console.log(d);
 		  // generate the actual content of the dashboard
 		  $scope.generateCharts(d);
 		  
@@ -235,7 +238,8 @@ angular.module('dashboards')
 			if ($scope.admlevel === 2) { 
 				$scope.name_selection = country_name[$scope.country_code]; 
 			}
-			if (zoom_max < 4) {document.getElementById('level4').style.visibility = 'hidden'; }			
+			if (zoom_max < 4) {document.getElementById('level4').style.visibility = 'hidden'; }		
+			if (zoom_max < 3) {document.getElementById('level3').style.visibility = 'hidden'; }		
 			
 			// get the lookup tables
 			var lookup = $scope.genLookup($scope.config.nameAttribute);
@@ -395,7 +399,7 @@ angular.module('dashboards')
 				var keyvalue = [];
 				$scope.tables.forEach(function(t) {
 					var key = t.name;
-					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+					if ($scope.admlevel == zoom_max && zoom_max > zoom_min && $scope.filters.length == 0) {
 						if(meta_format[t.name] === 'decimal0'){
 							keyvalue[key] =  dec0Format(d_prev[t.name]);
 						} else if(meta_format[t.name] === 'percentage'){
@@ -434,7 +438,7 @@ angular.module('dashboards')
 			var high_med_low = function(ind,ind_score) {
 				
 				if (dimensions_scores[ind]) {
-					if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+					if ($scope.admlevel == zoom_max && zoom_max > zoom_min && $scope.filters.length == 0) {
 							var width = d_prev[ind_score];
 						} else {
 							var width = dimensions_scores[ind].top(1)[0].value.finalVal;
@@ -478,13 +482,11 @@ angular.module('dashboards')
 				var vulnerability = document.getElementById('vulnerability');
 				var hazard = document.getElementById('hazard');
 				var coping = document.getElementById('coping');
-				var other = document.getElementById('other');
 				while (general.firstChild) { general.removeChild(general.firstChild); }
 				while (scores.firstChild) { scores.removeChild(scores.firstChild); }
 				while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); }
 				while (hazard.firstChild) { hazard.removeChild(hazard.firstChild); }
 				while (coping.firstChild) { coping.removeChild(coping.firstChild); }
-				while (other.firstChild) { other.removeChild(other.firstChild); }
 				for (var i=0;i<$scope.tables.length;i++) {
 					var record = $scope.tables[i];
 					
@@ -532,70 +534,9 @@ angular.module('dashboards')
 						img.setAttribute('style','height:17px');
 						button.appendChild(img);
 					
-					} else if (record.group === 'other') {
+					} else if (record.group) {
 						
-						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
-							var width = d_prev[record.scorevar_name]*10;
-						} else {
-							var width = dimensions[record.name].top(1)[0].value.finalVal*10;
-						}
-
-						var div = document.createElement('div');
-						div.setAttribute('class','component-section');
-						var parent = document.getElementById(record.group);
-						parent.appendChild(div);
-						var div0 = document.createElement('div');
-						div0.setAttribute('class','col-md-2');
-						div.appendChild(div0);	
-						var img1 = document.createElement('img');
-						img1.setAttribute('style','height:20px');
-						img1.setAttribute('src',icon);
-						div0.appendChild(img1);
-						var div1 = document.createElement('div');
-						div1.setAttribute('class','col-md-3 component-label');
-						div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
-						div1.innerHTML = meta_label[record.name];
-						$compile(div1)($scope);
-						div.appendChild(div1);	
-						var div1a = document.createElement('div');
-						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
-						div1a.setAttribute('id',record.name);
-						div1a.innerHTML = keyvalue[record.name];
-						div1.appendChild(div1a);
-						var div2 = document.createElement('div');
-						div2.setAttribute('class','col-md-5');
-						div.appendChild(div2);
-						var div2a = document.createElement('div');
-						div2a.setAttribute('class','component-scale');
-						div2.appendChild(div2a);
-						var div2a1 = document.createElement('div');
-						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
-						div2a1.setAttribute('id','bar-'+record.name);
-						div2a1.setAttribute('style','width:'+ width + '%');
-						div2a.appendChild(div2a1);
-						var img2 = document.createElement('img');
-						img2.setAttribute('class','scale-icon');
-						img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
-						div2a.appendChild(img2);
-						var div3 = document.createElement('div');
-						div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
-						div.appendChild(div3);
-						var button = document.createElement('button');
-						button.setAttribute('type','button');
-						button.setAttribute('class','btn-modal');
-						button.setAttribute('data-toggle','modal');
-						button.setAttribute('ng-click','info(\'' + record.name + '\')');
-						div3.appendChild(button);
-						$compile(button)($scope);
-						var img3 = document.createElement('img');
-						img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
-						img3.setAttribute('style','height:17px');
-						button.appendChild(img3);
-					}
-					
-					else if (record.group) {
-						
-						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+						if ($scope.admlevel == zoom_max && zoom_max > zoom_min && $scope.filters.length == 0) {
 							var width = d_prev[record.scorevar_name]*10;
 						} else {
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
@@ -690,25 +631,9 @@ angular.module('dashboards')
 						var div2 = document.getElementById(record.name);
 						div2.innerHTML = keyvalue[record.name] + ' ' + unit;
 					
-					} else if (record.group === 'other') {
+					} else if (record.group) {
 						
-						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
-							var width = d_prev[record.scorevar_name]*10;
-						} else {
-							var width = dimensions[record.name].top(1)[0].value.finalVal*10;
-						}
-					
-						var div1a = document.getElementById(record.name);
-						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
-						div1a.innerHTML = keyvalue[record.name];
-						var div2a1 = document.getElementById('bar-'+record.name);
-						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
-						div2a1.setAttribute('style','width:'+ width + '%');
-					}
-					
-					else if (record.group) {
-						
-						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
+						if ($scope.admlevel == zoom_max && zoom_max > zoom_min && $scope.filters.length == 0) {
 							var width = d_prev[record.scorevar_name]*10;
 						} else {
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
@@ -759,14 +684,14 @@ angular.module('dashboards')
 						return d ? mapChart.colors()(d) : '#cccccc';
 					} else {
 						if (d==0) {return '#cccccc';} 
-						else if (d<3.5) {return '#1a9641';} else if (d<4.5) {return '#a6d96a';} else if (d<5.5) {return '#f1d121';} else if (d<6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
+						else if (d<3.5) {return '#1a9641';} else if (d<=4.5) {return '#a6d96a';} else if (d<=5.5) {return '#f1d121';} else if (d<=6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
 					}
 				})
 				.featureKeyAccessor(function(feature){
 					return feature.properties.pcode;
 				})
 				.popup(function(d){
-					return lookup[d.key]; //.concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value));
+					return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value));
 				})
 				.renderPopup(true)
 				.turnOnControls(true)
@@ -814,25 +739,7 @@ angular.module('dashboards')
 				})
 			;
 			
-			/* rowchart for tabslideout possibly
-			rowChart
-				.width(200)
-				.height(2000)
-				.margins({top: 0, left: -5, right: 50, bottom: 20})
-				.dimension(whereDimension_tab)
-				.group(whereGroupSum_tab)
-				.colors(['#74a9cf'])
-                .colorDomain([0,0])
-                .colorAccessor(function(d, i){return 1;})
-				//.colorDomain([0, 1])
-				//.colorAccessor(function (d) {if(d.value > 0){return 1;} else {return 0;}})   
-				.ordering(function(d) {return -d.value + lookup[d.key];})
-				.label(function(d) { return lookup[d.key];})
-				.renderLabel(true)
-				.xAxis().ticks(0)
-			;	
-			*/
-			
+		
 				
 			///////////////////////////
 			// MAP RELATED FUNCTIONS //
@@ -900,7 +807,7 @@ angular.module('dashboards')
 							return d ? mapChart.colors()(d) : '#cccccc';
 						} else {
 							if (d==0) {return '#cccccc';} 
-							else if (d<3.5) {return '#1a9641';} else if (d<4.5) {return '#a6d96a';} else if (d<5.5) {return '#f1d121';} else if (d<6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
+							else if (d<3.5) {return '#1a9641';} else if (d<=4.5) {return '#a6d96a';} else if (d<=5.5) {return '#f1d121';} else if (d<=6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
 						}
 					})
 					;

@@ -118,7 +118,13 @@ INTO "MW_datamodel"."Indicators_3_health"
 FROM mw_source."Indicators_3_health"
 ;
 
-
+--electricity data Arjen
+drop table if exists "MW_datamodel"."Indicators_3_electricity";
+select "P_CODE" as pcode_level3
+	,case "Elec_Im_Ni" when  'Yes' then 1 when 'No' then 0 else 0.5 end as electricity
+into "MW_datamodel"."Indicators_3_electricity"
+from "mw_source"."Indicators_3_electricity"
+;
 
 ------------------
 -- Level 2 data --
@@ -196,6 +202,7 @@ select t0.pcode_level3 as pcode
 	,t4.nr_health_facilities
 	,case when population/10000 = 0 then null else cast(t4.nr_health_facilities as float)/ (cast(population as float) / 10000) end as health_density
 	,t5.poverty_incidence
+	,t6.electricity
 	--ADD NEW VARIABLES HERE
 	--,t6.XXX
 into "MW_datamodel"."Indicators_3_TOTAL"
@@ -205,6 +212,7 @@ left join "MW_datamodel"."Indicators_3_hazards" 	t2	on t0.pcode_level3 = t2.pcod
 left join "MW_datamodel"."Indicators_3_gdp_traveltime" 	t3	on t0.pcode_level3 = t3.pcode_level3
 left join "MW_datamodel"."Indicators_3_health" 		t4	on t0.pcode_level3 = t4.pcode_level3
 left join "MW_datamodel"."Indicators_3_poverty" 	t5	on t0.pcode_level3 = t5.pcode_level3
+left join "MW_datamodel"."Indicators_3_electricity" 	t6	on t0.pcode_level3 = t6.pcode_level3
 --ADD NEW JOINED TABLE HERE
 --left join "MW_datamodel"."Indicators_3_XXX" 		t6	on t0.pcode_level3 = t6.pcode_level3
 ;
@@ -214,6 +222,7 @@ select t0.pcode_level2 as pcode
 	,level3.population,land_area,pop_density
 		,cyclone_phys_exp,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp,tsunami_phys_exp
 		,gdp_per_capita,traveltime,nr_health_facilities,health_density,poverty_incidence
+		,electricity
 	--PLACEHOLDER: Add the newly added level3 indicators here again as well
 	--,level3.XXX
 	,t1.FCS
@@ -237,6 +246,7 @@ left join (
 		,sum(nr_health_facilities) as nr_health_facilities
 		,sum(health_density * population) / sum(population) as health_density
 		,sum(poverty_incidence * population) / sum(population) as poverty_incidence
+		,sum(electricity * population) / sum(population) as electricity
 		--PLACEHOLDER: ADD THE NEWLY ADDED LEVEL4 INDICATORS HERE AGAIN AS WELL with the appropriate transformation
 		--,sum(XXX * population) / sum(population) as XXX
 	from "MW_datamodel"."Indicators_3_TOTAL"
@@ -245,7 +255,7 @@ left join (
 	on t0.pcode_level2 = level3.pcode_parent
 left join "MW_datamodel"."Indicators_2_FCS" 	t1	on t0.pcode_level2 = t1.pcode_level2
 left join "MW_datamodel"."Indicators_2_knoema" 	t2	on t0.pcode_level2 = t2.pcode_level2
---PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL3 ALREADY) 
+--PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL2 ALREADY) 
 --left join "MW_datamodel"."Indicators_2_XXX" 	t2	on t0.pcode_level2 = t2.pcode_level2
 ;
 

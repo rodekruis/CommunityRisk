@@ -1,0 +1,312 @@
+<section class="section-expand" data-ng-controller="DistrictDashboardsController" data-ng-init="initiate('PI')">
+	
+	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#!/">
+				<img src="modules/dashboards/img/logo.svg" class="logo">
+				Community Risk Assessment <span class="title-hightlight">Toolbox</span>
+			</a>
+		</div>
+
+		<!-- start: view nav -->
+		<ul class="nav navbar-top-links navbar-right">
+			<li class="dropdown">
+				<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+					<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+						  Select View
+					<i class="fa fa-angle-down export-btn-arrow"></i>
+				</a>
+				<ul class="dropdown-menu export-items">
+					<li>
+						<a ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">Community Risk View</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">Priority Index View</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		<!-- end: view nav -->
+		<!-- start: export nav -->
+		<ul class="nav navbar-top-links navbar-right">
+			<li class="dropdown">
+				<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+					<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+						  Export Options
+					<i class="fa fa-angle-down export-btn-arrow"></i>
+				</a>
+				<ul class="dropdown-menu export-items">
+					<li>
+						<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a id="download" ng-click="export_csv()">Export (CSV)</a>
+					</li>
+				</ul>
+				<!-- /.dropdown-tasks -->
+			</li>
+		</ul>
+		<!-- end: export nav -->
+	</nav>
+	<!-- end: navbar-header -->
+	
+	<div class="content-wrapper">
+	
+		<!-- start: sidebar -->
+		<div class="navbar-default sidebar" role="navigation">
+
+			<!-- start: community profiles -->
+			<div class="community-profiles-wrapper">
+				<!-- typhoon selector -->
+				<ul class="nav navbar-top-links navbar-left">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+							<strong>Typhoon {{typhoon}}</strong> Choose other: 
+							<i class="fa fa-angle-down export-btn-arrow"></i>
+						</a>
+						<ul class="dropdown-menu export-items">
+							<li><strong>Prediction+Actuals:</strong></li>
+							<li><a ng-click="change_typhoon('Haima')">Haima</a></li>
+							<li><strong>Prediction only:</strong></li>
+							<li><a ng-click="change_typhoon('Nina')">Nina</a></li>
+							<li><strong>Actuals only:</strong></li>
+							<li><a ng-click="change_typhoon('Haiyan')">Haiyan</a></li>
+							<li><a ng-click="change_typhoon('Melor')">Melor</a></li>
+							<li><a ng-click="change_typhoon('Rammasun')">Rammasun</a></li>
+							<li><a ng-click="change_typhoon('Hagupit')">Hagupit</a></li>
+						</ul>
+						<!-- /.dropdown-tasks -->
+					</li>
+				</ul>
+				<hr style="margin-bottom:25px">
+				<div id="count-info" class="general-info">
+					{{type_text}}<hr style="margin-top: 10px; margin-bottom: 10px">
+					<strong>Date: </strong>{{start_date}} to {{end_date}}<hr style="margin-top: 10px; margin-bottom: 10px">
+					<strong>Overall damage: </strong><span class="total-count-pi">{{total_damage}}</span> houses damaged out of 
+					<span class="total-count-pi">{{total_potential}}</span> total houses in typhoon area, or  
+					<span class="total-count-pi">{{total_intensity}}</span><hr style="margin-top: 10px; margin-bottom: 10px">
+					<strong>Scope: </strong><span class="total-count total-count-pi"></span> {{subtype_selection}} involved (<span class="filter-count filter-count-pi"></span> selected) 
+					<br><a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
+				</div>
+				<!-- <div id="count-info" class="general-info">
+					<ul>
+					<li><strong>Date: </strong>{{start_date}} to {{end_date}}</li>
+					<li><strong>Overall damage: </strong><span class="total-count-pi">{{total_damage}}</span> houses damaged out of 
+					<span class="total-count-pi">{{total_potential}}</span> total houses in typhoon area, or  
+					<span class="total-count-pi">{{total_intensity}}</span></li>
+					<li><strong>Scope: </strong><span class="total-count total-count-pi"></span> {{subtype_selection}} involved (<span class="filter-count filter-count-pi"></span> selected) 
+					<br><a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a></li>
+					</ul>
+				</div> -->
+				<div class="row"></div>
+				<div class='tablearea' id='general'></div>
+				<div class="row"></div>
+			</div>
+			<!-- end: community profiles -->
+
+			<!-- start: accordion with stats  -->
+			<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
+				<div class="card">
+					<div class="card-header" role="tab" id="headingFour">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/undefined.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Predicted Damage</span>
+								<span class="panel-header-description">Predicted damaged houses per municipality</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseFour" class="collapse in" role="tabpanel" aria-labelledby="headingFour">
+						<div class="card-block" id="predictions"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingOne">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/undefined.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Actual Damage</span>
+								<span class="panel-header-description">Various measures of damaged houses per municipality</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+						<div class="card-block" id="damage"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingFive">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/undefined.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Prediction Errors</span>
+								<span class="panel-header-description">Measures of Actual vs. Prediction</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseFive" class="collapse" role="tabpanel" aria-labelledby="headingFive">
+						<div class="card-block" id="pred_error"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingTwo">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/undefined.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Typhoon features</span>
+								<span class="panel-header-description">Features specific to the typhoon</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="card-block" id="typhoon"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingThree">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/undefined.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Geographic features</span>
+								<span class="panel-header-description">Geographic features of municipalities</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+						<div class="card-block" id="geographic"></div>
+					</div>
+				</div>
+			</div>
+			<!-- end: accordion with stats -->
+
+
+		</div>
+		<!-- end: sidebar -->
+
+		<!-- start: map -->
+		<div class="map-wrapper" style="position: relative">
+
+			<div id="map-chart" style="position:absolute; width:100%; height:100%"></div> 
+			
+			<!-- start: zoom navigation -->
+			<div class="zoom-level-nav col-md-7">
+				<div class="btn-group zoom-level" role="group">
+					<button style="background-color: #1a9641; color:white" type="button" class="btn btn-secondary">
+						<i class="fa fa-tachometer" aria-hidden="true"></i>
+						<span class="button-label">{{metric_label}}</span>
+					</button>
+					<button id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
+						<i class="fa fa-globe" aria-hidden="true"></i>
+						<span class="button-label">{{country_selection}}</span>
+					</button>
+				</div>
+			</div>
+			<!-- end: zoom navigation -->
+			
+
+			<!-- the above div and inline styles are only for placement -->
+			<div id="mapPopup" class="map-popup" style="position:absolute;">
+				<div class="popup-header">{{name_popup}}
+					<button id="zoomin_icon" type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
+						<i class="fa fa-search-plus pull-right big-icon"></i>
+					</button>
+				</div>
+				<div class="popup-score">
+				  <div class="score-label">{{metric_label}}</div>
+				  {{value_popup}}
+				</div>
+			  </div>
+
+
+		</div>
+		<!-- end: map -->
+
+	</div>
+
+	<!-- start: risk score modal -->
+	<div id="infoModal" class="modal sidebar-modal" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</button>
+					<span class="panel-header-icon">
+						<img src="{{metric_icon}}">
+					</span>
+					<h3 class="modal-title">{{metric_label}}</h3>
+				</div>
+				<div class="modal-body">
+					<h5><b>Year source:</b> {{metric_year}}</h5><br>
+					<h5><b>Source link:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h5><br>
+					<h5><b>Description:</b> {{metric_desc}}</h5><br>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end: risk score modal -->
+	
+	<!-- start: phone device message -->
+	<div class="mobile-message">
+		<p>For best experience please use a tablet device, laptop or desktop computer.
+			<a href="/#!/" class="btn link-button" role="button">Dashboard Homepage</a>
+		</p>
+	</div>
+	<!-- end: phone device message -->
+
+	<!-- start: IE message -->
+	<div id="IEmodal" class="modal sidebar-modal" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</button>
+					<h3 class="modal-title">Warning</h3>
+				</div>
+				<div class="modal-body">
+					<p>This beta-version is currently best viewed in Google Chrome, and second-best in Firefox or Safari. Internet Explorer works, but has substantial interaction downsides.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end: IE message -->
+	
+		<!-- start: IE message -->
+	<div id="PImodal" class="modal sidebar-modal" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</button>
+					<h3 class="modal-title">Priority Index View</h3>
+				</div>
+				<div class="modal-body">
+					The Priority Index View is currently available for typhoons in the Philippines, on municipality level. Please see an <a style="color:#3780bb" href="510.global/an-improved-priority-index-for-typhoons/">early</a> and a <a style="color:#3780bb" href="510.global/philippines-typhoon-haima-priority-index/">later</a> for more explanation on the matter. Models for other countries and disaster types are being developed.
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end: IE message -->
+	
+</section>
+
+
+

@@ -1,12 +1,12 @@
 from sqlalchemy import create_engine
 import pandas as pd
 
-pathname = 'C:/Users/JannisV/Rode Kruis/CP Data/Administrative boundaries Global/' #DON'T FORGET CLOSING SLASH /
-filename = 'worldpopulation.csv'
+pathname = 'C:/Users/JannisV/Rode Kruis/CP Data/Priority Index/' #DON'T FORGET CLOSING SLASH /
+filename = 'Typhoon-Haima---house-damage-predictions-Version-2.csv'
 path = pathname+filename
-schema_name = 'public' #'geo_source' / 'ph_source' / 'mw_source' / 'np_source'
-table_name = 'worldpopulation'
-delim = ';' #',' / ';'
+schema_name = 'ph_source' #'geo_source' / 'ph_source' / 'mw_source' / 'np_source'
+table_name = 'PI_results_Haima'
+delim = ',' #',' / ';'
 
 engine = create_engine('postgresql://profiles:R3dCross+83@localhost/profiles')
 df = pd.read_csv(path,delimiter=delim, encoding="windows-1251")

@@ -44,6 +44,7 @@ module.exports = {
 				'public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css', // NOT in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.min.css', // in bower.json
 				'public/build/custom/font-awesome/css/font-awesome.min.css', // NOT in bower.json
+				'public/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css', // NOT in bower.json
 				'public/build/custom/leaflet-search/css/leaflet-search.min.css' // in bower.json				
 			],
 			js: [
@@ -84,6 +85,7 @@ module.exports = {
 				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js', // in bower,json
 				'public/build/custom/jquery-tabslideout/js/tabSlideOut.js', // NOT in bower.json
 				'public/build/bower/jquery-countTo/js/jquery.countTo.js', // in bower.json
+				'public/custom/dc-addons/dist/leaflet-map/dc-leaflet.js', // in bower.json
 				'public/build/bower/topojson/js/topojson.js' // in bower.json
 				
 			]

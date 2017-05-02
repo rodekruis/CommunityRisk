@@ -5,24 +5,6 @@
 ------------------------------------------
 
 --Get all level 2 geodata
-/* Old: with geo-tables for different countries combined in one table per level
-CREATE OR REPLACE FUNCTION usp_geo_level2(country varchar) RETURNS json AS $$
-
-	SELECT row_to_json(featcoll)
-	FROM (
-		SELECT 'FeatureCollection' As type, array_to_json(array_agg(feat)) As features
-		FROM (
-			SELECT 'Feature' As type
-				,ST_AsGeoJSON(tbl.geom)::json As geometry
-				,row_to_json((SELECT l FROM (SELECT pcode_level2 as pcode,name) As l)) As properties
-			FROM "tot_datamodel"."Geo_level2" As tbL
-			WHERE country_code = $1
-			)  As feat 
-		)  As featcoll
-	; 
-
-$$ LANGUAGE sql;
-*/
 DROP FUNCTION IF EXISTS usp_geo_level2(varchar);
 CREATE OR REPLACE FUNCTION usp_geo_level2(country varchar, OUT result json) AS $func$
 	BEGIN
@@ -44,24 +26,6 @@ $func$ LANGUAGE plpgsql;
 --select usp_geo_level2('PH');
 
 --Get all level 3 geodata
-/* Old
-CREATE OR REPLACE FUNCTION usp_geo_level3(pcode varchar) RETURNS json AS $$
-
-	SELECT row_to_json(featcoll)
-	FROM (
-		SELECT 'FeatureCollection' As type, array_to_json(array_agg(feat)) As features
-		FROM (
-			SELECT 'Feature' As type
-				,ST_AsGeoJSON(tbl.geom)::json As geometry
-				,row_to_json((SELECT l FROM (SELECT pcode_level3 as pcode,name,pcode_level2 as pcode_parent) As l)) As properties
-			FROM "tot_datamodel"."Geo_level3" As tbL
-			WHERE pcode_level2 = $1
-			)  As feat 
-		)  As featcoll
-	; 
-
-$$ LANGUAGE sql;
-*/
 DROP FUNCTION IF EXISTS usp_geo_level3(varchar);
 CREATE OR REPLACE FUNCTION usp_geo_level3(country varchar, pcode varchar, OUT result json) AS $func$
 	BEGIN
@@ -74,34 +38,16 @@ CREATE OR REPLACE FUNCTION usp_geo_level3(country varchar, pcode varchar, OUT re
 					,ST_AsGeoJSON(tbl.geom)::json As geometry
 					,row_to_json((SELECT l FROM (SELECT pcode_level3 as pcode,name,pcode_level2 as pcode_parent) As l)) As properties
 				FROM "%s_datamodel"."Geo_level3" As tbL
-				WHERE pcode_level2 = ''%s''
+				WHERE pcode_level2 = ''%s'' OR (CASE WHEN ''%s'' = '''' THEN 0 END = 0)
 				)  As feat 
 			)  As featcoll
-		;',country,pcode)
+		;',country,pcode,pcode)
 	INTO result;
 	END
 $func$ LANGUAGE plpgsql;
 --select usp_geo_level3('PH','AFRMWI101')
 
 --Get all level4 geodata
-/* Old
-CREATE OR REPLACE FUNCTION usp_geo_level4(pcode varchar) RETURNS json AS $$
-
-	SELECT row_to_json(featcoll)
-	FROM (
-		SELECT 'FeatureCollection' As type, array_to_json(array_agg(feat)) As features
-		FROM (
-			SELECT 'Feature' As type
-				,ST_AsGeoJSON(tbl.geom)::json As geometry
-				,row_to_json((SELECT l FROM (SELECT pcode_level4 as pcode,name,pcode_level3 as pcode_parent) As l)) As properties
-			FROM "tot_datamodel"."Geo_level4" As tbL
-			WHERE pcode_level3 = $1
-			)  As feat 
-		)  As featcoll
-	; 
-
-$$ LANGUAGE sql;
-*/
 DROP FUNCTION IF EXISTS usp_geo_level4(varchar);
 CREATE OR REPLACE FUNCTION usp_geo_level4(country varchar, pcode varchar, OUT result json) AS $func$
 	BEGIN
@@ -201,22 +147,60 @@ CREATE OR REPLACE FUNCTION usp_ind(state int,country varchar,pcode varchar) RETU
 $$ LANGUAGE sql;
 --SELECT usp_ind(2,'PH','');
 
+
+
+--------------------------------------------------
+-- Get Priority Index data --
+--------------------------------------------------
+
+DROP FUNCTION IF EXISTS usp_pi_level3(varchar,varchar);
+CREATE OR REPLACE FUNCTION usp_pi_level3(country varchar,typhoon varchar, OUT result json) AS $func$
+	BEGIN
+	EXECUTE format('select array_to_json(array_agg(level3))
+			from (
+			select *
+			from "%s_datamodel"."PI_input_damage"  t1
+			where typhoon_name = ''%s''
+			) level3;',country,typhoon)
+	INTO result;
+	END
+$func$ LANGUAGE plpgsql;
+--select usp_pi_level3('PH','Haima')
+
+
 --------------------------------------------------
 -- Combine Geodata and indicator-data in 1 JSON --
 --------------------------------------------------
 
-CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode varchar) RETURNS json AS $$
+CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode varchar,pi_cra varchar,typhoon varchar) RETURNS json AS $$
 
-	SELECT row_to_json(data)
-	FROM (
-	SELECT usp_ind($1,$2,$3) as ind
-		, usp_geo($1,$2,$3) as geo
-	) data
+	SELECT CASE 
+		WHEN $4 = 'PI' THEN usp_pi_level3($2,$5)
+		WHEN $4 = 'CRA' THEN (
+			SELECT row_to_json(data)
+			FROM (
+			SELECT usp_ind($1,$2,$3) as ind
+				, usp_geo($1,$2,$3) as geo
+			) data)
+		END
 	;
 $$ LANGUAGE sql;
 
---select usp_data(2,'INFORM','');
+CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode varchar,pi_cra varchar,typhoon varchar) RETURNS json AS $$
 
+	SELECT row_to_json(data)
+	FROM (
+	SELECT (CASE 
+		WHEN $4 = 'PI' THEN usp_pi_level3($2,$5)
+		WHEN $4 = 'CRA' THEN usp_ind($1,$2,$3) 
+		END) as ind
+		, usp_geo($1,$2,$3) as geo
+	) data
+
+	;
+$$ LANGUAGE sql;
+
+--select usp_data(3,'PH','','CRA','Haima');
 
 
 

@@ -9,6 +9,9 @@ angular.module('core').controller('HomeController', ['$scope','$rootScope','Auth
 	$scope.choose_country = function(country) {
 		$rootScope.country_code = country;
 	}
+	$scope.choose_view = function(view) {
+		$rootScope.view_code = view;
+	}
       
     angular.extend($scope, {
                     defaults: {

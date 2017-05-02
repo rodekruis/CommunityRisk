@@ -4,13 +4,23 @@ angular.module('dashboards')
 	.controller('DistrictDashboardsController', ['$scope','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
 	function($scope,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 		
+		$scope.change_view = function(view) {
+			$rootScope.view_code = view;
+		}
+
 		//Define variables
+		$rootScope.loadCount = 0;
 		$scope.authentication = Authentication;
 		$scope.geom = null;
 		$scope.country_code = 'PH';
-		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
+		$scope.view_code = 'CRA';
 		$scope.admlevel = 2;
 		$scope.metric = '';
+		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
+		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;}
+		if ($scope.view_code == 'PI') {$scope.country_code = 'PH';}
+		$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
+		$scope.view_code == 'CRA' ? $scope.metric = '' : $scope.metric = 'total_damage_houses';
 		$scope.metric_label = '';
 		$scope.metric_year = '';
 		$scope.metric_source = '';
@@ -34,6 +44,10 @@ angular.module('dashboards')
 		$scope.tables = [];
 		$scope.x = 500;
 		$scope.y = 200;
+		$scope.quantileColorDomain = ['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'];
+		$scope.quantileColorDomain_CRA = ['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d'];
+		$scope.quantileColorDomain_error = ['#d7191c','#fdae61','#ffffbf','#DA70D6','#8B008B'];
+		$scope.typhoon = 'Haima'; //Default typhoon when in Priority-Index view
 		var mapfilters_length = 0;
 		var d_prev = '';
 		var map;
@@ -55,14 +69,17 @@ angular.module('dashboards')
 		/**
 		 * Initiate the dashboard
 		 */
-		$scope.initiate = function() {	    
+		$scope.initiate = function(view_code) {	    
 				
 			// start loading bar
 		    $scope.start();
 			
-			$scope.metric = '';
-			$scope.admlevel = 2;
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code;
+			//$scope.metric = '';
+			//$scope.admlevel = 3;
+			$scope.view_code = view_code;
+			$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
+			$scope.view_code == 'CRA' ? $scope.metric = '' : $scope.metric = 'total_damage_houses';
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.typhoon;
 
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
 			    function(dashboard) {		
@@ -88,7 +105,7 @@ angular.module('dashboards')
 			// start loading bar
 		    $scope.start();
 			
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code;
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.typhoon;
 
 			Data.get({adminLevel: $scope.data_input}, 
 				function(pgData){
@@ -102,6 +119,7 @@ angular.module('dashboards')
 		 * load  them with ajax and if both are finished, generate the charts
 		 */
 		$scope.prepare = function(dashboard, pgData) {
+		  
 		  // set the title
 		  $scope.title = $scope.config.title;
 				
@@ -110,21 +128,31 @@ angular.module('dashboards')
 		  
 		  // load data
 		  var d = {};
-		  d.Districts = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
-		  //d.Metadata = pgData.usp_data.meta;
+		  var pcode_list = [];
+		  for (var i=0;i<d.Rapportage.length;i++){ pcode_list[i]=d.Rapportage[i].pcode; }
+		  d.Districts = pgData.usp_data.geo;
+		  d.Districts.features = $.grep(d.Districts.features, function(e){ return pcode_list.indexOf(e.properties.pcode) > -1; });
 		  var meta = dashboard.sources.Metadata.data;
-		  d.Metadata = $.grep(meta, function(e){ return e.country_code == 'All' || e.country_code == $scope.country_code; });
+		  d.Metadata = $scope.view_code === 'CRA'  ? $.grep(meta, function(e){ return e.country_code == 'All' || e.country_code == $scope.country_code; })
+												: $.grep(meta, function(e){ return e.country_code == 'PI'; });
 		  d.Country_meta = dashboard.sources.Country_meta.data;
-		  $scope.geom = pgData.usp_data.geo;
-		  console.log(d);
+		  if ($scope.view_code == 'PI') {d.Typhoon_meta = $.grep(dashboard.sources.Metadata_typhoons.data, function(e){return e.typhoon == $scope.typhoon;})[0];}
+		  $scope.geom = d.Districts; //pgData.usp_data.geo;
+		  //console.log(d);
 		  
 		  // generate the actual content of the dashboard
 		  $scope.generateCharts(d);
 		  
 		  // end loading bar
 		  $scope.complete();
-			
+		  
+		  //Show dialog when opening Priority Index View	
+		  if ($scope.view_code == 'PI' && $rootScope.loadCount == 0) {
+			$('#PImodal').modal('show');
+		  }	
+		  $rootScope.loadCount += 1;
+				  
 		  //Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)	
 		  if (typeof L_PREFER_CANVAS !== 'undefined') {
 			$('#IEmodal').modal('show');
@@ -283,6 +311,7 @@ angular.module('dashboards')
 				record.dimension = undefined;
 				record.weight_var = record_temp.weight_var;
 				record.scorevar_name = record_temp.scorevar_name;
+				record.view = record_temp.country_code === 'PI' ? 'PI' : 'CRA';
 				$scope.tables[i] = record;
 			}
 			
@@ -385,6 +414,26 @@ angular.module('dashboards')
 				$scope.tables[i].dimension = dimensions[name];
 			}
 			
+			//Create total statistics per typhoon
+			if ($scope.view_code === 'PI') {
+				var actuals = d.Typhoon_meta.actuals;
+				var predictions = d.Typhoon_meta.predictions;
+				if (actuals == 'yes' && predictions == 'no') {
+					$scope.type_text = 'This historical typhoon was used to develop this model, but was never used to make predictions at the time.';
+					$scope.metric = 'total_damage_houses';
+				} else if (actuals == 'yes' && predictions == 'yes') {
+					$scope.type_text = 'For this typhoon priority areas were predicted using the model, and actual damage was collected later, so prediction errors can be measured.';
+					$scope.metric = 'total_damage_houses';
+				} else if (actuals == 'no' && predictions == 'yes') {
+					$scope.type_text = 'For this typhoon priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.';
+					$scope.metric = 'perc_pred';
+				}
+				$scope.start_date = d.Typhoon_meta.startdate;
+				$scope.end_date = d.Typhoon_meta.enddate;
+				$scope.total_damage = dec0Format(dimensions.total_damage_houses.top(1)[0].value);
+				$scope.total_potential = dec0Format(dimensions.total_houses.top(1)[0].value);
+				$scope.total_intensity = percFormat(dimensions.total_damage_houses.top(1)[0].value / dimensions.total_houses.top(1)[0].value);
+			};			
 			
 			///////////////////////////////
 			// SET UP ALL INDICATOR HTML //
@@ -479,21 +528,34 @@ angular.module('dashboards')
 				var hazard = document.getElementById('hazard');
 				var coping = document.getElementById('coping');
 				var other = document.getElementById('other');
-				while (general.firstChild) { general.removeChild(general.firstChild); }
-				while (scores.firstChild) { scores.removeChild(scores.firstChild); }
-				while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); }
-				while (hazard.firstChild) { hazard.removeChild(hazard.firstChild); }
-				while (coping.firstChild) { coping.removeChild(coping.firstChild); }
-				while (other.firstChild) { other.removeChild(other.firstChild); }
+				if (general) {while (general.firstChild) { general.removeChild(general.firstChild); };}
+				if (scores) {while (scores.firstChild) { scores.removeChild(scores.firstChild); };}
+				if (vulnerability) {while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); };}
+				if (hazard) {while (hazard.firstChild) { hazard.removeChild(hazard.firstChild); };}
+				if (coping) {while (coping.firstChild) { coping.removeChild(coping.firstChild); };}
+				if (other) {while (other.firstChild) { other.removeChild(other.firstChild); };}
+				
+				//Priority-Index View groups
+				var predictions = document.getElementById('predictions');
+				var damage = document.getElementById('damage');
+				var pred_error = document.getElementById('pred_error');
+				var typhoon = document.getElementById('typhoon');
+				var geographic = document.getElementById('geographic');
+				if (predictions) {while (predictions.firstChild) { predictions.removeChild(predictions.firstChild); };}
+				if (damage) {while (damage.firstChild) { damage.removeChild(damage.firstChild); };}
+				if (pred_error) {while (pred_error.firstChild) { pred_error.removeChild(pred_error.firstChild); };}
+				if (typhoon) {while (typhoon.firstChild) { typhoon.removeChild(typhoon.firstChild); };}
+				if (geographic) {while (geographic.firstChild) { geographic.removeChild(geographic.firstChild); };}
+				
 				for (var i=0;i<$scope.tables.length;i++) {
 					var record = $scope.tables[i];
 					
 					if (!meta_icon[record.name]) {var icon = 'modules/dashboards/img/undefined.png';}
 					else {var icon = 'modules/dashboards/img/'+meta_icon[record.name];}
 					
+					if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
+					
 					if (record.group === 'general') {
-						
-						if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
 						
 						var div = document.createElement('div');
 						div.setAttribute('class','row profile-item');
@@ -532,7 +594,7 @@ angular.module('dashboards')
 						img.setAttribute('style','height:17px');
 						button.appendChild(img);
 					
-					} else if (record.group === 'other') {
+					} else if (record.group === 'other' || record.view === 'PI') {
 						
 						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
 							var width = d_prev[record.scorevar_name]*10;
@@ -552,7 +614,7 @@ angular.module('dashboards')
 						img1.setAttribute('src',icon);
 						div0.appendChild(img1);
 						var div1 = document.createElement('div');
-						div1.setAttribute('class','col-md-3 component-label');
+						div1.setAttribute('class','col-md-8 component-label');
 						div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
 						div1.innerHTML = meta_label[record.name];
 						$compile(div1)($scope);
@@ -560,8 +622,9 @@ angular.module('dashboards')
 						var div1a = document.createElement('div');
 						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
 						div1a.setAttribute('id',record.name);
-						div1a.innerHTML = keyvalue[record.name];
+						div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
 						div1.appendChild(div1a);
+						/*
 						var div2 = document.createElement('div');
 						div2.setAttribute('class','col-md-5');
 						div.appendChild(div2);
@@ -577,6 +640,7 @@ angular.module('dashboards')
 						img2.setAttribute('class','scale-icon');
 						img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
 						div2a.appendChild(img2);
+						*/
 						var div3 = document.createElement('div');
 						div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
 						div.appendChild(div3);
@@ -600,7 +664,7 @@ angular.module('dashboards')
 						} else {
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
 						}
-
+						
 						var div = document.createElement('div');
 						div.setAttribute('class','component-section');
 						var parent = document.getElementById(record.group);
@@ -621,7 +685,7 @@ angular.module('dashboards')
 						var div1a = document.createElement('div');
 						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
 						div1a.setAttribute('id',record.name);
-						div1a.innerHTML = keyvalue[record.name];
+						div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
 						div1.appendChild(div1a);
 						var div2 = document.createElement('div');
 						div2.setAttribute('class','col-md-5');
@@ -684,13 +748,14 @@ angular.module('dashboards')
 				for (var i=0;i<$scope.tables.length;i++) {
 					var record = $scope.tables[i];
 					
+					if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
+						
 					if (record.group === 'general') {
 						
-						if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
 						var div2 = document.getElementById(record.name);
 						div2.innerHTML = keyvalue[record.name] + ' ' + unit;
 					
-					} else if (record.group === 'other') {
+					} else if (record.group === 'other' || record.view === 'PI') {
 						
 						if ($scope.admlevel == zoom_max && $scope.filters.length == 0) {
 							var width = d_prev[record.scorevar_name]*10;
@@ -700,10 +765,10 @@ angular.module('dashboards')
 					
 						var div1a = document.getElementById(record.name);
 						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
-						div1a.innerHTML = keyvalue[record.name];
-						var div2a1 = document.getElementById('bar-'+record.name);
-						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
-						div2a1.setAttribute('style','width:'+ width + '%');
+						div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
+						//var div2a1 = document.getElementById('bar-'+record.name);
+						//div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
+						//div2a1.setAttribute('style','width:'+ width + '%');
 					}
 					
 					else if (record.group) {
@@ -716,7 +781,7 @@ angular.module('dashboards')
 					
 						var div1a = document.getElementById(record.name);
 						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
-						div1a.innerHTML = keyvalue[record.name];
+						div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
 						var div2a1 = document.getElementById('bar-'+record.name);
 						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
 						div2a1.setAttribute('style','width:'+ width + '%');
@@ -737,9 +802,17 @@ angular.module('dashboards')
 					for (i=0;i<d.Rapportage.length;i++) {
 						quantile_range[i] = d.Rapportage[i][$scope.metric];
 					};
+					var colorDomain;
+					if ($scope.view_code == 'CRA') {
+						colorDomain = $scope.quantileColorDomain_CRA;
+					} else if (Math.min.apply(null, quantile_range) < 0 && Math.max.apply(null, quantile_range) > 0) {
+						colorDomain = $scope.quantileColorDomain_error;
+					} else {
+						colorDomain = $scope.quantileColorDomain;
+					}
 					return d3.scale.quantile()
 							.domain(quantile_range)
-							.range(['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d']);
+							.range(colorDomain);
 				}
 			};
 			var mapchartColors = $scope.mapchartColors();		
@@ -756,7 +829,7 @@ angular.module('dashboards')
 				.colors(mapchartColors)
 				.colorCalculator(function(d){
 					if (!meta_scorevar[$scope.metric]){
-						return d ? mapChart.colors()(d) : '#cccccc';
+						return typeof(d) != 'undefined' ? mapChart.colors()(d) : '#cccccc';
 					} else {
 						if (d==0) {return '#cccccc';} 
 						else if (d<3.5) {return '#1a9641';} else if (d<4.5) {return '#a6d96a';} else if (d<5.5) {return '#f1d121';} else if (d<6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
@@ -766,8 +839,13 @@ angular.module('dashboards')
 					return feature.properties.pcode;
 				})
 				.popup(function(d){
-					return lookup[d.key]; //.concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value));
+					if (!meta_scorevar[$scope.metric]){
+						return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value), ' ',meta_unit[$scope.metric]);
+					} else {
+						return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value));
+					}
 				})
+				//.legend(dc.leafletLegend().position('topright'))
 				.renderPopup(true)
 				.turnOnControls(true)
 				//Set up what happens when clicking on the map (popup appearing mainly)
@@ -813,26 +891,12 @@ angular.module('dashboards')
 					
 				})
 			;
+			//Add legend only in Priority Index View
+			if ($scope.view_code == 'PI') {
+				mapChart.legend(dc.leafletLegend().position('topright'));
+			}
 			
-			/* rowchart for tabslideout possibly
-			rowChart
-				.width(200)
-				.height(2000)
-				.margins({top: 0, left: -5, right: 50, bottom: 20})
-				.dimension(whereDimension_tab)
-				.group(whereGroupSum_tab)
-				.colors(['#74a9cf'])
-                .colorDomain([0,0])
-                .colorAccessor(function(d, i){return 1;})
-				//.colorDomain([0, 1])
-				//.colorAccessor(function (d) {if(d.value > 0){return 1;} else {return 0;}})   
-				.ordering(function(d) {return -d.value + lookup[d.key];})
-				.label(function(d) { return lookup[d.key];})
-				.renderLabel(true)
-				.xAxis().ticks(0)
-			;	
-			*/
-			
+		
 				
 			///////////////////////////
 			// MAP RELATED FUNCTIONS //
@@ -892,6 +956,7 @@ angular.module('dashboards')
 				var mapchartColors = $scope.mapchartColors();	
 				whereGroupSum_scores.dispose();
 				whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (!meta_scorevar[$scope.metric]) {return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
+				//console.log(whereDimension.top(Infinity));
 				mapChart
 					.group(whereGroupSum_scores)
 					.colors(mapchartColors)
@@ -901,6 +966,13 @@ angular.module('dashboards')
 						} else {
 							if (d==0) {return '#cccccc';} 
 							else if (d<3.5) {return '#1a9641';} else if (d<4.5) {return '#a6d96a';} else if (d<5.5) {return '#f1d121';} else if (d<6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
+						}
+					})
+					.popup(function(d){
+						if (!meta_scorevar[$scope.metric]){
+							return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value), ' ',meta_unit[$scope.metric]);
+						} else {
+							return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value));
 						}
 					})
 					;
@@ -1031,9 +1103,18 @@ angular.module('dashboards')
 			
 			
 		};
+		
+		$scope.change_typhoon = function(typhoon) {
+	
+			$scope.typhoon = typhoon;
+			$scope.initiate('PI');
+			
+		}
 
 	}
 ])
+
+
 
 ;
 

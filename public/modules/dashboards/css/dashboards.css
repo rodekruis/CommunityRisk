@@ -34,6 +34,11 @@ body {
   margin-right: 15px;
   margin-top: 8px;
 }
+.navbar-left {
+  background: #eceff4;
+  border: 1px solid #cad3df;
+  border-radius: 4px;
+}
 .dropdown-toggle {
   color: #4d799d;
 }
@@ -264,6 +269,16 @@ body {
 .filter-count {
   color: #3780bb;
   font-size: 20px;
+}
+.total-count-pi{
+  color: #3780bb;
+  font-size: 14px;
+  font-weight: bold;
+}
+.filter-count-pi{
+  color: #444444;
+  font-size: 14px;
+  font-weight: bold;
 }
 .score-helptext {
   font-size: 11px;

@@ -417,13 +417,13 @@ to {
 /* Lifecycle
 -------------------------------------------------- */
 .walkthrough {
-    padding: 150px 0 100px;
+    padding: 0px 0 100px;
     text-align: center;
 }
 .walkthrough h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: white;
+    color: black;
     font-weight: 700;
 }
 .rhino-item img {

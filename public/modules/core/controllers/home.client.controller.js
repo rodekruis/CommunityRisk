@@ -62,16 +62,28 @@ angular.module('core').controller('HomeController', ['$scope','$rootScope','Auth
 		$('.timer').countTo();
 		
 		if ($('#slider').length !== 0) {
-        $('#slider').slick({
-            dots: true,
-            infinite: false,
-            speed: 300,
-            slidesToShow: 1,
-            adaptiveHeight: true,
-            fade: true,
-            centerMode: true,
-        });
-    }
+			$('#slider').slick({
+				dots: true,
+				infinite: false,
+				speed: 300,
+				slidesToShow: 1,
+				adaptiveHeight: true,
+				fade: true,
+				centerMode: true,
+			});
+		};
+		
+		if ($('#slider_PI').length !== 0) {
+			$('#slider_PI').slick({
+				dots: true,
+				infinite: false,
+				speed: 300,
+				slidesToShow: 1,
+				adaptiveHeight: true,
+				fade: true,
+				centerMode: true,
+			});
+		};
 	});
                         
 }]);

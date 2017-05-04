@@ -5,6 +5,7 @@ angular.module('core').controller('HomeController', ['$scope','$rootScope','Auth
     $scope.authentication = Authentication;
 	
 	$rootScope.country_code = '';
+	$rootScope.view_code = '';
 	
 	$scope.choose_country = function(country) {
 		$rootScope.country_code = country;

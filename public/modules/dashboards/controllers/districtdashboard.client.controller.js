@@ -148,10 +148,8 @@ angular.module('dashboards')
 		  $scope.complete();
 		  
 		  //Show dialog when opening Priority Index View	
-		  if ($scope.view_code == 'PI' && $rootScope.loadCount == 0) {
-			$('#PImodal').modal('show');
-		  }	
-		  $rootScope.loadCount += 1;
+		  //if ($scope.view_code == 'PI' && $rootScope.loadCount == 0) { $('#PImodal').modal('show'); }	
+		  //$rootScope.loadCount += 1;
 				  
 		  //Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)	
 		  if (typeof L_PREFER_CANVAS !== 'undefined') {

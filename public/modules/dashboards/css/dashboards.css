@@ -610,3 +610,16 @@ a.handle:hover {
 	color: white;
 	text-decoration: none;
 }
+
+/* Collapsible sidebar */
+
+body {
+    background: none repeat scroll 0 0 white;
+}
+.sidebar-menu-collapsed {
+    width: 75px;
+}
+.sidebar-menu-expanded {
+    width: 380px;
+}
+

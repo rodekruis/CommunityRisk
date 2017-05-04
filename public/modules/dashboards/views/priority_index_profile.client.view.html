@@ -57,6 +57,13 @@
 	
 		<!-- start: sidebar -->
 		<div class="navbar-default sidebar" role="navigation">
+		<!-- <div class="navbar-default sidebar sidebar-menu-expanded" id="sidebar" role="navigation"> -->
+		
+			<!-- <a href='#' id='justify-icon'>
+				<img src="modules/dashboards/img/expand.png" width="20px">
+			</a> -->
+			
+			<!-- <div id="sidebar-content"> -->
 
 			<!-- start: community profiles -->
 			<div class="community-profiles-wrapper">
@@ -191,7 +198,8 @@
 				</div>
 			</div>
 			<!-- end: accordion with stats -->
-
+			
+			<!-- </div> -->
 
 		</div>
 		<!-- end: sidebar -->
@@ -208,7 +216,7 @@
 						<i class="fa fa-tachometer" aria-hidden="true"></i>
 						<span class="button-label">{{metric_label}}</span>
 					</button>
-					<button id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
+					<button id="level2" type="button" class="btn btn-secondary btn-active "> <!-- ng-click="zoom_out(2)"> -->
 						<i class="fa fa-globe" aria-hidden="true"></i>
 						<span class="button-label">{{country_selection}}</span>
 					</button>
@@ -261,9 +269,14 @@
 	<!-- end: risk score modal -->
 	
 	<!-- start: phone device message -->
-	<div class="mobile-message">
+	<!-- <div class="mobile-message">
 		<p>For best experience please use a tablet device, laptop or desktop computer.
 			<a href="/#!/" class="btn link-button" role="button">Dashboard Homepage</a>
+		</p>
+	</div> -->
+	<div class="mobile-message">
+		<p>For best experience please use a tablet device, laptop or desktop computer.
+			<a class="btn link-button" role="button" onclick="mobile_anyway()">Continue anyway</a>
 		</p>
 	</div>
 	<!-- end: phone device message -->
@@ -299,7 +312,7 @@
 					<h3 class="modal-title">Priority Index View</h3>
 				</div>
 				<div class="modal-body">
-					The Priority Index View is currently available for typhoons in the Philippines, on municipality level. Please see an <a style="color:#3780bb" href="510.global/an-improved-priority-index-for-typhoons/">early</a> and a <a style="color:#3780bb" href="510.global/philippines-typhoon-haima-priority-index/">later</a> for more explanation on the matter. Models for other countries and disaster types are being developed.
+					The Priority Index View is currently available for typhoons in the Philippines, on municipality level. Please see an <a style="color:#3780bb" href="510.global/an-improved-priority-index-for-typhoons/">early</a> and a <a style="color:#3780bb" href="510.global/philippines-typhoon-haima-priority-index/">later</a> blogpost for more explanation on the matter. Models for other countries and disaster types are being developed.
 				</div>
 			</div>
 		</div>

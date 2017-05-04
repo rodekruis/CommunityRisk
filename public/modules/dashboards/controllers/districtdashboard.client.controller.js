@@ -416,17 +416,20 @@ angular.module('dashboards')
 			
 			//Create total statistics per typhoon
 			if ($scope.view_code === 'PI') {
-				var actuals = d.Typhoon_meta.actuals;
-				var predictions = d.Typhoon_meta.predictions;
-				if (actuals == 'yes' && predictions == 'no') {
+				$scope.actuals = d.Typhoon_meta.actuals;
+				$scope.predictions = d.Typhoon_meta.predictions;
+				if ($scope.actuals == 'yes' && $scope.predictions == 'no') {
 					$scope.type_text = 'This historical typhoon was used to develop this model, but was never used to make predictions at the time.';
 					$scope.metric = 'total_damage_houses';
-				} else if (actuals == 'yes' && predictions == 'yes') {
+					$scope.metric_label = meta_label[$scope.metric];
+				} else if ($scope.actuals == 'yes' && $scope.predictions == 'yes') {
 					$scope.type_text = 'For this typhoon priority areas were predicted using the model, and actual damage was collected later, so prediction errors can be measured.';
 					$scope.metric = 'total_damage_houses';
-				} else if (actuals == 'no' && predictions == 'yes') {
+					$scope.metric_label = meta_label[$scope.metric];
+				} else if ($scope.actuals == 'no' && $scope.predictions == 'yes') {
 					$scope.type_text = 'For this typhoon priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.';
 					$scope.metric = 'perc_pred';
+					$scope.metric_label = meta_label[$scope.metric];
 				}
 				$scope.start_date = d.Typhoon_meta.startdate;
 				$scope.end_date = d.Typhoon_meta.enddate;
@@ -601,60 +604,64 @@ angular.module('dashboards')
 						} else {
 							var width = dimensions[record.name].top(1)[0].value.finalVal*10;
 						}
-
-						var div = document.createElement('div');
-						div.setAttribute('class','component-section');
-						var parent = document.getElementById(record.group);
-						parent.appendChild(div);
-						var div0 = document.createElement('div');
-						div0.setAttribute('class','col-md-2');
-						div.appendChild(div0);	
-						var img1 = document.createElement('img');
-						img1.setAttribute('style','height:20px');
-						img1.setAttribute('src',icon);
-						div0.appendChild(img1);
-						var div1 = document.createElement('div');
-						div1.setAttribute('class','col-md-8 component-label');
-						div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
-						div1.innerHTML = meta_label[record.name];
-						$compile(div1)($scope);
-						div.appendChild(div1);	
-						var div1a = document.createElement('div');
-						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
-						div1a.setAttribute('id',record.name);
-						div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
-						div1.appendChild(div1a);
-						/*
-						var div2 = document.createElement('div');
-						div2.setAttribute('class','col-md-5');
-						div.appendChild(div2);
-						var div2a = document.createElement('div');
-						div2a.setAttribute('class','component-scale');
-						div2.appendChild(div2a);
-						var div2a1 = document.createElement('div');
-						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
-						div2a1.setAttribute('id','bar-'+record.name);
-						div2a1.setAttribute('style','width:'+ width + '%');
-						div2a.appendChild(div2a1);
-						var img2 = document.createElement('img');
-						img2.setAttribute('class','scale-icon');
-						img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
-						div2a.appendChild(img2);
-						*/
-						var div3 = document.createElement('div');
-						div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
-						div.appendChild(div3);
-						var button = document.createElement('button');
-						button.setAttribute('type','button');
-						button.setAttribute('class','btn-modal');
-						button.setAttribute('data-toggle','modal');
-						button.setAttribute('ng-click','info(\'' + record.name + '\')');
-						div3.appendChild(button);
-						$compile(button)($scope);
-						var img3 = document.createElement('img');
-						img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
-						img3.setAttribute('style','height:17px');
-						button.appendChild(img3);
+						
+						if (!($scope.predictions == 'no' && record.group == 'predictions') && !($scope.actuals == 'no' && record.group == 'damage') && !(($scope.predictions == 'no' || $scope.actuals == 'no') && record.group == 'pred_error')) {
+							
+							var div = document.createElement('div');
+							div.setAttribute('class','component-section');
+							var parent = document.getElementById(record.group);
+							parent.appendChild(div);
+							var div0 = document.createElement('div');
+							div0.setAttribute('class','col-md-2');
+							div.appendChild(div0);	
+							var img1 = document.createElement('img');
+							img1.setAttribute('style','height:20px');
+							img1.setAttribute('src',icon);
+							div0.appendChild(img1);
+							var div1 = document.createElement('div');
+							div1.setAttribute('class','col-md-8 component-label');
+							div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
+							div1.innerHTML = meta_label[record.name];
+							$compile(div1)($scope);
+							div.appendChild(div1);	
+							var div1a = document.createElement('div');
+							div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
+							div1a.setAttribute('id',record.name);
+							div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
+							div1.appendChild(div1a);
+							/*
+							var div2 = document.createElement('div');
+							div2.setAttribute('class','col-md-5');
+							div.appendChild(div2);
+							var div2a = document.createElement('div');
+							div2a.setAttribute('class','component-scale');
+							div2.appendChild(div2a);
+							var div2a1 = document.createElement('div');
+							div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
+							div2a1.setAttribute('id','bar-'+record.name);
+							div2a1.setAttribute('style','width:'+ width + '%');
+							div2a.appendChild(div2a1);
+							var img2 = document.createElement('img');
+							img2.setAttribute('class','scale-icon');
+							img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
+							div2a.appendChild(img2);
+							*/
+							var div3 = document.createElement('div');
+							div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+							div.appendChild(div3);
+							var button = document.createElement('button');
+							button.setAttribute('type','button');
+							button.setAttribute('class','btn-modal');
+							button.setAttribute('data-toggle','modal');
+							button.setAttribute('ng-click','info(\'' + record.name + '\')');
+							div3.appendChild(button);
+							$compile(button)($scope);
+							var img3 = document.createElement('img');
+							img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
+							img3.setAttribute('style','height:17px');
+							button.appendChild(img3);
+						}
+						
 					}
 					
 					else if (record.group) {
@@ -762,13 +769,17 @@ angular.module('dashboards')
 						} else {
 							var width = dimensions[record.name].top(1)[0].value.finalVal*10;
 						}
-					
-						var div1a = document.getElementById(record.name);
-						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
-						div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
-						//var div2a1 = document.getElementById('bar-'+record.name);
-						//div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
-						//div2a1.setAttribute('style','width:'+ width + '%');
+						
+						if (!($scope.predictions == 'no' && record.group == 'predictions') && !($scope.actuals == 'no' && record.group == 'damage') && !(($scope.predictions == 'no' || $scope.actuals == 'no') && record.group == 'pred_error')) {
+
+							var div1a = document.getElementById(record.name);
+							div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
+							div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
+							//var div2a1 = document.getElementById('bar-'+record.name);
+							//div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
+							//div2a1.setAttribute('style','width:'+ width + '%');
+						}
+						
 					}
 					
 					else if (record.group) {
@@ -875,7 +886,7 @@ angular.module('dashboards')
 							popup.style.top = '100px';
 						}
 						popup.style.visibility = 'visible';
-						if ($scope.admlevel < zoom_max) { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
+						if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
 					} 
 					mapfilters_length = $scope.filters.length;
 					//Recalculate all community-profile figures
@@ -980,6 +991,14 @@ angular.module('dashboards')
 				dc.redrawAll();
 				document.getElementById('mapPopup').style.visibility = 'hidden';
 				document.getElementById('zoomin_icon').style.visibility = 'hidden';
+			};
+			
+			//Change typhoon: reinitiate the dashboard
+			$scope.change_typhoon = function(typhoon) {
+	
+				$scope.typhoon = typhoon;
+				$scope.initiate('PI');
+				
 			};
 			
 			
@@ -1092,6 +1111,7 @@ angular.module('dashboards')
 			
 			//Render all dc-charts and -tables
 			dc.renderAll(); 
+			//document.getElementsByClassName('leaflet-top leaflet-left')[0].setAttribute('class','leaflet-top leaflet-right');
 			
 			map = mapChart.map();
 			function zoomToGeom(geom){
@@ -1104,12 +1124,70 @@ angular.module('dashboards')
 			
 		};
 		
-		$scope.change_typhoon = function(typhoon) {
-	
-			$scope.typhoon = typhoon;
-			$scope.initiate('PI');
-			
-		}
+
+		
+		///////////////////////////////////////
+		// FUNCTIONS FOR MOBILE FRIENDLINESS //
+		///////////////////////////////////////
+
+		//Sidebar collapsing/expanding	
+/* 		(function () {
+			$(function () {
+				var SideBAR;
+				SideBAR = (function () {
+					function SideBAR() {}
+
+					SideBAR.prototype.expandMyMenu = function () {
+						return $("#sidebar").removeClass("sidebar-menu-collapsed").addClass("sidebar-menu-expanded");
+					};
+
+					SideBAR.prototype.collapseMyMenu = function () {
+						return $("#sidebar").removeClass("sidebar-menu-expanded").addClass("sidebar-menu-collapsed");
+					};
+
+					SideBAR.prototype.ignite = function () {
+						return (function (instance) {
+							return $("#justify-icon").click(function (e) {
+								if ($($(this)[0].parentNode).hasClass("sidebar-menu-collapsed")) {
+									instance.expandMyMenu();
+									$('#sidebar-content').css('display','block');
+									$('.zoom-level-nav').css('left','380px');
+								} else if ($($(this)[0].parentNode).hasClass("sidebar-menu-expanded")) {
+									instance.collapseMyMenu();
+									$('#sidebar-content').css('display','none');
+									$('.zoom-level-nav').css('left','80px');
+								}
+								return false;
+							});
+						})(this);
+					};
+
+					return SideBAR;
+
+				})();
+				return (new SideBAR).ignite();
+			});
+
+		}).call(this);
+
+		//Set collapsing/expanding depending on type of screen
+		function checkWindowSize() {  
+			if ( $(window).width() < 480) { 
+				$('#sidebar').addClass('sidebar-menu-collapsed');  
+				$('#sidebar').removeClass('sidebar-menu-expanded');  
+				$('#sidebar-content').css('display','none');
+				$('.navbar-right').css('display','none');
+				$('.zoom-level-nav').css('left','80px');
+			}
+		}    
+		checkWindowSize();
+
+		$scope.mobile_anyway = function() {
+			$('.mobile-message').css('display','none');
+			$('.sidebar').css('display','block');
+			$('.map-wrapper').css('display','block');
+			generateCharts(d);
+		} */
 
 	}
 ])

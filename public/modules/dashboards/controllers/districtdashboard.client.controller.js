@@ -47,7 +47,7 @@ angular.module('dashboards')
 		$scope.quantileColorDomain = ['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'];
 		$scope.quantileColorDomain_CRA = ['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d'];
 		$scope.quantileColorDomain_error = ['#d7191c','#fdae61','#ffffbf','#DA70D6','#8B008B'];
-		$scope.typhoon = 'Haima'; //Default typhoon when in Priority-Index view
+		$scope.typhoon = 'Nina'; //Default typhoon when in Priority-Index view
 		var mapfilters_length = 0;
 		var d_prev = '';
 		var map;

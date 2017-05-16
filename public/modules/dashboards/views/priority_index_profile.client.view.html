@@ -120,7 +120,7 @@
 					<div class="card-header" role="tab" id="headingFour">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/undefined.png">
+								<img src="modules/dashboards/img/prediction.svg">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Predicted Damage</span>
@@ -136,7 +136,7 @@
 					<div class="card-header" role="tab" id="headingOne">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/undefined.png">
+								<img src="modules/dashboards/img/damage.png">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Actual Damage</span>
@@ -152,7 +152,7 @@
 					<div class="card-header" role="tab" id="headingFive">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/undefined.png">
+								<img src="modules/dashboards/img/error.png">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Prediction Errors</span>
@@ -168,7 +168,7 @@
 					<div class="card-header" role="tab" id="headingTwo">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/undefined.png">
+								<img src="modules/dashboards/img/cyclone_wind.png">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Typhoon features</span>
@@ -184,7 +184,7 @@
 					<div class="card-header" role="tab" id="headingThree">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
 							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/undefined.png">
+								<img src="modules/dashboards/img/elevation.png">
 							</span>
 							<span class="panel-header-content">
 								<span class="panel-header-title">Geographic features</span>
@@ -234,7 +234,7 @@
 				</div>
 				<div class="popup-score">
 				  <div class="score-label">{{metric_label}}</div>
-				  {{value_popup}}
+				  {{value_popup}}<span class="score-unit">{{value_popup_unit}}</span>
 				</div>
 			  </div>
 
@@ -259,9 +259,8 @@
 					<h3 class="modal-title">{{metric_label}}</h3>
 				</div>
 				<div class="modal-body">
-					<h5><b>Year source:</b> {{metric_year}}</h5><br>
-					<h5><b>Source link:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h5><br>
 					<h5><b>Description:</b> {{metric_desc}}</h5><br>
+					<h5><b>Link to source/info:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h5><br>
 				</div>
 			</div>
 		</div>

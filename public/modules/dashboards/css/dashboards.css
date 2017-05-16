@@ -94,7 +94,8 @@ body {
   color: #bbbbbb;
   margin-right: 3px;
   text-align: left;
-  width: 180px;
+  display: block;
+  min-width: 180px;
 }
 .zoom-level button:hover {
   background: #397ab0;
@@ -356,6 +357,10 @@ body {
 .map-popup .popup-score {
   font-size: 35px;
   text-transform: uppercase;
+}
+.map-popup .popup-score .score-unit {
+  font-size: 20px;
+  text-transform: lowercase;
 }
 .map-popup .score-label {
   color: #daeaf7;

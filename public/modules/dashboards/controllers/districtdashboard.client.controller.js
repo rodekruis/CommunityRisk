@@ -420,20 +420,27 @@ angular.module('dashboards')
 					$scope.type_text = 'This historical typhoon was used to develop this model, but was never used to make predictions at the time.';
 					$scope.metric = 'total_damage_houses';
 					$scope.metric_label = meta_label[$scope.metric];
+					//$('#overall_damage').css('visibility','visible');
+					//$('#overall_damage_na').css('visibility','hidden');
 				} else if ($scope.actuals == 'yes' && $scope.predictions == 'yes') {
 					$scope.type_text = 'For this typhoon priority areas were predicted using the model, and actual damage was collected later, so prediction errors can be measured.';
 					$scope.metric = 'total_damage_houses';
 					$scope.metric_label = meta_label[$scope.metric];
+					//$('#overall_damage').css('visibility','visible');
+					//$('#overall_damage_na').css('visibility','hidden');
 				} else if ($scope.actuals == 'no' && $scope.predictions == 'yes') {
 					$scope.type_text = 'For this typhoon priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.';
 					$scope.metric = 'perc_pred';
 					$scope.metric_label = meta_label[$scope.metric];
+					//$('#overall_damage').css('visibility','hidden');
+					//$('#overall_damage_na').css('visibility','visible');
 				}
 				$scope.start_date = d.Typhoon_meta.startdate;
 				$scope.end_date = d.Typhoon_meta.enddate;
 				$scope.total_damage = dec0Format(dimensions.total_damage_houses.top(1)[0].value);
 				$scope.total_potential = dec0Format(dimensions.total_houses.top(1)[0].value);
-				$scope.total_intensity = percFormat(dimensions.total_damage_houses.top(1)[0].value / dimensions.total_houses.top(1)[0].value);
+				var total_intensity = dimensions.total_damage_houses.top(1)[0].value / dimensions.total_houses.top(1)[0].value;
+				isNaN(total_intensity) ? $scope.total_intensity = percFormat(0) : $scope.total_intensity = percFormat(total_intensity);
 			};			
 			
 			///////////////////////////////
@@ -870,6 +877,7 @@ angular.module('dashboards')
 								var record = d.Rapportage[i];
 								if (record.pcode === $scope.filters[$scope.filters.length - 1]) {
 									$scope.value_popup = currentFormat(record[$scope.metric]); 
+									$scope.value_popup_unit = meta_unit[$scope.metric];
 									break;
 								};
 							}

@@ -257,7 +257,7 @@ select t0.pcode_level4 as pcode
 	,t1.land_area
 	,population / land_area as pop_density
 	,t2.poverty_incidence
-	--,t3.traveltime
+	,t3.traveltime
 	,t3.traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre
 	,t4.drought_risk,flood_risk
 into "MW_datamodel"."Indicators_4_TOTAL"

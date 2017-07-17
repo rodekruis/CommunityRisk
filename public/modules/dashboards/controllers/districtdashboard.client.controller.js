@@ -149,7 +149,6 @@ angular.module('dashboards')
 		  d.Districts.features = $.grep(d.Districts.features, function(e){ return pcode_list.indexOf(e.properties.pcode) > -1; });
 		  $scope.geom = d.Districts; //pgData.usp_data.geo;
 		  // 3. Data Preparedness Index data
-		  console.log(pgData.usp_data);
 		  d.dpi = pgData.usp_data.dpi;
 		  
 		  // 4. Variable-metadata
@@ -207,6 +206,7 @@ angular.module('dashboards')
 		  d.Districts = pgData.usp_data.geo;
 		  $scope.geom = pgData.usp_data.geo;
 		  d.Rapportage = pgData.usp_data.ind;
+		  console.log(pgData.usp_data);
 		  d.dpi = pgData.usp_data.dpi;
 		  d.Metadata = $scope.view_code === 'CRA'  ? $.grep(d.Metadata_full, function(e){ return e.view_code == 'CRA' && e.country_code.indexOf($scope.country_code) > -1 && e.admin_level >= $scope.admlevel && e.admin_level_min <= $scope.admlevel;}) 
 												: $.grep(d.Metadata_full, function(e){ return e.view_code == 'PI' && e.disaster_type.indexOf($scope.disaster_type) > -1 && e.country_code.indexOf($scope.country_code) > -1; });

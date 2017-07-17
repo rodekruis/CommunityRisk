@@ -370,7 +370,7 @@ left join (select pcode
 	) t1
 on t0.pcode_level3 = t1.pcode
 group by t0.pcode_level3
-
+;
 ------------------
 -- Level 2 data --
 ------------------

@@ -149,6 +149,7 @@ angular.module('dashboards')
 		  d.Districts.features = $.grep(d.Districts.features, function(e){ return pcode_list.indexOf(e.properties.pcode) > -1; });
 		  $scope.geom = d.Districts; //pgData.usp_data.geo;
 		  // 3. Data Preparedness Index data
+		  console.log(pgData.usp_data);
 		  d.dpi = pgData.usp_data.dpi;
 		  
 		  // 4. Variable-metadata

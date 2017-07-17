@@ -111,8 +111,6 @@ where "DIST_CODE" <> 0
 ;
 --select count(*) from "MW_datamodel"."Indicators_4_hazards"
 
-select *
-from "mw_source"."Indicators_4_miscellaneous"
 
 
 ------------------

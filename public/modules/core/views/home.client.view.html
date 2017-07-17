@@ -65,16 +65,25 @@
 																Philippines
 															</a>
 														</li>
-														<li class="divider"></li>
 														<li>
 															<a ng-click="choose_country('MW')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" role="button">
 																Malawi
 															</a>
 														</li>
-														<li class="divider"></li>
 														<li>
 															<a ng-click="choose_country('NP')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" role="button">
-																Nepal (under construction)
+																Nepal
+															</a>
+														</li>
+														<li class="divider"></li>
+														<li>
+															<a ng-click="choose_country('MLI')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" role="button">
+																Mali (basic)
+															</a>
+														</li>
+														<li>
+															<a ng-click="choose_country('LKA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" role="button">
+																Sri Lanka (basic)
 															</a>
 														</li>
 													</ul>
@@ -111,7 +120,7 @@
 	
 							<div class="row">
 								<div class="col-md-12">
-									<h2>2. Priority Index model - <span class="timer" data-speed="1" data-to="2"></span> Typhoons Predicted</h2>
+									<h2>2. Priority Index model - <span class="timer" data-speed="1" data-to="3"></span> Disasters Predicted</h2>
 									<br>
 								</div>
 							</div>
@@ -131,8 +140,14 @@
 													</a>
 													<ul class="dropdown-menu">
 														<li>
-															<a ng-click="choose_country('PH')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile" role="button">
+															<a ng-click="setup_PI('PH','Typhoon')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile" role="button">
 																Typhoons - Philippines
+															</a>
+														</li>
+														<li class="divider"></li>
+														<li>
+															<a ng-click="setup_PI('PH','Earthquake')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile" role="button">
+																Earthquakes - Philippines
 															</a>
 														</li>
 													</ul>
@@ -173,7 +188,7 @@
 		</div>
 	</section>
 	
-	<span class="scroll" id="walkthrough"></span>
+	<span class="scroll" id="walkthrough_CRA"></span>
 	
 	<section class="walkthrough">
 		<div class="container">

@@ -5,10 +5,15 @@ angular.module('core').controller('HomeController', ['$scope','$rootScope','Auth
     $scope.authentication = Authentication;
 	
 	$rootScope.country_code = '';
+	$rootScope.disaster_type = '';
 	$rootScope.view_code = '';
 	
 	$scope.choose_country = function(country) {
 		$rootScope.country_code = country;
+	}
+	$scope.setup_PI = function(country,disaster_type) {
+		$rootScope.country_code = country;
+		$rootScope.disaster_type = disaster_type;
 	}
 	$scope.choose_view = function(view) {
 		$rootScope.view_code = view;

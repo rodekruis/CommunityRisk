@@ -66,10 +66,28 @@ into "NP_datamodel"."Indicators_4_population"
 from np_source."Indicators_4_population"
 ;
 
+drop table if exists "NP_datamodel"."Indicators_4_traveltime";
+select "PCODE" as pcode_level4
+	,tt_mean as traveltime
+into "NP_datamodel"."Indicators_4_traveltime"
+from np_source."Indicators_4_traveltime"
+;
+
 
 ------------------
 -- Level 3 data --
 ------------------
+
+drop table if exists "NP_datamodel"."Indicators_3_hazards";
+select "PCODE" as pcode_level3
+	,cs_sum + cy_sum as cyclone_phys_exp 	/* Combine into one variable */
+	,dr_sum as drought_phys_exp
+	,eq_sum as earthquake7_phys_exp
+	,fl_sum as flood_phys_exp
+	,ts_sum as tsunami_phys_exp
+into "NP_datamodel"."Indicators_3_hazards"
+from "np_source"."Indicators_3_hazards"
+;
 
 drop table if exists "NP_datamodel"."Indicators_3_vulnerability";
 SELECT 'NP-' || ocha_pcode as pcode_level3
@@ -157,18 +175,29 @@ select t0.pcode_level4 as pcode
 	,land_area
 	,population
 	,population / land_area as pop_density
+	,traveltime
+	--,tX.XXX ADD NEW VARIABLE HERE
 into "NP_datamodel"."Indicators_4_TOTAL"
 from "NP_datamodel"."Geo_level4" t0
 left join "NP_datamodel"."Indicators_4_area" 		t1	on t0.pcode_level4 = t1.pcode_level4
 left join "NP_datamodel"."Indicators_4_population" 	t2	on t0.pcode_level4 = t2.pcode_level4
+left join "NP_datamodel"."Indicators_4_traveltime" 	t3	on t0.pcode_level4 = t3.pcode_level4
+--left join "NP_datamodel"."Indicators_4_XXX" 		tX	on t0.pcode_level4 = tX.pcode_level4
 ;
 
 
 drop table if exists "NP_datamodel"."Indicators_3_TOTAL";
 select t0.pcode_level3 as pcode
 	,t0.pcode_level2 as pcode_parent
-	,level4.land_area,population,pop_density
+	,level4.land_area,population,pop_density,traveltime
+	--ADD NEW LEVEL4 VARIABLES HERE AGAIN AS WELL (in aggregated form)
 	,t1.earlydeath,illiteracy,nosafewater,malnourished,provisioning,hpi,hdi
+	,case when population = 0 then null else cyclone_phys_exp / population end as cyclone_phys_exp
+	,case when population = 0 then null else drought_phys_exp / population end as drought_phys_exp
+	,case when population = 0 then null else earthquake7_phys_exp / population end as earthquake7_phys_exp
+	,case when population = 0 then null else flood_phys_exp / population end as flood_phys_exp
+	,case when population = 0 then null else tsunami_phys_exp / population end as tsunami_phys_exp
+	--ADD NEW LEVEL3 VARIABLES HERE
 into "NP_datamodel"."Indicators_3_TOTAL"
 from "NP_datamodel"."Geo_level3" t0
 left join (
@@ -176,18 +205,24 @@ left join (
 		,sum(land_area) as land_area
 		,sum(population) as population
 		,sum(pop_density * land_area) / sum(land_area) as pop_density
+		,sum(traveltime * population) / sum(population) as traveltime
+		--ADD NEW LEVEL4 VARIABLES HERE AGAIN AS WELL (in aggregated form)
 	from "NP_datamodel"."Indicators_4_TOTAL"
 	group by 1
 	) level4
 	on t0.pcode_level3 = level4.pcode_parent
 left join "NP_datamodel"."Indicators_3_vulnerability" 	t1	on t0.pcode_level3 = t1.pcode_level3
+left join "NP_datamodel"."Indicators_3_hazards" 	t2	on t0.pcode_level3 = t2.pcode_level3
+--left join "NP_datamodel"."Indicators_3_XXX" 		t3	on t0.pcode_level3 = t3.pcode_level3
 ;
 
 
 drop table if exists "NP_datamodel"."Indicators_2_TOTAL";
 select t0.pcode_level2 as pcode
-	,level3.population,land_area,pop_density
-	,level3.earlydeath,illiteracy,nosafewater,malnourished,provisioning,hpi,hdi
+	,t0.pcode_level1 as pcode_parent
+	,level3.population,land_area,pop_density,traveltime --ADD NEW LEVEL4 VARIABLES HERE
+	,level3.earlydeath,illiteracy,nosafewater,malnourished,provisioning,hpi,hdi,cyclone_phys_exp,drought_phys_exp,tsunami_phys_exp,flood_phys_exp,earthquake7_phys_exp --ADD NEW LEVEL3 VARIABLES HERE
+	--ADD NEW LEVEL2 VARIABLES HERE
 into "NP_datamodel"."Indicators_2_TOTAL"
 from "NP_datamodel"."Geo_level2" t0
 left join (
@@ -195,6 +230,8 @@ left join (
 		,sum(population) as population
 		,sum(land_area) as land_area
 		,sum(pop_density * land_area) / sum(land_area) as pop_density
+		,sum(traveltime * population) / sum(population) as traveltime
+		--ADD NEW LEVEL4-VARIABLES HERE AS WELL
 		,sum(earlydeath * population) / sum(population) as earlydeath
 		,sum(illiteracy * population) / sum(population) as illiteracy
 		,sum(nosafewater * population) / sum(population) as nosafewater
@@ -202,16 +239,18 @@ left join (
 		,sum(provisioning * population) / sum(population) as provisioning
 		,sum(hpi * population) / sum(population) as hpi
 		,sum(hdi * population) / sum(population) as hdi
+		,sum(flood_phys_exp * population) / sum(population) as flood_phys_exp
+		,sum(cyclone_phys_exp * population) / sum(population) as cyclone_phys_exp
+		,sum(earthquake7_phys_exp * population) / sum(population) as earthquake7_phys_exp
+		,sum(tsunami_phys_exp * population) / sum(population) as tsunami_phys_exp
+		,sum(drought_phys_exp * population) / sum(population) as drought_phys_exp
+		--ADD NEW LEVEL3-VARIABLES HERE AS WELL
 	from "NP_datamodel"."Indicators_3_TOTAL"
 	group by 1
 	) level3
 	on t0.pcode_level2 = level3.pcode_parent
+--left join "NP_datamodel"."Indicators_2_XXX" 		t1	on t0.pcode_level2 = t1.pcode_level2
 ;
 
---CREATE DUMMY RISK FRAMEWORK TABLE as it needs to exist for the stored procedures to work
-drop table if exists "NP_datamodel"."total_scores_level2";
-select *
-into "NP_datamodel"."total_scores_level2"
-from "MW_datamodel"."total_scores_level2"
-limit 0;
+
 

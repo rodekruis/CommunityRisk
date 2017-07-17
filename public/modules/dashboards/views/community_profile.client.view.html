@@ -1,57 +1,108 @@
 <section class="section-expand" data-ng-controller="DistrictDashboardsController" data-ng-init="initiate('CRA')">
 	
 	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
-
+		
+		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
+			<span class="sr-only" translate>Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		
 		<div class="navbar-header">
 			<a class="navbar-brand" href="/#!/">
 				<img src="modules/dashboards/img/logo.svg" class="logo">
 				Community Risk Assessment <span class="title-hightlight">Toolbox</span>
 			</a>
 		</div>
+		
+		<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
+			
+			<!-- start: tutorial nav -->
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">
+						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+						How it works
+					</a>
+				</li>
+			</ul>
+			<!-- end: tutorial nav -->
+			<!-- start: export nav -->
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+							  Export Options
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu export-items">
+						<li>
+							<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a id="download" ng-click="export_csv()">Export (CSV)</a>
+						</li>
+					</ul>
+					<!-- /.dropdown-tasks -->
+				</li>
+			</ul>
+			<!-- end: export nav -->
+			<!-- start: hierarchical nav -->
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+							  Select ...
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu export-items">
+						<li class="dropdown-submenu">
+							<a class="menu-item" href="#">View<i class="fa fa-angle-down export-btn-arrow"></i></a>
+							<ul class="dropdown-menu submenu-items">
+								<li>
+									<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">Community Risk</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">Priority Index</a>
+								</li>
+							</ul>
+						</li>
+						<li class="divider"></li>
+						<li class="dropdown-submenu">
+							<a class="menu-item" href="#">Country<i class="fa fa-angle-down export-btn-arrow"></i></a>
+							<ul class="dropdown-menu submenu-items">
+								<li>
+									<a class="submenu-item" ng-click="change_country('PH')" role="button">Philippines</a>
+								</li>
+								<!-- <li class="divider"></li> -->
+								<li>
+									<a class="submenu-item" ng-click="change_country('MW')" role="button">Malawi</a>
+								</li>
+								<!-- <li class="divider"></li> -->
+								<li>
+									<a class="submenu-item" ng-click="change_country('NP')" role="button">Nepal</a>
+								</li>
+								<!-- <li class="divider"></li> -->
+								<li>
+									<a class="submenu-item" ng-click="change_country('MLI')" role="button">Mali (basic)</a>
+								</li>
+								<!-- <li class="divider"></li> -->
+								<li>
+									<a class="submenu-item" ng-click="change_country('LKA')" role="button">Sri Lanka (basic)</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<!-- end: hierarchical nav -->
+		</nav>
 
-		<!-- start: view nav -->
-		<ul class="nav navbar-top-links navbar-right">
-			<li class="dropdown">
-				<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-					<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
-						  Select View
-					<i class="fa fa-angle-down export-btn-arrow"></i>
-				</a>
-				<ul class="dropdown-menu export-items">
-					<li>
-						<a ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">Community Risk View</a>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<a ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">Priority Index View</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-		<!-- end: view nav -->
-		<!-- start: export nav -->
-		<ul class="nav navbar-top-links navbar-right">
-			<li class="dropdown">
-				<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-					<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
-						  Export Options
-					<i class="fa fa-angle-down export-btn-arrow"></i>
-				</a>
-				<ul class="dropdown-menu export-items">
-					<li>
-						<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<a id="download" ng-click="export_csv()">Export (CSV)</a>
-					</li>
-				</ul>
-				<!-- /.dropdown-tasks -->
-			</li>
-		</ul>
-		<!-- end: export nav -->
+		
 	</nav>
-	<!-- end: navbar-header -->
 	
 	<div class="content-wrapper">
 	
@@ -75,6 +126,46 @@
 
 			<!-- start: accordion with stats  -->
 			<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
+				<div class="card">
+					<div style="background-color:#B0DED3" class="card-header" role="tab" id="headingZero">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/dpi.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Data Preparedness Index - <span class="component-score" id="dpi_score_main"></span>
+									<span class="score-helptext"></span>
+								</span>
+								<span class="panel-header-description">Completeness, recency and quality of sources</span>
+							</span>
+						</a>
+					</div>
+
+					<div id="collapseZero" class="collapse" role="tabpanel" aria-labelledby="headingZero">
+						<div class="card-block" id="dpi"></div>
+						<!-- <div class="card-block"> -->
+							<!-- <div class="component-section"> -->
+								<!-- <div class="col-md-2"> -->
+									<!-- <img style="height:20px" src="modules/dashboards/img/risk_score.png"> -->
+								<!-- </div> -->
+								<!-- <div class="col-md-3 component-label ng-scope" ng-click="map_coloring('risk_score')">Completeness -->
+									<!-- <div class="component-score medium-good" id="risk_score">{{completeness}}</div> -->
+								<!-- </div> -->
+								<!-- <div class="col-md-5"> -->
+									<!-- <div class="component-scale"> -->
+										<!-- <div class="score-bar medium-good" id="bar-risk_score" style="width:41.99980612523844%"></div> -->
+										<!-- <img class="scale-icon" src="modules/dashboards/img/icon-scale.svg"> -->
+									<!-- </div> -->
+								<!-- </div> -->
+								<!-- <div class="col-sm-2 col-md-2 no-padding"> -->
+									<!-- <button type="button" class="btn-modal ng-scope" data-toggle="modal" ng-click="info('risk_score')"> -->
+										<!-- <img src="modules/dashboards/img/icon-popup.svg" style="height:17px"> -->
+									<!-- </button> -->
+								<!-- </div> -->
+							<!-- </div> -->
+						<!-- </div> -->
+					</div>
+				</div>
 				<div class="card">
 					<div class="card-header" role="tab" id="headingOne">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -186,21 +277,21 @@
 			<!-- start: zoom navigation -->
 			<div class="zoom-level-nav col-md-7">
 				<div class="btn-group zoom-level" role="group">
-					<button style="background-color: #1a9641; color:white" type="button" class="btn btn-secondary">
+					<button style="background-color: #B0DED3; color:black; border-color:#4C8293" type="button" class="btn btn-secondary">
 						<i class="fa fa-tachometer" aria-hidden="true"></i>
-						<span class="button-label">{{metric_label}}</span>
+						<span class="button-label"><strong>{{metric_label}}</strong></span>
 					</button>
-					<button id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
+					<button id="level1" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(1)">
 						<i class="fa fa-globe" aria-hidden="true"></i>
 						<span class="button-label">{{country_selection}}</span>
 					</button>
-					<button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)">
+					<button id="level2" type="button" class="btn btn-secondary" ng-click="zoom_out(2)">
 						<i class="fa fa-th-large" aria-hidden="true"></i>
-						<span class="button-label">{{level2_selection}}</span>
+						<span class="button-label">{{levelB_selection}}</span>
 					</button>
-					<button id="level4" type="button" class="btn btn-secondary">
+					<button id="level3" type="button" class="btn btn-secondary">
 						<i class="fa fa-th" aria-hidden="true"></i>
-						<span class="button-label">{{level3_selection}}</span>
+						<span class="button-label">{{levelC_selection}}</span>
 					</button>
 				</div>
 			</div>

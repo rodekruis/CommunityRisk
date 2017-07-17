@@ -20,7 +20,7 @@ COPY "ph_source"."Indicators_3_hazards_new" FROM 'C:\Users\JannisV\Rode Kruis\CP
 -- 1.1: Boundary data tables --
 -------------------------------
 
-drop table if exists "PH_datamodel"."Geo_level4";
+drop table if exists "PH_datamodel"."Geo_level4_backup";
 SELECT cast('PH' || case when ___pcode_1 < 100000000 then '0' else '' end || cast(___pcode_1 as text) as varchar) as pcode_level2
 	, cast('PH' || case when ___pcode_2 < 100000000 then '0' else '' end || cast(___pcode_2 as text) as varchar) as pcode_level3
 	, ___name_subm as name_submunicipality
@@ -30,11 +30,35 @@ SELECT cast('PH' || case when ___pcode_1 < 100000000 then '0' else '' end || cas
 	, alt_pcodes
 	, area / 1000000 as land_area
 	, geom --t1.geom
-INTO "PH_datamodel"."Geo_level4"
+INTO "PH_datamodel"."Geo_level4_backup"
 FROM "geo_source"."Geo_PH_level4"
---JOIN "geo_source"."Geo_PH_level4_mapshaper" t1 on t0.gid = t1.gid
 ;
 
+drop table if exists "PH_datamodel"."Geo_level4";
+select replace(replace(pcode_level4,'0645','1845'),'0746','1846') as pcode_level4
+	,name
+	,replace(replace(pcode_level3,'0645','1845'),'0746','1846') as pcode_level3
+	,land_area
+	,geom
+into "PH_datamodel"."Geo_level4"
+from "PH_datamodel"."Geo_level4_backup"
+;
+/*
+select case when pcode_level4 is null then 0 else 1 end as aa
+	,case when "Barangay Code" is null then 0 else 1 end as bb
+	,count(*)
+from (
+	select t0.pcode_level4
+		,t0.name
+		,t1."Barangay Code"
+		,t1."Barangay"
+	from "PH_datamodel"."Geo_level4" t0
+	full outer join ph_source."Indicators_4_population_disaggregated" t1
+		on replace(replace(t0.pcode_level4,'0645','1845'),'0746','1846') = t1."Barangay Code"
+	) agg
+group by 1,2
+*/
+/*
 drop table if exists "PH_datamodel"."Geo_level3";
 SELECT t0.name_mun as name
 	, cast('PH' || case when t0.pcode_mun = '99701000' then '099701000' else t0.pcode_mun end as varchar) as pcode_level3
@@ -54,7 +78,27 @@ SELECT cast('PH' || t0.pcode_prov as varchar) as pcode_level2
 INTO "PH_datamodel"."Geo_level2"
 FROM "geo_source"."Geo_PH_level2" t0
 JOIN "geo_source"."Geo_PH_level2_mapshaper" t1 on t0.gid = t1.gid
+;*/
+
+drop table if exists "PH_datamodel"."Geo_level3";
+SELECT mun_code as pcode_level3
+	,initcap(lower(mun_name)) as name
+	,pro_code as pcode_level2
+	, geom
+INTO "PH_datamodel"."Geo_level3"
+FROM "geo_source"."Geo_PH_level3_mapshaper"
 ;
+--select * FROM "PH_datamodel"."Geo_level3" order by 1
+
+drop table if exists "PH_datamodel"."Geo_level2";
+SELECT pro_code as pcode_level2
+	,initcap(lower(pro_name)) as name
+	,reg_code as pcode_level1
+	,geom
+INTO "PH_datamodel"."Geo_level2"
+FROM "geo_source"."Geo_PH_level2_mapshaper"
+;
+
 
 
 ------------------------------------------
@@ -76,17 +120,25 @@ join <possibly join with any other tables necessary for transformations>
 where <possibly apply any filters here>
 ;
 */
-
+/*
 drop table if exists "PH_datamodel"."Indicators_4_population";
 select cast('PH' || case when length(pcode_barangay) = 8 then '0' else '' end || pcode_barangay as varchar) as pcode_level4
 	, population
 into "PH_datamodel"."Indicators_4_population"
 from "ph_source"."Indicators_4_population"
 where pcode_barangay not in ('New','#N/A')
+;*/
+
+drop table if exists "PH_datamodel"."Indicators_4_population";
+select "Barangay Code" as pcode_level4
+	,cast("F All Ages" + "M All Ages" as int) as population
+into "PH_datamodel"."Indicators_4_population"
+from ph_source."Indicators_4_population_disaggregated"
 ;
+--select * from "PH_datamodel"."Indicators_4_population";
 
 drop table if exists "PH_datamodel"."Indicators_4_traveltime";
-select cast('PH' || case when pcode_barangay < 100000000 then '0' else '' end || pcode_barangay as varchar) as pcode_level4
+select replace(replace(cast('PH' || case when pcode_barangay < 100000000 then '0' else '' end || pcode_barangay as varchar),'0645','1845'),'0746','1846') as pcode_level4
 	,traveltime
 into "PH_datamodel"."Indicators_4_traveltime"
 from "ph_source"."Indicators_4_traveltime_gdp"
@@ -128,17 +180,16 @@ where <possibly apply any filters here>
 */
 
 drop table if exists "PH_datamodel"."Indicators_3_poverty";
-select 'PH' || case when psgc_muni < 100000000 then '0' else '' end || psgc_muni as pcode_level3
+select replace(replace('PH' || case when psgc_muni < 100000000 then '0' else '' end || psgc_muni,'0645','1845'),'0746','1846') as pcode_level3
 	,sum(case when pov_muni_measure = 'Incidence' then cast(replace(estimate,',','.') as numeric) end) / 100 as poverty_incidence
 into "PH_datamodel"."Indicators_3_poverty"
 from "ph_source"."Indicators_3_poverty"
 where pov_muni_year = 2012 and estimate <> '-'
 group by 1
-order by 1
 ;
 
 drop table if exists "PH_datamodel"."Indicators_3_hazards";
-select 'PH' || case when pcode_mun = '99701000' then '099701000' else pcode_mun end as pcode_level3
+select replace(replace('PH' || case when pcode_mun = '99701000' then '099701000' else pcode_mun end,'0645','1845'),'0746','1846') as pcode_level3
 	,cs_sum + cy_sum as cyclone_phys_exp 	/* Combine into one variable */
 	,dr_sum as drought_phys_exp
 	,eq7_sum as earthquake7_phys_exp
@@ -173,7 +224,7 @@ group by 1
 
 --hospital information from OCHA
 drop table if exists "PH_datamodel"."Indicators_3_hospitals_OCHA";
-select "Mun_City Code" as pcode_level3
+select replace(replace("Mun_City Code",'0645','1845'),'0746','1846') as pcode_level3
 	, "Barangay Health Station" as barangay_health_station
 	, "Government Hospital" as gov_hospital
 	, "Private Hospital" as private_hospital
@@ -206,7 +257,7 @@ group by 1
 
 --good governance index
 drop table if exists "PH_datamodel"."Indicators_3_governance";
-SELECT 'PH' || case when length(mun_code) = 8 then '0' else '' end || mun_code as pcode_level3
+SELECT replace(replace('PH' || case when length(mun_code) = 8 then '0' else '' end || mun_code,'0645','1845'),'0746','1846') as pcode_level3
 	, max(case when indicator = 'GOOD GOVERNANCE INDEX' then cast(value_2008 as numeric) end) as good_governance_index
 	, max(case when indicator = 'Income Index' then value_2008 end) as income_index
 	, max(case when indicator = 'Expenditure Index' then value_2008 end) as expenditure_index
@@ -248,7 +299,7 @@ select Muncode
 		+ asbestos+ glass+ "Makeshift/salvaged/improvised"+ others+ "No Wall"+ "Not reported" as total
 FROM "ph_source"."Indicators_3_walltype"
 )
-SELECT t0.Muncode as pcode_level3
+SELECT replace(replace(t0.Muncode,'0645','1845'),'0746','1846') as pcode_level3
 	, round("Concrete/Brick/Wall" / total,3) as concrete_or_brick
 	, round( wood / total,3)  as wood
 	, round( "Half Concrete Hald Wood" / total,3)  as concrete_and_wood
@@ -266,10 +317,9 @@ LEFT JOIN total on t0.Muncode = total.Muncode
 ;
 
 
-
 --Pantawid (4P) program for poor people. (Is actually by family, which is not per se the same as household.)
 drop table if exists "PH_datamodel"."Indicators_3_Pantawid";
-select "Mun_City Code" as pcode_level3
+select replace(replace("Mun_City Code",'0645','1845'),'0746','1846') as pcode_level3
 	,case when "Both Sexes" = 0 then null else cast("Pantawid Beneficiary" as float) / cast("Both Sexes" as float) end as Pantawid_perc
 INTO "PH_datamodel"."Indicators_3_Pantawid"
 FROM "ph_source"."Indicators_3_OCHA_predisaster"
@@ -287,7 +337,7 @@ select "Mun_City Code" as pcode_level3
        "R Other" + "R Not reported" as total
 FROM "ph_source"."Indicators_3_OCHA_predisaster"
 )
-SELECT t0."Mun_City Code" as pcode_level3
+SELECT replace(replace(t0."Mun_City Code",'0645','1845'),'0746','1846') as pcode_level3
 	, round( cast("R Galvanized Iron/Aluminum" / total as numeric),3) as galv_iron_aluminium
 	, round( cast("R Tile Concrete" / total as numeric),3)  as tile_concrete
 	, round( cast("R Half galvanized/half concrete" / total as numeric),3)  as galv_and_concrete
@@ -301,6 +351,25 @@ INTO "PH_datamodel"."Indicators_3_rooftype"
 FROM "ph_source"."Indicators_3_OCHA_predisaster" t0
 LEFT JOIN total on t0."Mun_City Code" = total.pcode_level3
 ;
+
+
+
+--recents shocks (# of typhoons that hit)
+drop table if exists "PH_datamodel"."Indicators_3_recent_shocks";
+select t0.pcode_level3
+	,sum(case when t1.pcode is not null then 1 else 0 end) as recent_shocks
+INTO "PH_datamodel"."Indicators_3_recent_shocks"
+from "PH_datamodel"."Geo_level3" t0
+left join (select pcode
+	from "PH_datamodel"."PI_Typhoon_input_damage"
+	where disaster_name <> 'Nina' and total_damage_houses_perc > 1
+	union all 
+	select pcode
+	from "PH_datamodel"."PI_Earthquake_input_damage"
+	where disaster_name <> 'Sarangani 2017' and total_damage_houses_perc > 1
+	) t1
+on t0.pcode_level3 = t1.pcode
+group by t0.pcode_level3
 
 ------------------
 -- Level 2 data --
@@ -319,7 +388,7 @@ where <possibly apply any filters here>
 */
 
 drop table if exists "PH_datamodel"."Indicators_2_HDI";
-select 'PH' || case when coalesce(t2.pcode2,province_code) < 100000000 then '0' else '' end || coalesce(t2.pcode2,province_code) as pcode_level2
+select replace(replace('PH' || case when coalesce(t2.pcode2,province_code) < 100000000 then '0' else '' end || coalesce(t2.pcode2,province_code),'0645','1845'),'0746','1846') as pcode_level2
 	,cast(replace(hdi_2012,',','.') as numeric)		as hdi
 	,cast(replace(life_exp_index,',','.') as numeric) 	as life_exp_index
 	,cast(replace(educ_index,',','.') as numeric) 		as educ_index
@@ -350,7 +419,7 @@ select t0.pcode_level4 as pcode
 	,t0.pcode_level3 as pcode_parent
 	,t1.population
 	,round(t0.land_area,1) as land_area
-	,round(t1.population / t0.land_area,1) as pop_density
+	,t1.population / t0.land_area as pop_density
 	,round(t3.traveltime,1) as traveltime
 	--PLACEHOLDER: ADD HERE WHICH NEW VARIABLES TO INCLUDE FROM NEW TABLE
 	--,t5.XXX
@@ -384,6 +453,7 @@ select t0.pcode_level3 as pcode
 	,round(cast(t9.pantawid_perc as numeric),3) as pantawid_perc
 	,t10.nr_health_facilities
 	,case when level4.population/10000 = 0 then null else cast(t10.nr_health_facilities as float)/ (cast(level4.population as float) / 10000) end as health_density
+	,t11.recent_shocks
 	--PLACEHOLDER: ADD HERE WHICH NEW VARIABLES TO INCLUDE FROM NEW TABLE
 	--,t11.XXX
 into "PH_datamodel"."Indicators_3_TOTAL"
@@ -406,15 +476,17 @@ left join "PH_datamodel"."Indicators_3_walltype" 		t7	on t0.pcode_level3 = t7.pc
 left join "PH_datamodel"."Indicators_3_rooftype" 		t8	on t0.pcode_level3 = t8.pcode_level3
 left join "PH_datamodel"."Indicators_3_Pantawid" 		t9	on t0.pcode_level3 = t9.pcode_level3
 left join "PH_datamodel"."Indicators_3_hospitals_OCHA" 		t10	on t0.pcode_level3 = t10.pcode_level3
+left join "PH_datamodel"."Indicators_3_recent_shocks"		t11	on t0.pcode_level3 = t11.pcode_level3
 --PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL3 ALREADY) 
 --left join "PH_datamodel"."Indicators_3_XXX" 			t11	on t0.pcode_level3 = t11.pcode_level3
 ;
 
 drop table if exists "PH_datamodel"."Indicators_2_TOTAL"; 
 select t0.pcode_level2 as pcode
+	,t0.pcode_level1 as pcode_parent
 	,level3.poverty_incidence,flood_phys_exp,cyclone_phys_exp,earthquake7_phys_exp,tsunami_phys_exp,drought_phys_exp,good_governance_index,income_class
 		,perc_wall_partly_concrete,perc_roof_concrete_alu_iron,pantawid_perc
-		,nr_health_facilities,health_density
+		,nr_health_facilities,health_density,recent_shocks
 		,population,land_area,pop_density,traveltime
 	--PLACEHOLDER: Add the newly added level3 and level4 indicators here again as well
 	--,level3.XXX
@@ -442,6 +514,7 @@ left join (
 		,round(sum(population*pantawid_perc)  / sum(population),3) as pantawid_perc
 		,sum(nr_health_facilities) as nr_health_facilities
 		,sum(health_density * population) / sum(population) as health_density
+		,sum(recent_shocks) as recent_shocks 
 		--PLACEHOLDER: ADD THE NEWLY ADDED LEVEL3 and LEVEL4 INDICATORS HERE AGAIN AS WELL with the appropriate transformation
 		--,sum(XXX * population) / sum(population) as XXX
 	from "PH_datamodel"."Indicators_3_TOTAL"

@@ -280,6 +280,8 @@ left join haz_risk_score t1	on t0.pcode_level3 = t1.pcode_level3
 --PLACEHOLDER: add new variable here
 --left join XXX_score t2	on t0.pcode_level3 = t2.pcode_level3
 ;
+--select * from "PH_datamodel"."hazard_scores"
+
 
 UPDATE "PH_datamodel"."hazard_scores"
 set hazard_score = 0
@@ -381,7 +383,7 @@ governance_score as (
 --select * from governance_score
 
 --JOINING ALL
-select t1.pcode_level3
+select t0.pcode_level3
 	,travel_score,traveltime
 	,hospitals_score,health_density
 	,governance_score,governance
@@ -392,13 +394,13 @@ select t1.pcode_level3
 			* coalesce((10-governance_score)/10*9+1,1)
 			--PLACEHOLDER
 			--* coalesce((10-XXX_score)/10*9+1,1)			
-		,cast(1 as float)/cast(
-		(case when travel_score is null then 0 else 1 end + 
-		case when hospitals_score is null then 0 else 1 end + 
+		,cast(1 as float)/cast((nullif(0
+		+ case when travel_score is null then 0 else 1 end 
+		+ case when hospitals_score is null then 0 else 1 end 
+		+ case when governance_score is null then 0 else 1 end
 		--PLACEHOLDER
-		--case when XXX_score is null then 0 else 1 end + 		
-		case when governance_score is null then 0 else 1 end)		
-		as float)))/9*10 as coping_capacity_score
+		--+ case when XXX_score is null then 0 else 1 end
+		,0)) as float)))/9*10 as coping_capacity_score
 into "PH_datamodel"."coping_capacity_scores"
 from "PH_datamodel"."Geo_level3" t0
 left join travel_score t1	on t0.pcode_level3 = t1.pcode_level3
@@ -407,7 +409,7 @@ left join governance_score t3 	on t0.pcode_level3 = t3.pcode_level3
 --PLACEHOLDER: add new variable here
 --left join XXX_score t4	on t0.pcode_level3 = t4.pcode_level3
 ;
-
+--select * from "PH_datamodel"."coping_capacity_scores"
 
 ----------------
 -- 2.4: Total --
@@ -453,6 +455,31 @@ join "PH_datamodel"."Indicators_3_TOTAL" t1	on t0.pcode_level3 = t1.pcode
 group by t1.pcode_parent
 ;
 
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "PH_datamodel"."Indicators_2_TOTAL_temp";
+select *
+into "PH_datamodel"."Indicators_2_TOTAL_temp"
+from "PH_datamodel"."Indicators_2_TOTAL" t0
+left join "PH_datamodel"."total_scores_level2" t1
+on t0.pcode = t1.pcode_level2
+;
+drop table "PH_datamodel"."Indicators_2_TOTAL";
+select * into "PH_datamodel"."Indicators_2_TOTAL" from "PH_datamodel"."Indicators_2_TOTAL_temp";
+drop table "PH_datamodel"."Indicators_2_TOTAL_temp";
+--select * from "PH_datamodel"."Indicators_2_TOTAL" 
+
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "PH_datamodel"."Indicators_3_TOTAL_temp";
+select *
+into "PH_datamodel"."Indicators_3_TOTAL_temp"
+from "PH_datamodel"."Indicators_3_TOTAL" t0
+left join "PH_datamodel"."total_scores_level3" t1
+on t0.pcode = t1.pcode_level3
+;
+drop table "PH_datamodel"."Indicators_3_TOTAL";
+select * into "PH_datamodel"."Indicators_3_TOTAL" from "PH_datamodel"."Indicators_3_TOTAL_temp";
+drop table "PH_datamodel"."Indicators_3_TOTAL_temp";
+--select * from "PH_datamodel"."Indicators_3_TOTAL" 
 
 
 

@@ -51,7 +51,7 @@ exports.getData = function(req, res, next, adminLevel) {
 		if (err) return next(err);
 
         var sql1 = 'SELECT usp_data(';
-		var sql2 = '\');';
+		var sql2 = ');';
 		var sql = sql1 + adminLevel + sql2;
 		console.log(sql);
         

@@ -1,0 +1,12 @@
+country_code;disaster_type;name;startdate;enddate;actuals;predictions;default_metric
+PH;Typhoon;Haima;14-10-2016;26-10-2016;yes;yes;total_damage_houses
+PH;Typhoon;Nina;20-12-2016;28-12-2016;no;yes;perc_pred
+PH;Typhoon;Haiyan;3-11-2013;11-11-2013;yes;no;total_damage_houses
+PH;Typhoon;Melor;10-12-2015;17-12-2015;yes;no;total_damage_houses
+PH;Typhoon;Rammasun;9-7-2014;20-7-2014;yes;no;total_damage_houses
+PH;Typhoon;Hagupit;30-11-2014;12-12-2014;yes;no;total_damage_houses
+PH;Earthquake;Leyte 2017;6-7-2017;6-7-2017;no;yes;total_damage_houses_pred
+PH;Earthquake;Bohol 2013;15-10-2013;15-10-2013;yes;no;total_damage_houses
+PH;Earthquake;Negros Oriental 2012;6-2-2012;6-2-2012;yes;no;total_damage_houses
+PH;Earthquake;Batangas 2017;4-4-2017;8-4-2017;yes;no;total_damage_houses
+PH;Earthquake;Surigao City 2017;10-2-2017;10-2-2017;yes;no;total_damage_houses

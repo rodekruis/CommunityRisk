@@ -45,9 +45,75 @@ into "MW_datamodel"."Geo_level3"
 from "geo_source"."Geo_MW_level3_incl_pop2008"
 ;
 
+drop table if exists "MW_datamodel"."Geo_level4";
+select eacode as pcode_level4
+	,ta || ' - EA ' || cast(feature as int) as name
+	,adm3_p_cod as pcode_level3
+	,geom
+into "MW_datamodel"."Geo_level4"
+from "geo_source"."Geo_MW_level4"
+where dist_code <> 0 and pop_sum > 0
+;
+--select count(*) from "MW_datamodel"."Geo_level4"
+
+
+
 ------------------------------------------
 -- 1.2: Transform Indicator data tables --
 ------------------------------------------
+
+------------------
+-- Level 4 data --
+------------------
+
+drop table if exists "MW_datamodel"."Indicators_4_population";
+select eacode as pcode_level4
+	,pop_sum as population
+	,st_area(st_transform(geom,31467))/1000000 as land_area
+into "MW_datamodel"."Indicators_4_population"
+from "geo_source"."Geo_MW_level4"
+where dist_code <> 0
+;
+--select count(*) from "MW_datamodel"."Indicators_4_population"
+
+drop table if exists "MW_datamodel"."Indicators_4_poverty";
+select "EACODE" as pcode_level4
+	,pov_rate as poverty_incidence
+into "MW_datamodel"."Indicators_4_poverty"
+from "mw_source"."Indicators_4_miscellaneous"
+where "DIST_CODE" <> 0
+;
+--select count(*) from "MW_datamodel"."Indicators_4_poverty"
+
+drop table if exists "MW_datamodel"."Indicators_4_traveltime";
+select "EACODE" as pcode_level4
+	,traveltime
+	,tt_ea_ttcavg as traveltime_city
+	,tt_ea_havg as traveltime_hospital
+	,tt_ea_psavg as traveltime_prim_school
+	,tt_ea_ssavg as traveltime_sec_school
+	,tt_ea_tcavg as traveltime_tradingcentre
+	,tt_ea_wpavg as traveltime_waterpoint
+	,(tt_ea_havg + tt_ea_ssavg + tt_ea_tcavg) / 3 as traveltime_avg
+into "MW_datamodel"."Indicators_4_traveltime"
+from "mw_source"."Indicators_4_miscellaneous"
+where "DIST_CODE" <> 0
+;
+--select count(*) from "MW_datamodel"."Indicators_4_traveltime"
+
+drop table if exists "MW_datamodel"."Indicators_4_hazards";
+select "EACODE" as pcode_level4
+	,drought_in*filter as drought_risk
+	,flood_in*filter as flood_risk
+into "MW_datamodel"."Indicators_4_hazards"
+from "mw_source"."Indicators_4_miscellaneous"
+where "DIST_CODE" <> 0
+;
+--select count(*) from "MW_datamodel"."Indicators_4_hazards"
+
+select *
+from "mw_source"."Indicators_4_miscellaneous"
+
 
 ------------------
 -- Level 3 data --
@@ -75,7 +141,7 @@ from "mw_source"."malawi_pop2014"
 )
 select p_code as pcode_level3
 	,substr(p_code,1,9) as pcode_level2
-	,pop2008 * pop_growth as population
+	--,pop2008 * pop_growth as population
 	,st_area(st_transform(geom,31467))/1000000 as land_area
 into "MW_datamodel"."Indicators_3_pop_area"
 from "geo_source"."Geo_MW_level3_incl_pop2008" t0
@@ -186,32 +252,65 @@ FROM temp
 -- 1.3: Create one Indicator table per level--
 -----------------------------------------------
 
+drop table if exists "MW_datamodel"."Indicators_4_TOTAL";
+select t0.pcode_level4 as pcode
+	,t0.pcode_level3 as pcode_parent
+	,t1.population
+	,t1.land_area
+	,population / land_area as pop_density
+	,t2.poverty_incidence
+	--,t3.traveltime
+	,t3.traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre
+	,t4.drought_risk,flood_risk
+into "MW_datamodel"."Indicators_4_TOTAL"
+from "MW_datamodel"."Geo_level4" t0
+left join "MW_datamodel"."Indicators_4_population" t1	on t0.pcode_level4 = t1.pcode_level4
+left join "MW_datamodel"."Indicators_4_poverty" t2	on t0.pcode_level4 = t2.pcode_level4
+left join "MW_datamodel"."Indicators_4_traveltime" t3	on t0.pcode_level4 = t3.pcode_level4
+left join "MW_datamodel"."Indicators_4_hazards" t4	on t0.pcode_level4 = t4.pcode_level4
+;
+
+
 drop table if exists "MW_datamodel"."Indicators_3_TOTAL";
 select t0.pcode_level3 as pcode
 	,t0.pcode_level2 as pcode_parent
-	,population
+	,level4.population,poverty_incidence,traveltime,traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre
 	,land_area
-	,population / land_area as pop_density
-	,case when population = 0 then null else cyclone_phys_exp / population end as cyclone_phys_exp
+	,population / land_area as pop_density	
+--	,case when population = 0 then null else cyclone_phys_exp / population end as cyclone_phys_exp
 	,case when population = 0 then null else drought_phys_exp / population end as drought_phys_exp
 	,case when population = 0 then null else earthquake7_phys_exp / population end as earthquake7_phys_exp
 	,case when population = 0 then null else flood_phys_exp / population end as flood_phys_exp
-	,case when population = 0 then null else tsunami_phys_exp / population end as tsunami_phys_exp
-	,case when population = 0 then null else gdp / population end as gdp_per_capita
-	,traveltime
+--	,case when population = 0 then null else tsunami_phys_exp / population end as tsunami_phys_exp
+--	,case when population = 0 then null else gdp / population end as gdp_per_capita
+--	,traveltime
 	,t4.nr_health_facilities
 	,case when population/10000 = 0 then null else cast(t4.nr_health_facilities as float)/ (cast(population as float) / 10000) end as health_density
-	,t5.poverty_incidence
+	--,t5.poverty_incidence
 	,t6.electricity
 	--ADD NEW VARIABLES HERE
 	--,t6.XXX
 into "MW_datamodel"."Indicators_3_TOTAL"
 from "MW_datamodel"."Geo_level3" t0
-left join "MW_datamodel"."Indicators_3_pop_area" 	t1	on t0.pcode_level3 = t1.pcode_level3
+left join (
+	select pcode_parent
+		,sum(population) as population
+		,sum(land_area) as land_area
+		,sum(pop_density * land_area) / sum(land_area) as pop_density
+		,sum(poverty_incidence * population) / sum(population) as poverty_incidence
+		,sum(traveltime * population) / sum(population) as traveltime
+		,sum(traveltime_hospital * population) / sum(population) as traveltime_hospital
+		,sum(traveltime_sec_school * population) / sum(population) as traveltime_sec_school
+		,sum(traveltime_tradingcentre * population) / sum(population) as traveltime_tradingcentre
+	from "MW_datamodel"."Indicators_4_TOTAL"
+	group by 1
+	) level4
+	on t0.pcode_level3 = level4.pcode_parent
+--left join "MW_datamodel"."Indicators_3_pop_area" 	t1	on t0.pcode_level3 = t1.pcode_level3
 left join "MW_datamodel"."Indicators_3_hazards" 	t2	on t0.pcode_level3 = t2.pcode_level3
-left join "MW_datamodel"."Indicators_3_gdp_traveltime" 	t3	on t0.pcode_level3 = t3.pcode_level3
+--left join "MW_datamodel"."Indicators_3_gdp_traveltime" 	t3	on t0.pcode_level3 = t3.pcode_level3
 left join "MW_datamodel"."Indicators_3_health" 		t4	on t0.pcode_level3 = t4.pcode_level3
-left join "MW_datamodel"."Indicators_3_poverty" 	t5	on t0.pcode_level3 = t5.pcode_level3
+--left join "MW_datamodel"."Indicators_3_poverty" 	t5	on t0.pcode_level3 = t5.pcode_level3
 left join "MW_datamodel"."Indicators_3_electricity" 	t6	on t0.pcode_level3 = t6.pcode_level3
 --ADD NEW JOINED TABLE HERE
 --left join "MW_datamodel"."Indicators_3_XXX" 		t6	on t0.pcode_level3 = t6.pcode_level3
@@ -219,9 +318,10 @@ left join "MW_datamodel"."Indicators_3_electricity" 	t6	on t0.pcode_level3 = t6.
 
 drop table if exists "MW_datamodel"."Indicators_2_TOTAL";
 select t0.pcode_level2 as pcode
+	,t0.pcode_level1 as pcode_parent
 	,level3.population,land_area,pop_density
-		,cyclone_phys_exp,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp,tsunami_phys_exp
-		,gdp_per_capita,traveltime,nr_health_facilities,health_density,poverty_incidence
+		,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp
+		,traveltime,nr_health_facilities,health_density,poverty_incidence
 		,electricity
 	--PLACEHOLDER: Add the newly added level3 indicators here again as well
 	--,level3.XXX
@@ -236,12 +336,12 @@ left join (
 		,sum(population) as population
 		,sum(land_area) as land_area
 		,sum(pop_density * land_area) / sum(land_area) as pop_density
-		,sum(cyclone_phys_exp * population) / sum(population) as cyclone_phys_exp
+--		,sum(cyclone_phys_exp * population) / sum(population) as cyclone_phys_exp
 		,sum(drought_phys_exp * population) / sum(population) as drought_phys_exp
 		,sum(earthquake7_phys_exp * population) / sum(population) as earthquake7_phys_exp
 		,sum(flood_phys_exp * population) / sum(population) as flood_phys_exp
-		,sum(tsunami_phys_exp * population) / sum(population) as tsunami_phys_exp
-		,sum(gdp_per_capita * population) / sum(population) as gdp_per_capita
+--		,sum(tsunami_phys_exp * population) / sum(population) as tsunami_phys_exp
+--		,sum(gdp_per_capita * population) / sum(population) as gdp_per_capita
 		,sum(traveltime * population) / sum(population) as traveltime
 		,sum(nr_health_facilities) as nr_health_facilities
 		,sum(health_density * population) / sum(population) as health_density

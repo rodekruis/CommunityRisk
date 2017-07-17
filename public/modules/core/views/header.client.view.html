@@ -1,15 +1,107 @@
 <div class="container" data-ng-controller="HeaderController">
-	<!-- Navigation -->
-		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
-
-		  <div class="navbar-header">
-			  <a class="navbar-brand" href="/#!/">
+	
+	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+		
+		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
+			<span class="sr-only" translate>Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#!/">
 				<img src="modules/dashboards/img/logo.svg" class="logo">
-				Community Profiles <span class="title-hightlight">Dashboard</span></a>
-		  </div>
+				Community Risk Assessment <span class="title-hightlight">Toolbox</span>
+			</a>
+		</div>
+		
+		<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
+			<!-- start: country nav -->
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+							  Select Country
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<li>
+							<a ng-click="change_country('PH')" role="button">
+								Philippines
+							</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a ng-click="change_country('MW')" role="button">
+								Malawi
+							</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a ng-click="change_country('NP')" role="button">
+								Nepal
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<!-- start: view nav -->
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+							  Select View
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu export-items">
+						<li>
+							<a ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">Community Risk View</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">Priority Index View</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<!-- end: view nav -->
+			<!-- start: export nav -->
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+							  Export Options
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu export-items">
+						<li>
+							<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a id="download" ng-click="export_csv()">Export (CSV)</a>
+						</li>
+					</ul>
+					<!-- /.dropdown-tasks -->
+				</li>
+			</ul>
+			<!-- end: export nav --><!-- start: export nav -->
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">
+						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
+							How it works
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+				</li>
+			</ul>
+			<!-- end: export nav -->
+		</nav>
 
-	  </nav>
-		  <!-- end: navbar-header -->
+		
+	</nav>
+	<!-- end: navbar-header -->
 	<!-- 
 	<div class="navbar-header navbar-default">
 		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">

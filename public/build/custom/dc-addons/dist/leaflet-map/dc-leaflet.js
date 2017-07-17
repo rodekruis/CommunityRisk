@@ -726,7 +726,7 @@ dc.leafletLegend = function () {
                     var grades = [];
                     //grades[0] = Math.round(minValue);
                     for (i = 0; i < colorLength; i++) {
-                        grades[i] = Math.round(_parent.colorDomain()[step*(i)]); //Math.round((0.5 + (i - 1)) * delta + minValue);
+                        grades[i] = Math.round(_parent.colorDomain()[step*(i)]*10)/10; //Math.round((0.5 + (i - 1)) * delta + minValue);
                     }
 
                     // var div = L.DomUtil.create('div', 'info legend');

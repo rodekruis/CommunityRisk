@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-	background: #0f4882;
+	background: #4C8293; /* #0f4882; */
 	padding: 0px;
 	margin: 0px;
 	overflow-x: hidden;
@@ -72,26 +72,24 @@ body {
 #ribbon1,#ribbon2,#ribbon3,#ribbon4,#ribbon5 {
     position: fixed;
     right: 0;
-    bottom: 60px;
+    bottom: 45px;
 }
 #ribbon2 {
-	bottom: 30px;
-	background: #3498db;
+	bottom: 15px;
+	background: #4C8293; /*#3498db;*/
+	color: white;
 	padding: 5px 5px 5px 5px;
 	border-radius: 5px;
 	width: 140px;
 	text-align: center;
 }
 #ribbon3 {
-	bottom: 0px;
-	background: #ccc;
+	bottom: 15px;
+	background: B0DED3; /*#ccc;*/
 	padding: 5px 5px 5px 5px;
 	border-radius: 5px;
 	width: 140px;
 	text-align: center;
-}
-#ribbon2:hover {
-	color: black;
 }
 #ribbon4 {
 	top:60px;
@@ -677,7 +675,7 @@ section.container {
 
 /*homepage styles*/
 .homepage {
-  background: #0f4882;
+  background: #B0DED3; /*#4C8293; #0f4882;*/
 }
 .home-bg {
   left: 0;
@@ -688,12 +686,12 @@ section.container {
   top: 0;
 }
 .home-content {
-  color: #ffffff;
+  color: black; /*#ffffff;*/
   padding-bottom: 50px;
   padding-top: 90px;
 }
 .home-content h2 {
-  color: #cfe7fb;
+  color: #4C8293; /*#cfe7fb;*/
   font-weight: bold;
   margin-top: 10px;
   text-align: center;
@@ -721,7 +719,7 @@ section.container {
 }
 .link-button,
 .link-button:visited {
-  background: #397ab2;
+  background: #4C8293; /*#397ab2;*/
   border-radius: 4px;
   color: #ffffff;
   display: block;

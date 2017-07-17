@@ -55,7 +55,7 @@ order by 1,2
 ) final
 ;
 
-select * from metadata."DPI_scores"
+--select * from metadata."DPI_scores"
 
 
 

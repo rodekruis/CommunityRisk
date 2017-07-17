@@ -6,7 +6,6 @@ BEGIN
 EXECUTE format('CREATE SCHEMA IF NOT EXISTS "%s_datamodel";', country);
 END;
 $$ LANGUAGE plpgsql;
---select Create_schema(LKA)
 
 --Create Geo-table
 DROP FUNCTION IF EXISTS Geo_level(varchar,int,varchar,varchar,varchar);
@@ -22,7 +21,6 @@ EXECUTE format('DROP TABLE IF EXISTS "%s_datamodel"."Geo_level%s";
 		', country,admin_level,country,admin_level,pcode,admin_level,name,pcode_parent,(admin_level-1),country,admin_level);
 END;
 $$ LANGUAGE plpgsql;
---select Geo_level('LKA',2,'district_c','district_n')
 
 --Create population-table
 DROP FUNCTION IF EXISTS population(varchar,int,varchar,varchar);
@@ -36,8 +34,6 @@ EXECUTE format('DROP TABLE IF EXISTS "%s_datamodel"."Indicators_%s_population";
 		', country,admin_level,country,admin_level,pcode,admin_level,population,country,admin_level);
 END;
 $$ LANGUAGE plpgsql;
---select population('LKA',4,'gn_uid','tot_pop')
-
 --Create land_area-table
 DROP FUNCTION IF EXISTS land_area(varchar,int,varchar,varchar);
 CREATE OR REPLACE FUNCTION land_area(country varchar,admin_level int,pcode varchar) RETURNS void AS $$
@@ -50,7 +46,6 @@ EXECUTE format('DROP TABLE IF EXISTS "%s_datamodel"."Indicators_%s_area";
 		', country,admin_level,country,admin_level,pcode,admin_level,country,admin_level);
 END;
 $$ LANGUAGE plpgsql;
---select land_area('LKA',4,'gn_uid')
 
 --Combine level 4
 DROP FUNCTION IF EXISTS Ind_join(varchar,int);
@@ -69,7 +64,6 @@ EXECUTE format('DROP TABLE IF EXISTS "%s_datamodel"."Indicators_%s_TOTAL";
 		', country,admin_level,country,admin_level,admin_level,(admin_level-1),country,admin_level,country,admin_level,admin_level,admin_level,country,admin_level,admin_level,admin_level);
 END;
 $$ LANGUAGE plpgsql;
---select Ind_join('LKA',4)
 
 --Combine level 3
 DROP FUNCTION IF EXISTS Ind_agg(varchar,int);
@@ -93,7 +87,6 @@ EXECUTE format('DROP TABLE IF EXISTS "%s_datamodel"."Indicators_%s_TOTAL";
 		', country,admin_level,country,admin_level,admin_level,(admin_level-1),country,admin_level,country,(admin_level+1),admin_level);
 END;
 $$ LANGUAGE plpgsql;
---select Ind_agg('LKA',2)
 
 --NEW: Main stored procedure, dependent on geo-state
 DROP FUNCTION IF EXISTS Ind_total(varchar,int,int);
@@ -106,7 +99,29 @@ CREATE OR REPLACE FUNCTION Ind_total(country varchar,admin_level int,state varch
 	;	
 
 $$ LANGUAGE sql;
---select Ind_total('LKA',3,'agg')
+
+--Sri Lanka
+select Create_schema('LKA');
+select Geo_level('LKA',2,'district_c','district_n');
+select Geo_level('LKA',3,'dsd_c','dsd_n','district_1');
+select Geo_level('LKA',4,'gn_uid','gnd_n','dsd_c');
+select population('LKA',4,'gn_uid','tot_pop');
+select land_area('LKA',4,'gn_uid');
+select Ind_total('LKA',4,'join');
+select Ind_total('LKA',3,'agg');
+select Ind_total('LKA',2,'agg');
+
+--Mali
+select Create_schema('MLI');
+select Geo_level('MLI',1,'pcode_ad_1','admin1_nam');
+select Geo_level('MLI',2,'pcode_ad_2','admin2_nam','pcode_ad_1');
+select Geo_level('MLI',3,'pcode_ad_3','admin3_nam','pcode_ad_2');
+select population('MLI',3,'pcode_ad_3','pop2017_to');
+select land_area('MLI',3,'pcode_ad_3');
+select Ind_total('MLI',3,'join');
+select Ind_total('MLI',2,'agg');
+select Ind_total('MLI',1,'agg');
+
 
 
 

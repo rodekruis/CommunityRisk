@@ -23,7 +23,7 @@ angular.module('dashboards')
 		$rootScope.loadCount = 0;
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.country_code = 'MW';
+		$scope.country_code = 'PH';
 		$scope.view_code = 'CRA';
 		$scope.disaster_type = 'Earthquake'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
 		//$scope.admlevel = 1;

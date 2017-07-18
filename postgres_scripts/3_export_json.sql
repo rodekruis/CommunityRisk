@@ -207,21 +207,21 @@ $func$ LANGUAGE plpgsql;
 -- Get Data Preparedness Index data --
 --------------------------------------------------
 
-DROP FUNCTION IF EXISTS usp_dpi(varchar,int);
-CREATE OR REPLACE FUNCTION usp_dpi(country varchar, adminlevel int, OUT result json) AS $func$
+DROP FUNCTION IF EXISTS usp_dpi(varchar);
+CREATE OR REPLACE FUNCTION usp_dpi(country varchar, OUT result json) AS $func$
 	BEGIN
 	EXECUTE format('select array_to_json(array_agg(dpi))
 			from (
 
 			select * 
 			from metadata."DPI_scores"
-			where country_code = ''%s'' and admin_level = ''%s''
+			where country_code = ''%s''
 			
-			) dpi;',country,adminlevel)
+			) dpi;',country)
 	INTO result;
 	END
 $func$ LANGUAGE plpgsql;
---select usp_dpi('PH',2);
+--select usp_dpi('PH');
 
 
 --------------------------------
@@ -237,13 +237,13 @@ CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode varchar,pi_c
 		WHEN $4 = 'CRA' THEN usp_ind($1,$2,$3) 
 		END) as ind
 		, usp_geo($1,$2,$3) as geo
-		, usp_dpi($2,$1) as dpi
+		, usp_dpi($2) as dpi
 	) data
 
 	;
 $$ LANGUAGE sql;
 
---select usp_data(2,'LKA','','CRA','Earthquake','Leyte 2017');
+--select usp_data(2,'PH','','CRA','Earthquake','Leyte 2017');
 
 
 

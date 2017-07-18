@@ -209,11 +209,14 @@ angular.module('dashboards')
 		  //d.dpi = pgData.usp_data.dpi;
 
 		  d.dpi = [];
-		  for (var i=0;i<d.dpi_temp.length;i++){
-			  if (d.dpi_temp[i].admin_level == $scope.admlevel) {
-				  d.dpi[0] = d.dpi_temp[i];
+		  if (d.dpi_temp) {
+			  for (var i=0;i<d.dpi_temp.length;i++){
+				  if (d.dpi_temp[i].admin_level == $scope.admlevel) {
+					  d.dpi[0] = d.dpi_temp[i];
+				  }
 			  }
 		  }
+		  
 		  d.Metadata = $scope.view_code === 'CRA'  ? $.grep(d.Metadata_full, function(e){ return e.view_code == 'CRA' && e.country_code.indexOf($scope.country_code) > -1 && e.admin_level >= $scope.admlevel && e.admin_level_min <= $scope.admlevel;}) 
 												: $.grep(d.Metadata_full, function(e){ return e.view_code == 'PI' && e.disaster_type.indexOf($scope.disaster_type) > -1 && e.country_code.indexOf($scope.country_code) > -1; });
 		  

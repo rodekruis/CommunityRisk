@@ -20,6 +20,9 @@ COPY "ph_source"."Indicators_3_hazards_new" FROM 'C:\Users\JannisV\Rode Kruis\CP
 -- 1.1: Boundary data tables --
 -------------------------------
 
+
+
+/*
 drop table if exists "PH_datamodel"."Geo_level4_backup";
 SELECT cast('PH' || case when ___pcode_1 < 100000000 then '0' else '' end || cast(___pcode_1 as text) as varchar) as pcode_level2
 	, cast('PH' || case when ___pcode_2 < 100000000 then '0' else '' end || cast(___pcode_2 as text) as varchar) as pcode_level3
@@ -43,7 +46,7 @@ select replace(replace(pcode_level4,'0645','1845'),'0746','1846') as pcode_level
 into "PH_datamodel"."Geo_level4"
 from "PH_datamodel"."Geo_level4_backup"
 ;
-/*
+
 select case when pcode_level4 is null then 0 else 1 end as aa
 	,case when "Barangay Code" is null then 0 else 1 end as bb
 	,count(*)
@@ -79,6 +82,15 @@ INTO "PH_datamodel"."Geo_level2"
 FROM "geo_source"."Geo_PH_level2" t0
 JOIN "geo_source"."Geo_PH_level2_mapshaper" t1 on t0.gid = t1.gid
 ;*/
+
+drop table if exists "PH_datamodel"."Geo_level4";
+select bgy_code as pcode_level4
+	,bgy_name as name
+	,mun_code as pcode_level3
+	,geom
+into "PH_datamodel"."Geo_level4"
+from geo_source."Geo_PH_level4_mapshaper"
+;
 
 drop table if exists "PH_datamodel"."Geo_level3";
 SELECT mun_code as pcode_level3
@@ -137,6 +149,13 @@ into "PH_datamodel"."Indicators_4_population"
 from ph_source."Indicators_4_population_disaggregated"
 ;
 --select * from "PH_datamodel"."Indicators_4_population";
+
+drop table if exists "PH_datamodel"."Indicators_4_land_area";
+select bgy_code as pcode_level4
+	,st_area(st_transform(geom,32647))/1000000 as land_area
+into "PH_datamodel"."Indicators_4_land_area"
+from "geo_source"."Geo_PH_level4_mapshaper"
+;
 
 drop table if exists "PH_datamodel"."Indicators_4_traveltime";
 select replace(replace(cast('PH' || case when pcode_barangay < 100000000 then '0' else '' end || pcode_barangay as varchar),'0645','1845'),'0746','1846') as pcode_level4
@@ -419,15 +438,15 @@ drop table if exists "PH_datamodel"."Indicators_4_TOTAL";
 select t0.pcode_level4 as pcode
 	,t0.pcode_level3 as pcode_parent
 	,t1.population
-	,round(t0.land_area,1) as land_area
-	,t1.population / t0.land_area as pop_density
+	,t2.land_area
+	,t1.population / t2.land_area as pop_density
 	,round(t3.traveltime,1) as traveltime
 	--PLACEHOLDER: ADD HERE WHICH NEW VARIABLES TO INCLUDE FROM NEW TABLE
 	--,t5.XXX
 into "PH_datamodel"."Indicators_4_TOTAL"
 from "PH_datamodel"."Geo_level4" t0
 left join "PH_datamodel"."Indicators_4_population" 	t1	on t0.pcode_level4 = t1.pcode_level4
-left join "PH_datamodel"."Indicators_4_gdp" 		t2	on t0.pcode_level4 = t2.pcode_level4
+left join "PH_datamodel"."Indicators_4_land_area"	t2	on t0.pcode_level4 = t2.pcode_level4
 left join "PH_datamodel"."Indicators_4_traveltime" 	t3	on t0.pcode_level4 = t3.pcode_level4
 left join "PH_datamodel"."Indicators_4_rural_urban" 	t4	on t0.pcode_level4 = t4.pcode_level4
 --PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL3 ALREADY) 
@@ -438,7 +457,7 @@ left join "PH_datamodel"."Indicators_4_rural_urban" 	t4	on t0.pcode_level4 = t4.
 drop table if exists "PH_datamodel"."Indicators_3_TOTAL";
 select t0.pcode_level3 as pcode
 	,t0.pcode_level2 as pcode_parent
-	,level4.population,round(land_area,1) as land_area,round(pop_density,1) as pop_density,round(traveltime,1) as traveltime
+	,level4.population,land_area,pop_density,traveltime
 	--PLACEHOLDER: Add the newly added level4 indicators here again as well
 	--,level4.XXX
 	,round(t1.poverty_incidence,3) as poverty_incidence
@@ -499,20 +518,20 @@ from "PH_datamodel"."Geo_level2" t0
 left join (
 	select pcode_parent
 		,sum(population) as population
-		,round(sum(land_area),1) as land_area
-		,round(sum(pop_density * land_area) / sum(land_area),1) as pop_density
-		,round(sum(traveltime*population) / sum(population),1) as traveltime
-		,round(sum(poverty_incidence*population) / sum(population),3) as poverty_incidence
-		,round(sum(population*flood_phys_exp) / sum(population),3) as flood_phys_exp
-		,round(sum(population*cyclone_phys_exp)  / sum(population),3) as cyclone_phys_exp
-		,round(sum(population*earthquake7_phys_exp)  / sum(population),3) as earthquake7_phys_exp
-		,round(sum(population*tsunami_phys_exp)  / sum(population),3) as tsunami_phys_exp
-		,round(sum(population*drought_phys_exp)  / sum(population),3) as drought_phys_exp
-		,round(sum(population*good_governance_index)  / sum(population),1) as good_governance_index
-		,round(sum(population*income_class)  / sum(population),1) as income_class
-		,round(sum(population*perc_wall_partly_concrete)  / sum(population),3) as perc_wall_partly_concrete
-		,round(sum(population*perc_roof_concrete_alu_iron)  / sum(population),3) as perc_roof_concrete_alu_iron
-		,round(sum(population*pantawid_perc)  / sum(population),3) as pantawid_perc
+		,sum(land_area) as land_area
+		,sum(pop_density * land_area) / sum(land_area) as pop_density
+		,sum(traveltime*population) / sum(population) as traveltime
+		,sum(poverty_incidence*population) / sum(population) as poverty_incidence
+		,sum(population*flood_phys_exp) / sum(population) as flood_phys_exp
+		,sum(population*cyclone_phys_exp)  / sum(population) as cyclone_phys_exp
+		,sum(population*earthquake7_phys_exp)  / sum(population) as earthquake7_phys_exp
+		,sum(population*tsunami_phys_exp)  / sum(population) as tsunami_phys_exp
+		,sum(population*drought_phys_exp)  / sum(population) as drought_phys_exp
+		,sum(population*good_governance_index)  / sum(population) as good_governance_index
+		,sum(population*income_class)  / sum(population) as income_class
+		,sum(population*perc_wall_partly_concrete)  / sum(population) as perc_wall_partly_concrete
+		,sum(population*perc_roof_concrete_alu_iron)  / sum(population) as perc_roof_concrete_alu_iron
+		,sum(population*pantawid_perc)  / sum(population) as pantawid_perc
 		,sum(nr_health_facilities) as nr_health_facilities
 		,sum(health_density * population) / sum(population) as health_density
 		,sum(recent_shocks) as recent_shocks 

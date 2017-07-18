@@ -243,7 +243,7 @@ CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode varchar,pi_c
 	;
 $$ LANGUAGE sql;
 
---select usp_data(2,'PH','','CRA','Earthquake','Leyte 2017');
+--select usp_data(3,'PH','','PI','Earthquake','Leyte 2017');
 
 
 

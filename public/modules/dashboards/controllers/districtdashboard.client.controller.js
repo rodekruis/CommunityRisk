@@ -1296,9 +1296,9 @@ angular.module('dashboards')
 				}
 				
 				var download = document.getElementById('download');
-				console.log(download);
 				download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
-				download.setAttribute('download', 'export.csv');
+				download.setAttribute('download','export.csv');
+				download.click();
 			};
 			
 			//Tabslide functions (Not included yet at the moment)

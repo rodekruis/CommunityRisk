@@ -84,3 +84,4 @@ CRA;;MW;traveltime_sec_school;Traveltime to nearest secondary school;;decimal0;t
 CRA;;MW;traveltime_tradingcentre;Traveltime to nearest trading centre;;decimal0;traveltime.png;coping;weighted_avg;population;traveltime_tradingcentre_score;;;2017;https://510.global/developing-and-field-testing-a-remoteness-indicator-in-malawi/;;;;4;4;;
 CRA;;MW;flood_risk;Flood risk (0-10);;decimal2;flood.png;hazard;weighted_avg;population;flood_score;;;;;;;;4;4;;
 CRA;;MW;drought_risk;Drought risk (0-10);;decimal2;drought.png;hazard;weighted_avg;population;drought_score;;;;;;;;4;4;;
+CRA;;MW;echo2_area;Identified for ECHO2;;decimal0;;other;sum;;;;;;;;;;0;4;;

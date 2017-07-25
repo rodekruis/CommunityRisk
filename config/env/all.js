@@ -48,6 +48,7 @@ module.exports = {
 				'public/build/bower/angular-touch/js/angular-touch.js', 
 				'public/build/bower/angular-sanitize/js/angular-sanitize.js', 
 				'public/build/bower/angular-ui-router/js/angular-ui-router.min.js',
+				'public/build/bower/angular-route-styles/js/route-styles.js',
 				'public/build/bower/bootstrap/js/bootstrap.min.js',
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
 				'public/build/bower/leaflet/js/leaflet-src.js',//in bower.json
@@ -76,6 +77,9 @@ module.exports = {
 				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js', // in bower.json
 				'public/build/custom/jquery-tabslideout/js/tabSlideOut.js', // NOT in bower.json
 				'public/build/bower/jquery-countTo/js/jquery.countTo.js', // in bower.json
+				'public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js', // in bower.json
+				'public/build/bower/jquery-easing/js/jquery.easing.min.js', // in bower.json
+				'public/build/bower/wow/js/wow.js', // in bower.json
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js', // in bower.json
 				'public/build/bower/topojson/js/topojson.min.js' // in bower.json
 			]

@@ -30,6 +30,7 @@ from   (
 drop table if exists "INFORM_datamodel"."Geo_level2";
 select t1.iso3 as pcode_level2
 	,t1.country as name
+	,'' as pcode_level1
 	,t2.geom
 INTO "INFORM_datamodel"."Geo_level2"
 FROM "inform_source"."geo_global" t1
@@ -41,6 +42,7 @@ WHERE iso3 not in ('ATA','GRL') --leave out Antarctica and Greenland
 --Transpose rows to columns
 drop table if exists "INFORM_datamodel"."Indicators_2_TOTAL";
 select ISO3 as pcode
+	,'' as pcode_parent
 	,max(case when indicatorid = 'INFORM' then indicatorscore end) 	as risk_score
 	,max(case when indicatorid = 'HA' then indicatorscore end) 	as hazard_score
 	,max(case when indicatorid = 'HA.HUM' then indicatorscore end) 	as human_hazard

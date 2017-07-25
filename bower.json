@@ -7,6 +7,8 @@
     "jquery": "~2.2.3",
 	"jquery-countTo": "*",
 	"jquery-tabslideout": "*",
+	"jquery-scrollTo": "*",
+	"jquery-easing": "*",
     "leaflet": "0.7.7",
     "cartodb.js": "3.15.9",
     "angular": "1.5.5",
@@ -21,7 +23,7 @@
     "angular-cookies": "1.5.6",
     "angular-touch": "1.5.6",
     "angular-sanitize": "*",
-    "angular-ui-router": "~0.2.10",
+    "angular-route-styles": "*",
     "angular-ui-bootstrap-bower": "*",
     "angular-leaflet-directive": "0.10.0",
     "leaflet-ajax": "~2.0.0",
@@ -37,6 +39,7 @@
 	"leaflet-gps": "1.0.*",
 	"slick": "*",	
 	"topojson": "1.6.26",
+	"WOW": "*",
 	"dc-addons": "*"
   },
   "resolutions": {

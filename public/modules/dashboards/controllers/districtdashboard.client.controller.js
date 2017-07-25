@@ -1245,6 +1245,7 @@ angular.module('dashboards')
 			
 			//Function to open the modal with information on indicator
 			$scope.info = function(id) {
+				//var metric_old = $scope.metric;
 				$scope.metric = id;
 				$scope.metric_label = meta_label[$scope.metric];
 				$scope.metric_year = meta_year[$scope.metric];
@@ -1253,6 +1254,7 @@ angular.module('dashboards')
 				if (!meta_icon[$scope.metric]) {$scope.metric_icon = 'modules/dashboards/img/undefined.png';}
 				else {$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];}
 				$('#infoModal').modal('show');
+				//$scope.metric = metric_old;
 			};
 			
 			//Export to CSV function

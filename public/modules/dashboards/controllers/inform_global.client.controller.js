@@ -62,7 +62,7 @@ angular.module('dashboards')
 			
 			$scope.metric = '';
 			$scope.admlevel = 2;
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code;
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'CRA\',\'\',\'\'';
 
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
 			    function(dashboard) {		

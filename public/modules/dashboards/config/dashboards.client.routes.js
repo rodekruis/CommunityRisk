@@ -1,8 +1,8 @@
 'use strict';
 
 // Setting up route
-angular.module('dashboards').config(['$stateProvider','$routeProvider',
-	function($stateProvider,$routeProvider) {
+angular.module('dashboards').config(['$stateProvider',/*'$routeProvider',*/
+	function($stateProvider/* ,$routeProvider */) {
 		// dashboards state routing
 		$stateProvider.
 		state('listDashboards', {
@@ -26,7 +26,7 @@ angular.module('dashboards').config(['$stateProvider','$routeProvider',
 			url: '/dashboards/:dashboardId/edit',
 			templateUrl: 'modules/dashboards/views/edit-dashboards.client.view.html'
 		})
-		$routeProvider
+		/*$routeProvider
         .when('/dashboards/:dashboardId/:templateUrl', {
             templateUrl: function ($stateParams){
 				return 'modules/dashboards/views/' + $stateParams.templateUrl + '.client.view.html';
@@ -34,7 +34,7 @@ angular.module('dashboards').config(['$stateProvider','$routeProvider',
             css: function ($stateParams){
 				return 'modules/dashboards/css/' + ($stateParams.templateUrl == 'priority_index_storyboard' ? $stateParams.templateUrl : 'dashboards') + '.css';
 		    }
-        })
+        }) */
 		;
 	}
 ]);

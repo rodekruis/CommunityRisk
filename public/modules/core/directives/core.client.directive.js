@@ -43,7 +43,8 @@ angular.module('core')
             });
         }
     };
-}]);
+}])
+;
 
     
     

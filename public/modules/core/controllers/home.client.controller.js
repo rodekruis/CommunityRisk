@@ -1,8 +1,12 @@
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope','$rootScope','Authentication', 'leafletData',
-	function ($scope,$rootScope, Authentication, leafletData) {
-    $scope.authentication = Authentication;
+angular.module('core').controller('HomeController', ['$scope','$css','$rootScope','Authentication', 'leafletData',
+	function ($scope,$css,$rootScope, Authentication, leafletData) {
+    
+	$css.remove('modules/dashboards/css/priority_index_storyboard.css');
+	$css.add('modules/dashboards/css/header.css');
+	
+	$scope.authentication = Authentication;
 	
 	$rootScope.country_code = '';
 	$rootScope.disaster_type = '';

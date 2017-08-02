@@ -20,4 +20,6 @@ angular.module('dashboards')
             });
         }
     };
-}]);
+}])
+
+;

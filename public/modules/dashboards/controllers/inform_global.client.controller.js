@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('InformGlobalController', ['$scope','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($scope,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('InformGlobalController', ['$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+		
+		
+		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
 		
 		//Define variables
 		$scope.authentication = Authentication;

@@ -12,6 +12,7 @@
 		<div class="navbar-header">
 			<a class="navbar-brand" href="/#!/">
 				<img src="modules/dashboards/img/logo.svg" class="logo">
+				<img src="modules/core/img/510white.png" class="logo">
 				Community Risk Assessment <span class="title-hightlight">Toolbox</span>
 			</a>
 		</div>
@@ -77,19 +78,19 @@
 								<li>
 									<a class="submenu-item" ng-click="change_country('PH')" role="button">Philippines</a>
 								</li>
-								<!-- <li class="divider"></li> -->
 								<li>
 									<a class="submenu-item" ng-click="change_country('MW')" role="button">Malawi</a>
 								</li>
-								<!-- <li class="divider"></li> -->
 								<li>
 									<a class="submenu-item" ng-click="change_country('NP')" role="button">Nepal</a>
 								</li>
-								<!-- <li class="divider"></li> -->
+								<li class="divider"></li>
+								<li>
+									<a class="submenu-item" ng-click="change_country('ZMB')" role="button">Zambia (basic)</a>
+								</li>
 								<li>
 									<a class="submenu-item" ng-click="change_country('MLI')" role="button">Mali (basic)</a>
 								</li>
-								<!-- <li class="divider"></li> -->
 								<li>
 									<a class="submenu-item" ng-click="change_country('LKA')" role="button">Sri Lanka (basic)</a>
 								</li>
@@ -289,7 +290,7 @@
 						<i class="fa fa-th-large" aria-hidden="true"></i>
 						<span class="button-label">{{levelB_selection}}</span>
 					</button>
-					<button id="level3" type="button" class="btn btn-secondary">
+					<button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)">
 						<i class="fa fa-th" aria-hidden="true"></i>
 						<span class="button-label">{{levelC_selection}}</span>
 					</button>

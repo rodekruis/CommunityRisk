@@ -1,9 +1,14 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('DistrictDashboardsController', ['$scope','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($scope,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('DistrictDashboardsController', ['$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 		
+		//This is the only working method I found to load page-specific CSS.
+		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
+		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
+		
+		//Selection-functions for changing main parameters
 		$scope.change_view = function(view) {
 			$rootScope.view_code = view;
 		}
@@ -19,14 +24,13 @@ angular.module('dashboards')
 			$scope.initiate('CRA');
 		}		
 
-		//Define variables
+		//Define variables (Probably a lot of these are obsolete)
 		$rootScope.loadCount = 0;
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.country_code = 'PH';
+		$scope.country_code = 'MW';
 		$scope.view_code = 'CRA';
-		$scope.disaster_type = 'Earthquake'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
-		//$scope.admlevel = 1;
+		$scope.disaster_type = 'Typhoon'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
 		$scope.metric = '';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
@@ -78,25 +82,28 @@ angular.module('dashboards')
 		 */
 		$scope.initiate = function(view_code) {	    
 				
-			// start loading bar
+			//Start loading bar
 		    $scope.start();
 			
-			//$scope.metric = '';
-			//$scope.admlevel = 3;
-			
+			//Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)			
 			document.getElementById('mapPopup').style.visibility = 'hidden';
+			if (document.getElementById('level2')) {document.getElementById('level2').setAttribute('class','btn btn-secondary');};
+			if (document.getElementById('level3')) {document.getElementById('level3').setAttribute('class','btn btn-secondary');};
+			
+			//Set main parameters
 			$scope.view_code = view_code;
 			$rootScope.view_code = view_code;
 			if ($scope.view_code == 'PI') {$scope.country_code = 'PH';}
-			$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
-			//$scope.view_code == 'CRA' ? $scope.metric = '' : $scope.metric = 'total_damage_houses';
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			//console.log($scope.data_input);
+			$scope.admlevel = $scope.view_code == 'CRA' ?  2 : 3;
+			if (['MLI','ZMB'].indexOf($scope.country_code) > -1) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
 			
+			//This is the main search-query for PostgreSQL
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
+			
+			//Call dashboard itself, and then call data query
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
 			    function(dashboard) {		
-					// get the data
-					//console.log(data_input);
+					// Get the data
 					Data.get({adminLevel: $scope.data_input}, 
 						function(pgData){
 							$scope.prepare(dashboard, pgData);
@@ -118,7 +125,7 @@ angular.module('dashboards')
 		    $scope.start();
 			
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			//console.log($scope.data_input);
+			
 			Data.get({adminLevel: $scope.data_input}, 
 				function(pgData){
 					$scope.prepare_reload(d,pgData);
@@ -133,9 +140,9 @@ angular.module('dashboards')
 		$scope.prepare = function(dashboard, pgData) {
 		  
 		  // set the title
-		  $scope.title = $scope.config.title;
+		  //$scope.title = $scope.config.title;
 		  // create the map chart (NOTE: this has to be done before the ajax call)
-		  $scope.mapChartType = 'leafletChoroplethChart';	
+		  //$scope.mapChartType = 'leafletChoroplethChart';	
 		  
 		  // LOAD DATA
 		  var d = {};
@@ -150,6 +157,14 @@ angular.module('dashboards')
 		  $scope.geom = d.Districts; //pgData.usp_data.geo;
 		  // 3. Data Preparedness Index data
 		  d.dpi_temp = pgData.usp_data.dpi;
+		  d.dpi = [];
+		  if (d.dpi_temp) {
+			  for (var i=0;i<d.dpi_temp.length;i++){
+				  if (d.dpi_temp[i].admin_level == $scope.admlevel) {
+					  d.dpi[0] = d.dpi_temp[i];
+				  }
+			  }
+		  }
 		  
 		  // 4. Variable-metadata
 		  d.Metadata_full = dashboard.sources.Metadata.data;
@@ -166,7 +181,7 @@ angular.module('dashboards')
 		  console.log(d);
 		  
 		  //Retrieve zoomlevel_min now and start reloading from there (THIS IS A BAD HACK!!)
-		  if ($scope.view_code === 'CRA') {
+		  if (['MLI','ZMB'].indexOf($scope.country_code) > -1) {
 				$scope.admlevel = d.Country_meta[0].zoomlevel_min;
 				$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_name + '\'';
 		  
@@ -351,15 +366,37 @@ angular.module('dashboards')
 			//This part replaces the commented out part below to allow for flexibility in included admin-levels between countries
 			$scope.type_selection = ($scope.admlevel == zoom_min) ? 'Country' : $scope.genLookup_country_meta(d,'level' + ($scope.admlevel - 1) + '_name')[$scope.country_code];
 			$scope.subtype_selection = $scope.genLookup_country_meta(d,'level' + $scope.admlevel + '_name')[$scope.country_code];
-			if ($scope.admlevel == zoom_min) {
-				$scope.levelB_selection = undefined;
-				$scope.levelB_code = '';
-			} else if ($scope.admlevel <= zoom_max && $scope.levelB_selection == undefined) {
-				$scope.levelB_selection = $scope.name_selection;
-				$scope.levelB_code = $scope.parent_code;
+			
+			//Changes to be able to show ALL lower-level districts, for now only applied to Malawi
+			if ($scope.country_code == 'MW') {
+				if ($scope.admlevel == zoom_min) {
+					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; //undefined;
+					$scope.levelB_code = '';
+				} else if ($scope.admlevel < zoom_max && $scope.parent_code !== '') { //$scope.levelB_selection == undefined) {
+					$scope.levelB_selection = $scope.name_selection;
+					$scope.levelB_code = $scope.parent_code;
+				}
+				if ($scope.admlevel < zoom_max) { 
+					$scope.levelC_selection = $scope.parent_code == '' ? 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
+																		: undefined;
+					$scope.levelC_code = '';
+				} else if ($scope.parent_code !== '') {
+					$scope.levelC_selection = $scope.name_selection;
+					$scope.levelC_code = $scope.parent_code;
+				}
+			} else {
+				if ($scope.admlevel == zoom_min) {
+					$scope.levelB_selection = undefined;
+					$scope.levelB_code = '';
+				} else if ($scope.admlevel < zoom_max && $scope.levelB_selection == undefined) {
+					$scope.levelB_selection = $scope.name_selection;
+					$scope.levelB_code = $scope.parent_code;
+				}				
+				$scope.levelC_selection = $scope.admlevel < zoom_max ? undefined : $scope.name_selection;
+				$scope.levelC_code 		= $scope.admlevel < zoom_max ? '' : $scope.parent_code;
 			}
-			$scope.levelC_selection = $scope.admlevel < zoom_max ? undefined : $scope.name_selection;
-			$scope.levelC_code 		= $scope.admlevel < zoom_max ? '' : $scope.parent_code;
+			
+			
 			
 			/* if ($scope.admlevel === zoom_min) {
 				$scope.type_selection = 'Country';
@@ -612,8 +649,8 @@ angular.module('dashboards')
 			};
 			var keyvalue = fill_keyvalues();
 		
-			//Pool all values for all 0-10 score value together to determine quantile_range (so that quantile thresholds will not differe between indicators)
-			//if ($scope.admlevel == zoom_min) {
+			//Pool all values for all 0-10 score value together to determine quantile_range (so that quantile thresholds will not differ between indicators)
+			if ($scope.admlevel == zoom_min) {
 				var quantile_range_scores = [];
 				var j=0;
 				for (i=0;i<d.Rapportage.length;i++) {
@@ -636,7 +673,7 @@ angular.module('dashboards')
 				var thresholds = [];
 				while (++k < q) thresholds[k - 1] = Math.round(quantile(quantile_range_scores, k / q)*100)/100;		
 				d.thresholds = thresholds;
-			//}
+			}
 			
 			
 			//Function for determining color of indicator-bars and -numbers in sidebar
@@ -1061,7 +1098,6 @@ angular.module('dashboards')
 						return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value.sum));
 					}
 				})
-				//.legend(dc.leafletLegend().position('topright'))
 				.renderPopup(true)
 				.turnOnControls(true)
 				//Set up what happens when clicking on the map (popup appearing mainly)
@@ -1109,7 +1145,7 @@ angular.module('dashboards')
 				})
 			;
 			//Add legend only in Priority Index View
-			if ($scope.view_code == 'PI' || $scope.view_code == 'CRA' && meta_scorevar[$scope.metric]) {
+			if ($scope.view_code == 'PI' || $scope.view_code == 'CRA' /*&& meta_scorevar[$scope.metric]*/) {
 				mapChart.legend(dc.leafletLegend().position('topright'));
 			}
 			
@@ -1148,16 +1184,45 @@ angular.module('dashboards')
 			//Functions for zooming out
 			$scope.zoom_out = function(dest_level) {
 				var admlevel_old = $scope.admlevel;
-				if (dest_level === 1 && $scope.admlevel > zoom_min) {
-					$scope.admlevel = zoom_min; //dest_level;
-					$scope.parent_code = '';
-					$scope.reload(d);
-				} else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
-					$scope.admlevel = zoom_min + 1;
-					$scope.parent_code = $scope.levelB_code;
-					$scope.name_selection = $scope.name_selection_prev;
-					$scope.reload(d);
+				if ($scope.country_code == 'MW') {
+					if (dest_level === 1 && $scope.admlevel > zoom_min) {
+						$scope.admlevel = zoom_min; //dest_level;
+						$scope.parent_code = '';
+						$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code];
+						$scope.reload(d);
+					} else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
+						$scope.admlevel = zoom_min + 1;
+						$scope.parent_code = $scope.levelB_code;
+						$scope.name_selection = $scope.name_selection_prev;
+						$scope.levelC_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code];
+						$scope.reload(d);
+					} else if (dest_level === 2 && $scope.admlevel < zoom_min + 1) {
+						$scope.admlevel = zoom_min + 1;
+						$scope.parent_code = '';
+						$scope.name_selection = $scope.levelB_selection;
+						document.getElementById('level2').setAttribute('class','btn btn-secondary btn-active');		
+						$scope.reload(d);		
+					} else if (dest_level === 3 && $scope.admlevel < zoom_min + 2 && $scope.parent_code == '') {
+						$scope.admlevel = zoom_min + 2;
+						$scope.parent_code = '';
+						$scope.name_selection = $scope.levelC_selection;
+						document.getElementById('level2').setAttribute('class','btn btn-secondary btn-active');	
+						document.getElementById('level3').setAttribute('class','btn btn-secondary btn-active');		
+						$scope.reload(d);		
+					}
+				} else {
+					if (dest_level === 1 && $scope.admlevel > zoom_min) {
+						$scope.admlevel = zoom_min; //dest_level;
+						$scope.parent_code = '';
+						$scope.reload(d);
+					} else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
+						$scope.admlevel = zoom_min + 1;
+						$scope.parent_code = $scope.levelB_code;
+						$scope.name_selection = $scope.name_selection_prev;
+						$scope.reload(d);
+					}
 				}
+				
 				while (admlevel_old - zoom_min > dest_level - 1) {
 					document.getElementById('level' + (admlevel_old - zoom_min + 1)).setAttribute('class','btn btn-secondary');
 					admlevel_old = admlevel_old-1;

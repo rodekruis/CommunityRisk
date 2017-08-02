@@ -76,6 +76,7 @@ pantawid_score as (
 	),
 
 --Income class (Higher income class = more vulnerable DO do NOT switch scale around)
+/*
 inc_class as (
 	select t0.pcode_level3
 		,t1.income_class
@@ -93,6 +94,7 @@ inc_score as (
 	from inc_class t0
 	left join inc_minmax t1 on 1=1
 	),
+*/
 
 --walltype (Higher walltype = less vulnerable >> DO switch scale around) 
 wall as (
@@ -132,6 +134,25 @@ roof_score as (
 	left join roof_minmax t1 on 1=1
 	),
 
+--Recent shocks (More shocks = more vulnerable DO do NOT switch scale around)
+recent_shocks as (
+	select t0.pcode_level3
+		,t1.recent_shocks
+	from "PH_datamodel"."Geo_level3" 	t0
+	left join "PH_datamodel"."Indicators_3_TOTAL"	t1 on t0.pcode_level3 = t1.pcode
+	), 
+recent_shocks_minmax as (
+	select min(recent_shocks) as min
+		,max(recent_shocks) as max
+	from recent_shocks
+	),
+recent_shocks_score as (
+	select t0.*
+		,(cast((recent_shocks - min) as numeric) / cast((max - min) as numeric)) * 10 as recent_shocks_score
+	from recent_shocks t0
+	left join recent_shocks_minmax t1 on 1=1
+	),
+
 --HDI (Higher HDI = less vulnerable >> DO switch scale around) 
 hdi as (
 	select t0.pcode_level3
@@ -154,42 +175,48 @@ hdi_score as (
 --JOINING ALL
 select t0.pcode_level3
 	,pov_score,poverty_incidence
-	,inc_score,income_class
+	--,inc_score,income_class
 	,hdi_score,hdi
 	,wall_score,wall
 	,roof_score,roof
 	,pantawid_score,pantawid_perc
+	,recent_shocks_score,recent_shocks
 	--PLACEHOLDER
 	--,XXX_score,XXX
-	,(10-power(coalesce((10-pov_score)/10*9+1,1) 
-			* coalesce((10-inc_score)/10*9+1,1) 
-			* coalesce((10-hdi_score)/10*9+1,1)
-			* coalesce((10-wall_score)/10*9+1,1)
-			* coalesce((10-roof_score)/10*9+1,1)
-			* coalesce((10-pantawid_score)/10*9+1,1)
+	,(10-power(1
+		* coalesce((10-pov_score)/10*9+1,1) 
+		--* coalesce((10-inc_score)/10*9+1,1) 
+		* coalesce((10-hdi_score)/10*9+1,1)
+		* coalesce((10-wall_score)/10*9+1,1)
+		* coalesce((10-roof_score)/10*9+1,1)
+		* coalesce((10-pantawid_score)/10*9+1,1)
+		* coalesce((10-recent_shocks_score)/10*9+1,1)	
+		--PLACEHOLDER
+		--* coalesce((10-XXX_score)/10*9+1,1)			
+		,cast(1 as float)/cast((0
+			+ case when pov_score is null then 0 else 1 end
+			--+ case when inc_score is null then 0 else 1 end
+			+ case when wall_score is null then 0 else 1 end
+			+ case when roof_score is null then 0 else 1 end
+			+ case when pantawid_score is null then 0 else 1 end			
+			+ case when hdi_score is null then 0 else 1 end 
+			+ case when recent_shocks_score is null then 0 else 1 end
 			--PLACEHOLDER
-			--* coalesce((10-XXX_score)/10*9+1,1)			
-			,cast(1 as float)/cast((
-				case when pov_score is null then 0 else 1 end +
-				case when inc_score is null then 0 else 1 end +
-				case when wall_score is null then 0 else 1 end +
-				case when roof_score is null then 0 else 1 end +
-				case when pantawid_score is null then 0 else 1 end +
-				--PLACEHOLDER
-				--case when XXX_score is null then 0 else 1 end +				
-				case when hdi_score is null then 0 else 1 end )
-		as float)))/9*10 as vulnerability_score
+			--+ case when XXX_score is null then 0 else 1 end	
+		) as float)))/9*10 as vulnerability_score
 into "PH_datamodel"."vulnerability_scores"
 from "PH_datamodel"."Geo_level3" t0
 left join pov_score t2		on t0.pcode_level3 = t2.pcode_level3
-left join inc_score t3		on t0.pcode_level3 = t3.pcode_level3
+--left join inc_score t3		on t0.pcode_level3 = t3.pcode_level3
 left join hdi_score t4		on t0.pcode_level3 = t4.pcode_level3
 left join wall_score t5		on t0.pcode_level3 = t5.pcode_level3
 left join roof_score t6		on t0.pcode_level3 = t6.pcode_level3
 left join pantawid_score t7	on t0.pcode_level3 = t7.pcode_level3
+left join recent_shocks_score t8	on t0.pcode_level3 = t8.pcode_level3
 --PLACEHOLDER: add new variable here
 --left join XXX_score t8	on t0.pcode_level3 = t8.pcode_level3
 ;
+--select * from "PH_datamodel"."vulnerability_scores"
 
 ------------------
 -- 2.2: Hazards --
@@ -420,7 +447,7 @@ select t1.pcode_level3
 	,vulnerability_score
 	,hazard_score
 	,coping_capacity_score
-	,pov_score,inc_score,hdi_score,wall_score,roof_score,pantawid_score
+	,pov_score,hdi_score,wall_score,roof_score,pantawid_score,recent_shocks_score
 	,flood_score,cyclone_score,earthquake_score,tsunami_score,drought_score
 	,travel_score,hospitals_score,governance_score
 	--PLACEHOLDER
@@ -442,7 +469,7 @@ select t1.pcode_parent as pcode_level2
 	,sum(hazard_score * population) / sum(population) as hazard_score
 	,sum(vulnerability_score * population) / sum(population) as vulnerability_score
 	,sum(coping_capacity_score * population) / sum(population) as coping_capacity_score
-	,sum(pov_score * population) / sum(population) as pov_score,sum(inc_score * population) / sum(population) as inc_score,sum(hdi_score * population) / sum(population) as hdi_score
+	,sum(pov_score * population) / sum(population) as pov_score,sum(hdi_score * population) / sum(population) as hdi_score,sum(recent_shocks_score * population) / sum(population) as recent_shocks_score
 	,sum(wall_score * population) / sum(population) as wall_score,sum(roof_score * population) / sum(population) as roof_score,sum(pantawid_score * population) / sum(population) as pantawid_score
 	,sum(flood_score * population) / sum(population) as flood_score,sum(cyclone_score * population) / sum(population) as cyclone_score,sum(earthquake_score * population) / sum(population) as earthquake_score
 	,sum(tsunami_score * population) / sum(population) as tsunami_score,sum(drought_score * population) / sum(population) as drought_score
@@ -451,7 +478,7 @@ select t1.pcode_parent as pcode_level2
 	--,sum(XXX_score * population)/ sum(population) as XXX_score
 into "PH_datamodel"."total_scores_level2"
 from "PH_datamodel"."total_scores_level3" t0
-join "PH_datamodel"."Indicators_3_TOTAL" t1	on t0.pcode_level3 = t1.pcode
+join (select pcode, pcode_parent, population from "PH_datamodel"."Indicators_3_TOTAL") t1	on t0.pcode_level3 = t1.pcode
 group by t1.pcode_parent
 ;
 

@@ -199,6 +199,60 @@ where <possibly apply any filters here>
 ;
 */
 
+
+
+drop table if exists "PH_datamodel"."Indicators_3_competitiveness";
+select pcode_level3
+	,economic_dynamism+government_efficiency+infrastructure as competitiveness
+	,economic_dynamism
+	,government_efficiency
+	,infrastructure
+into "PH_datamodel"."Indicators_3_competitiveness"
+from (
+	select  "Pcode_municipality" as pcode_level3
+		,"Overall Total Score" as competitiveness
+		,case when "Pcode_municipality" in ('PH118604000','PH083731000','PH086414000') then "Economic Dynamism"/10
+			when round("Economic Dynamism" + "Government Efficiency" + "Infrastructure") > "Overall Total Score" then (
+			case when round("Economic Dynamism") > "Overall Total Score" then 
+				"Economic Dynamism"/10 else "Economic Dynamism" end)
+			else "Economic Dynamism" end as economic_dynamism
+		,case when "Pcode_municipality" in ('PH083731000') then "Government Efficiency"/10
+			when "Pcode_municipality" = 'PH031403000' then cast('0.' || cast(round("Government Efficiency") as varchar) as float)
+			when round("Economic Dynamism" + "Government Efficiency" + "Infrastructure") > "Overall Total Score" then (
+			case when round("Government Efficiency") > "Overall Total Score" then 
+				"Government Efficiency"/10 else "Government Efficiency" end)
+			else "Government Efficiency" end as government_efficiency
+		,case when "Pcode_municipality" in ('PH118604000','PH086414000') then "Infrastructure"/10
+			when round("Economic Dynamism" + "Government Efficiency" + "Infrastructure") > "Overall Total Score" then (
+			case when round("Infrastructure") > "Overall Total Score" then 
+				"Infrastructure"/10 else "Infrastructure" end)
+			else "Infrastructure" end as infrastructure
+		,"Economic Dynamism" as econ_orig
+		,"Government Efficiency" as gov_orig
+		,"Infrastructure" as inf_orig
+	from "ph_source"."Indicators_3_competitiveness"
+	where "Overall/Category" = 'OVERALL' and "Rank/Score" = 'Score'
+) aa
+;
+
+select * from "PH_datamodel"."Indicators_3_competitiveness" order by 2;
+
+/*
+SELECT index, "Pcode_municipality", "Overall/Category", "Rank/Score", 
+       "Overall Total Score", "Economic Dynamism", "Local Economy Size", 
+       "Local Economy Growth", "Jobs", "Cost of Living", "Cost of Doing Business", 
+       "Financial Institutions", "Productivity", "Business Groups", 
+       "Government Efficiency", "Capacity of Health Services", "Capacity of Schools", 
+       "Police to Population", "Business Registration Efficiency", "Compliance to BPLS standards", 
+       "Presence of Investment Promotions Unit", "Compliance to National Directives for LGUs", 
+       "Ratio of LGU collected tax to LGU revenues", "Most Competitive LGU awardee", 
+       "Social Protection", "Infrastructure", "Road Network", "Distance to Ports", 
+       "Accommodations", "Availability of Utilities", "Infrastructure Investment", 
+       "Connection to ICT", "Transportation", "Health", "Education", 
+       "ATM"
+FROM ph_source."Indicators_3_competitiveness";
+*/
+
 drop table if exists "PH_datamodel"."Indicators_3_poverty";
 select replace(replace('PH' || case when psgc_muni < 100000000 then '0' else '' end || psgc_muni,'0645','1845'),'0746','1846') as pcode_level3
 	,sum(case when pov_muni_measure = 'Incidence' then cast(replace(estimate,',','.') as numeric) end) / 100 as poverty_incidence
@@ -374,23 +428,24 @@ LEFT JOIN total on t0."Mun_City Code" = total.pcode_level3
 
 
 
---recents shocks (# of typhoons that hit)
+--recents shocks (# of typhoons/earthquakes that hit)
 drop table if exists "PH_datamodel"."Indicators_3_recent_shocks";
 select t0.pcode_level3
 	,sum(case when t1.pcode is not null then 1 else 0 end) as recent_shocks
 INTO "PH_datamodel"."Indicators_3_recent_shocks"
 from "PH_datamodel"."Geo_level3" t0
 left join (select "Mun_Code" as pcode
-	from "ph_source"."PI_typhoon_training_data"
-	where typhoon_name <> 'Nina' and total_damage_houses_perc > 1
+	from "ph_source"."PI_typhoon_training_data_new"
 	union all 
 	select "PCODE" as pcode
 	from "ph_source"."PI_earthquake_training_data"
-	where "Earthquake" not in ('Gorhka 2015','Sarangani 2017') and "Total_as_Percentage" * 4 > 1
+	where "Earthquake" not in ('Gorhka 2015','Sarangani 2017') 
 	) t1
 on t0.pcode_level3 = t1.pcode
 group by t0.pcode_level3
 ;
+--select * from "PH_datamodel"."Indicators_3_recent_shocks"
+
 ------------------
 -- Level 2 data --
 ------------------
@@ -474,6 +529,7 @@ select t0.pcode_level3 as pcode
 	,t10.nr_health_facilities
 	,case when level4.population/10000 = 0 then null else cast(t10.nr_health_facilities as float)/ (cast(level4.population as float) / 10000) end as health_density
 	,t11.recent_shocks
+	,t12.competitiveness,economic_dynamism,government_efficiency,infrastructure
 	--PLACEHOLDER: ADD HERE WHICH NEW VARIABLES TO INCLUDE FROM NEW TABLE
 	--,t11.XXX
 into "PH_datamodel"."Indicators_3_TOTAL"
@@ -497,6 +553,7 @@ left join "PH_datamodel"."Indicators_3_rooftype" 		t8	on t0.pcode_level3 = t8.pc
 left join "PH_datamodel"."Indicators_3_Pantawid" 		t9	on t0.pcode_level3 = t9.pcode_level3
 left join "PH_datamodel"."Indicators_3_hospitals_OCHA" 		t10	on t0.pcode_level3 = t10.pcode_level3
 left join "PH_datamodel"."Indicators_3_recent_shocks"		t11	on t0.pcode_level3 = t11.pcode_level3
+left join "PH_datamodel"."Indicators_3_competitiveness"		t12	on t0.pcode_level3 = t12.pcode_level3
 --PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL3 ALREADY) 
 --left join "PH_datamodel"."Indicators_3_XXX" 			t11	on t0.pcode_level3 = t11.pcode_level3
 ;
@@ -507,6 +564,7 @@ select t0.pcode_level2 as pcode
 	,level3.poverty_incidence,flood_phys_exp,cyclone_phys_exp,earthquake7_phys_exp,tsunami_phys_exp,drought_phys_exp,good_governance_index,income_class
 		,perc_wall_partly_concrete,perc_roof_concrete_alu_iron,pantawid_perc
 		,nr_health_facilities,health_density,recent_shocks
+		,competitiveness,economic_dynamism,government_efficiency,infrastructure
 		,population,land_area,pop_density,traveltime
 	--PLACEHOLDER: Add the newly added level3 and level4 indicators here again as well
 	--,level3.XXX
@@ -534,7 +592,11 @@ left join (
 		,sum(population*pantawid_perc)  / sum(population) as pantawid_perc
 		,sum(nr_health_facilities) as nr_health_facilities
 		,sum(health_density * population) / sum(population) as health_density
-		,sum(recent_shocks) as recent_shocks 
+		,sum(recent_shocks * population) / sum(population) as recent_shocks 
+		,sum(competitiveness * population) / sum(population) as competitiveness
+		,sum(economic_dynamism * population) / sum(population) as economic_dynamism
+		,sum(government_efficiency * population) / sum(population) as government_efficiency
+		,sum(infrastructure * population) / sum(population) as infrastructure
 		--PLACEHOLDER: ADD THE NEWLY ADDED LEVEL3 and LEVEL4 INDICATORS HERE AGAIN AS WELL with the appropriate transformation
 		--,sum(XXX * population) / sum(population) as XXX
 	from "PH_datamodel"."Indicators_3_TOTAL"
@@ -603,7 +665,7 @@ select 'Typhoon' as disaster_type
 	, ratio_comp_part--/100 as ratio_comp_part
 	, total_damage_houses / (total_damage_houses_perc/100) as total_houses
 	--event-specific input
-	, average_speed_mph, distance_typhoon_km, "Rainfallme" as rainfall, distance_first_impact / 1000 as distance_first_impact
+	, avg_speed_mph as windspeed, distance_typhoon_km, "Rainfall" as rainfall, distance_first_impact / 1000 as distance_first_impact
 	--geographic input
 	, mean_slope, mean_elevation_m, ruggedness_stdev, mean_ruggedness, slope_stdev
 	--prediction (errors)
@@ -611,7 +673,7 @@ select 'Typhoon' as disaster_type
 	, total_damage_houses_0p25weight_perc - t2.perc_pred as pred_error_point_diff
 	, t3.population,t3.land_area
 INTO "PH_datamodel"."PI_Typhoon_input_damage"
-FROM ph_source."PI_typhoon_training_data" t1
+FROM ph_source."PI_typhoon_training_data_new" t1
 LEFT JOIN (
 	select typhoon_name
 		,"M_Code" as pcode
@@ -631,6 +693,7 @@ LEFT JOIN (
 LEFT JOIN "PH_datamodel"."Indicators_3_TOTAL" t3
 	ON t1."Mun_Code" = t3.pcode
 ;
+
 
 drop table if exists "PH_datamodel"."PI_Earthquake_input_damage";
 select t1.*

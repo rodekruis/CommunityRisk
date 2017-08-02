@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-	background: #4C8293; /* #0f4882; */
+	background: #B0DED3; /* #0f4882; */
 	padding: 0px;
 	margin: 0px;
 	overflow-x: hidden;
@@ -428,14 +428,14 @@ to {
     max-width: 100%;
 }
 
-#slider {
+.slider {
     width: 100%;
     /*IE bugfix*/
     padding: 0;
     margin: 0;
 }
 
-#slider li {
+.slider li {
     list-style: none;
 }
 
@@ -457,25 +457,26 @@ to {
     position: absolute;
     border: none;
     overflow: hidden;
+	color: #4C8293;
 }
 
 .slick-prev {
     left: 2%;/* 
     background: url(../img/prev.png) no-repeat; */
-    background: url(../modules/core/img/prev.png) no-repeat;
+    background: url(../img/prev.png) no-repeat;
 }
 
 .slick-next {
     right: 2%;/*
     background: url(../img/next.png) no-repeat; */
-    background: url(../modules/core/img/next.png) no-repeat;
+    background: url(../img/next.png) no-repeat;
 }
 
 .slick-dots {
     position: absolute;
     bottom: -40px;
-    left: 50%;
-    margin: 0 0 0 -250px;
+    left: 35%;
+    margin: 0 0 0 0px;
     z-index: 3;
     background: #c8c5c2;
     padding: 0;
@@ -737,4 +738,3 @@ section.container {
   opacity: 1;
   text-decoration: none;
 }
-

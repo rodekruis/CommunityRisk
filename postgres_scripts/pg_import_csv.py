@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 import pandas as pd
 
-#pathname = 'C:/Users/JannisV/Rode Kruis/CP Data/Data Preparedness Index/' #DON'T FORGET CLOSING SLASH /
+#pathname = 'C:/github/Priority_index_pipeline/' #DON'T FORGET CLOSING SLASH /
+#pathname = 'C:/Users/JannisV/Rode Kruis/CP data/Zambia/'
 pathname = 'C:/github/profiles/data/public/' #DON'T FORGET CLOSING SLASH /
 filename = 'metadata_prototype.csv'
 path = pathname+filename

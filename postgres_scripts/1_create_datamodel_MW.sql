@@ -42,7 +42,7 @@ select p_code as pcode_level3
 --	,case when pop2008 = 0 then 0 else 1 end as inhabited_ind
 	,geom
 into "MW_datamodel"."Geo_level3"
-from "geo_source"."Geo_MW_level3_incl_pop2008"
+from "geo_source"."Geo_MW_level3_mapshaper"
 ;
 
 drop table if exists "MW_datamodel"."Geo_level4";
@@ -51,7 +51,7 @@ select eacode as pcode_level4
 	,adm3_p_cod as pcode_level3
 	,geom
 into "MW_datamodel"."Geo_level4"
-from "geo_source"."Geo_MW_level4"
+from "geo_source"."Geo_MW_level4_mapshaper"
 where dist_code <> 0 and pop_sum > 0
 ;
 --select count(*) from "MW_datamodel"."Geo_level4"
@@ -71,7 +71,7 @@ select eacode as pcode_level4
 	,pop_sum as population
 	,st_area(st_transform(geom,31467))/1000000 as land_area
 into "MW_datamodel"."Indicators_4_population"
-from "geo_source"."Geo_MW_level4"
+from "geo_source"."Geo_MW_level4_mapshaper"
 where dist_code <> 0
 ;
 --select count(*) from "MW_datamodel"."Indicators_4_population"
@@ -147,7 +147,7 @@ select p_code as pcode_level3
 	--,pop2008 * pop_growth as population
 	,st_area(st_transform(geom,31467))/1000000 as land_area
 into "MW_datamodel"."Indicators_3_pop_area"
-from "geo_source"."Geo_MW_level3_incl_pop2008" t0
+from "geo_source"."Geo_MW_level3_mapshaper" t0
 left join popgrowth t1 on substr(t0.p_code,1,9) = t1.pcode_level2
 ;
 
@@ -262,7 +262,7 @@ select t0.pcode_level4 as pcode
 	,t1.land_area
 	,population / land_area as pop_density
 	,t2.poverty_incidence
-	,t3.traveltime
+	--,t3.traveltime
 	,t3.traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre
 	,t4.drought_risk,flood_risk
 	,t5.echo2_area

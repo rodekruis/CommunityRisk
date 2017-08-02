@@ -47,7 +47,8 @@ module.exports = {
 				'public/build/bower/angular-cookies/js/angular-cookies.js', //in bower.json 
 				'public/build/bower/angular-touch/js/angular-touch.js', 
 				'public/build/bower/angular-sanitize/js/angular-sanitize.js', 
-				'public/build/bower/angular-ui-router/js/angular-ui-router.min.js',
+				'public/build/bower/angular-ui-router/js/angular-ui-router.min.js', 
+				'public/build/bower/angular-css/js/angular-css.js',
 				'public/build/bower/angular-route-styles/js/route-styles.js',
 				'public/build/bower/bootstrap/js/bootstrap.min.js',
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
@@ -85,7 +86,7 @@ module.exports = {
 			]
 		},
 		css: [
-			'public/modules/**/css/*.css'
+			'public/modules/*[!dashboards]*/css/*.css'
 		],
 		js: [
 			'public/config.js',

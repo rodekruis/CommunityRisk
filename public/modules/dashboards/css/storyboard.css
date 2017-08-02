@@ -13,7 +13,7 @@ body {
 	font-family: 'Lato',sans-serif;
 	font-weight: 300;
 	color: #666;
-	background: url(../img/screenshot1_shaded.png) no-repeat top center;
+	/* background: url(../img/screenshot1_shaded.png) no-repeat top center; */
 	background-size: cover;
 	background-attachment: fixed;
  	}

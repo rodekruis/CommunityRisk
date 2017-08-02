@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('PiStoryboardController', ['$scope','$css','$rootScope','Authentication', 'leafletData',
+	.controller('StoryboardController', ['$scope','$css','$rootScope','Authentication', 'leafletData',
 	function ($scope,$css,$rootScope, Authentication, leafletData) {
 	
 	$css.remove('modules/dashboards/css/header.css');
-	$css.add('modules/dashboards/css/priority_index_storyboard.css');
+	$css.add('modules/dashboards/css/storyboard.css');
 	
 	$(document).ready(function() {
 		

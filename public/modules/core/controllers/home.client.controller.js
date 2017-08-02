@@ -3,7 +3,7 @@
 angular.module('core').controller('HomeController', ['$scope','$css','$rootScope','Authentication', 'leafletData',
 	function ($scope,$css,$rootScope, Authentication, leafletData) {
     
-	$css.remove('modules/dashboards/css/priority_index_storyboard.css');
+	$css.remove('modules/dashboards/css/storyboard.css');
 	$css.add('modules/dashboards/css/header.css');
 	
 	$scope.authentication = Authentication;

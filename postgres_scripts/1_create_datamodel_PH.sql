@@ -235,8 +235,6 @@ from (
 ) aa
 ;
 
-select * from "PH_datamodel"."Indicators_3_competitiveness" order by 2;
-
 /*
 SELECT index, "Pcode_municipality", "Overall/Category", "Rank/Score", 
        "Overall Total Score", "Economic Dynamism", "Local Economy Size", 

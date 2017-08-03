@@ -304,7 +304,7 @@ $func$ LANGUAGE plpgsql;
 -- Combine all data in 1 JSON --
 --------------------------------
 
-DROP FUNCTION usp_data(int,varchar,text[],varchar,varchar,varchar);
+DROP FUNCTION IF EXISTS usp_data(int,varchar,text[],varchar,varchar,varchar);
 CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode text[],pi_cra varchar,disaster_type varchar,disaster_name varchar) RETURNS json AS $$
 
 	SELECT row_to_json(data)

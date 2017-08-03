@@ -463,13 +463,13 @@ to {
 .slick-prev {
     left: 2%;/* 
     background: url(../img/prev.png) no-repeat; */
-    background: url(../img/prev.png) no-repeat;
+    background: url(../modules/core/img/prev.png) no-repeat;
 }
 
 .slick-next {
     right: 2%;/*
     background: url(../img/next.png) no-repeat; */
-    background: url(../img/next.png) no-repeat;
+    background: url(../modules/core/img/next.png) no-repeat;
 }
 
 .slick-dots {

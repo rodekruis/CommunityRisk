@@ -99,7 +99,7 @@ into "MW_datamodel"."Indicators_4_traveltime"
 from "mw_source"."Indicators_4_miscellaneous"
 where "DIST_CODE" <> 0
 ;
---select count(*) from "MW_datamodel"."Indicators_4_traveltime"
+--select * from "MW_datamodel"."Indicators_4_traveltime"
 
 drop table if exists "MW_datamodel"."Indicators_4_hazards";
 select "EACODE" as pcode_level4

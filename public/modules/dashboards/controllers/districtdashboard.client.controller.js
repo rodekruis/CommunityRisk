@@ -19,7 +19,7 @@ angular.module('dashboards')
 		}
 		$scope.change_country = function(country) {
 			$scope.country_code = country;
-			$scope.parent_code = '';
+			$scope.parent_codes = [];
 			$scope.metric = '';
 			$scope.initiate('CRA');
 		}		
@@ -49,7 +49,8 @@ angular.module('dashboards')
 		$scope.name_popup = '';
 		$scope.value_popup = 0;
 		$scope.country_selection = '';
-		$scope.parent_code = '';
+		//$scope.parent_code = '';
+		$scope.parent_codes = [];
 		$scope.data_input = '';
 		$scope.filters = [];
 		$scope.tables = [];
@@ -98,7 +99,8 @@ angular.module('dashboards')
 			if (['MLI','ZMB'].indexOf($scope.country_code) > -1) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
 			
 			//This is the main search-query for PostgreSQL
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
+			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
 			
 			//Call dashboard itself, and then call data query
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
@@ -124,7 +126,9 @@ angular.module('dashboards')
 			// start loading bar
 		    $scope.start();
 			
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
+			$scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
+			//console.log($scope.data_input);
 			
 			Data.get({adminLevel: $scope.data_input}, 
 				function(pgData){
@@ -180,20 +184,9 @@ angular.module('dashboards')
 		  // Log to check when needed
 		  console.log(d);
 		  
-		  //Retrieve zoomlevel_min now and start reloading from there (THIS IS A BAD HACK!!)
-		  if (['MLI','ZMB'].indexOf($scope.country_code) > -1) {
-				$scope.admlevel = d.Country_meta[0].zoomlevel_min;
-				$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_name + '\'';
-		  
-				Data.get({adminLevel: $scope.data_input}, 
-					function(pgData){
-						$scope.prepare_reload(d,pgData);
-				});	
-		  } else {
-				// generate the actual content of the dashboard
-				$scope.generateCharts(d);
-		  }
-			  
+		  //Load actual content
+		  $scope.generateCharts(d);
+		    
 		  // end loading bar
 		  $scope.complete();
 		  
@@ -235,8 +228,8 @@ angular.module('dashboards')
 		  d.Metadata = $scope.view_code === 'CRA'  ? $.grep(d.Metadata_full, function(e){ return e.view_code == 'CRA' && e.country_code.indexOf($scope.country_code) > -1 && e.admin_level >= $scope.admlevel && e.admin_level_min <= $scope.admlevel;}) 
 												: $.grep(d.Metadata_full, function(e){ return e.view_code == 'PI' && e.disaster_type.indexOf($scope.disaster_type) > -1 && e.country_code.indexOf($scope.country_code) > -1; });
 		  
-		  console.log(d);
-		  
+		  //console.log(d);
+		  //Load actual content
 		  $scope.generateCharts(d);
 		  
 		  // end loading bar
@@ -372,25 +365,29 @@ angular.module('dashboards')
 				if ($scope.admlevel == zoom_min) {
 					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; //undefined;
 					$scope.levelB_code = '';
-				} else if ($scope.admlevel < zoom_max && $scope.parent_code !== '') { //$scope.levelB_selection == undefined) {
+					$scope.levelB_codes = [];
+				} else if ($scope.admlevel < zoom_max && $scope.parent_codes.length > 0) { //$scope.levelB_selection == undefined) {
 					$scope.levelB_selection = $scope.name_selection;
-					$scope.levelB_code = $scope.parent_code;
+					//$scope.levelB_code = $scope.parent_code;
+					$scope.levelB_codes = $scope.parent_codes;
 				}
 				if ($scope.admlevel < zoom_max) { 
-					$scope.levelC_selection = $scope.parent_code == '' ? 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
+					$scope.levelC_selection = $scope.parent_codes.length == 0 ? 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
 																		: undefined;
 					$scope.levelC_code = '';
-				} else if ($scope.parent_code !== '') {
+				} else if ($scope.parent_codes.length > 0) {
 					$scope.levelC_selection = $scope.name_selection;
 					$scope.levelC_code = $scope.parent_code;
 				}
 			} else {
 				if ($scope.admlevel == zoom_min) {
 					$scope.levelB_selection = undefined;
-					$scope.levelB_code = '';
+					//$scope.levelB_code = '';
+					$scope.levelB_codes = [];
 				} else if ($scope.admlevel < zoom_max && $scope.levelB_selection == undefined) {
 					$scope.levelB_selection = $scope.name_selection;
-					$scope.levelB_code = $scope.parent_code;
+					//$scope.levelB_code = $scope.parent_code;
+					$scope.levelB_codes = $scope.parent_codes;
 				}				
 				$scope.levelC_selection = $scope.admlevel < zoom_max ? undefined : $scope.name_selection;
 				$scope.levelC_code 		= $scope.admlevel < zoom_max ? '' : $scope.parent_code;
@@ -477,8 +474,8 @@ angular.module('dashboards')
 			var cf_scores_metric = !meta_scorevar[$scope.metric] ? $scope.metric : meta_scorevar[$scope.metric];
 			//var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { return d[cf_scores_metric]; }); //if (!meta_scorevar[$scope.metric]) { return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
 			var whereGroupSum_scores = whereDimension.group().reduce(
-				function(p,v) { p.count = p.count + 1; p.sum = p.sum + v[cf_scores_metric]; return p; }, 
-				function(p,v) {p.count = p.count - 1; p.sum = p.sum - v[cf_scores_metric]; return p; }, 
+				function(p,v) {p.count = v[cf_scores_metric] !== null ? p.count + 1 : p.count; p.sum = p.sum + v[cf_scores_metric]; return p; }, 
+				function(p,v) {p.count = v[cf_scores_metric] !== null ? p.count - 1 : p.count; p.sum = p.sum - v[cf_scores_metric]; return p; }, 
 				function() { return { count: 0, sum: 0 }; }
 			);	
 			
@@ -1161,8 +1158,10 @@ angular.module('dashboards')
 					$scope.admlevel = $scope.admlevel + 1;
 					$scope.parent_code_prev = $scope.parent_code;
 					$scope.name_selection_prev = $scope.name_selection;
-					$scope.parent_code = $scope.filters[$scope.filters.length - 1];
-					$scope.name_selection = lookup[$scope.parent_code];
+					//$scope.parent_code = $scope.filters[$scope.filters.length - 1];
+					$scope.parent_codes = $scope.filters;
+					$scope.name_selection = $scope.filters.length > 1 ? 'Multiple ' + $scope.genLookup_country_meta(d,'level' + ($scope.admlevel - 1) + '_name')[$scope.country_code]
+																	  : lookup[$scope.parent_codes[0]]; //$scope.parent_code];
 					if ($scope.admlevel == zoom_max) {
 						//$scope.metric = 'population';
 						for (var i=0;i<d.Rapportage.length;i++) {
@@ -1187,24 +1186,28 @@ angular.module('dashboards')
 				if ($scope.country_code == 'MW') {
 					if (dest_level === 1 && $scope.admlevel > zoom_min) {
 						$scope.admlevel = zoom_min; //dest_level;
-						$scope.parent_code = '';
+						//$scope.parent_code = '';
+						$scope.parent_codes = [];
 						$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code];
 						$scope.reload(d);
 					} else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
 						$scope.admlevel = zoom_min + 1;
-						$scope.parent_code = $scope.levelB_code;
+						//$scope.parent_code = $scope.levelB_code;
+						$scope.parent_codes = $scope.levelB_codes;
 						$scope.name_selection = $scope.name_selection_prev;
 						$scope.levelC_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code];
 						$scope.reload(d);
 					} else if (dest_level === 2 && $scope.admlevel < zoom_min + 1) {
 						$scope.admlevel = zoom_min + 1;
-						$scope.parent_code = '';
+						//$scope.parent_code = '';
+						$scope.parent_codes = [];
 						$scope.name_selection = $scope.levelB_selection;
 						document.getElementById('level2').setAttribute('class','btn btn-secondary btn-active');		
 						$scope.reload(d);		
-					} else if (dest_level === 3 && $scope.admlevel < zoom_min + 2 && $scope.parent_code == '') {
+					} else if (dest_level === 3 && $scope.admlevel < zoom_min + 2 && $scope.parent_codes.length == 0) {
 						$scope.admlevel = zoom_min + 2;
-						$scope.parent_code = '';
+						//$scope.parent_code = '';
+						$scope.parent_codes = [];
 						$scope.name_selection = $scope.levelC_selection;
 						document.getElementById('level2').setAttribute('class','btn btn-secondary btn-active');	
 						document.getElementById('level3').setAttribute('class','btn btn-secondary btn-active');		
@@ -1213,11 +1216,13 @@ angular.module('dashboards')
 				} else {
 					if (dest_level === 1 && $scope.admlevel > zoom_min) {
 						$scope.admlevel = zoom_min; //dest_level;
-						$scope.parent_code = '';
+						//$scope.parent_code = '';
+						$scope.parent_codes = [];
 						$scope.reload(d);
 					} else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
 						$scope.admlevel = zoom_min + 1;
-						$scope.parent_code = $scope.levelB_code;
+						//$scope.parent_code = $scope.levelB_code;
+						$scope.parent_codes = $scope.levelB_codes;
 						$scope.name_selection = $scope.name_selection_prev;
 						$scope.reload(d);
 					}
@@ -1240,8 +1245,8 @@ angular.module('dashboards')
 				cf_scores_metric = !meta_scorevar[$scope.metric] ? $scope.metric : meta_scorevar[$scope.metric];
 				//whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { return d[cf_scores_metric]; }); //if (!meta_scorevar[$scope.metric]) {return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
 				whereGroupSum_scores = whereDimension.group().reduce(
-					function(p,v) { p.count = p.count + 1; p.sum = p.sum + v[cf_scores_metric]; return p; }, 
-					function(p,v) {p.count = p.count - 1; p.sum = p.sum - v[cf_scores_metric]; return p; }, 
+					function(p,v) {p.count = v[cf_scores_metric] !== null ? p.count + 1 : p.count; p.sum = p.sum + v[cf_scores_metric]; return p; }, 
+					function(p,v) {p.count = v[cf_scores_metric] !== null ? p.count - 1 : p.count; p.sum = p.sum - v[cf_scores_metric]; return p; }, 
 					function() { return { count: 0, sum: 0 }; }
 				);
 				//console.log(whereDimension.top(Infinity));
@@ -1365,7 +1370,7 @@ angular.module('dashboards')
 				var download = document.getElementById('download');
 				download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
 				download.setAttribute('download','export.csv');
-				download.click();
+				//download.click();
 			};
 			
 			//Tabslide functions (Not included yet at the moment)

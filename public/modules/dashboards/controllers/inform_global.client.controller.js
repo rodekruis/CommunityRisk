@@ -30,8 +30,9 @@ angular.module('dashboards')
 		$scope.level2_code = '';
 		$scope.level3_code = '';
 		$scope.type_selection = '';
-		$scope.subtype_selection = ''; 
+		$scope.subtype_selection = '';
 		$scope.parent_code = '';
+		$scope.parent_codes = [];
 		$scope.data_input = '';
 		$scope.filters = [];
 		$scope.tables = [];
@@ -65,7 +66,9 @@ angular.module('dashboards')
 			
 			$scope.metric = '';
 			$scope.admlevel = 2;
-			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_code + '\',\'CRA\',\'\',\'\'';
+			
+			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
+			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'CRA\',\'\',\'\'';
 
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
 			    function(dashboard) {		

@@ -7,6 +7,32 @@ angular.module('dashboards')
 	$css.remove('modules/dashboards/css/header.css');
 	$css.add('modules/dashboards/css/storyboard.css');
 	
+	d3.dsv(';')("modules/dashboards/data/storyboard_echo2.csv", function(data) {
+		
+		for (var i=0;i<data.length;i++) {
+			var record = data[i];
+					
+			var div = document.createElement('li');
+			var parent = document.getElementById(record.section+'-items');
+			parent.appendChild(div);
+			var div0 = document.createElement('div');
+			div0.setAttribute('class','section-info');
+			div.appendChild(div0);	
+			var h3 = document.createElement('h3');
+			h3.innerHTML = record.subitem_name;
+			div0.appendChild(h3);
+			var p = document.createElement('p');
+			p.innerHTML = record.subitem_text;
+			div0.appendChild(p);
+			var img = document.createElement('img');
+			img.setAttribute('style','width:90%');
+			img.setAttribute('src',record.subitem_img);
+			div0.appendChild(img);
+		}
+		
+	});
+	
+	
 	$(document).ready(function() {
 		
 		if ($('.slider').length !== 0) {

@@ -7,7 +7,7 @@ angular.module('dashboards')
 	$css.remove('modules/dashboards/css/header.css');
 	$css.add('modules/dashboards/css/storyboard.css');
 	
-	d3.dsv(';')("modules/dashboards/data/storyboard_echo2.csv", function(data) {
+	/* d3.dsv(';')("modules/dashboards/data/storyboard_echo2.csv", function(data) {
 		
 		for (var i=0;i<data.length;i++) {
 			var record = data[i];
@@ -30,7 +30,7 @@ angular.module('dashboards')
 			div0.appendChild(img);
 		}
 		
-	});
+	}); */
 	
 	
 	$(document).ready(function() {

@@ -474,9 +474,8 @@ to {
 
 .slick-dots {
     position: absolute;
-    bottom: -40px;
-    left: 35%;
-    margin: 0 0 0 0px;
+    top: 0px;
+    margin: 0 auto 0 auto;
     z-index: 3;
     background: #c8c5c2;
     padding: 0;
@@ -533,12 +532,12 @@ to {
 
 .slick-dots li button:hover, .slick-dots li button:focus {
     color: #fff;
-    background: #3498db;
+    background: #4C8293;
 }
 
 .slick-dots li.slick-active button {
     color: #fff;
-    background: #3498db;
+    background: #4C8293;
 }
 
 @media only screen and (max-width: 600px) {
@@ -685,6 +684,7 @@ section.container {
   opacity: 0.2;
   position: fixed;
   top: 0;
+  z-index: -1;
 }
 .home-content {
   color: black; /*#ffffff;*/

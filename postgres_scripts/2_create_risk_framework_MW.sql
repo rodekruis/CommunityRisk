@@ -291,6 +291,27 @@ XXX_score as (
 	),
 */
 
+--RC_capacity: higher RC capacity is lower Lack of Coping Capacity score
+volunteers as (
+	select t0.pcode_level2
+		,log(volunteers) as volunteers
+	from "MW_datamodel"."Geo_level2" t0
+	left join "MW_datamodel"."Indicators_2_TOTAL" t1 on t0.pcode_level2 = t1.pcode
+	)
+,--select * from travel
+volunteers_minmax as (
+	select min(volunteers) as min
+		,max(volunteers) as max
+	from volunteers
+	),
+volunteers_score as (
+	select t0.*
+		,((max - volunteers) / (max - min)) * 10 as volunteers_score
+	from volunteers t0
+	join volunteers_minmax t1 on 1=1
+	)
+--select * from volunteers_score
+,
 electricity as (
 	select t0.pcode_level2
 		,t1.electricity 		--POSSIBLE LOG-TRANSFORMATION HERE
@@ -407,6 +428,7 @@ pipewater_score as (
 
 --JOINING ALL
 select t1.pcode_level2
+	,volunteers_score,volunteers
 	,travel_score,travel
 	,hospitals_score,hospitals
 	,mobile_score,mobile
@@ -416,6 +438,7 @@ select t1.pcode_level2
 	--PLACEHOLDER
 	--,XXX_score,XXX
 	,(10-power(1
+			* coalesce((10-volunteers_score)/10*9+1,1)
 			* coalesce((10-travel_score)/10*9+1,1)
 			 * coalesce((10-hospitals_score)/10*9+1,1)
 			 * coalesce((10-mobile_score)/10*9+1,1)
@@ -425,6 +448,7 @@ select t1.pcode_level2
 			 --PLACEHOLDER
 			 --* coalesce((10-XXX_score)/10*9+1,1)
 			,cast(1 as float)/cast((0
+		+ case when volunteers_score is null then 0 else 1 end
 		+ case when travel_score is null then 0 else 1 end
 		+ case when hospitals_score is null then 0 else 1 end
 		+ case when mobile_score is null then 0 else 1 end
@@ -442,6 +466,7 @@ left join mobile_score t3 	on t0.pcode_level2 = t3.pcode_level2
 left join sanitation_score t4 	on t0.pcode_level2 = t4.pcode_level2
 left join pipewater_score t5 	on t0.pcode_level2 = t5.pcode_level2
 left join electricity_score t6 	on t0.pcode_level2 = t6.pcode_level2
+left join volunteers_score t7 	on t0.pcode_level2 = t7.pcode_level2
 --PLACEHOLDER
 --left join XXX_score t6 		on t0.pcode_level2 = t6.pcode_level2
 ;
@@ -459,7 +484,7 @@ select t1.pcode_level2
 	,coping_capacity_score
 	,poverty_score,life_exp_score,infant_mort_score,construction_score,fcs_score
 	,flood_score,earthquake_score,drought_score
-	,travel_score,hospitals_score,mobile_score,sanitation_score,pipewater_score,electricity_score
+	,travel_score,hospitals_score,mobile_score,sanitation_score,pipewater_score,electricity_score,volunteers_score
 	--PLACEHOLDER
 	--,XXX_score
 	,(10 - power(coalesce((10-vulnerability_score)/10*9+1,1)
@@ -583,6 +608,27 @@ left join haz_risk_score t1	on t0.pcode_level3 = t1.pcode_level3
 drop table if exists "MW_datamodel"."coping_scores_level3";
 
 with
+--RC_capacity: higher RC capacity is lower Lack of Coping Capacity score
+volunteers as (
+	select t0.pcode_level3
+		,log(volunteers) as volunteers
+	from "MW_datamodel"."Geo_level4" t0
+	left join "MW_datamodel"."Indicators_3_TOTAL" t1 on t0.pcode_level3 = t1.pcode
+	)
+,--select * from travel
+volunteers_minmax as (
+	select min(volunteers) as min
+		,max(volunteers) as max
+	from volunteers
+	),
+volunteers_score as (
+	select t0.*
+		,((max - volunteers) / (max - min)) * 10 as volunteers_score
+	from volunteers t0
+	join volunteers_minmax t1 on 1=1
+	)
+--select * from volunteers_score
+,
 electricity as (
 	select t0.pcode_level3
 		,t1.electricity 		--POSSIBLE LOG-TRANSFORMATION HERE
@@ -641,22 +687,27 @@ hospitals_score as (
 
 --JOINING ALL
 select t1.pcode_level3
+	,volunteers_score,volunteers
 	,travel_score,travel
 	,hospitals_score,hospitals
 	,electricity_score,electricity
 	,(10-power(1
 		* coalesce((10-travel_score)/10*9+1,1)
+		* coalesce((10-volunteers_score)/10*9+1,1)
 		* coalesce((10-hospitals_score)/10*9+1,1)
 		* coalesce((10-electricity_score)/10*9+1,1)
 			,cast(1 as float)/cast(0
 		+ case when travel_score is null then 0 else 1 end
+		+ case when volunteers_score is null then 0 else 1 end
 		+ case when hospitals_score is null then 0 else 1 end
-		+ case when electricity_score is null then 0 else 1 end as float)))/9*10 as coping_capacity_score
+		+ case when electricity_score is null then 0 else 1 end
+		 as float)))/9*10 as coping_capacity_score
 into "MW_datamodel"."coping_scores_level3"
 from "MW_datamodel"."Geo_level3" t0
 left join travel_score t1	on t0.pcode_level3 = t1.pcode_level3
 left join hospitals_score t2	on t0.pcode_level3 = t2.pcode_level3
-left join electricity_score t6 	on t0.pcode_level3 = t6.pcode_level3
+left join electricity_score t3 	on t0.pcode_level3 = t3.pcode_level3
+left join volunteers_score t4 	on t0.pcode_level3 = t4.pcode_level3
 ;
 --select * from "MW_datamodel"."coping_scores_level3"
 
@@ -667,7 +718,7 @@ select t1.pcode_level3
 	,coping_capacity_score
 	,poverty_score
 	,flood_score,earthquake_score,drought_score
-	,travel_score,hospitals_score,electricity_score
+	,travel_score,hospitals_score,electricity_score,volunteers_score
 	,(10 - power(coalesce((10-vulnerability_score)/10*9+1,1)
 		* coalesce((10-hazard_score)/10*9+1,1)
 		* coalesce((10-coping_capacity_score)/10*9+1,1)
@@ -784,6 +835,27 @@ left join haz_risk_score t1	on t0.pcode_level4 = t1.pcode_level4
 drop table if exists "MW_datamodel"."coping_scores_level4";
 
 with
+--RC_capacity: higher RC capacity is lower Lack of Coping Capacity score
+volunteers as (
+	select t0.pcode_level4
+		,log(volunteers) as volunteers
+	from "MW_datamodel"."Geo_level4" t0
+	left join "MW_datamodel"."Indicators_4_TOTAL" t1 on t0.pcode_level4 = t1.pcode
+	)
+,--select * from travel
+volunteers_minmax as (
+	select min(volunteers) as min
+		,max(volunteers) as max
+	from volunteers
+	),
+volunteers_score as (
+	select t0.*
+		,((max - volunteers) / (max - min)) * 10 as volunteers_score
+	from volunteers t0
+	join volunteers_minmax t1 on 1=1
+	)
+--select * from volunteers_score
+,
 --travel time: higher travel time is lower coping capacity, so higher (Lack of Coping Capacity) score
 travel_hospital as (
 	select t0.pcode_level4
@@ -846,15 +918,18 @@ travel_tradingcentre_score as (
 	
 --JOINING ALL
 select t1.pcode_level4
+	,volunteers_score,volunteers
 	,travel_hospital_score,travel_hospital
 	,travel_sec_school_score,travel_sec_school
 	,travel_tradingcentre_score,travel_tradingcentre
 	,case when travel_hospital_score is null and travel_sec_school_score is null and travel_tradingcentre_score is null then null else 
 	(10-power(1
+		* coalesce((10-volunteers_score)/10*9+1,1)
 		* coalesce((10-travel_hospital_score)/10*9+1,1)
 		* coalesce((10-travel_sec_school_score)/10*9+1,1)
 		* coalesce((10-travel_tradingcentre_score)/10*9+1,1)
 			,cast(1 as float)/cast(0
+		+ case when volunteers_score is null then 0 else 1 end
 		+ case when travel_hospital_score is null then 0 else 1 end
 		+ case when travel_sec_school_score is null then 0 else 1 end
 		+ case when travel_tradingcentre_score is null then 0 else 1 end
@@ -865,6 +940,7 @@ from "MW_datamodel"."Geo_level4" t0
 left join travel_hospital_score t1	on t0.pcode_level4 = t1.pcode_level4
 left join travel_sec_school_score t2	on t0.pcode_level4 = t2.pcode_level4
 left join travel_tradingcentre_score t3	on t0.pcode_level4 = t3.pcode_level4
+left join volunteers_score t4		on t0.pcode_level4 = t4.pcode_level4
 ;
 --select * from "MW_datamodel"."coping_scores_level4"
 
@@ -875,7 +951,7 @@ select t1.pcode_level4
 	,coping_capacity_score
 	,poverty_score
 	,flood_score,drought_score
-	,travel_hospital_score,travel_sec_school_score,travel_tradingcentre_score
+	,travel_hospital_score,travel_sec_school_score,travel_tradingcentre_score,volunteers_score
 	,(10 - power(coalesce((10-vulnerability_score)/10*9+1,1)
 		* coalesce((10-hazard_score)/10*9+1,1)
 		* coalesce((10-coping_capacity_score)/10*9+1,1)
@@ -904,8 +980,7 @@ on t0.pcode = t1.pcode_level4
 drop table "MW_datamodel"."Indicators_4_TOTAL";
 select * into "MW_datamodel"."Indicators_4_TOTAL" from "MW_datamodel"."Indicators_4_TOTAL_temp";
 drop table "MW_datamodel"."Indicators_4_TOTAL_temp";
---select * from "MW_datamodel"."Indicators_4_TOTAL" 
-
+--select * from "MW_datamodel"."Indicators_4_TOTAL" order by volunteers_score
 
 
 

@@ -28,7 +28,7 @@ p.lead {
 }
 
 a {
-	color: #28c3ab;
+	color: #4C8293;
 	-webkit-transition: all .2s ease-in-out;
 	-moz-transition: all .2s ease-in-out;
 	transition: all .2s ease-in-out;
@@ -283,8 +283,8 @@ hr {
 	opacity: 0.8;
 }
 .section-heading i {
-	margin-bottom: 0px;
-	margin-right: -700px;
+	margin-top: 0;
+	margin-left: 20px;
 }
 
 
@@ -320,7 +320,6 @@ hr {
 	height:100%;
 	width:100%;
 	padding:10% 0 0 0;
-	background: url(../picture/screenshot1.jpg) no-repeat top center;
 	background-size: cover;
 }
 

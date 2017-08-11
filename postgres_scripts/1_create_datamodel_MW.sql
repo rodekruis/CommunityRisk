@@ -104,11 +104,14 @@ where "DIST_CODE" <> 0
 drop table if exists "MW_datamodel"."Indicators_4_hazards";
 select "EACODE" as pcode_level4
 	,drought_in*filter as drought_risk
-	,flood_in*filter as flood_risk
+	,case when flood_in*filter = 0 then 0
+		else flood_in*filter/2 + 5 end as flood_risk
 into "MW_datamodel"."Indicators_4_hazards"
 from "mw_source"."Indicators_4_miscellaneous"
 where "DIST_CODE" <> 0
 ;
+
+
 --select count(*) from "MW_datamodel"."Indicators_4_hazards"
 
 drop table if exists "MW_datamodel"."Indicators_4_echo2_areas";
@@ -116,6 +119,56 @@ select "EACODE" as pcode_level4
 	,"filter_GVH" as echo2_area
 into "MW_datamodel"."Indicators_4_echo2_areas"
 from "mw_source"."Indicators_4_echo2_areas"
+;
+
+
+--RED CROSS capacity
+drop table if exists "MW_datamodel"."Indicators_4_RC_capacity";
+select t0.pcode_level4
+	,t2.volunteers*100 as volunteers
+into "MW_datamodel"."Indicators_4_RC_capacity"
+from "MW_datamodel"."Geo_level4" t0
+left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
+left join (
+	select aa.pcode_level2
+		,aa.n_volunteers/bb.population as volunteers
+	from (
+	select t0.pcode_level2
+		,sum("No of Volunteers") as n_volunteers
+	from (select case when name in ('Blantyre','Blantyre City') then 'Blantyre'
+			when name in ('Zomba','Zomba City') then 'Zomba'
+			when name in ('Lilongwe','Lilongwe City') then 'Lilongwe'
+			else name end as name
+			,pcode_level2
+		from "MW_datamodel"."Geo_level2" 
+		) t0
+	full outer join (
+		select *
+			,case when "Branch name" in ('Nsanje 1','Nsanje 2') then 'Nsanje'
+				when "Branch name" in ('Chitipa 1','Chitipa 2') then 'Chitipa'
+				when "Branch name" = 'Nkhatabay' then 'Nkhata Bay'
+				when "Branch name" = 'Blantyre ' then 'Blantyre'
+				when "Branch name" = 'Mzuzu' then 'Mzuzu City'
+				when "Branch name" in ('Lilongwe Bua','Lilongwe') then 'Lilongwe'
+				when "Branch name" = 'Mtakataka' then 'Dedza'
+				else "Branch name" end as name
+		from mw_source."Indicators_2_RC_capacity" 
+		) t1	
+		on t0.name = t1.name
+	group by t0.pcode_level2
+		) aa
+	left join (
+		select t0.pcode_level2
+			,sum(population) as population
+		from "MW_datamodel"."Geo_level3" t0
+		left join "MW_datamodel"."Geo_level4" t1 on t0.pcode_level3 = t1.pcode_level3
+		left join "MW_datamodel"."Indicators_4_population" t2 on t1.pcode_level4 = t2.pcode_level4
+		group by 1
+		) bb
+		on aa.pcode_level2 = bb.pcode_level2
+	) t2
+	on t1.pcode_level2 = t2.pcode_level2
+order by 2
 ;
 
 ------------------
@@ -211,6 +264,8 @@ where <possibly apply any filters here>
 ;
 */
 
+
+
 drop table if exists "MW_datamodel"."Indicators_2_FCS";
 select pcode as pcode_level2
 	,fcs_acceptable / 100 as FCS
@@ -266,6 +321,7 @@ select t0.pcode_level4 as pcode
 	,t3.traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre
 	,t4.drought_risk,flood_risk
 	,t5.echo2_area
+	,t6.volunteers
 into "MW_datamodel"."Indicators_4_TOTAL"
 from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Indicators_4_population" t1	on t0.pcode_level4 = t1.pcode_level4
@@ -273,13 +329,14 @@ left join "MW_datamodel"."Indicators_4_poverty" t2	on t0.pcode_level4 = t2.pcode
 left join "MW_datamodel"."Indicators_4_traveltime" t3	on t0.pcode_level4 = t3.pcode_level4
 left join "MW_datamodel"."Indicators_4_hazards" t4	on t0.pcode_level4 = t4.pcode_level4
 left join "MW_datamodel"."Indicators_4_echo2_areas" t5	on t0.pcode_level4 = t5.pcode_level4
+left join "MW_datamodel"."Indicators_4_RC_capacity" t6	on t0.pcode_level4 = t6.pcode_level4
 ;
 
 
 drop table if exists "MW_datamodel"."Indicators_3_TOTAL";
 select t0.pcode_level3 as pcode
 	,t0.pcode_level2 as pcode_parent
-	,level4.population,poverty_incidence,traveltime,traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre,echo2_area
+	,level4.population,poverty_incidence,traveltime,traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre,echo2_area,volunteers
 	,land_area
 	,population / land_area as pop_density	
 --	,case when population = 0 then null else cyclone_phys_exp / population end as cyclone_phys_exp
@@ -308,6 +365,7 @@ left join (
 		,sum(traveltime_sec_school * population) / sum(population) as traveltime_sec_school
 		,sum(traveltime_tradingcentre * population) / sum(population) as traveltime_tradingcentre
 		,max(echo2_area) as echo2_area
+		,max(volunteers) as volunteers
 	from "MW_datamodel"."Indicators_4_TOTAL"
 	group by 1
 	) level4
@@ -325,7 +383,7 @@ left join "MW_datamodel"."Indicators_3_electricity" 	t6	on t0.pcode_level3 = t6.
 drop table if exists "MW_datamodel"."Indicators_2_TOTAL";
 select t0.pcode_level2 as pcode
 	,t0.pcode_level1 as pcode_parent
-	,level3.population,land_area,pop_density,echo2_area
+	,level3.population,land_area,pop_density,echo2_area,volunteers
 		,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp
 		,traveltime,nr_health_facilities,health_density,poverty_incidence
 		,electricity
@@ -343,6 +401,7 @@ left join (
 		,sum(land_area) as land_area
 		,sum(pop_density * land_area) / sum(land_area) as pop_density
 		,max(echo2_area) echo2_area
+		,max(volunteers) volunteers
 --		,sum(cyclone_phys_exp * population) / sum(population) as cyclone_phys_exp
 		,sum(drought_phys_exp * population) / sum(population) as drought_phys_exp
 		,sum(earthquake7_phys_exp * population) / sum(population) as earthquake7_phys_exp

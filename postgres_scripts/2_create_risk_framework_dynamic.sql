@@ -39,6 +39,7 @@ BEGIN
     FOR r IN
     EXECUTE 'select t0.group
 			,t0.variable
+			,t0.reverse
 		from metadata."DPI_metadata" t0
 		inner join (
 			select *
@@ -49,7 +50,8 @@ BEGIN
 		where t0.country_code like ''%' || $1 || '%'' and t0.group in (''hazard'',''vulnerability'',''coping'')'
     LOOP
 
-	sql := ('CREATE TABLE "' || $1 || '_datamodel".score_' || $1 || '_' || $2 || '_' || r.variable || ' AS 
+	sql := ('DROP TABLE IF EXISTS "' || $1 || '_datamodel".score_' || $1 || '_' || $2 || '_' || r.variable || ';
+		CREATE TABLE "' || $1 || '_datamodel".score_' || $1 || '_' || $2 || '_' || r.variable || ' AS 
 		with ' || r.variable || ' as (
 			select t0.pcode_level' || $2 || ' 
 				,' || r.variable || '
@@ -62,7 +64,7 @@ BEGIN
 			from ' || r.variable || '
 			)
 		select t0.*
-			,(cast((max - ' || r.variable || ') as numeric) / cast((max - min) as numeric)) * 10 as ' || r.variable || '_score
+			,(cast((' || case when r.reverse = 1 then 'max - ' else '' end || r.variable || case when r.reverse=0 then ' - min' else '' end || ') as numeric) / cast((max - min) as numeric)) * 10 as ' || r.variable || '_score
 		from ' || r.variable || ' t0
 		join ' || r.variable || '_minmax t1 on 1=1
 		
@@ -79,8 +81,6 @@ $$ LANGUAGE plpgsql STRICT;
 --select test_dpi('MW',2)
 --select test_dpi('MW',3)
 --select test_dpi('MW',4)
-
-
 
 DROP FUNCTION IF EXISTS test_dpi2(varchar,int,varchar);
 CREATE OR REPLACE FUNCTION test_dpi2(country varchar, admin_level int, group_var varchar) RETURNS VOID AS $$

@@ -154,7 +154,7 @@ hpi_score as (
 	)
 
 ,
---Human Development Index (Higher hdi = more vulnerable >> DO NOT switch scale around)
+--Human Development Index (Higher hdi = less vulnerable >> DO switch scale around)
 hdi as (
 	select t0.pcode_level3
 		,t1.hdi
@@ -168,7 +168,7 @@ hdi_minmax as (
 	),
 hdi_score as (
 	select t0.*
-		,((hdi - min) / ( max - min)) * 10 as hdi_score
+		,((max - hdi) / ( max - min)) * 10 as hdi_score
 	from hdi t0
 	left join hdi_minmax t1 on 1=1
 	)

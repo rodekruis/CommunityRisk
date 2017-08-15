@@ -228,7 +228,7 @@ angular.module('dashboards')
 		  d.Metadata = $scope.view_code === 'CRA'  ? $.grep(d.Metadata_full, function(e){ return e.view_code == 'CRA' && e.country_code.indexOf($scope.country_code) > -1 && e.admin_level >= $scope.admlevel && e.admin_level_min <= $scope.admlevel;}) 
 												: $.grep(d.Metadata_full, function(e){ return e.view_code == 'PI' && e.disaster_type.indexOf($scope.disaster_type) > -1 && e.country_code.indexOf($scope.country_code) > -1; });
 		  
-		  //console.log(d);
+		  console.log(d);
 		  //Load actual content
 		  $scope.generateCharts(d);
 		  
@@ -741,7 +741,7 @@ angular.module('dashboards')
 				var scores = document.getElementById('scores');
 				var vulnerability = document.getElementById('vulnerability');
 				var hazard = document.getElementById('hazard');
-				var coping = document.getElementById('coping');
+				var coping = document.getElementById('coping_capacity');
 				var other = document.getElementById('other');
 				if (general) {while (general.firstChild) { general.removeChild(general.firstChild); };}
 				if (dpi) {while (dpi.firstChild) { dpi.removeChild(dpi.firstChild); };}

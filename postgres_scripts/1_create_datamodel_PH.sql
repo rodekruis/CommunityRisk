@@ -487,7 +487,7 @@ left join "ph_source"."Aux_Manila_districts" t2
 -- 3. Aggregate such that the level3-table also contains level4-aggregates, etc.
 
 --Combine all level 4 data in one table
-drop table if exists "PH_datamodel"."Indicators_4_TOTAL";
+drop table if exists "PH_datamodel"."Indicators_4_TOTAL_temp";
 select t0.pcode_level4 as pcode
 	,t0.pcode_level3 as pcode_parent
 	,t1.population
@@ -496,7 +496,7 @@ select t0.pcode_level4 as pcode
 	,round(t3.traveltime,1) as traveltime
 	--PLACEHOLDER: ADD HERE WHICH NEW VARIABLES TO INCLUDE FROM NEW TABLE
 	--,t5.XXX
-into "PH_datamodel"."Indicators_4_TOTAL"
+into "PH_datamodel"."Indicators_4_TOTAL_temp"
 from "PH_datamodel"."Geo_level4" t0
 left join "PH_datamodel"."Indicators_4_population" 	t1	on t0.pcode_level4 = t1.pcode_level4
 left join "PH_datamodel"."Indicators_4_land_area"	t2	on t0.pcode_level4 = t2.pcode_level4
@@ -507,7 +507,7 @@ left join "PH_datamodel"."Indicators_4_rural_urban" 	t4	on t0.pcode_level4 = t4.
 ;
 
 --Combine all level 3 data in one table
-drop table if exists "PH_datamodel"."Indicators_3_TOTAL";
+drop table if exists "PH_datamodel"."Indicators_3_TOTAL_temp";
 select t0.pcode_level3 as pcode
 	,t0.pcode_level2 as pcode_parent
 	,level4.population,land_area,pop_density,traveltime
@@ -528,9 +528,10 @@ select t0.pcode_level3 as pcode
 	,case when level4.population/10000 = 0 then null else cast(t10.nr_health_facilities as float)/ (cast(level4.population as float) / 10000) end as health_density
 	,t11.recent_shocks
 	,t12.competitiveness,economic_dynamism,government_efficiency,infrastructure
+	,t13.hdi
 	--PLACEHOLDER: ADD HERE WHICH NEW VARIABLES TO INCLUDE FROM NEW TABLE
 	--,t11.XXX
-into "PH_datamodel"."Indicators_3_TOTAL"
+into "PH_datamodel"."Indicators_3_TOTAL_temp"
 from "PH_datamodel"."Geo_level3" 				t0
 left join (
 	select pcode_parent
@@ -540,7 +541,7 @@ left join (
 		,sum(traveltime*population) / sum(population) as traveltime
 		--PLACEHOLDER: ADD THE NEWLY ADDED LEVEL4 INDICATORS HERE AGAIN AS WELL with the appropriate transformation
 		--,sum(XXX * population) / sum(population) as XXX
-	from "PH_datamodel"."Indicators_4_TOTAL"
+	from "PH_datamodel"."Indicators_4_TOTAL_temp"
 	group by 1) 						level4	on t0.pcode_level3 = level4.pcode_parent
 left join "PH_datamodel"."Indicators_3_poverty" 		t1	on t0.pcode_level3 = t1.pcode_level3
 left join "PH_datamodel"."Indicators_3_hazards" 		t2	on t0.pcode_level3 = t2.pcode_level3
@@ -552,11 +553,12 @@ left join "PH_datamodel"."Indicators_3_Pantawid" 		t9	on t0.pcode_level3 = t9.pc
 left join "PH_datamodel"."Indicators_3_hospitals_OCHA" 		t10	on t0.pcode_level3 = t10.pcode_level3
 left join "PH_datamodel"."Indicators_3_recent_shocks"		t11	on t0.pcode_level3 = t11.pcode_level3
 left join "PH_datamodel"."Indicators_3_competitiveness"		t12	on t0.pcode_level3 = t12.pcode_level3
+left join "PH_datamodel"."Indicators_2_HDI"			t13	on t0.pcode_level2 = t13.pcode_level2 /* NOTE: you can also add higher-level tables here if wanted */
 --PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL3 ALREADY) 
 --left join "PH_datamodel"."Indicators_3_XXX" 			t11	on t0.pcode_level3 = t11.pcode_level3
 ;
 
-drop table if exists "PH_datamodel"."Indicators_2_TOTAL"; 
+drop table if exists "PH_datamodel"."Indicators_2_TOTAL_temp"; 
 select t0.pcode_level2 as pcode
 	,t0.pcode_level1 as pcode_parent
 	,level3.poverty_incidence,flood_phys_exp,cyclone_phys_exp,earthquake7_phys_exp,tsunami_phys_exp,drought_phys_exp,good_governance_index,income_class
@@ -569,7 +571,7 @@ select t0.pcode_level2 as pcode
 	,t1.hdi
 	--PLACEHOLDER: ADD HERE WHICH NEW VARIABLES TO INCLUDE FROM NEW TABLE
 	--,t2.XXX
-into "PH_datamodel"."Indicators_2_TOTAL"
+into "PH_datamodel"."Indicators_2_TOTAL_temp"
 from "PH_datamodel"."Geo_level2" t0 
 left join (
 	select pcode_parent
@@ -597,7 +599,7 @@ left join (
 		,sum(infrastructure * population) / sum(population) as infrastructure
 		--PLACEHOLDER: ADD THE NEWLY ADDED LEVEL3 and LEVEL4 INDICATORS HERE AGAIN AS WELL with the appropriate transformation
 		--,sum(XXX * population) / sum(population) as XXX
-	from "PH_datamodel"."Indicators_3_TOTAL"
+	from "PH_datamodel"."Indicators_3_TOTAL_temp"
 	group by 1) 				level3	on t0.pcode_level2 = level3.pcode_parent
 left join "PH_datamodel"."Indicators_2_HDI" 	t1	on t0.pcode_level2 = t1.pcode_level2
 --PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL3 ALREADY) 
@@ -681,14 +683,14 @@ LEFT JOIN (
 	--	,perc_true
 	FROM ph_source."PI_typhoon_Haima_damage"
 	union all
-	select typhoon_name
+	select 'Nock-Ten' as typhoon_name
 		,"M_Code" as pcode
 		,num_total_damage_houses_0p25weight_perc_pred
 		,total_damage_houses_0p25weight_perc_pred
 	FROM ph_source."PI_typhoon_Nina_damage"
 	) t2
 	ON t1.typhoon_name = t2.typhoon_name and t1."Mun_Code" = t2.pcode
-LEFT JOIN "PH_datamodel"."Indicators_3_TOTAL" t3
+LEFT JOIN "PH_datamodel"."Indicators_3_TOTAL_temp" t3
 	ON t1."Mun_Code" = t3.pcode
 ;
 
@@ -727,22 +729,71 @@ from (
 	from ph_source."PI_earthquake_training_data"
 	where "Earthquake" not in ('Gorhka 2015','Sarangani 2017')
 	) t1
-LEFT JOIN "PH_datamodel"."Indicators_3_TOTAL" t2
+LEFT JOIN "PH_datamodel"."Indicators_3_TOTAL_temp" t2
 	ON t1.pcode = t2.pcode
+;
 
 
 
+----------------------------------
+-- 2.1: Calculate INFORM-scores --
+----------------------------------
+
+--calculate INFORM-scores at lowest level:level2
+select usp_inform('PH',3);
+
+--aggregate to higher levels
+drop table if exists "PH_datamodel"."total_scores_level2";
+select t1.pcode_parent as pcode_level2
+	,sum(risk_score * population) / sum(population) as risk_score
+	,sum(hazard_score * population) / sum(population) as hazard_score
+	,sum(vulnerability_score * population) / sum(population) as vulnerability_score
+	,sum(coping_capacity_score * population) / sum(population) as coping_capacity_score
+	,sum(poverty_incidence_score * population) / sum(population) as poverty_incidence_score,sum(hdi_score * population) / sum(population) as hdi_score
+		,sum(recent_shocks_score * population) / sum(population) as recent_shocks_score,sum(perc_wall_partly_concrete_score * population) / sum(population) as perc_wall_partly_concrete_score
+		,sum(perc_roof_concrete_alu_iron_score * population) / sum(population) as perc_roof_concrete_alu_iron_score,sum(pantawid_perc_score * population) / sum(population) as pantawid_perc_score
+	,sum(flood_phys_exp_score * population) / sum(population) as flood_phys_exp_score,sum(cyclone_phys_exp_score * population) / sum(population) as cyclone_phys_exp_score
+		,sum(earthquake7_phys_exp_score * population) / sum(population) as earthquake7_phys_exp_score,sum(tsunami_phys_exp_score * population) / sum(population) as tsunami_phys_exp_score
+		,sum(drought_phys_exp_score * population) / sum(population) as drought_phys_exp_score
+	,sum(traveltime_score * population) / sum(population) as traveltime_score,sum(health_density_score * population) / sum(population) as health_density_score
+		,sum(good_governance_index_score * population) / sum(population) as good_governance_index_score
+	--PLACEHOLDER
+	--,sum(XXX_score * population)/ sum(population) as XXX_score
+into "PH_datamodel"."total_scores_level2"
+from "PH_datamodel"."total_scores_level3" t0
+join (select pcode, pcode_parent, population from "PH_datamodel"."Indicators_3_TOTAL_temp") t1	on t0.pcode_level3 = t1.pcode
+group by t1.pcode_parent
+;
+
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "PH_datamodel"."Indicators_2_TOTAL";
+select *
+into "PH_datamodel"."Indicators_2_TOTAL"
+from "PH_datamodel"."Indicators_2_TOTAL_temp" t0
+left join "PH_datamodel"."total_scores_level2" t1
+on t0.pcode = t1.pcode_level2
+;
+--select * from "PH_datamodel"."Indicators_2_TOTAL" 
+
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "PH_datamodel"."Indicators_3_TOTAL";
+select *
+into "PH_datamodel"."Indicators_3_TOTAL"
+from "PH_datamodel"."Indicators_3_TOTAL_temp" t0
+left join "PH_datamodel"."total_scores_level3" t1
+on t0.pcode = t1.pcode_level3
+;
+--select * from "PH_datamodel"."Indicators_3_TOTAL" 
 
 
-
-
-
-
-
-
-
-
-
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "PH_datamodel"."Indicators_4_TOTAL";
+select *
+into "PH_datamodel"."Indicators_4_TOTAL"
+from "PH_datamodel"."Indicators_4_TOTAL_temp" t0
+--left join "PH_datamodel"."total_scores_level4" t1
+--on t0.pcode = t1.pcode_level4
+;
 
 
 

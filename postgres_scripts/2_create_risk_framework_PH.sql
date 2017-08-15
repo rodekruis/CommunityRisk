@@ -469,11 +469,14 @@ select t1.pcode_parent as pcode_level2
 	,sum(hazard_score * population) / sum(population) as hazard_score
 	,sum(vulnerability_score * population) / sum(population) as vulnerability_score
 	,sum(coping_capacity_score * population) / sum(population) as coping_capacity_score
-	,sum(pov_score * population) / sum(population) as pov_score,sum(hdi_score * population) / sum(population) as hdi_score,sum(recent_shocks_score * population) / sum(population) as recent_shocks_score
-	,sum(wall_score * population) / sum(population) as wall_score,sum(roof_score * population) / sum(population) as roof_score,sum(pantawid_score * population) / sum(population) as pantawid_score
-	,sum(flood_score * population) / sum(population) as flood_score,sum(cyclone_score * population) / sum(population) as cyclone_score,sum(earthquake_score * population) / sum(population) as earthquake_score
-	,sum(tsunami_score * population) / sum(population) as tsunami_score,sum(drought_score * population) / sum(population) as drought_score
-	,sum(travel_score * population) / sum(population) as travel_score,sum(hospitals_score * population) / sum(population) as hospitals_score,sum(governance_score * population) / sum(population) as governance_score
+	,sum(poverty_incidence_score * population) / sum(population) as poverty_incidence_score,sum(hdi_score * population) / sum(population) as hdi_score
+		,sum(recent_shocks_score * population) / sum(population) as recent_shocks_score,sum(perc_wall_partly_concrete_score * population) / sum(population) as perc_wall_partly_concrete_score
+		,sum(perc_roof_concrete_alu_iron_score * population) / sum(population) as perc_roof_concrete_alu_iron_score,sum(pantawid_perc_score * population) / sum(population) as pantawid_perc_score
+	,sum(flood_phys_exp_score * population) / sum(population) as flood_phys_exp_score,sum(cyclone_phys_exp_score * population) / sum(population) as cyclone_phys_exp_score
+		,sum(earthquake7_phys_exp_score * population) / sum(population) as earthquake7_phys_exp_score,sum(tsunami_phys_exp_score * population) / sum(population) as tsunami_phys_exp_score
+		,sum(drought_phys_exp_score * population) / sum(population) as drought_phys_exp_score
+	,sum(traveltime_score * population) / sum(population) as traveltime_score,sum(health_density_score * population) / sum(population) as health_density_score
+		,sum(good_governance_index_score * population) / sum(population) as good_governance_index_score
 	--PLACEHOLDER
 	--,sum(XXX_score * population)/ sum(population) as XXX_score
 into "PH_datamodel"."total_scores_level2"
@@ -483,29 +486,29 @@ group by t1.pcode_parent
 ;
 
 --ADD risk scores to Indicators_TOTAL table
-drop table if exists "PH_datamodel"."Indicators_2_TOTAL_temp";
+drop table if exists "PH_datamodel"."Indicators_2_TOTAL";
 select *
-into "PH_datamodel"."Indicators_2_TOTAL_temp"
-from "PH_datamodel"."Indicators_2_TOTAL" t0
+into "PH_datamodel"."Indicators_2_TOTAL"
+from "PH_datamodel"."Indicators_2_TOTAL_temp" t0
 left join "PH_datamodel"."total_scores_level2" t1
 on t0.pcode = t1.pcode_level2
 ;
-drop table "PH_datamodel"."Indicators_2_TOTAL";
-select * into "PH_datamodel"."Indicators_2_TOTAL" from "PH_datamodel"."Indicators_2_TOTAL_temp";
-drop table "PH_datamodel"."Indicators_2_TOTAL_temp";
+--drop table "PH_datamodel"."Indicators_2_TOTAL";
+--select * into "PH_datamodel"."Indicators_2_TOTAL" from "PH_datamodel"."Indicators_2_TOTAL_temp";
+--drop table "PH_datamodel"."Indicators_2_TOTAL_temp";
 --select * from "PH_datamodel"."Indicators_2_TOTAL" 
 
 --ADD risk scores to Indicators_TOTAL table
-drop table if exists "PH_datamodel"."Indicators_3_TOTAL_temp";
+drop table if exists "PH_datamodel"."Indicators_3_TOTAL";
 select *
-into "PH_datamodel"."Indicators_3_TOTAL_temp"
-from "PH_datamodel"."Indicators_3_TOTAL" t0
+into "PH_datamodel"."Indicators_3_TOTAL"
+from "PH_datamodel"."Indicators_3_TOTAL_temp" t0
 left join "PH_datamodel"."total_scores_level3" t1
 on t0.pcode = t1.pcode_level3
 ;
-drop table "PH_datamodel"."Indicators_3_TOTAL";
-select * into "PH_datamodel"."Indicators_3_TOTAL" from "PH_datamodel"."Indicators_3_TOTAL_temp";
-drop table "PH_datamodel"."Indicators_3_TOTAL_temp";
+--drop table "PH_datamodel"."Indicators_3_TOTAL";
+--select * into "PH_datamodel"."Indicators_3_TOTAL" from "PH_datamodel"."Indicators_3_TOTAL_temp";
+--drop table "PH_datamodel"."Indicators_3_TOTAL_temp";
 --select * from "PH_datamodel"."Indicators_3_TOTAL" 
 
 

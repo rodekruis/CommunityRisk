@@ -103,16 +103,27 @@ where "DIST_CODE" <> 0
 
 drop table if exists "MW_datamodel"."Indicators_4_hazards";
 select "EACODE" as pcode_level4
-	,drought_in*filter as drought_risk
+--	,drought_in*filter as drought_risk
+--	,10-log(1+(10-drought_in*filter))/log(11)*10 as drought_risk
+	,drought_risk
 	,case when flood_in*filter = 0 then 0
 		else flood_in*filter/2 + 5 end as flood_risk
 into "MW_datamodel"."Indicators_4_hazards"
-from "mw_source"."Indicators_4_miscellaneous"
+from "mw_source"."Indicators_4_miscellaneous" t0
+left join (
+	select "EACODE" as pcode_level4
+		,drought_risk/max_drought_risk*10 as drought_risk
+	from mw_source."Indicators_4_drought_new" t0
+	left join (select max(drought_risk) as max_drought_risk from mw_source."Indicators_4_drought_new") t1 on 1=1
+	) t1
+	on t0."EACODE" = t1.pcode_level4
 where "DIST_CODE" <> 0
 ;
-
-
 --select count(*) from "MW_datamodel"."Indicators_4_hazards"
+
+
+
+
 
 drop table if exists "MW_datamodel"."Indicators_4_echo2_areas";
 select "EACODE" as pcode_level4
@@ -310,7 +321,7 @@ FROM temp
 -- 1.3: Create one Indicator table per level--
 -----------------------------------------------
 
-drop table if exists "MW_datamodel"."Indicators_4_TOTAL";
+drop table if exists "MW_datamodel"."Indicators_4_TOTAL_temp";
 select t0.pcode_level4 as pcode
 	,t0.pcode_level3 as pcode_parent
 	,t1.population
@@ -322,7 +333,7 @@ select t0.pcode_level4 as pcode
 	,t4.drought_risk,flood_risk
 	,t5.echo2_area
 	,t6.volunteers
-into "MW_datamodel"."Indicators_4_TOTAL"
+into "MW_datamodel"."Indicators_4_TOTAL_temp"
 from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Indicators_4_population" t1	on t0.pcode_level4 = t1.pcode_level4
 left join "MW_datamodel"."Indicators_4_poverty" t2	on t0.pcode_level4 = t2.pcode_level4
@@ -333,14 +344,14 @@ left join "MW_datamodel"."Indicators_4_RC_capacity" t6	on t0.pcode_level4 = t6.p
 ;
 
 
-drop table if exists "MW_datamodel"."Indicators_3_TOTAL";
+drop table if exists "MW_datamodel"."Indicators_3_TOTAL_temp";
 select t0.pcode_level3 as pcode
 	,t0.pcode_level2 as pcode_parent
-	,level4.population,poverty_incidence,traveltime,traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre,echo2_area,volunteers
+	,level4.population,poverty_incidence,traveltime,/*traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre,*/echo2_area,volunteers,drought_risk
 	,land_area
 	,population / land_area as pop_density	
 --	,case when population = 0 then null else cyclone_phys_exp / population end as cyclone_phys_exp
-	,case when population = 0 then null else drought_phys_exp / population end as drought_phys_exp
+--	,case when population = 0 then null else drought_phys_exp / population end as drought_phys_exp
 	,case when population = 0 then null else earthquake7_phys_exp / population end as earthquake7_phys_exp
 	,case when population = 0 then null else flood_phys_exp / population end as flood_phys_exp
 --	,case when population = 0 then null else tsunami_phys_exp / population end as tsunami_phys_exp
@@ -352,7 +363,7 @@ select t0.pcode_level3 as pcode
 	,t6.electricity
 	--ADD NEW VARIABLES HERE
 	--,t6.XXX
-into "MW_datamodel"."Indicators_3_TOTAL"
+into "MW_datamodel"."Indicators_3_TOTAL_temp"
 from "MW_datamodel"."Geo_level3" t0
 left join (
 	select pcode_parent
@@ -361,12 +372,13 @@ left join (
 		,sum(pop_density * land_area) / sum(land_area) as pop_density
 		,sum(poverty_incidence * population) / sum(population) as poverty_incidence
 		,sum(traveltime * population) / sum(population) as traveltime
+		,sum(drought_risk * population) / sum(population) as drought_risk
 		,sum(traveltime_hospital * population) / sum(population) as traveltime_hospital
 		,sum(traveltime_sec_school * population) / sum(population) as traveltime_sec_school
 		,sum(traveltime_tradingcentre * population) / sum(population) as traveltime_tradingcentre
 		,max(echo2_area) as echo2_area
 		,max(volunteers) as volunteers
-	from "MW_datamodel"."Indicators_4_TOTAL"
+	from "MW_datamodel"."Indicators_4_TOTAL_temp"
 	group by 1
 	) level4
 	on t0.pcode_level3 = level4.pcode_parent
@@ -380,11 +392,12 @@ left join "MW_datamodel"."Indicators_3_electricity" 	t6	on t0.pcode_level3 = t6.
 --left join "MW_datamodel"."Indicators_3_XXX" 		t6	on t0.pcode_level3 = t6.pcode_level3
 ;
 
-drop table if exists "MW_datamodel"."Indicators_2_TOTAL";
+
+drop table if exists "MW_datamodel"."Indicators_2_TOTAL_temp";
 select t0.pcode_level2 as pcode
 	,t0.pcode_level1 as pcode_parent
 	,level3.population,land_area,pop_density,echo2_area,volunteers
-		,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp
+		,drought_risk,earthquake7_phys_exp,flood_phys_exp
 		,traveltime,nr_health_facilities,health_density,poverty_incidence
 		,electricity
 	--PLACEHOLDER: Add the newly added level3 indicators here again as well
@@ -393,7 +406,7 @@ select t0.pcode_level2 as pcode
 	,t2.mobile_access,life_expectancy,improved_sanitation,infant_mortality,watersource_piped,construction_semipermanent
 	--ADD NEW VARIABLES HERE
 	--,t3.XXX
-into "MW_datamodel"."Indicators_2_TOTAL"
+into "MW_datamodel"."Indicators_2_TOTAL_temp"
 from "MW_datamodel"."Geo_level2" t0
 left join (
 	select pcode_parent
@@ -403,9 +416,10 @@ left join (
 		,max(echo2_area) echo2_area
 		,max(volunteers) volunteers
 --		,sum(cyclone_phys_exp * population) / sum(population) as cyclone_phys_exp
-		,sum(drought_phys_exp * population) / sum(population) as drought_phys_exp
+--		,sum(drought_phys_exp * population) / sum(population) as drought_phys_exp
 		,sum(earthquake7_phys_exp * population) / sum(population) as earthquake7_phys_exp
 		,sum(flood_phys_exp * population) / sum(population) as flood_phys_exp
+		,sum(drought_risk * population) / sum(population) as drought_risk
 --		,sum(tsunami_phys_exp * population) / sum(population) as tsunami_phys_exp
 --		,sum(gdp_per_capita * population) / sum(population) as gdp_per_capita
 		,sum(traveltime * population) / sum(population) as traveltime
@@ -415,7 +429,7 @@ left join (
 		,sum(electricity * population) / sum(population) as electricity
 		--PLACEHOLDER: ADD THE NEWLY ADDED LEVEL4 INDICATORS HERE AGAIN AS WELL with the appropriate transformation
 		--,sum(XXX * population) / sum(population) as XXX
-	from "MW_datamodel"."Indicators_3_TOTAL"
+	from "MW_datamodel"."Indicators_3_TOTAL_temp"
 	group by 1
 	) level3
 	on t0.pcode_level2 = level3.pcode_parent
@@ -424,6 +438,55 @@ left join "MW_datamodel"."Indicators_2_knoema" 	t2	on t0.pcode_level2 = t2.pcode
 --PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL2 ALREADY) 
 --left join "MW_datamodel"."Indicators_2_XXX" 	t2	on t0.pcode_level2 = t2.pcode_level2
 ;
+
+
+----------------------------------
+-- 2.1: Calculate INFORM-scores --
+----------------------------------
+
+--calculate INFORM-scores at lowest level:level2
+select usp_inform('MW',2);
+select usp_inform('MW',3);
+select usp_inform('MW',4);
+
+-------------
+-- Level 2 --
+-------------
+
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "MW_datamodel"."Indicators_2_TOTAL";
+select *
+into "MW_datamodel"."Indicators_2_TOTAL"
+from "MW_datamodel"."Indicators_2_TOTAL_temp" t0
+left join "MW_datamodel"."total_scores_level2" t1
+on t0.pcode = t1.pcode_level2
+;
+--select * from "MW_datamodel"."Indicators_2_TOTAL" 
+
+
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "MW_datamodel"."Indicators_3_TOTAL";
+select *
+into "MW_datamodel"."Indicators_3_TOTAL"
+from "MW_datamodel"."Indicators_3_TOTAL_temp" t0
+left join "MW_datamodel"."total_scores_level3" t1
+on t0.pcode = t1.pcode_level3
+;
+--select * from "MW_datamodel"."Indicators_3_TOTAL" 
+
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "MW_datamodel"."Indicators_4_TOTAL";
+select *
+into "MW_datamodel"."Indicators_4_TOTAL"
+from "MW_datamodel"."Indicators_4_TOTAL_temp" t0
+left join "MW_datamodel"."total_scores_level4" t1
+on t0.pcode = t1.pcode_level4
+;
+--select * from "MW_datamodel"."Indicators_4_TOTAL" order by volunteers_score
+
+
+
+
 
 
 

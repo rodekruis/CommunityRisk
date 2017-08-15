@@ -487,7 +487,7 @@ angular.module('dashboards')
 				var scores = document.getElementById('scores');
 				var vulnerability = document.getElementById('vulnerability');
 				var hazard = document.getElementById('hazard');
-				var coping = document.getElementById('coping');
+				var coping = document.getElementById('coping_capacity');
 				while (general.firstChild) { general.removeChild(general.firstChild); }
 				while (scores.firstChild) { scores.removeChild(scores.firstChild); }
 				while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); }

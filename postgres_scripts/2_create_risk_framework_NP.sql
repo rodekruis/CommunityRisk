@@ -434,29 +434,29 @@ group by t1.pcode_parent
 ;
 
 --ADD risk scores to Indicators_TOTAL table
-drop table if exists "NP_datamodel"."Indicators_2_TOTAL_temp";
+drop table if exists "NP_datamodel"."Indicators_2_TOTAL";
 select *
-into "NP_datamodel"."Indicators_2_TOTAL_temp"
-from "NP_datamodel"."Indicators_2_TOTAL" t0
+into "NP_datamodel"."Indicators_2_TOTAL"
+from "NP_datamodel"."Indicators_2_TOTAL_temp" t0
 left join "NP_datamodel"."total_scores_level2" t1
 on t0.pcode = t1.pcode_level2
 ;
-drop table "NP_datamodel"."Indicators_2_TOTAL";
-select * into "NP_datamodel"."Indicators_2_TOTAL" from "NP_datamodel"."Indicators_2_TOTAL_temp";
-drop table "NP_datamodel"."Indicators_2_TOTAL_temp";
+--drop table "NP_datamodel"."Indicators_2_TOTAL";
+--select * into "NP_datamodel"."Indicators_2_TOTAL" from "NP_datamodel"."Indicators_2_TOTAL_temp";
+--drop table "NP_datamodel"."Indicators_2_TOTAL_temp";
 --select * from "NP_datamodel"."Indicators_2_TOTAL" 
 
 --ADD risk scores to Indicators_TOTAL table
-drop table if exists "NP_datamodel"."Indicators_3_TOTAL_temp";
+drop table if exists "NP_datamodel"."Indicators_3_TOTAL";
 select *
-into "NP_datamodel"."Indicators_3_TOTAL_temp"
-from "NP_datamodel"."Indicators_3_TOTAL" t0
+into "NP_datamodel"."Indicators_3_TOTAL"
+from "NP_datamodel"."Indicators_3_TOTAL_temp" t0
 left join "NP_datamodel"."total_scores_level3" t1
 on t0.pcode = t1.pcode_level3
 ;
-drop table "NP_datamodel"."Indicators_3_TOTAL";
-select * into "NP_datamodel"."Indicators_3_TOTAL" from "NP_datamodel"."Indicators_3_TOTAL_temp";
-drop table "NP_datamodel"."Indicators_3_TOTAL_temp";
+--drop table "NP_datamodel"."Indicators_3_TOTAL";
+--select * into "NP_datamodel"."Indicators_3_TOTAL" from "NP_datamodel"."Indicators_3_TOTAL_temp";
+--drop table "NP_datamodel"."Indicators_3_TOTAL_temp";
 --select * from "NP_datamodel"."Indicators_3_TOTAL" 
 
 

@@ -499,25 +499,14 @@ left join "MW_datamodel"."coping_capacity_scores" t3	on t0.pcode_level2 = t3.pco
 --order by 7
 ;
 
---ADD risk scores to Indicators_TOTAL table
-drop table if exists "MW_datamodel"."Indicators_2_TOTAL_temp";
-select *
-into "MW_datamodel"."Indicators_2_TOTAL_temp"
-from "MW_datamodel"."Indicators_2_TOTAL" t0
-left join "MW_datamodel"."total_scores_level2" t1
-on t0.pcode = t1.pcode_level2
-;
-drop table "MW_datamodel"."Indicators_2_TOTAL";
-select * into "MW_datamodel"."Indicators_2_TOTAL" from "MW_datamodel"."Indicators_2_TOTAL_temp";
-drop table "MW_datamodel"."Indicators_2_TOTAL_temp";
---select * from "MW_datamodel"."Indicators_2_TOTAL" 
 
 
 
 
-------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- LEVEL 3 --
-------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 drop table if exists "MW_datamodel"."vulnerability_scores_level3";
@@ -612,7 +601,7 @@ with
 volunteers as (
 	select t0.pcode_level3
 		,log(volunteers) as volunteers
-	from "MW_datamodel"."Geo_level4" t0
+	from "MW_datamodel"."Geo_level3" t0
 	left join "MW_datamodel"."Indicators_3_TOTAL" t1 on t0.pcode_level3 = t1.pcode
 	)
 ,--select * from travel
@@ -732,18 +721,6 @@ left join "MW_datamodel"."coping_scores_level3" t3	on t0.pcode_level3 = t3.pcode
 ;
 --select * from "MW_datamodel"."total_scores_level3"
 
---ADD risk scores to Indicators_TOTAL table
-drop table if exists "MW_datamodel"."Indicators_3_TOTAL_temp";
-select *
-into "MW_datamodel"."Indicators_3_TOTAL_temp"
-from "MW_datamodel"."Indicators_3_TOTAL" t0
-left join "MW_datamodel"."total_scores_level3" t1
-on t0.pcode = t1.pcode_level3
-;
-drop table "MW_datamodel"."Indicators_3_TOTAL";
-select * into "MW_datamodel"."Indicators_3_TOTAL" from "MW_datamodel"."Indicators_3_TOTAL_temp";
-drop table "MW_datamodel"."Indicators_3_TOTAL_temp";
---select * from "MW_datamodel"."Indicators_3_TOTAL" 
 
 
 ------------------
@@ -969,17 +946,61 @@ left join "MW_datamodel"."coping_scores_level4" t3		on t0.pcode_level4 = t3.pcod
 ;
 --select * from "MW_datamodel"."total_scores_level4"
 
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Create final tables
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------
+-- Level 2 --
+-------------
+
 --ADD risk scores to Indicators_TOTAL table
-drop table if exists "MW_datamodel"."Indicators_4_TOTAL_temp";
+drop table if exists "MW_datamodel"."Indicators_2_TOTAL";
 select *
-into "MW_datamodel"."Indicators_4_TOTAL_temp"
-from "MW_datamodel"."Indicators_4_TOTAL" t0
+into "MW_datamodel"."Indicators_2_TOTAL"
+from "MW_datamodel"."Indicators_2_TOTAL_temp" t0
+left join "MW_datamodel"."total_scores_level2" t1
+on t0.pcode = t1.pcode_level2
+;
+--drop table "MW_datamodel"."Indicators_2_TOTAL";
+--select * into "MW_datamodel"."Indicators_2_TOTAL" from "MW_datamodel"."Indicators_2_TOTAL_temp";
+--drop table "MW_datamodel"."Indicators_2_TOTAL_temp";
+--select * from "MW_datamodel"."Indicators_2_TOTAL" 
+
+-------------
+-- Level 3 --
+-------------
+
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "MW_datamodel"."Indicators_3_TOTAL";
+select *
+into "MW_datamodel"."Indicators_3_TOTAL"
+from "MW_datamodel"."Indicators_3_TOTAL_temp" t0
+left join "MW_datamodel"."total_scores_level3" t1
+on t0.pcode = t1.pcode_level3
+;
+--drop table "MW_datamodel"."Indicators_3_TOTAL";
+--select * into "MW_datamodel"."Indicators_3_TOTAL" from "MW_datamodel"."Indicators_3_TOTAL_temp";
+--drop table "MW_datamodel"."Indicators_3_TOTAL_temp";
+--select * from "MW_datamodel"."Indicators_3_TOTAL" 
+
+
+-------------
+-- Level 4 --
+-------------
+
+--ADD risk scores to Indicators_TOTAL table
+drop table if exists "MW_datamodel"."Indicators_4_TOTAL";
+select *
+into "MW_datamodel"."Indicators_4_TOTAL"
+from "MW_datamodel"."Indicators_4_TOTAL_temp" t0
 left join "MW_datamodel"."total_scores_level4" t1
 on t0.pcode = t1.pcode_level4
 ;
-drop table "MW_datamodel"."Indicators_4_TOTAL";
-select * into "MW_datamodel"."Indicators_4_TOTAL" from "MW_datamodel"."Indicators_4_TOTAL_temp";
-drop table "MW_datamodel"."Indicators_4_TOTAL_temp";
+--drop table "MW_datamodel"."Indicators_4_TOTAL";
+--select * into "MW_datamodel"."Indicators_4_TOTAL" from "MW_datamodel"."Indicators_4_TOTAL_temp";
+--drop table "MW_datamodel"."Indicators_4_TOTAL_temp";
 --select * from "MW_datamodel"."Indicators_4_TOTAL" order by volunteers_score
 
 

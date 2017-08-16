@@ -136,7 +136,7 @@ from "mw_source"."Indicators_4_echo2_areas"
 --RED CROSS capacity
 drop table if exists "MW_datamodel"."Indicators_4_RC_capacity";
 select t0.pcode_level4
-	,t2.volunteers*100 as rc_capacity
+	,t2.volunteers as rc_capacity
 into "MW_datamodel"."Indicators_4_RC_capacity"
 from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3

@@ -31,7 +31,7 @@ BEGIN
 		CREATE TABLE "' || $1 || '_datamodel".score_' || $1 || '_' || $2 || '_' || r.variable || ' AS 
 		with ' || r.variable || ' as (
 			select t0.pcode_level' || $2 || ' 
-				,' || case when r.log_inform=1 then 'log(0.00001+' || r.variable || ') ' else '' end || r.variable || '
+				,' || case when r.log_inform=1 then 'log(0.1+' || r.variable || ') ' else '' end || r.variable || '
 			from "' || $1 || '_datamodel"."Geo_level' || $2 || '" t0
 			left join "' || $1 || '_datamodel"."Indicators_' || $2 || '_TOTAL_temp" t1 on t0.pcode_level' || $2 || ' = t1.pcode
 			),

@@ -136,13 +136,13 @@ from "mw_source"."Indicators_4_echo2_areas"
 --RED CROSS capacity
 drop table if exists "MW_datamodel"."Indicators_4_RC_capacity";
 select t0.pcode_level4
-	,t2.volunteers*100 as volunteers
+	,t2.volunteers*100 as rc_capacity
 into "MW_datamodel"."Indicators_4_RC_capacity"
 from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
 left join (
 	select aa.pcode_level2
-		,aa.n_volunteers/bb.population as volunteers
+		,aa.n_volunteers/(bb.population / 100000) as volunteers
 	from (
 	select t0.pcode_level2
 		,sum("No of Volunteers") as n_volunteers
@@ -179,8 +179,27 @@ left join (
 		on aa.pcode_level2 = bb.pcode_level2
 	) t2
 	on t1.pcode_level2 = t2.pcode_level2
-order by 2
 ;
+
+
+drop table if exists "MW_datamodel"."Indicators_4_NGO_capacity";
+select t0.pcode_level4
+	,t2.active_organisations/(t3.population / 100000) as ngo_capacity
+into "MW_datamodel"."Indicators_4_NGO_capacity"
+from "MW_datamodel"."Geo_level4" t0
+left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
+left join mw_source."Indicators_2_ngo_capacity" t2 on t1.pcode_level2 = t2.pcode_level2
+left join (
+	select t0.pcode_level2
+		,sum(population) as population
+	from "MW_datamodel"."Geo_level3" t0
+	left join "MW_datamodel"."Geo_level4" t1 on t0.pcode_level3 = t1.pcode_level3
+	left join "MW_datamodel"."Indicators_4_population" t2 on t1.pcode_level4 = t2.pcode_level4
+	group by 1
+	) t3
+	on t1.pcode_level2 = t3.pcode_level2
+;
+
 
 ------------------
 -- Level 3 data --
@@ -332,7 +351,8 @@ select t0.pcode_level4 as pcode
 	,t3.traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre
 	,t4.drought_risk,flood_risk
 	,t5.echo2_area
-	,t6.volunteers
+	,t6.rc_capacity
+	,t7.ngo_capacity
 into "MW_datamodel"."Indicators_4_TOTAL_temp"
 from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Indicators_4_population" t1	on t0.pcode_level4 = t1.pcode_level4
@@ -341,13 +361,15 @@ left join "MW_datamodel"."Indicators_4_traveltime" t3	on t0.pcode_level4 = t3.pc
 left join "MW_datamodel"."Indicators_4_hazards" t4	on t0.pcode_level4 = t4.pcode_level4
 left join "MW_datamodel"."Indicators_4_echo2_areas" t5	on t0.pcode_level4 = t5.pcode_level4
 left join "MW_datamodel"."Indicators_4_RC_capacity" t6	on t0.pcode_level4 = t6.pcode_level4
+left join "MW_datamodel"."Indicators_4_NGO_capacity" t7	on t0.pcode_level4 = t7.pcode_level4
 ;
 
 
 drop table if exists "MW_datamodel"."Indicators_3_TOTAL_temp";
 select t0.pcode_level3 as pcode
 	,t0.pcode_level2 as pcode_parent
-	,level4.population,poverty_incidence,traveltime,/*traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre,*/echo2_area,volunteers,drought_risk
+	,level4.population,poverty_incidence,traveltime/*traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre,*/
+		,echo2_area,rc_capacity,ngo_capacity,drought_risk
 	,land_area
 	,population / land_area as pop_density	
 --	,case when population = 0 then null else cyclone_phys_exp / population end as cyclone_phys_exp
@@ -377,7 +399,8 @@ left join (
 		,sum(traveltime_sec_school * population) / sum(population) as traveltime_sec_school
 		,sum(traveltime_tradingcentre * population) / sum(population) as traveltime_tradingcentre
 		,max(echo2_area) as echo2_area
-		,max(volunteers) as volunteers
+		,max(rc_capacity) as rc_capacity
+		,max(ngo_capacity) as ngo_capacity
 	from "MW_datamodel"."Indicators_4_TOTAL_temp"
 	group by 1
 	) level4
@@ -396,7 +419,7 @@ left join "MW_datamodel"."Indicators_3_electricity" 	t6	on t0.pcode_level3 = t6.
 drop table if exists "MW_datamodel"."Indicators_2_TOTAL_temp";
 select t0.pcode_level2 as pcode
 	,t0.pcode_level1 as pcode_parent
-	,level3.population,land_area,pop_density,echo2_area,volunteers
+	,level3.population,land_area,pop_density,echo2_area,rc_capacity,ngo_capacity
 		,drought_risk,earthquake7_phys_exp,flood_phys_exp
 		,traveltime,nr_health_facilities,health_density,poverty_incidence
 		,electricity
@@ -414,7 +437,8 @@ left join (
 		,sum(land_area) as land_area
 		,sum(pop_density * land_area) / sum(land_area) as pop_density
 		,max(echo2_area) echo2_area
-		,max(volunteers) volunteers
+		,max(rc_capacity) as rc_capacity
+		,max(ngo_capacity) as ngo_capacity
 --		,sum(cyclone_phys_exp * population) / sum(population) as cyclone_phys_exp
 --		,sum(drought_phys_exp * population) / sum(population) as drought_phys_exp
 		,sum(earthquake7_phys_exp * population) / sum(population) as earthquake7_phys_exp

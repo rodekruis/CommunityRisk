@@ -323,6 +323,7 @@ angular.module('dashboards')
 			$scope.country_selection = country_name[$scope.country_code];
 			var zoom_min = Number(country_zoom_min[$scope.country_code]); 
 			var zoom_max = Number(country_zoom_max[$scope.country_code]); 
+			$scope.inform_admlevel = Number($scope.genLookup_country_meta(d,'inform_admlevel')[$scope.country_code]);
 			
 			if ($scope.view_code === 'PI') {
 				$scope.metric = $scope.genLookup_disaster_meta(d,'default_metric')[$scope.disaster_name];

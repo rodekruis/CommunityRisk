@@ -56,7 +56,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STRICT;
 --select test_dpi('ZMB',2)
---select test_dpi('PH',3)
+--select test_dpi('PH',4)
 --select test_dpi('MW',4)
 
 --2: Calculate main component-scores and create table per main component
@@ -64,6 +64,8 @@ DROP FUNCTION IF EXISTS test_dpi2(varchar,int,varchar);
 CREATE OR REPLACE FUNCTION test_dpi2(country varchar, admin_level int, group_var varchar) RETURNS VOID AS $$
 DECLARE 
     r RECORD;
+    sql TEXT;
+    sql_alt TEXT;
     sql_main1 TEXT;
     sql_main2 TEXT;
     sql_main3 TEXT;
@@ -103,17 +105,27 @@ BEGIN
 			
     END LOOP;
 
-    RAISE NOTICE '%', sql_main1 || sql1 || sql_main2 || sql2 || sql_main3 || sql3 || sql_main4 || sql4 || sql_main5 || sql5;
+    sql := sql_main1 || sql1 || sql_main2 || sql2 || sql_main3 || sql3 || sql_main4 || sql4 || sql_main5 || sql5;
+    sql_alt := 'CREATE TABLE "' || $1 || '_datamodel".scores_' || $3 || '_' || $2 || ' AS 
+		select cast(null as varchar) as pcode_level' || $2 || ',cast(null as float) as ' || $3 || '_score'; 
+	
+    
+    RAISE NOTICE '%', sql;
 
     EXECUTE 'DROP TABLE IF EXISTS "' || $1 || '_datamodel".scores_' || $3 || '_' || $2;
-    EXECUTE sql_main1 || sql1 || sql_main2 || sql2 || sql_main3 || sql3 || sql_main4 || sql4 || sql_main5 || sql5;
+    
+    IF sql is null THEN
+	EXECUTE sql_alt;
+    ELSE 
+	EXECUTE sql;
+    END IF;
 
 END;
 $$ LANGUAGE plpgsql STRICT;
---select test_dpi2('ZMB',2,'hazard');
---select test_dpi2('ZMB',2,'vulnerability');
---select test_dpi2('ZMB',2,'coping_capacity');
-
+--select test_dpi2('PH',4,'hazard');
+--select test_dpi2('PH',4,'vulnerability');
+--select test_dpi2('PH',4,'coping_capacity');
+ 
 --3: compute risk-score and create Totals out of 3 components table
 DROP FUNCTION IF EXISTS test_dpi3(varchar,int);
 CREATE OR REPLACE FUNCTION test_dpi3(country varchar, admin_level int) RETURNS VOID AS $$
@@ -153,7 +165,7 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql STRICT;
---select test_dpi3('ZMB',2)
+--select test_dpi3('PH',4)
 
 --4: Combine all above functions in 1 function
 DROP FUNCTION IF EXISTS usp_inform(varchar,int);
@@ -175,7 +187,7 @@ $$ LANGUAGE plpgsql STRICT;
 --select usp_inform('ZMB',2);
 --select usp_inform('NP',2);
 --select usp_inform('NP',3);
---select usp_inform('PH',3);
+--select usp_inform('PH',4);
 
 
 --select * from "NP_datamodel"."total_scores_level3"

@@ -280,6 +280,11 @@ join "NP_datamodel"."Indicators_3_TOTAL_temp" t1	on t0.pcode_level3 = t1.pcode
 group by t1.pcode_parent
 ;
 
+select usp_inform('NP',4);
+ALTER TABLE "NP_datamodel"."total_scores_level4" DROP COLUMN risk_score, DROP COLUMN vulnerability_score, DROP COLUMN hazard_score, DROP COLUMN coping_capacity_score;
+--select * from "NP_datamodel"."total_scores_level4"
+
+
 --ADD risk scores to Indicators_TOTAL table
 drop table if exists "NP_datamodel"."Indicators_2_TOTAL";
 select *
@@ -306,4 +311,6 @@ drop table if exists "NP_datamodel"."Indicators_4_TOTAL";
 select *
 into "NP_datamodel"."Indicators_4_TOTAL"
 from "NP_datamodel"."Indicators_4_TOTAL_temp" t0
+left join "NP_datamodel"."total_scores_level4" t1
+on t0.pcode = t1.pcode_level4
 ;

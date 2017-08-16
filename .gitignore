@@ -16,3 +16,4 @@ node_modules
 public/lib/
 public/build/bower/
 data/private/
+postgres_scripts/old/

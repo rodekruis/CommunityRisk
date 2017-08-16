@@ -230,6 +230,7 @@ left join (
 --calculate INFORM-scores at lowest level:level2
 select usp_inform('ZMB',2);
 
+
 --aggregate to higher levels
 drop table if exists "ZMB_datamodel"."total_scores_level1";
 select t1.pcode_parent as pcode_level1
@@ -249,6 +250,10 @@ join "ZMB_datamodel"."Indicators_2_TOTAL_temp" t1	on t0.pcode_level2 = t1.pcode
 group by t1.pcode_parent
 ;
 
+--do the calculation also for level3 (so that individual indicator-scores are available) but set composite scores to null
+select usp_inform('ZMB',3);
+ALTER TABLE "ZMB_datamodel"."total_scores_level3" DROP COLUMN risk_score, DROP COLUMN vulnerability_score, DROP COLUMN hazard_score, DROP COLUMN coping_capacity_score;
+--select * from "ZMB_datamodel"."total_scores_level3"
 
 --ADD risk scores to Indicators_TOTAL table
 drop table if exists "ZMB_datamodel"."Indicators_2_TOTAL";
@@ -274,6 +279,8 @@ drop table if exists "ZMB_datamodel"."Indicators_3_TOTAL";
 select *
 into "ZMB_datamodel"."Indicators_3_TOTAL"
 from "ZMB_datamodel"."Indicators_3_TOTAL_temp" t0
+left join "ZMB_datamodel"."total_scores_level3" t1
+on t0.pcode = t1.pcode_level3
 ;
 --select * from "ZMB_datamodel"."Indicators_1_TOTAL" 
 

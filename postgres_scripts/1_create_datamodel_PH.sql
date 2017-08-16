@@ -765,6 +765,11 @@ join (select pcode, pcode_parent, population from "PH_datamodel"."Indicators_3_T
 group by t1.pcode_parent
 ;
 
+--do the calculation also for level3 (so that individual indicator-scores are available) but set composite scores to null
+select usp_inform('PH',4);
+ALTER TABLE "PH_datamodel"."total_scores_level4" DROP COLUMN risk_score, DROP COLUMN vulnerability_score, DROP COLUMN hazard_score, DROP COLUMN coping_capacity_score;
+--select * from "PH_datamodel"."total_scores_level4"
+
 --ADD risk scores to Indicators_TOTAL table
 drop table if exists "PH_datamodel"."Indicators_2_TOTAL";
 select *
@@ -791,8 +796,8 @@ drop table if exists "PH_datamodel"."Indicators_4_TOTAL";
 select *
 into "PH_datamodel"."Indicators_4_TOTAL"
 from "PH_datamodel"."Indicators_4_TOTAL_temp" t0
---left join "PH_datamodel"."total_scores_level4" t1
---on t0.pcode = t1.pcode_level4
+left join "PH_datamodel"."total_scores_level4" t1
+on t0.pcode = t1.pcode_level4
 ;
 
 

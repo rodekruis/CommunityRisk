@@ -1,0 +1,6 @@
+date;release;section;change_category;change description
+15-8-2017;1;CRA Zambia;new content;Zambia has basic INFORM-score now as well (including new poverty indicator)
+15-8-2017;1;CRA Malawi;new content;Malawi admin4 drought_risk (for ECHO2) is updated
+15-8-2017;1;PI Typhoon;bug fix;Typhoon Nina error (Nina changed to Nock-Ten consistitently now)
+15-8-2017;1;CRA;automization;INFORM scores are now calculated automatically through PostgresQL function written in 2_create_risk_framework_dynamic, which are called in scripts 1_create_datamodel_XX. All scripts 2_create_risk_framework_XX are now practically obsolete.
+16-8-2017;2;CRA;new feature;it is now possible to see the available INFORM-indicators for lower levels than the overall INFORM is calculated for. 

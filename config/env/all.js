@@ -81,6 +81,15 @@ module.exports = {
 				'public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js', // in bower.json
 				'public/build/bower/jquery-easing/js/jquery.easing.min.js', // in bower.json
 				'public/build/bower/wow/js/wow.js', // in bower.json
+				'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js',
+				'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js',
+				// 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js',
+				// 'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js',
+				// 'http://cdn.uriit.ru/jsPDF/libs/adler32cs.js/adler32cs.js',
+				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.addimage.js',
+				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.standard_fonts_metrics.js',
+				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.split_text_to_size.js',
+				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.from_html.js',
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js', // in bower.json
 				'public/build/bower/topojson/js/topojson.min.js' // in bower.json
 			]

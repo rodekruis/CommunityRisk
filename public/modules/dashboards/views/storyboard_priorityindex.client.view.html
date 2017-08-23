@@ -1,4 +1,4 @@
-<section class="section-expand" data-ng-controller="StoryboardController">
+<section class="section-expand" data-ng-controller="StoryboardController" id="pdf-target">
 	
 	<section class="slideshow js-fullheight fluid-container">		
 		<img src="modules/dashboards/img/storyboards/priorityindex/background_priorityindex.png" class="home-bg">
@@ -29,12 +29,14 @@
 
 			<!-- Section: intro -->
 			<section id="intro" class="intro">
-			
+				
 				<div class="slogan">
 					<h2>Priority Areas for Typhoon Haima</h2>
 					<h4>identified within 24 hours through innovative machine learning techniques</h4>
 					<h4>Go immediately to <span class="page-scroll"><a href="#priority">Detailed Priority Area Predictions</a></span>
 					<h4>Or scroll down for a step-by-step walkthrough of the approach</h4>
+					<!-- <h4><button id="cmd" class="btn">Export to PDF</button></h4> -->
+					<!-- </h4><button class="btn" onClick="window.print()">Print as PDF</button></h4> -->
 				</div>
 				<div class="page-scroll">
 					<a href="#problem" class="btn btn-circle" style="margin-bottom:25%">

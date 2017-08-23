@@ -3,11 +3,11 @@
 
 /* header styles*/
 .navbar-inverse {
-  background: #4C8293; /*#397ab2;*/
-  border-color: #4C8293; /*#397ab2;*/
+  background: #4C8293; /*white; */
+  border-color: #4C8293; /*white; */
 }
 .navbar-inverse .navbar-brand {
-  color: #ffffff;
+  color: #ffffff; /*#4C8293;*/
   font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   font-weight: bold;

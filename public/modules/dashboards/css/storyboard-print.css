@@ -5,13 +5,7 @@
     Author URL: https://bootstrapmade.com
 */
 
-@media print {
-	@page {
-		size: landscape;
-	}
-	footer {page-break-after: always;}
-	.noprint {display:none;}
-}
+@import url(print-style.css) print;
 	
 body { 
 	width: 100%;

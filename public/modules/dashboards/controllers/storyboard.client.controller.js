@@ -95,7 +95,7 @@ angular.module('dashboards')
 			div4.appendChild(img);
 		
 		}
-		
+		/* 
 		if ($('.slider').length !== 0) {
 			$('.slider').slick({
 				dots: true,
@@ -106,7 +106,7 @@ angular.module('dashboards')
 				fade: true,
 				centerMode: true,
 			});
-		};
+		}; */
 		 
 	
 		

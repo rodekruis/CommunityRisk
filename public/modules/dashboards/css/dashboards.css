@@ -17,7 +17,7 @@ body {
   top: 51px;
   width: 380px;
   z-index: 2;
-  background-color: #ffffff;
+  background-color: #b0ded3; /*#ffffff;*/
 }
 .map-wrapper {
   background: #accfff;
@@ -25,14 +25,14 @@ body {
   bottom: 0;
   height: 100%;
   position: absolute;
-  left: 0;
+  /* left: 380px;  */
   top: 0;
   width: 100%;
 }
 .zoom-level-nav {
-  position: absolute;
-  left: 420px;
-  margin-top: 10px;
+  position: relative; /*absolute;*/
+  /* left: 380px; */
+  margin-top: 0px; /*10px;*/
   z-index: 3;
 }
 .zoom-level {
@@ -40,19 +40,22 @@ body {
 }
 .zoom-level button {
   background: #f1f1f1;
-  border-radius: 4px;
+  border-radius: 0px; /*4px;*/
   color: #bbbbbb;
   margin-right: 3px;
   text-align: left;
+  font-size: 12px;
   display: block;
-  min-width: 180px;
+  /* min-width: 180px; */
+  width: 106px;
+  height: 34px;
 }
 .zoom-level button:hover {
-  background: #4C8293; /*#397ab0*/;
+  background: #4C8293;
   color: #ffffff;
 }
 .zoom-level button.btn-active {
-  background: #4C8293; /*#397ab0*/;
+  background: #4C8293;
   color: #ffffff;
   padding-left: 15px;
   padding-right: 15px;
@@ -60,7 +63,7 @@ body {
 }
 .zoom-level .button-label {
   font-size: 12px;
-  margin-left: 5px;
+  /* margin-left: 5px; */
 }
 .zoom-level button.btn-active .button-label {
   display: inline-block;
@@ -82,8 +85,9 @@ body {
 }
 .indicators-panels .card-block {
   border-bottom: none;
-  border-left: 1px solid #e6eaee;
-  border-right: 1px solid #e6eaee;
+  background-color: #fff;
+  /*border-left: 1px solid #e6eaee;
+  border-right: 1px solid #e6eaee;*/
   border-top: none;
   padding: 10px;
 }
@@ -205,8 +209,9 @@ body {
 
 /*community profiles*/
 .community-profiles-wrapper {
-  background: #B0DED3; /*#f3faff;*/
-  border: 1px solid #e9e9e9;
+  background: #fff; /*#4C8293; /*#B0DED3; /*#f3faff;*/
+  /* color: #fff; */
+  /*border: 1px solid #e9e9e9;*/
   border-radius: 2px;
   margin-top: 0px;
   margin-bottom: 20px;
@@ -222,7 +227,7 @@ body {
   font-size: 20px;
 }
 .filter-count {
-  color: #3780bb;
+  color: #B0DED3; /*#3780bb;*/
   font-size: 20px;
 }
 .total-count-pi{
@@ -523,7 +528,10 @@ a.handle:hover {
 
 .leaflet-control-zoom {
 	left: 380px;
-	top: 90%;
+	/* top: 90%; */
+}
+.legend {
+	left:380px;
 }
 
 #loading-bar-spinner {
@@ -540,6 +548,8 @@ a.handle:hover {
 }
 
 .hdx-3w-info {
+	/* position: relative; */
+	float: left;
 	padding:5px;
     background-color:white;
     background: rgba(255,255,255,0.8);

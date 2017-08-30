@@ -11,30 +11,38 @@
 		
 		<div class="navbar-header">
 			<a class="navbar-brand" href="/#!/">
-				<img src="modules/dashboards/img/logo.svg" class="logo">
-				<img src="modules/core/img/510white.png" class="logo">
-				Community Risk Assessment <span class="title-hightlight">Toolbox</span>
+				<img src="modules/core/img/510logo-part2.png" style="height:20px; float:left; margin-right:15px;">
 			</a>
-		</div>
+		</div> 
 		
 		<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
 			
-			<!-- start: export nav -->
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
-					<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">
-						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
-						How it works
-					</a>
+					<a href="http://510.global" target="_blank">510 HOME</a>
 				</li>
 			</ul>
-			<!-- end: export nav -->
-			<!-- start: export nav -->
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
-							  Export Options
+						HOW IT WORKS
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu export-items">
+						<li>
+							<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">Tutorial</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/communityprofiles" target="_blank">Github</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+							  EXPORT
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu export-items">
@@ -46,49 +54,55 @@
 							<a id="download" ng-click="export_csv()">Export (CSV)</a>
 						</li>
 					</ul>
-					<!-- /.dropdown-tasks -->
 				</li>
 			</ul>
-			<!-- end: export nav -->
-			<!-- start: hierarchical nav -->
-			<ul class="nav navbar-top-links navbar-right">
+
+			<ul class="nav navbar-top-links navbar-left">
+				<li class="dropdown">
+					<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">COMMUNITY RISK</a>
+				</li>
+			</ul> 	
+			<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293">
+				<li class="dropdown">
+					<a style="color:#fff" class="submenu-item" ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">PRIORITY INDEX</a>
+				</li>
+			</ul> <!-- 	
+			<ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-						<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
-							  Select ...
+						View
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
-					<ul class="dropdown-menu export-items">
-						<li class="dropdown-submenu">
-							<a class="menu-item" href="#">View<i class="fa fa-angle-down export-btn-arrow"></i></a>
-							<ul class="dropdown-menu submenu-items">
-								<li>
-									<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">Community Risk</a>
-								</li>
-								<li class="divider"></li>
-								<li>
-									<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">Priority Index</a>
-								</li>
-							</ul>
+					<ul class="dropdown-menu submenu-items">
+						<li>
+							<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">Community Risk</a>
 						</li>
 						<li class="divider"></li>
-						<li class="dropdown-submenu">
-							<a class="menu-item" href="#">Disaster Type<i class="fa fa-angle-down export-btn-arrow"></i></a>
-							<ul class="dropdown-menu submenu-items">
-								<li>
-									<a class="submenu-item" ng-click="change_disaster_type('Typhoon')">Typhoons</a>
-								</li>
-								<li class="divider"></li>
-								<li>
-									<a class="submenu-item" ng-click="change_disaster_type('Earthquake')">Earthquakes</a>
-								</li>
-							</ul>
+						<li>
+							<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">Priority Index</a>
 						</li>
 					</ul>
 				</li>
-			</ul>
-			<!-- end: hierarchical nav -->
+			</ul> 			 -->
+			<!-- <ul class="nav navbar-top-links navbar-left">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+						Disaster Type
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu submenu-items">
+						<li>
+							<a class="submenu-item" ng-click="change_disaster_type('Typhoon')">Typhoons</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a class="submenu-item" ng-click="change_disaster_type('Earthquake')">Earthquakes</a>
+						</li>
+					</ul>
+				</li>
+			</ul> -->
 		</nav>
+		
 
 		
 	</nav>
@@ -107,11 +121,43 @@
 
 			<!-- start: community profiles -->
 			<div class="community-profiles-wrapper">
-				<!-- typhoon selector -->
-				<ul class="nav navbar-top-links navbar-left">
+				<!-- <ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293">
 					<li class="dropdown">
-						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-							<strong>{{disaster_type}} {{disaster_name}}</strong> Choose other: 
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff;width:250px">
+							<strong>{{metric_label}}</strong>
+						</a>
+					</li>
+				</ul> -->
+				<div class="zoom-level-nav">
+					<div class="btn-group zoom-level" role="group">
+						<button style="background-color: #4C8293; color:white; border-color:#4C8293; width:95%;" type="button" class="btn btn-secondary">
+							<i class="fa fa-tachometer" aria-hidden="true"></i>
+							<span class="button-label"><strong>{{metric_label}}</strong></span>
+						</button>
+					</div>
+				</div>
+				<!-- typhoon selector -->
+				<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293; width:45%">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff">
+							<strong>{{disaster_type}}</strong>
+							<i class="fa fa-angle-down export-btn-arrow"></i>
+						</a>
+						<ul class="dropdown-menu submenu-items">
+							<li>
+								<a class="submenu-item" ng-click="change_disaster_type('Typhoon')">Typhoons</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a class="submenu-item" ng-click="change_disaster_type('Earthquake')">Earthquakes</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293; width:45%">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff">
+							<strong>{{disaster_name}}</strong>
 							<i class="fa fa-angle-down export-btn-arrow"></i>
 						</a>
 						<ul class="dropdown-menu export-items" id="events">
@@ -240,18 +286,18 @@
 			<div id="map-chart" style="position:absolute; width:100%; height:100%"></div> 
 			
 			<!-- start: zoom navigation -->
-			<div class="zoom-level-nav col-md-7">
-				<div class="btn-group zoom-level" role="group">
-					<button style="background-color: #B0DED3; color:black; border-color:#4C8293" type="button" class="btn btn-secondary">
-						<i class="fa fa-tachometer" aria-hidden="true"></i>
-						<span class="button-label"><strong>{{metric_label}}</strong></span>
-					</button>
-					<button id="level2" type="button" class="btn btn-secondary btn-active "> <!-- ng-click="zoom_out(2)"> -->
-						<i class="fa fa-globe" aria-hidden="true"></i>
-						<span class="button-label">{{country_selection}}</span>
-					</button>
-				</div>
-			</div>
+			<!-- <div class="zoom-level-nav col-md-7"> -->
+				<!-- <div class="btn-group zoom-level" role="group"> -->
+					<!-- <button style="background-color: #B0DED3; color:black; border-color:#4C8293" type="button" class="btn btn-secondary"> -->
+						<!-- <i class="fa fa-tachometer" aria-hidden="true"></i> -->
+						<!-- <span class="button-label"><strong>{{metric_label}}</strong></span> -->
+					<!-- </button> -->
+					<!-- <button id="level2" type="button" class="btn btn-secondary btn-active "> -->
+						<!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
+						<!-- <span class="button-label">{{country_selection}}</span> -->
+					<!-- </button> -->
+				<!-- </div> -->
+			<!-- </div> -->
 			<!-- end: zoom navigation -->
 			
 

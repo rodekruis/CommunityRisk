@@ -12,6 +12,28 @@
 
 		<!-- start: export nav -->
 		<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a href="http://www.inform-index.org" target="_blank">INFORM Home</a>
+				</li>
+		</ul>
+		<ul class="nav navbar-top-links navbar-right">
+			<li class="dropdown">
+				<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+					How it works
+					<i class="fa fa-angle-down export-btn-arrow"></i>
+				</a>
+				<ul class="dropdown-menu export-items">
+					<li>
+						<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">Tutorial</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/communityprofiles" target="_blank">Github</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		<ul class="nav navbar-top-links navbar-right">
 			<li class="dropdown">
 				<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
 					<img class="export-icon" src="modules/dashboards/img/icon-download-options.svg" alt="download options">
@@ -38,13 +60,34 @@
 	
 		<!-- start: sidebar -->
 		<div class="navbar-default sidebar" role="navigation">
-
+			
+			<!-- start: zoom navigation -->
+			<div class="zoom-level-nav">
+				<div class="btn-group zoom-level" role="group">
+					<button style="background-color: #1a9641; color:white; width:210px;" type="button" class="btn btn-secondary">
+						<i class="fa fa-tachometer" aria-hidden="true"></i>
+						<span class="button-label">{{metric_label}}</span>
+					</button>
+					<button style="width:120px;" id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
+						<i class="fa fa-globe" aria-hidden="true"></i>
+						<span class="button-label">{{country_selection}}</span>
+					</button>
+					<!-- <button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)">
+						<i class="fa fa-th-large" aria-hidden="true"></i>
+						<span class="button-label">{{level2_selection}}</span>
+					</button>
+					<button id="level4" type="button" class="btn btn-secondary">
+						<i class="fa fa-th" aria-hidden="true"></i>
+						<span class="button-label">{{level3_selection}}</span>
+					</button> -->
+				</div>
+			</div>
+			<!-- end: zoom navigation -->
+			
 			<!-- start: community profiles -->
 			<div class="community-profiles-wrapper">
 				<div id="count-info" class="general-info">
-					<div>
-						<span class="community-title">{{name_selection}}</span>
-					</div>
+					<!-- <div><span class="community-title">{{name_selection}}</span></div> -->
 					<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
 					<a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
 				</div>
@@ -148,28 +191,7 @@
 
 			<div id="map-chart" style="position:absolute; width:100%; height:100%"></div> 
 			
-			<!-- start: zoom navigation -->
-			<div class="zoom-level-nav col-md-7">
-				<div class="btn-group zoom-level" role="group">
-					<button style="background-color: #1a9641; color:white" type="button" class="btn btn-secondary">
-						<i class="fa fa-tachometer" aria-hidden="true"></i>
-						<span class="button-label">{{metric_label}}</span>
-					</button>
-					<button id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
-						<i class="fa fa-globe" aria-hidden="true"></i>
-						<span class="button-label">{{country_selection}}</span>
-					</button>
-					<button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)">
-						<i class="fa fa-th-large" aria-hidden="true"></i>
-						<span class="button-label">{{level2_selection}}</span>
-					</button>
-					<button id="level4" type="button" class="btn btn-secondary">
-						<i class="fa fa-th" aria-hidden="true"></i>
-						<span class="button-label">{{level3_selection}}</span>
-					</button>
-				</div>
-			</div>
-			<!-- end: zoom navigation -->
+			
 			
 
 			<!-- the above div and inline styles are only for placement -->

@@ -1,6 +1,6 @@
 country_code;country_name;zoomlevel_min;zoomlevel_max;level1_name;level2_name;level3_name;level4_name;default_metric;inform_admlevel
 PH;The Philippines;2;4;;Provinces;Municipalities;Barangays;risk_score;3
-MW;Malawi;2;4;;Districts;Traditional Authorities;Enumeration Zones;risk_score;4
+MW;Malawi;2;4;;Districts;TA's;GVH's;risk_score;4
 NP;Nepal;2;4;;Zones;Districts;VDCs;risk_score;3
 INFORM;Global;2;2;;Countries;;;risk_score;2
 LKA;Sri Lanka;2;4;;Districts;DSDs;GNDs;population;

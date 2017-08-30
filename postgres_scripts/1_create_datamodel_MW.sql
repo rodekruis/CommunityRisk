@@ -46,16 +46,35 @@ from "geo_source"."Geo_MW_level3_mapshaper"
 ;
 
 drop table if exists "MW_datamodel"."Geo_level4";
-select eacode as pcode_level4
-	,ta || ' - EA ' || cast(feature as int) as name
-	,adm3_p_cod as pcode_level3
+select t1.pcode_level3 || '-' || t0.id_3 as pcode_level4
+	,name_3 as name
+	,pcode_level3
 	,geom
 into "MW_datamodel"."Geo_level4"
-from "geo_source"."Geo_MW_level4_mapshaper"
+from "geo_source"."Geo_MW_level4_mapshaper_new" t0
+left join (select "ID_3" as id_3,max("adm3_P_COD") as pcode_level3 from "mw_source"."EA_GVH_mapping" group by 1) t1 on t0.id_3 = t1.id_3
+where name_2 not in ('Lilongwe City','Zomba City','Mzuzu City','Blantyre City') and name_2 not like ('%Lake%')
+union all
+select p_code || '-1' as pcode_level4
+	,trad_auth as name
+	,p_code as pcode_level3
+	,geom
+from "geo_source"."Geo_MW_level3_mapshaper"
+where district in ('Lilongwe City','Zomba City','Mzuzu City','Blantyre City')
+;
+
+drop table if exists "MW_datamodel"."Geo_level5";
+select eacode as pcode_level5
+	,ta || ' - EA ' || cast(feature as int) as name
+	,adm3_P_COD || '-' || case when t1."ID_3" in (94,975,1987,3126) then 1 else t1."ID_3" end as pcode_level4
+	,adm3_p_cod as pcode_level3
+	,geom
+into "MW_datamodel"."Geo_level5"
+from "geo_source"."Geo_MW_level4_mapshaper" t0
+left join "mw_source"."EA_GVH_mapping" t1 on t0.eacode = t1."EACODE"
 where dist_code <> 0 and pop_sum > 0
 ;
---select count(*) from "MW_datamodel"."Geo_level4"
-
+--select * from "MW_datamodel"."Geo_level5"
 
 
 ------------------------------------------
@@ -63,30 +82,30 @@ where dist_code <> 0 and pop_sum > 0
 ------------------------------------------
 
 ------------------
--- Level 4 data --
+-- Level 5 data --
 ------------------
 
-drop table if exists "MW_datamodel"."Indicators_4_population";
-select eacode as pcode_level4
+drop table if exists "MW_datamodel"."Indicators_5_population";
+select eacode as pcode_level5
 	,pop_sum as population
 	,st_area(st_transform(geom,31467))/1000000 as land_area
-into "MW_datamodel"."Indicators_4_population"
+into "MW_datamodel"."Indicators_5_population"
 from "geo_source"."Geo_MW_level4_mapshaper"
 where dist_code <> 0
 ;
 --select count(*) from "MW_datamodel"."Indicators_4_population"
 
-drop table if exists "MW_datamodel"."Indicators_4_poverty";
-select "EACODE" as pcode_level4
+drop table if exists "MW_datamodel"."Indicators_5_poverty";
+select "EACODE" as pcode_level5
 	,pov_rate as poverty_incidence
-into "MW_datamodel"."Indicators_4_poverty"
+into "MW_datamodel"."Indicators_5_poverty"
 from "mw_source"."Indicators_4_miscellaneous"
 where "DIST_CODE" <> 0
 ;
 --select count(*) from "MW_datamodel"."Indicators_4_poverty"
 
-drop table if exists "MW_datamodel"."Indicators_4_traveltime";
-select "EACODE" as pcode_level4
+drop table if exists "MW_datamodel"."Indicators_5_traveltime";
+select "EACODE" as pcode_level5
 	,traveltime
 	,tt_ea_ttcavg as traveltime_city
 	,tt_ea_havg as traveltime_hospital
@@ -95,28 +114,28 @@ select "EACODE" as pcode_level4
 	,tt_ea_tcavg as traveltime_tradingcentre
 	,tt_ea_wpavg as traveltime_waterpoint
 	,(tt_ea_havg + tt_ea_ssavg + tt_ea_tcavg) / 3 as traveltime_avg
-into "MW_datamodel"."Indicators_4_traveltime"
+into "MW_datamodel"."Indicators_5_traveltime"
 from "mw_source"."Indicators_4_miscellaneous"
 where "DIST_CODE" <> 0
 ;
 --select * from "MW_datamodel"."Indicators_4_traveltime"
 
-drop table if exists "MW_datamodel"."Indicators_4_hazards";
-select "EACODE" as pcode_level4
+drop table if exists "MW_datamodel"."Indicators_5_hazards";
+select "EACODE" as pcode_level5
 --	,drought_in*filter as drought_risk
 --	,10-log(1+(10-drought_in*filter))/log(11)*10 as drought_risk
 	,drought_risk
 	,case when flood_in*filter = 0 then 0
 		else flood_in*filter/2 + 5 end as flood_risk
-into "MW_datamodel"."Indicators_4_hazards"
+into "MW_datamodel"."Indicators_5_hazards"
 from "mw_source"."Indicators_4_miscellaneous" t0
 left join (
-	select "EACODE" as pcode_level4
+	select "EACODE" as pcode_level5
 		,drought_risk/max_drought_risk*10 as drought_risk
 	from mw_source."Indicators_4_drought_new" t0
 	left join (select max(drought_risk) as max_drought_risk from mw_source."Indicators_4_drought_new") t1 on 1=1
 	) t1
-	on t0."EACODE" = t1.pcode_level4
+	on t0."EACODE" = t1.pcode_level5
 where "DIST_CODE" <> 0
 ;
 --select count(*) from "MW_datamodel"."Indicators_4_hazards"
@@ -125,20 +144,20 @@ where "DIST_CODE" <> 0
 
 
 
-drop table if exists "MW_datamodel"."Indicators_4_echo2_areas";
-select "EACODE" as pcode_level4
+drop table if exists "MW_datamodel"."Indicators_5_echo2_areas";
+select "EACODE" as pcode_level5
 	,"filter_GVH" as echo2_area
-into "MW_datamodel"."Indicators_4_echo2_areas"
+into "MW_datamodel"."Indicators_5_echo2_areas"
 from "mw_source"."Indicators_4_echo2_areas"
 ;
 
 
 --RED CROSS capacity
-drop table if exists "MW_datamodel"."Indicators_4_RC_capacity";
-select t0.pcode_level4
+drop table if exists "MW_datamodel"."Indicators_5_RC_capacity";
+select t0.pcode_level5
 	,t2.volunteers as rc_capacity
-into "MW_datamodel"."Indicators_4_RC_capacity"
-from "MW_datamodel"."Geo_level4" t0
+into "MW_datamodel"."Indicators_5_RC_capacity"
+from "MW_datamodel"."Geo_level5" t0
 left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
 left join (
 	select aa.pcode_level2
@@ -172,33 +191,35 @@ left join (
 		select t0.pcode_level2
 			,sum(population) as population
 		from "MW_datamodel"."Geo_level3" t0
-		left join "MW_datamodel"."Geo_level4" t1 on t0.pcode_level3 = t1.pcode_level3
-		left join "MW_datamodel"."Indicators_4_population" t2 on t1.pcode_level4 = t2.pcode_level4
+		left join "MW_datamodel"."Geo_level5" t1 on t0.pcode_level3 = t1.pcode_level3
+		left join "MW_datamodel"."Indicators_5_population" t2 on t1.pcode_level5 = t2.pcode_level5
 		group by 1
 		) bb
 		on aa.pcode_level2 = bb.pcode_level2
 	) t2
 	on t1.pcode_level2 = t2.pcode_level2
 ;
+--select * from "MW_datamodel"."Indicators_5_RC_capacity";
 
 
-drop table if exists "MW_datamodel"."Indicators_4_NGO_capacity";
-select t0.pcode_level4
+drop table if exists "MW_datamodel"."Indicators_5_NGO_capacity";
+select t0.pcode_level5
 	,t2.active_organisations/(t3.population / 100000) as ngo_capacity
-into "MW_datamodel"."Indicators_4_NGO_capacity"
-from "MW_datamodel"."Geo_level4" t0
+into "MW_datamodel"."Indicators_5_NGO_capacity"
+from "MW_datamodel"."Geo_level5" t0
 left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
 left join mw_source."Indicators_2_ngo_capacity" t2 on t1.pcode_level2 = t2.pcode_level2
 left join (
 	select t0.pcode_level2
 		,sum(population) as population
 	from "MW_datamodel"."Geo_level3" t0
-	left join "MW_datamodel"."Geo_level4" t1 on t0.pcode_level3 = t1.pcode_level3
-	left join "MW_datamodel"."Indicators_4_population" t2 on t1.pcode_level4 = t2.pcode_level4
+	left join "MW_datamodel"."Geo_level5" t1 on t0.pcode_level3 = t1.pcode_level3
+	left join "MW_datamodel"."Indicators_5_population" t2 on t1.pcode_level5 = t2.pcode_level5
 	group by 1
 	) t3
 	on t1.pcode_level2 = t3.pcode_level2
 ;
+--select * from "MW_datamodel"."Indicators_5_NGO_capacity";
 
 
 ------------------
@@ -340,9 +361,10 @@ FROM temp
 -- 1.3: Create one Indicator table per level--
 -----------------------------------------------
 
-drop table if exists "MW_datamodel"."Indicators_4_TOTAL_temp";
-select t0.pcode_level4 as pcode
-	,t0.pcode_level3 as pcode_parent
+drop table if exists "MW_datamodel"."Indicators_5_TOTAL_temp";
+select t0.pcode_level5 as pcode
+	,t0.pcode_level4 as pcode_parent
+--	,t0.pcode_level3 as pcode_parent
 	,t1.population
 	,t1.land_area
 	,population / land_area as pop_density
@@ -353,17 +375,52 @@ select t0.pcode_level4 as pcode
 	,t5.echo2_area
 	,t6.rc_capacity
 	,t7.ngo_capacity
+into "MW_datamodel"."Indicators_5_TOTAL_temp"
+from "MW_datamodel"."Geo_level5" t0
+left join "MW_datamodel"."Indicators_5_population" t1	on t0.pcode_level5 = t1.pcode_level5
+left join "MW_datamodel"."Indicators_5_poverty" t2	on t0.pcode_level5 = t2.pcode_level5
+left join "MW_datamodel"."Indicators_5_traveltime" t3	on t0.pcode_level5 = t3.pcode_level5
+left join "MW_datamodel"."Indicators_5_hazards" t4	on t0.pcode_level5 = t4.pcode_level5
+left join "MW_datamodel"."Indicators_5_echo2_areas" t5	on t0.pcode_level5 = t5.pcode_level5
+left join "MW_datamodel"."Indicators_5_RC_capacity" t6	on t0.pcode_level5 = t6.pcode_level5
+left join "MW_datamodel"."Indicators_5_NGO_capacity" t7	on t0.pcode_level5 = t7.pcode_level5
+;
+--select * from "MW_datamodel"."Indicators_5_TOTAL_temp"
+--drop table if exists "MW_datamodel"."Indicators_4_TOTAL_temp";
+--select *
+--into "MW_datamodel"."Indicators_4_TOTAL_temp"
+--from "MW_datamodel"."Indicators_5_TOTAL_temp";
+
+drop table if exists "MW_datamodel"."Indicators_4_TOTAL_temp";
+select t0.pcode_level4 as pcode
+	,t0.pcode_level3 as pcode_parent
+	,level5.population,land_area,pop_density,poverty_incidence,traveltime,traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre
+		,echo2_area
+		,drought_risk,flood_risk
+		,rc_capacity,ngo_capacity
 into "MW_datamodel"."Indicators_4_TOTAL_temp"
 from "MW_datamodel"."Geo_level4" t0
-left join "MW_datamodel"."Indicators_4_population" t1	on t0.pcode_level4 = t1.pcode_level4
-left join "MW_datamodel"."Indicators_4_poverty" t2	on t0.pcode_level4 = t2.pcode_level4
-left join "MW_datamodel"."Indicators_4_traveltime" t3	on t0.pcode_level4 = t3.pcode_level4
-left join "MW_datamodel"."Indicators_4_hazards" t4	on t0.pcode_level4 = t4.pcode_level4
-left join "MW_datamodel"."Indicators_4_echo2_areas" t5	on t0.pcode_level4 = t5.pcode_level4
-left join "MW_datamodel"."Indicators_4_RC_capacity" t6	on t0.pcode_level4 = t6.pcode_level4
-left join "MW_datamodel"."Indicators_4_NGO_capacity" t7	on t0.pcode_level4 = t7.pcode_level4
+left join (
+	select pcode_parent
+		,sum(population) as population
+		,sum(land_area) as land_area
+		,sum(pop_density * land_area) / sum(land_area) as pop_density
+		,sum(poverty_incidence * population) / sum(population) as poverty_incidence
+		,sum(traveltime * population) / sum(population) as traveltime
+		,sum(flood_risk * population) / sum(population) as flood_risk
+		,sum(drought_risk * population) / sum(population) as drought_risk
+		,sum(traveltime_hospital * population) / sum(population) as traveltime_hospital
+		,sum(traveltime_sec_school * population) / sum(population) as traveltime_sec_school
+		,sum(traveltime_tradingcentre * population) / sum(population) as traveltime_tradingcentre
+		,max(echo2_area) as echo2_area
+		,max(rc_capacity) as rc_capacity
+		,max(ngo_capacity) as ngo_capacity
+	from "MW_datamodel"."Indicators_5_TOTAL_temp"
+	group by 1
+	) level5
+	on t0.pcode_level4 = level5.pcode_parent
 ;
-
+--select * from "MW_datamodel"."Indicators_4_TOTAL_temp"
 
 drop table if exists "MW_datamodel"."Indicators_3_TOTAL_temp";
 select t0.pcode_level3 as pcode

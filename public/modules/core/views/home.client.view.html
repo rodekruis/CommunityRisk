@@ -7,13 +7,37 @@
 				<!-- Navigation -->
 				<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 
-					<div class="navbar-header">
+					<!-- <div class="navbar-header">
 						<a class="navbar-brand" href="/#!/">
 							<img src="modules/dashboards/img/logo.svg" class="logo">
 							Community Risk Assessment <span class="title-hightlight">Toolbox</span>
 							<img src="modules/core/img/510white.png" class="logo">
 						</a>
-					</div>
+					</div> -->
+					<div class="navbar-header">
+						<a class="navbar-brand" href="/#!/">
+							<img src="modules/core/img/510logo-part2.png" style="height:20px; float:left; margin-right:15px;">
+						</a>
+					</div> 
+					
+					<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
+						<ul class="nav navbar-top-links navbar-left">
+							<li class="dropdown">
+								<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">COMMUNITY RISK</a>
+							</li>
+						</ul> 	
+						<ul class="nav navbar-top-links navbar-left">
+							<li class="dropdown">
+								<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">PRIORITY INDEX</a>
+							</li>
+						</ul>
+						<ul class="nav navbar-top-links navbar-right">
+							<li class="dropdown">
+								<a href="http://510.global" target="_blank">510 Home</a>
+							</li>
+						</ul>
+					</nav>
+			
 				</nav>
 				<!-- end: navbar-header -->
 

@@ -558,9 +558,9 @@ angular.module('dashboards')
 				if ($scope.actuals == 'yes' && $scope.predictions == 'no') {
 					$scope.type_text = 'This historical ' + $scope.disaster_type.toLowerCase() + ' was used to develop this model, but was never used to make predictions at the time.';
 				} else if ($scope.actuals == 'yes' && $scope.predictions == 'yes') {
-					$scope.type_text = 'For this ' + $scope.disaster_type.toLowerCase() + ' priority areas were predicted using the model, and actual damage was collected later, so prediction errors can be measured.';
+					$scope.type_text = 'For this ' + $scope.disaster_type.toLowerCase() + ', priority areas were predicted using the model, and actual damage was collected later, so prediction errors can be measured.';
 				} else if ($scope.actuals == 'no' && $scope.predictions == 'yes') {
-					$scope.type_text = 'For this ' + $scope.disaster_type.toLowerCase() + ' priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.';
+					$scope.type_text = 'For this ' + $scope.disaster_type.toLowerCase() + ', priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.';
 				}
 				$scope.start_date = $scope.genLookup_disaster_meta(d,'startdate')[$scope.disaster_name];
 				$scope.end_date = $scope.disaster_type == 'Typhoon' ? 'to ' + $scope.genLookup_disaster_meta(d,'enddate')[$scope.disaster_name] : '';
@@ -1098,6 +1098,7 @@ angular.module('dashboards')
 				})
 				.renderPopup(true)
 				.turnOnControls(true)
+				.legend(dc.leafletLegend().position('topleft'))
 				//Set up what happens when clicking on the map (popup appearing mainly)
 				.on('filtered',function(chart,filters){
 					$scope.filters = chart.filters();
@@ -1143,9 +1144,9 @@ angular.module('dashboards')
 				})
 			;
 			//Add legend only in Priority Index View
-			if ($scope.view_code == 'PI' || $scope.view_code == 'CRA' /*&& meta_scorevar[$scope.metric]*/) {
-				mapChart.legend(dc.leafletLegend().position('topright'));
-			}
+			// if ($scope.view_code == 'PI' || $scope.view_code == 'CRA' /*&& meta_scorevar[$scope.metric]*/) {
+				// mapChart.legend(dc.leafletLegend().position('topleft'));
+			// }
 			
 		
 				

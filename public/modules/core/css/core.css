@@ -9,7 +9,7 @@ body {
 	padding: 0px;
 	margin: 0px;
 	overflow-x: hidden;
-    /*font-family: 'Open Sans', sans-serif; */
+    font-family: 'Open Sans', sans-serif;
 }
 .content {
   margin-top: 50px;
@@ -462,15 +462,15 @@ to {
 }
 
 .slick-prev {
-    left: 2%;/* 
-    background: url(../img/prev.png) no-repeat; */
-    background: url(../modules/core/img/prev.png) no-repeat;
+    left: 2%;
+    background: url(../img/prev.png) no-repeat;
+    /* background: url(../modules/core/img/prev.png) no-repeat; */
 }
 
 .slick-next {
-    right: 2%;/*
-    background: url(../img/next.png) no-repeat; */
-    background: url(../modules/core/img/next.png) no-repeat;
+    right: 2%;
+    background: url(../img/next.png) no-repeat;
+    /* background: url(../modules/core/img/next.png) no-repeat; */
 }
 
 .slick-dots {

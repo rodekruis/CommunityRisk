@@ -15,6 +15,7 @@ angular.module('dashboards')
 	//Load data, which contains text and images to fill the storyboard
 	d3.dsv(';')('modules/dashboards/data/storyboard_' + storyboard + '.csv', function(data) {
 		
+		
 		for (var i=0;i<data.length;i++) {
 			var record = data[i];
 						
@@ -36,7 +37,7 @@ angular.module('dashboards')
 				var section = document.createElement('section');
 				section.setAttribute('id',record.section);
 				section.setAttribute('class','home-section text-center');
-				var sibling = document.getElementById('intro');
+				var sibling = document.getElementById('last-child');
 				sibling.parentNode.insertBefore(section,document.getElementById('last-child'));				
 				var div = document.createElement('div');
 				div.setAttribute('class','heading-about');
@@ -47,18 +48,18 @@ angular.module('dashboards')
 				var div2 = document.createElement('div');
 				div2.setAttribute('class','row');
 				div1.appendChild(div2);
-				var div3 = document.createElement('div');
-				div3.setAttribute('class','col-lg-12');
-				div2.appendChild(div3);
-				var div3a = document.createElement('div');
-				div3a.setAttribute('class','section-heading');
-				div3.appendChild(div3a);
-				var h2 = document.createElement('h2');
-				h2.innerHTML = record.label_long;
-				div3a.appendChild(h2);
+				//var div3 = document.createElement('div');
+				//div3.setAttribute('class','col-lg-12');
+				//div2.appendChild(div3);
+				// var div3a = document.createElement('div');
+				// div3a.setAttribute('class','section-heading');
+				// div3.appendChild(div3a);
+				// var h2 = document.createElement('h2');
+				// h2.innerHTML = record.label_long;
+				// div3a.appendChild(h2);
 				var span = document.createElement('span');
 				span.setAttribute('class','page-scroll');
-				h2.appendChild(span);
+				div1.appendChild(span); //h2.appendChild(span);
 				var a2 = document.createElement('a');
 				a2.setAttribute('href','#');
 				a2.setAttribute('class','next-section');
@@ -68,7 +69,7 @@ angular.module('dashboards')
 				a2.appendChild(i_el);				
 				var div3b = document.createElement('div');
 				div3b.setAttribute('class','main-img');
-				div3.appendChild(div3b);
+				div2.appendChild(div3b); //div3.appendChild(div3b);
 				var ul = document.createElement('ul');
 				ul.setAttribute('class','slider');
 				div3b.appendChild(ul);
@@ -80,7 +81,7 @@ angular.module('dashboards')
 			//Fill sections with slides
 			var li = document.createElement('li');
 			ul.appendChild(li);
-			var div4 = document.createElement('div');
+			/* var div4 = document.createElement('div');
 			div4.setAttribute('class','section-info');
 			li.appendChild(div4);	
 			var h3 = document.createElement('h3');
@@ -88,17 +89,24 @@ angular.module('dashboards')
 			div4.appendChild(h3);
 			var p = document.createElement('p');
 			p.innerHTML = record.subitem_text;
-			div4.appendChild(p);
+			div4.appendChild(p); */
+			//var img = document.createElement('iframe');
+			//img.setAttribute('style','width:'+record.img_width);
+			//img.setAttribute('style','height:100%');
+			//img.setAttribute('src',record.subitem_img);
+			//div4.appendChild(img);
 			var img = document.createElement('img');
 			img.setAttribute('style','width:'+record.img_width);
 			img.setAttribute('src',record.subitem_img);
-			div4.appendChild(img);
+			//div4.appendChild(img);
+			li.appendChild(img);
 		
 		}
-		/* 
+		
+		
 		if ($('.slider').length !== 0) {
 			$('.slider').slick({
-				dots: true,
+				dots: false,
 				infinite: false,
 				speed: 300,
 				slidesToShow: 1,
@@ -106,8 +114,8 @@ angular.module('dashboards')
 				fade: true,
 				centerMode: true,
 			});
-		}; */
-		 
+		}; 
+		
 	
 		
 

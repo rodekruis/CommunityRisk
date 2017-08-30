@@ -44,7 +44,7 @@ select p_code as pcode_level3
 into "MW_datamodel"."Geo_level3"
 from "geo_source"."Geo_MW_level3_mapshaper"
 ;
-
+/*
 drop table if exists "MW_datamodel"."Geo_level4";
 select t1.pcode_level3 || '-' || t0.id_3 as pcode_level4
 	,name_3 as name
@@ -63,6 +63,7 @@ from "geo_source"."Geo_MW_level3_mapshaper"
 where district in ('Lilongwe City','Zomba City','Mzuzu City','Blantyre City')
 ;
 
+
 drop table if exists "MW_datamodel"."Geo_level5";
 select eacode as pcode_level5
 	,ta || ' - EA ' || cast(feature as int) as name
@@ -75,7 +76,17 @@ left join "mw_source"."EA_GVH_mapping" t1 on t0.eacode = t1."EACODE"
 where dist_code <> 0 and pop_sum > 0
 ;
 --select * from "MW_datamodel"."Geo_level5"
+*/
 
+drop table if exists "MW_datamodel"."Geo_level4";
+select eacode as pcode_level4
+	,ta || ' - GVH ' || cast(feature as int) as name
+	,adm3_p_cod as pcode_level3
+	,geom
+into "MW_datamodel"."Geo_level4"
+from "geo_source"."Geo_MW_level4_mapshaper"
+where dist_code <> 0 and pop_sum > 0
+;
 
 ------------------------------------------
 -- 1.2: Transform Indicator data tables --
@@ -154,10 +165,10 @@ from "mw_source"."Indicators_4_echo2_areas"
 
 --RED CROSS capacity
 drop table if exists "MW_datamodel"."Indicators_5_RC_capacity";
-select t0.pcode_level5
+select t0.pcode_level4
 	,t2.volunteers as rc_capacity
 into "MW_datamodel"."Indicators_5_RC_capacity"
-from "MW_datamodel"."Geo_level5" t0
+from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
 left join (
 	select aa.pcode_level2
@@ -191,8 +202,8 @@ left join (
 		select t0.pcode_level2
 			,sum(population) as population
 		from "MW_datamodel"."Geo_level3" t0
-		left join "MW_datamodel"."Geo_level5" t1 on t0.pcode_level3 = t1.pcode_level3
-		left join "MW_datamodel"."Indicators_5_population" t2 on t1.pcode_level5 = t2.pcode_level5
+		left join "MW_datamodel"."Geo_level4" t1 on t0.pcode_level3 = t1.pcode_level3
+		left join "MW_datamodel"."Indicators_5_population" t2 on t1.pcode_level4 = t2.pcode_level5
 		group by 1
 		) bb
 		on aa.pcode_level2 = bb.pcode_level2
@@ -203,18 +214,18 @@ left join (
 
 
 drop table if exists "MW_datamodel"."Indicators_5_NGO_capacity";
-select t0.pcode_level5
+select t0.pcode_level4
 	,t2.active_organisations/(t3.population / 100000) as ngo_capacity
 into "MW_datamodel"."Indicators_5_NGO_capacity"
-from "MW_datamodel"."Geo_level5" t0
+from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
 left join mw_source."Indicators_2_ngo_capacity" t2 on t1.pcode_level2 = t2.pcode_level2
 left join (
 	select t0.pcode_level2
 		,sum(population) as population
 	from "MW_datamodel"."Geo_level3" t0
-	left join "MW_datamodel"."Geo_level5" t1 on t0.pcode_level3 = t1.pcode_level3
-	left join "MW_datamodel"."Indicators_5_population" t2 on t1.pcode_level5 = t2.pcode_level5
+	left join "MW_datamodel"."Geo_level4" t1 on t0.pcode_level3 = t1.pcode_level3
+	left join "MW_datamodel"."Indicators_5_population" t2 on t1.pcode_level4 = t2.pcode_level5
 	group by 1
 	) t3
 	on t1.pcode_level2 = t3.pcode_level2
@@ -361,6 +372,31 @@ FROM temp
 -- 1.3: Create one Indicator table per level--
 -----------------------------------------------
 
+drop table if exists "MW_datamodel"."Indicators_4_TOTAL_temp";
+select t0.pcode_level4 as pcode
+	,t0.pcode_level3 as pcode_parent
+	,t1.population
+	,t1.land_area
+	,population / land_area as pop_density
+	,t2.poverty_incidence
+	,t3.traveltime
+	,t3.traveltime_hospital,traveltime_sec_school,traveltime_tradingcentre
+	,t4.drought_risk,flood_risk
+	,t5.echo2_area
+	,t6.rc_capacity
+	,t7.ngo_capacity
+into "MW_datamodel"."Indicators_4_TOTAL_temp"
+from "MW_datamodel"."Geo_level4" t0
+left join "MW_datamodel"."Indicators_5_population" t1	on t0.pcode_level4 = t1.pcode_level5
+left join "MW_datamodel"."Indicators_5_poverty" t2	on t0.pcode_level4 = t2.pcode_level5
+left join "MW_datamodel"."Indicators_5_traveltime" t3	on t0.pcode_level4 = t3.pcode_level5
+left join "MW_datamodel"."Indicators_5_hazards" t4	on t0.pcode_level4 = t4.pcode_level5
+left join "MW_datamodel"."Indicators_5_echo2_areas" t5	on t0.pcode_level4 = t5.pcode_level5
+left join "MW_datamodel"."Indicators_5_RC_capacity" t6	on t0.pcode_level4 = t6.pcode_level4
+left join "MW_datamodel"."Indicators_5_NGO_capacity" t7	on t0.pcode_level4 = t7.pcode_level4
+;
+--select * from "MW_datamodel"."Indicators_4_TOTAL_temp"
+/*
 drop table if exists "MW_datamodel"."Indicators_5_TOTAL_temp";
 select t0.pcode_level5 as pcode
 	,t0.pcode_level4 as pcode_parent
@@ -421,6 +457,7 @@ left join (
 	on t0.pcode_level4 = level5.pcode_parent
 ;
 --select * from "MW_datamodel"."Indicators_4_TOTAL_temp"
+*/
 
 drop table if exists "MW_datamodel"."Indicators_3_TOTAL_temp";
 select t0.pcode_level3 as pcode

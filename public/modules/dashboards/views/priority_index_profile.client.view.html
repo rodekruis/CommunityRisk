@@ -70,41 +70,24 @@
 				<li class="dropdown">
 					<a style="color:#fff" class="submenu-item" ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">PRIORITY INDEX</a>
 				</li>
-			</ul> <!-- 	
+			</ul> 
+			
 			<ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-						View
+							  COUNTRY
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu submenu-items">
 						<li>
-							<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile">Community Risk</a>
+							<a class="submenu-item" ng-click="change_country('PH')" role="button">Philippines</a>
 						</li>
-						<li class="divider"></li>
 						<li>
-							<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile">Priority Index</a>
+							<a class="submenu-item" ng-click="change_country('NP')" role="button">Nepal</a>
 						</li>
 					</ul>
 				</li>
-			</ul> 			 -->
-			<!-- <ul class="nav navbar-top-links navbar-left">
-				<li class="dropdown">
-					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-						Disaster Type
-						<i class="fa fa-angle-down export-btn-arrow"></i>
-					</a>
-					<ul class="dropdown-menu submenu-items">
-						<li>
-							<a class="submenu-item" ng-click="change_disaster_type('Typhoon')">Typhoons</a>
-						</li>
-						<li class="divider"></li>
-						<li>
-							<a class="submenu-item" ng-click="change_disaster_type('Earthquake')">Earthquakes</a>
-						</li>
-					</ul>
-				</li>
-			</ul> -->
+			</ul>
 		</nav>
 		
 
@@ -143,7 +126,7 @@
 				<!-- typhoon selector -->
 				<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293; width:45%">
 					<li class="dropdown">
-						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff; font-size:12px">
 							<strong>{{disaster_type}}</strong>
 							<i class="fa fa-angle-down export-btn-arrow"></i>
 						</a>
@@ -160,7 +143,7 @@
 				</ul>
 				<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293; width:45%">
 					<li class="dropdown">
-						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff; font-size:12px">
 							<strong>{{disaster_name}}</strong>
 							<i class="fa fa-angle-down export-btn-arrow"></i>
 						</a>

@@ -21,7 +21,7 @@ angular.module('dashboards')
 			$scope.country_code = country;
 			$scope.parent_codes = [];
 			$scope.metric = '';
-			$scope.initiate('CRA');
+			$scope.initiate($rootScope.view_code);
 		}		
 
 		//Define variables (Probably a lot of these are obsolete)
@@ -36,7 +36,7 @@ angular.module('dashboards')
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
 		$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
-		if ($scope.view_code == 'PI') {$scope.country_code = 'PH';}
+		if ($scope.view_code == 'PI' && ['PH','NP'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PH';}
 		$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
 		$scope.metric_label = '';
 		$scope.metric_year = '';
@@ -94,21 +94,31 @@ angular.module('dashboards')
 			//Set main parameters
 			$scope.view_code = view_code;
 			$rootScope.view_code = view_code;
-			if ($scope.view_code == 'PI') {$scope.country_code = 'PH';}
-			$scope.admlevel = $scope.view_code == 'CRA' ?  2 : 3;
 			
+			//Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
+			$scope.admlevel = $scope.view_code == 'CRA' ?  2 : 3;
+			if ($scope.view_code == 'PI' && ['PH','NP'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PH';}
+			else if ($scope.view_code == 'PI' && $scope.country_code == 'NP'){
+				$scope.admlevel = 4;
+				$scope.disaster_type = 'Earthquake';
+				$scope.disaster_name = 'Gorkha 2015';
+			}
+			if (['MLI','ZMB'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
+			
+			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
 			var url = location.href;
 			if (url.indexOf('?') > -1) {
 				url = url.split('?')[1];
 				$scope.directURLload = true;
+				$scope.country_code = url.split('&')[0].split('=')[1];
+				$scope.admlevel = url.split('&')[1].split('=')[1];
+				$scope.metric = url.split('&')[2].split('=')[1];
 				if ($scope.view_code == 'CRA') {
-					$scope.country_code = url.split('&')[0].split('=')[1];
-					$scope.admlevel = url.split('&')[1].split('=')[1];
-					$scope.parent_codes = url.split('&')[2].split('=')[1].split(',');
+					$scope.parent_codes = url.split('&')[3].split('=')[1].split(',');
 					window.history.pushState({}, document.title, '/#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile');
 				} else if ($scope.view_code == 'PI') {
-					$scope.disaster_type = url.split('&')[1].split('=')[1];
-					$scope.disaster_name = url.split('&')[2].split('=')[1].replace('%20',' ');
+					$scope.disaster_type = url.split('&')[3].split('=')[1];
+					$scope.disaster_name = url.split('&')[4].split('=')[1].replace('%20',' ');
 					console.log($scope.disaster_name);
 					window.history.pushState({}, document.title, '/#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile');
 				}
@@ -117,11 +127,10 @@ angular.module('dashboards')
 			}
 			
 			
-			if (['MLI','ZMB'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
-			
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
+			console.log($scope.data_input);
 			
 			//Call dashboard itself, and then call data query
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
@@ -200,7 +209,7 @@ angular.module('dashboards')
 		  d.Country_meta = $.grep(d.Country_meta,function(e){return e.country_code == $scope.country_code;});
 		  
 		  // 6. Disaster-metadata
-		  if ($scope.view_code == 'PI') {d.Disaster_meta = $.grep(dashboard.sources.Metadata_disaster_events.data, function(e){return e.disaster_type == $scope.disaster_type;});}
+		  if ($scope.view_code == 'PI') {d.Disaster_meta = $.grep(dashboard.sources.Metadata_disaster_events.data, function(e){return e.disaster_type == $scope.disaster_type && e.country_code == $scope.country_code;});}
 		  
 		  // Log to check when needed
 		  console.log(d);
@@ -346,13 +355,16 @@ angular.module('dashboards')
 			var zoom_max = Number(country_zoom_max[$scope.country_code]); 
 			$scope.inform_admlevel = Number($scope.genLookup_country_meta(d,'inform_admlevel')[$scope.country_code]);
 			
-			if ($scope.view_code === 'PI') {
+			if (!$scope.directURLload) {
+				if ($scope.view_code === 'PI') {
 				$scope.metric = $scope.genLookup_disaster_meta(d,'default_metric')[$scope.disaster_name];
-			} else if ($scope.metric === '') { 
-				$scope.metric = country_default_metric[$scope.country_code]; 
-			} else if (typeof(d.Rapportage[0][$scope.metric]) == 'undefined'){
-				$scope.metric = 'population';
-			};
+				} else if ($scope.metric === '') { 
+					$scope.metric = country_default_metric[$scope.country_code]; 
+				} else if (typeof(d.Rapportage[0][$scope.metric]) == 'undefined'){
+					$scope.metric = 'population';
+				};
+			}
+			
 				
 			if ($scope.admlevel === zoom_min) { 
 				$scope.name_selection = country_name[$scope.country_code]; 
@@ -1397,19 +1409,19 @@ angular.module('dashboards')
 			};
 			
 			//Create parameter-specific URL and show it in popup to copy
-			function addParameterToURL(view,country,admlevel,parent_codes,disaster_type,disaster_name){
+			function addParameterToURL(view,country,admlevel,metric,parent_codes,disaster_type,disaster_name){
 				var _url = location.href;
 				_url = _url.split('?')[0];
 				if (view=='CRA') {
-					_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&admlevel='+admlevel+'&parent_code='+parent_codes;
+					_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&admlevel='+admlevel+'&metric='+metric+'&parent_code='+parent_codes;
 				} else if (view=='PI') {
-					_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&disaster='+disaster_type+'&event='+disaster_name;
+					_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&admlevel='+admlevel+'&metric='+metric+'&disaster='+disaster_type+'&event='+disaster_name;
 				}
 				console.log(_url);
 				return _url;
 			}
 			$scope.share_URL = function() {
-				$scope.shareable_URL = addParameterToURL($scope.view_code,$scope.country_code,$scope.admlevel,$scope.parent_codes,$scope.disaster_type,$scope.disaster_name);
+				$scope.shareable_URL = addParameterToURL($scope.view_code,$scope.country_code,$scope.admlevel,$scope.metric,$scope.parent_codes,$scope.disaster_type,$scope.disaster_name);
 				$('#URLModal').modal('show');
 			}
 			

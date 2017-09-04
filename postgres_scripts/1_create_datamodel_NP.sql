@@ -41,7 +41,7 @@ select hrpcode as pcode_level4
 	,hrparent as pcode_level3
 	,geom
 into "NP_datamodel"."Geo_level4"
-from "geo_source"."Geo_NP_level4"
+from "geo_source"."Geo_NP_level4_mapshaper"
 ;
 
 ------------------------------------------
@@ -251,6 +251,58 @@ left join (
 	on t0.pcode_level2 = level3.pcode_parent
 --left join "NP_datamodel"."Indicators_2_XXX" 		t1	on t0.pcode_level2 = t1.pcode_level2
 ;
+
+
+
+------------------------------
+-- 1.5: Priority Index data --
+------------------------------
+
+drop table if exists "NP_datamodel"."PI_Earthquake_input_damage";
+/*
+select disaster_type
+	,disaster_name
+	,pcode_parent as pcode
+	,null as total_damage_houses_pred
+	,null as total_damage_houses_perc_pred
+	,sum(comp_damage_houses) as comp_damage_houses
+	,sum(part_damage_houses) as part_damage_houses
+	,sum(total_damage_houses) as total_damage_houses
+	,sum(total_damage_houses_perc * population) / sum(population) as total_damage_houses_perc
+	,sum(mmi * population) / sum(population) as mmi
+	,sum(mean_slope * population) / sum(population) as mean_slope
+	,sum(total_houses) as total_houses
+	,sum(population) as population
+	,sum(land_area) as land_area
+into "NP_datamodel"."PI_Earthquake_input_damage"
+from ( */
+	select t1.*
+		,t2.pcode_parent
+		,t2.population / 4 as total_houses
+		,t2.population
+		,t2.land_area
+	into "NP_datamodel"."PI_Earthquake_input_damage"
+	from (
+		select cast('Earthquake' as varchar) as disaster_type
+			,cast("Earthquake" as varchar) as disaster_name
+			,'NP-' || "PCODE" as pcode
+			,null as total_damage_houses_pred
+			,null as total_damage_houses_perc_pred
+			,"Completely_damaged_houses" as comp_damage_houses
+			,"Partially_damaged_houses" as part_damage_houses
+			,"Total" as total_damage_houses
+			,"Total_as_Percentage" * 4 as total_damage_houses_perc
+			,"MMI" as mmi
+			,"Slope" as mean_slope	
+		from ph_source."PI_earthquake_training_data"
+		where "Country" = 'Nepal'
+		) t1
+	LEFT JOIN "NP_datamodel"."Indicators_4_TOTAL_temp" t2
+		ON t1.pcode = t2.pcode
+--) aa
+--group by 1,2,3
+;
+
 
 ----------------------------------
 -- 2.1: Calculate INFORM-scores --

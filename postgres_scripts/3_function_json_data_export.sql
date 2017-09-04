@@ -277,7 +277,7 @@ CREATE OR REPLACE FUNCTION usp_pi_level3(country varchar,disaster_type varchar,d
 	INTO result;
 	END
 $func$ LANGUAGE plpgsql;
---select usp_pi_level3('PH','Typhoon','Haima')
+--select usp_pi_level3('NP','Earthquake','Gorkha 2015')
 
 --------------------------------------------------
 -- Get Data Preparedness Index data --

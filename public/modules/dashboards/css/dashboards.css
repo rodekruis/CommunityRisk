@@ -527,11 +527,10 @@ a.handle:hover {
 }
 
 .leaflet-control-zoom {
-	left: 380px;
 	/* top: 90%; */
 }
 .legend {
-	left:380px;
+	 left:380px;
 }
 
 #loading-bar-spinner {

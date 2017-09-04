@@ -96,7 +96,28 @@ angular.module('dashboards')
 			$rootScope.view_code = view_code;
 			if ($scope.view_code == 'PI') {$scope.country_code = 'PH';}
 			$scope.admlevel = $scope.view_code == 'CRA' ?  2 : 3;
-			if (['MLI','ZMB'].indexOf($scope.country_code) > -1) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
+			
+			var url = location.href;
+			if (url.indexOf('?') > -1) {
+				url = url.split('?')[1];
+				$scope.directURLload = true;
+				if ($scope.view_code == 'CRA') {
+					$scope.country_code = url.split('&')[0].split('=')[1];
+					$scope.admlevel = url.split('&')[1].split('=')[1];
+					$scope.parent_codes = url.split('&')[2].split('=')[1].split(',');
+					window.history.pushState({}, document.title, '/#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile');
+				} else if ($scope.view_code == 'PI') {
+					$scope.disaster_type = url.split('&')[1].split('=')[1];
+					$scope.disaster_name = url.split('&')[2].split('=')[1].replace('%20',' ');
+					console.log($scope.disaster_name);
+					window.history.pushState({}, document.title, '/#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile');
+				}
+			} else {
+				$scope.directURLload = false;
+			}
+			
+			
+			if (['MLI','ZMB'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
 			
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
@@ -648,7 +669,7 @@ angular.module('dashboards')
 			var keyvalue = fill_keyvalues();
 		
 			//Pool all values for all 0-10 score value together to determine quantile_range (so that quantile thresholds will not differ between indicators)
-			if ($scope.admlevel == zoom_min) {
+			if ($scope.admlevel == zoom_min || $scope.directURLload) {
 				var quantile_range_scores = [];
 				var j=0;
 				for (i=0;i<d.Rapportage.length;i++) {
@@ -1375,6 +1396,24 @@ angular.module('dashboards')
 				//download.click();
 			};
 			
+			//Create parameter-specific URL and show it in popup to copy
+			function addParameterToURL(view,country,admlevel,parent_codes,disaster_type,disaster_name){
+				var _url = location.href;
+				_url = _url.split('?')[0];
+				if (view=='CRA') {
+					_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&admlevel='+admlevel+'&parent_code='+parent_codes;
+				} else if (view=='PI') {
+					_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&disaster='+disaster_type+'&event='+disaster_name;
+				}
+				console.log(_url);
+				return _url;
+			}
+			$scope.share_URL = function() {
+				$scope.shareable_URL = addParameterToURL($scope.view_code,$scope.country_code,$scope.admlevel,$scope.parent_codes,$scope.disaster_type,$scope.disaster_name);
+				$('#URLModal').modal('show');
+			}
+			
+			
 			//Tabslide functions (Not included yet at the moment)
 /* 			$(function(){
 				 $('.slide-out-tab-province').tabSlideOut({
@@ -1407,7 +1446,6 @@ angular.module('dashboards')
 			
 			//Render all dc-charts and -tables
 			dc.renderAll(); 
-			//document.getElementsByClassName('leaflet-top leaflet-left')[0].setAttribute('class','leaflet-top leaflet-right');
 			
 			map = mapChart.map();
 			function zoomToGeom(geom){
@@ -1415,6 +1453,12 @@ angular.module('dashboards')
 				map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
 			}
 			zoomToGeom($scope.geom);
+			
+			var zoom_child = $('.leaflet-control-zoom')[0];
+			var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
+			zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0])
+			//zoom_parent.prepend(zoom_child);
+			
 			
 			
 			

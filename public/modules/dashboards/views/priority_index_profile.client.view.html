@@ -47,11 +47,15 @@
 					</a>
 					<ul class="dropdown-menu export-items">
 						<li>
-							<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+							<a id="download" ng-click="share_URL()">Share current settings (URL)</a>
 						</li>
 						<li class="divider"></li>
 						<li>
 							<a id="download" ng-click="export_csv()">Export (CSV)</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
 						</li>
 					</ul>
 				</li>
@@ -342,6 +346,25 @@
 		</div>
 	</div>
 	<!-- end: risk score modal -->
+	
+	<!-- start: URL modal -->
+	<div id="URLModal" class="modal sidebar-modal" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</button>
+					<h3 class="modal-title">Share current parameter-settings directly through URL</h3>
+				</div>
+				<div class="modal-body" style="word-break:break-all">
+					<h5><b>URL:</b> {{shareable_URL}}</h5><br>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end: URL modal -->
 	
 	<!-- start: phone device message -->
 	<div class="mobile-message">

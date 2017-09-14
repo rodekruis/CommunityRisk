@@ -130,7 +130,7 @@ angular.module('dashboards')
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			console.log($scope.data_input);
+			//console.log($scope.data_input);
 			
 			//Call dashboard itself, and then call data query
 			Dashboards.get({dashboardId: $stateParams.dashboardId},
@@ -1405,7 +1405,7 @@ angular.module('dashboards')
 				var download = document.getElementById('download');
 				download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
 				download.setAttribute('download','export.csv');
-				//download.click();
+				download.click();
 			};
 			
 			//Create parameter-specific URL and show it in popup to copy

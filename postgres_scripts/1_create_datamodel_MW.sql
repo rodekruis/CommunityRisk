@@ -80,13 +80,20 @@ where dist_code <> 0 and pop_sum > 0
 
 drop table if exists "MW_datamodel"."Geo_level4";
 select eacode as pcode_level4
-	,ta || ' - GVH ' || cast(feature as int) as name
+	,case when t1."EA_CODE" is not null then t1.name else ta || ' - GVH ' || cast(feature as int) end as name
 	,adm3_p_cod as pcode_level3
 	,geom
 into "MW_datamodel"."Geo_level4"
-from "geo_source"."Geo_MW_level4_mapshaper"
+from "geo_source"."Geo_MW_level4_mapshaper" t0
+left join (
+	select "EA_CODE"
+		,min("GVH_name") || case when min("GVH_name") = max("GVH_name") then '' else '/' || max("GVH_name") end as name
+	from mw_source."Indicators_4_GVH_names"
+	group by 1) t1
+on t0.eacode = t1."EA_CODE"
 where dist_code <> 0 and pop_sum > 0
 ;
+
 
 ------------------------------------------
 -- 1.2: Transform Indicator data tables --
@@ -96,27 +103,27 @@ where dist_code <> 0 and pop_sum > 0
 -- Level 5 data --
 ------------------
 
-drop table if exists "MW_datamodel"."Indicators_5_population";
-select eacode as pcode_level5
+drop table if exists "MW_datamodel"."Indicators_4_population";
+select eacode as pcode_level4
 	,pop_sum as population
 	,st_area(st_transform(geom,31467))/1000000 as land_area
-into "MW_datamodel"."Indicators_5_population"
+into "MW_datamodel"."Indicators_4_population"
 from "geo_source"."Geo_MW_level4_mapshaper"
 where dist_code <> 0
 ;
 --select count(*) from "MW_datamodel"."Indicators_4_population"
 
-drop table if exists "MW_datamodel"."Indicators_5_poverty";
-select "EACODE" as pcode_level5
+drop table if exists "MW_datamodel"."Indicators_4_poverty";
+select "EACODE" as pcode_level4
 	,pov_rate as poverty_incidence
-into "MW_datamodel"."Indicators_5_poverty"
+into "MW_datamodel"."Indicators_4_poverty"
 from "mw_source"."Indicators_4_miscellaneous"
 where "DIST_CODE" <> 0
 ;
 --select count(*) from "MW_datamodel"."Indicators_4_poverty"
 
-drop table if exists "MW_datamodel"."Indicators_5_traveltime";
-select "EACODE" as pcode_level5
+drop table if exists "MW_datamodel"."Indicators_4_traveltime";
+select "EACODE" as pcode_level4
 	,traveltime
 	,tt_ea_ttcavg as traveltime_city
 	,tt_ea_havg as traveltime_hospital
@@ -125,28 +132,28 @@ select "EACODE" as pcode_level5
 	,tt_ea_tcavg as traveltime_tradingcentre
 	,tt_ea_wpavg as traveltime_waterpoint
 	,(tt_ea_havg + tt_ea_ssavg + tt_ea_tcavg) / 3 as traveltime_avg
-into "MW_datamodel"."Indicators_5_traveltime"
+into "MW_datamodel"."Indicators_4_traveltime"
 from "mw_source"."Indicators_4_miscellaneous"
 where "DIST_CODE" <> 0
 ;
 --select * from "MW_datamodel"."Indicators_4_traveltime"
 
-drop table if exists "MW_datamodel"."Indicators_5_hazards";
-select "EACODE" as pcode_level5
+drop table if exists "MW_datamodel"."Indicators_4_hazards";
+select "EACODE" as pcode_level4
 --	,drought_in*filter as drought_risk
 --	,10-log(1+(10-drought_in*filter))/log(11)*10 as drought_risk
 	,drought_risk
 	,case when flood_in*filter = 0 then 0
 		else flood_in*filter/2 + 5 end as flood_risk
-into "MW_datamodel"."Indicators_5_hazards"
+into "MW_datamodel"."Indicators_4_hazards"
 from "mw_source"."Indicators_4_miscellaneous" t0
 left join (
-	select "EACODE" as pcode_level5
+	select "EACODE" as pcode_level4
 		,drought_risk/max_drought_risk*10 as drought_risk
 	from mw_source."Indicators_4_drought_new" t0
 	left join (select max(drought_risk) as max_drought_risk from mw_source."Indicators_4_drought_new") t1 on 1=1
 	) t1
-	on t0."EACODE" = t1.pcode_level5
+	on t0."EACODE" = t1.pcode_level4
 where "DIST_CODE" <> 0
 ;
 --select count(*) from "MW_datamodel"."Indicators_4_hazards"
@@ -154,20 +161,29 @@ where "DIST_CODE" <> 0
 
 
 
-
-drop table if exists "MW_datamodel"."Indicators_5_echo2_areas";
-select "EACODE" as pcode_level5
+/*
+drop table if exists "MW_datamodel"."Indicators_4_echo2_areas";
+select "EACODE" as pcode_level4
 	,"filter_GVH" as echo2_area
-into "MW_datamodel"."Indicators_5_echo2_areas"
+into "MW_datamodel"."Indicators_4_echo2_areas"
 from "mw_source"."Indicators_4_echo2_areas"
 ;
-
+*/
+drop table if exists "MW_datamodel"."Indicators_4_echo2_areas";
+select pcode_level4
+	,max(case when t1."GVH_name" is not null then 1 else 0 end) as echo2_area
+into "MW_datamodel"."Indicators_4_echo2_areas"
+from "MW_datamodel"."Geo_level4" t0
+left join mw_source."Indicators_4_GVH_names" t1
+	on t0.pcode_level4 = t1."EA_CODE"
+group by 1
+;
 
 --RED CROSS capacity
-drop table if exists "MW_datamodel"."Indicators_5_RC_capacity";
+drop table if exists "MW_datamodel"."Indicators_4_RC_capacity";
 select t0.pcode_level4
 	,t2.volunteers as rc_capacity
-into "MW_datamodel"."Indicators_5_RC_capacity"
+into "MW_datamodel"."Indicators_4_RC_capacity"
 from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
 left join (
@@ -210,13 +226,13 @@ left join (
 	) t2
 	on t1.pcode_level2 = t2.pcode_level2
 ;
---select * from "MW_datamodel"."Indicators_5_RC_capacity";
+--select * from "MW_datamodel"."Indicators_4_RC_capacity";
 
 
-drop table if exists "MW_datamodel"."Indicators_5_NGO_capacity";
+drop table if exists "MW_datamodel"."Indicators_4_NGO_capacity";
 select t0.pcode_level4
 	,t2.active_organisations/(t3.population / 100000) as ngo_capacity
-into "MW_datamodel"."Indicators_5_NGO_capacity"
+into "MW_datamodel"."Indicators_4_NGO_capacity"
 from "MW_datamodel"."Geo_level4" t0
 left join "MW_datamodel"."Geo_level3" t1 on t0.pcode_level3 = t1.pcode_level3
 left join mw_source."Indicators_2_ngo_capacity" t2 on t1.pcode_level2 = t2.pcode_level2
@@ -387,13 +403,13 @@ select t0.pcode_level4 as pcode
 	,t7.ngo_capacity
 into "MW_datamodel"."Indicators_4_TOTAL_temp"
 from "MW_datamodel"."Geo_level4" t0
-left join "MW_datamodel"."Indicators_5_population" t1	on t0.pcode_level4 = t1.pcode_level5
-left join "MW_datamodel"."Indicators_5_poverty" t2	on t0.pcode_level4 = t2.pcode_level5
-left join "MW_datamodel"."Indicators_5_traveltime" t3	on t0.pcode_level4 = t3.pcode_level5
-left join "MW_datamodel"."Indicators_5_hazards" t4	on t0.pcode_level4 = t4.pcode_level5
-left join "MW_datamodel"."Indicators_5_echo2_areas" t5	on t0.pcode_level4 = t5.pcode_level5
-left join "MW_datamodel"."Indicators_5_RC_capacity" t6	on t0.pcode_level4 = t6.pcode_level4
-left join "MW_datamodel"."Indicators_5_NGO_capacity" t7	on t0.pcode_level4 = t7.pcode_level4
+left join "MW_datamodel"."Indicators_4_population" t1	on t0.pcode_level4 = t1.pcode_level4
+left join "MW_datamodel"."Indicators_4_poverty" t2	on t0.pcode_level4 = t2.pcode_level4
+left join "MW_datamodel"."Indicators_4_traveltime" t3	on t0.pcode_level4 = t3.pcode_level4
+left join "MW_datamodel"."Indicators_4_hazards" t4	on t0.pcode_level4 = t4.pcode_level4
+left join "MW_datamodel"."Indicators_4_echo2_areas" t5	on t0.pcode_level4 = t5.pcode_level4
+left join "MW_datamodel"."Indicators_4_RC_capacity" t6	on t0.pcode_level4 = t6.pcode_level4
+left join "MW_datamodel"."Indicators_4_NGO_capacity" t7	on t0.pcode_level4 = t7.pcode_level4
 ;
 --select * from "MW_datamodel"."Indicators_4_TOTAL_temp"
 /*

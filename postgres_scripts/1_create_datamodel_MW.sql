@@ -171,7 +171,7 @@ from "mw_source"."Indicators_4_echo2_areas"
 */
 drop table if exists "MW_datamodel"."Indicators_4_echo2_areas";
 select pcode_level4
-	,max(case when t1."GVH_name" is not null then 1 else 0 end) as echo2_area
+	,max(case when t1."GVH_name" is not null then 1 end) as echo2_area
 into "MW_datamodel"."Indicators_4_echo2_areas"
 from "MW_datamodel"."Geo_level4" t0
 left join mw_source."Indicators_4_GVH_names" t1
@@ -219,7 +219,7 @@ left join (
 			,sum(population) as population
 		from "MW_datamodel"."Geo_level3" t0
 		left join "MW_datamodel"."Geo_level4" t1 on t0.pcode_level3 = t1.pcode_level3
-		left join "MW_datamodel"."Indicators_5_population" t2 on t1.pcode_level4 = t2.pcode_level5
+		left join "MW_datamodel"."Indicators_4_population" t2 on t1.pcode_level4 = t2.pcode_level4
 		group by 1
 		) bb
 		on aa.pcode_level2 = bb.pcode_level2
@@ -241,7 +241,7 @@ left join (
 		,sum(population) as population
 	from "MW_datamodel"."Geo_level3" t0
 	left join "MW_datamodel"."Geo_level4" t1 on t0.pcode_level3 = t1.pcode_level3
-	left join "MW_datamodel"."Indicators_5_population" t2 on t1.pcode_level4 = t2.pcode_level5
+	left join "MW_datamodel"."Indicators_4_population" t2 on t1.pcode_level4 = t2.pcode_level4
 	group by 1
 	) t3
 	on t1.pcode_level2 = t3.pcode_level2

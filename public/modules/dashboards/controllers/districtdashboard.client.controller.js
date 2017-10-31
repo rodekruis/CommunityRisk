@@ -97,6 +97,7 @@ angular.module('dashboards')
 			
 			//Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
 			$scope.admlevel = $scope.view_code == 'CRA' ?  2 : 3;
+			$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
 			if ($scope.view_code == 'PI' && ['PH','NP'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PH';}
 			else if ($scope.view_code == 'PI' && $scope.country_code == 'NP'){
 				$scope.admlevel = 4;

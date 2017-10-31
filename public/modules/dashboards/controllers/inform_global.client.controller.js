@@ -457,7 +457,8 @@ angular.module('dashboards')
 					else if (width > 6.5) { return 'bad';} 
 				}				
 			};	
-
+			
+			
 			$scope.createHTML = function(keyvalue) {
 				
 				var risk_score = document.getElementById('risk_score_main');
@@ -825,7 +826,7 @@ angular.module('dashboards')
 			
 			
 			//Make sure that when opening another accordion-panel, the current one collapses
-			var acc = document.getElementsByClassName('card-header');
+			/* var acc = document.getElementsByClassName('card-header');
 			var panel = document.getElementsByClassName('collapse');
 			var active = document.getElementsByClassName('collapse in')[0];
 			
@@ -837,8 +838,35 @@ angular.module('dashboards')
 					} 
 					active = active_new;
 				}
-			}
-		
+			} */
+			
+			//Multi-level Accordion -- BEGIN
+			var headers = ["A1","A2","A3","A4","A5","A6"];
+			$(".accordion").click(function(e) {
+			  var target = e.target,
+				name = target.nodeName.toUpperCase();
+				console.log(target);
+			  
+			  if($.inArray(name,headers) > -1) {
+				var subItem = $(target).next();
+				
+				//slideUp all elements (except target) at current depth or greater
+				var depth = $(subItem).parents().length;
+				var allAtDepth = $(".accordion p, .accordion div").filter(function() {
+				  if($(this).parents().length >= depth && this !== subItem.get(0)) {
+					return true; 
+				  }
+				});
+				$(allAtDepth).slideUp("fast");
+				
+				//slideToggle target content and adjust bottom border if necessary
+				subItem.slideToggle("fast",function() {
+					$(".accordion :visible:last").css("border-radius","0 0 10px 10px");
+				});
+				$(target).css({"border-bottom-right-radius":"0", "border-bottom-left-radius":"0"});
+			  }
+			});
+			//Multi-level Accordion -- END
 			
 			/////////////////////
 			// OTHER FUNCTIONS //

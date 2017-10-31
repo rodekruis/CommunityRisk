@@ -322,7 +322,6 @@ Related to the above, I have already worked on https://github.com/jannisvisser/A
 - downloading & unzipping it
 - simplifying the shapfiles through Mapshaper
 - uploading in PostGIS database
-- processing them further within PostGIS (to prepare for Community Risk Assessment-dasbhaord).
+- processing them further within PostGIS (to prepare for Community Risk Assessment-dasbhaord)
 
 The ultimate goal here would be to fully automatically be able to create a base-version of Community Risk Assessment (admin-boundaries + population) for every country available on HDX.
-- 

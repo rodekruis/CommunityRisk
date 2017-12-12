@@ -17,7 +17,7 @@ body {
   top: 51px;
   width: 380px;
   z-index: 2;
-  background-color: #b0ded3; /*#ffffff;*/
+  background-color: #F3EEE3; /*#b0ded3; */
 }
 .map-wrapper {
   background: #accfff;
@@ -128,6 +128,7 @@ body {
 }
 .component-section:hover {
   background: #f3f3f3;
+  color: #fffff;
   border-radius: 5px;
 }
 .component-label {
@@ -135,6 +136,7 @@ body {
   line-height: 13px;
   padding: 0;
 }
+
 
 .component-label,
 .general-component-label:hover {
@@ -253,8 +255,7 @@ body {
   padding: 7px;
 }
 .profile-item:hover {
-  background: #4C8293;
-  color: #ffffff;
+  background: #f3f3f3;
 }
 .profile-item .col {
   padding: 0;
@@ -592,84 +593,3 @@ body {
     width: 380px;
 }
 }
-
-
-/* Multi-level Accordion */
-/* * {
-  margin: 0; padding: 0;
-}
-body {
-  font-size: 100%;
-} */
-.accordion {
-  width: 380px;
-  margin: 20px auto;
-}
-.accordion h1, h2, h3, h4 {
-  cursor: pointer;
-}
- .accordion h2, h3, h4 {
-  font-family: "News Cycle";
-} */
- .accordion h1 {
-  padding: 15px 20px;
-  background-color: #333;
-  font-family: Lobster;
-  font-size: 1.5rem;
-  font-weight: normal;
-  color: #1abc9c;
-} 
-.accordion h1:hover {
-  color: #4afcdc;
-} 
-.accordion h1:first-child {
-  border-radius: 10px 10px 0 0;
-}
-.accordion h1:last-of-type {
-  border-radius: 0 0 10px 10px;
-}
-.accordion h1:not(:last-of-type) {
-  border-bottom: 1px dotted #1abc9c;
-} 
-/*  .accordion div, .accordion p {
-  display: none;
-}  */
-.accordion h2 {
-  padding: 5px 25px;
-  background-color: #1abc9c;
-  font-size: 1.1rem;
-  color: #333;
-}
-.accordion h2:hover {
-  background-color: #09ab8b;
-}
-.accordion h3 {
-  padding: 5px 30px;
-  background-color: #b94152;
-  font-size: .9rem;
-  color: #ddd; 
-}
-.accordion h3:hover {
-  background-color: #a93142;
-}
-.accordion h4 {
-  padding: 5px 35px;
-  background-color: #ffc25a;
-  font-size: .9rem;
-  color: #af720a; 
-}
-.accordion h4:hover {
-  background-color: #e0b040;
-}
-.accordion p {
-  padding: 15px 35px;
-  background-color: #ddd;
-  font-family: "Georgia";
-  font-size: .8rem;
-  color: #333;
-  line-height: 1.3rem;
-} 
-.accordion .opened-for-codepen {
-  display: block;
-}
-

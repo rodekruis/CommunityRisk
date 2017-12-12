@@ -97,107 +97,86 @@
 			</div>
 			<!-- end: community profiles -->
 
-			<aside class="accordion" id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
-				<h1>
-					<div class="card">
-						<div class="card-header" role="tab" id="headingOne">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								<span class="panel-header-icon">
-									<img src="modules/dashboards/img/risk_score.png">
+			<!-- start: accordion with stats  -->
+			<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
+				<div class="card">
+					<div class="card-header accordion-header" role="tab" id="headingOne" style="background-color:#b0ded3">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/risk_score.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title" ng-click="map_coloring('INFORM')">Risk Score - <span class="component-score" id="risk_score_main"></span>
+									<span class="score-helptext">/10</span>
 								</span>
-								<span class="panel-header-content">
-									<span class="panel-header-title">Risk Score - <span class="component-score" id="risk_score_main"></span>
-										<span class="score-helptext">/10</span>
-									</span>
-									<span class="panel-header-description">Overall composite risk score</span>
+								<span class="panel-header-description">Overall composite risk score</span>
+							</span>
+						</a>
+					</div>
+					<!-- <div id="collapseOne" class="collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<div class="card-block" id="scores"></div>
+					</div> -->
+				</div>
+				<div class="card">
+					<div class="card-header accordion-header" role="tab" id="headingTwo">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/vulnerability.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title" ng-click="map_coloring('VU')">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
+									<span class="score-helptext">/10</span>
 								</span>
-							</a>
-						</div>
+								<span class="panel-header-description">Click for vulnerability components</span>
+							</span>
+						</a>
 					</div>
-				</h1>
-				<div class="opened-for-codepen">
-					<h2>
-						<div class="card">
-							<div class="card-header" role="tab" id="headingTwo">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
-									<span class="panel-header-icon">
-										<img src="modules/dashboards/img/vulnerability.png">
-									</span>
-									<span class="panel-header-content">
-										<span class="panel-header-title">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
-											<span class="score-helptext">/10</span>
-										</span>
-										<span class="panel-header-description">Click for vulnerability components</span>
-									</span>
-								</a>
-							</div>
-						</div>
-					</h2>
-					<div class="opened-for-codepen">
-						<h3>
-							<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-								<div class="card-block" id="vulnerability">
-									<!-- Vulnerability components set up as the ones above. -->
-								</div>
-							</div>
-						</h3>
-					</div>
-					<h2>
-						<div class="card">
-							<div class="card-header" role="tab" id="headingThree">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-									<span class="panel-header-icon">
-										<img src="modules/dashboards/img/cyclone_wind.png">
-									</span>
-									<span class="panel-header-content">
-										<span class="panel-header-title">Hazard Score - <span class="component-score" id="hazard_score_main"></span>
-											<span class="score-helptext">/10</span>
-										</span>
-										<span class="panel-header-description">Click for hazard components</span>
-									</span>
-								</a>
-							</div>
-						</div>
-					</h2>
-					<div class="opened-for-codepen">
-						<h3>
-							<div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-								<div class="card-block" id="hazard">
-									<!-- Hazard components set up as the ones above. -->
-								</div>
-							</div>
-						</h3>
-					</div>
-					<h2>
-						<div class="card">
-							<div class="card-header" role="tab" id="headingFour">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-									<span class="panel-header-icon">
-										<img src="modules/dashboards/img/coping.png">
-									</span>
-									<span class="panel-header-content">
-										<span class="panel-header-title">Coping Capacity Score - <span class="component-score" id="coping_capacity_score_main"></span>
-											<span class="score-helptext">/10</span>
-										</span>
-										<span class="panel-header-description">Click for coping capacity components</span>
-									</span>
-								</a>
-							</div>
-						</div>
-					</h2>
-					<div class="opened-for-codepen">
-						<h3>
-							<div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
-								<div class="card-block" id="coping_capacity">
-									<!-- Coping capacity indicators set up as the ones above. -->
-								</div>
-							</div>
-						</h3>
+					<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="card-block" id="VU"></div>
 					</div>
 				</div>
-			</aside>
-
-
+				<div class="card">
+					<div class="card-header accordion-header" role="tab" id="headingThree">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/cyclone_wind.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title" ng-click="map_coloring('HA')">Hazard Score - <span class="component-score" id="hazard_score_main"></span>
+									<span class="score-helptext">/10</span>
+								</span>
+								<span class="panel-header-description">Click for hazard components</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+						<div class="card-block" id="HA"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header accordion-header" role="tab" id="headingFour">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/coping.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title" ng-click="map_coloring('CC')">Coping Capacity Score - <span class="component-score" id="coping_capacity_score_main"></span>
+									<span class="score-helptext">/10</span>
+								</span>
+								<span class="panel-header-description">Click for coping capacity components</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+						<div class="card-block" id="CC"></div>
+					</div>
+				</div>
+				<div class="card"></div>
+			</div>
+			<!-- end: accordion with stats -->
+		
+			
+		
 		</div>
 		<!-- end: sidebar -->
 

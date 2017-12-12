@@ -34,7 +34,7 @@ angular.module('dashboards')
 		$scope.metric = '';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
-		$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
+		$scope.disaster_name = ''; //$scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
 		if ($scope.view_code == 'PI' && ['PH','NP'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PH';}
 		$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
@@ -97,7 +97,7 @@ angular.module('dashboards')
 			
 			//Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
 			$scope.admlevel = $scope.view_code == 'CRA' ?  2 : 3;
-			$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
+			if ($scope.disaster_name == '') { $scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017'; };
 			if ($scope.view_code == 'PI' && ['PH','NP'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PH';}
 			else if ($scope.view_code == 'PI' && $scope.country_code == 'NP'){
 				$scope.admlevel = 4;
@@ -810,6 +810,7 @@ angular.module('dashboards')
 						
 						var div = document.createElement('div');
 						div.setAttribute('class','row profile-item');
+						div.setAttribute('id','section-'+record.name);
 						var parent = document.getElementById(record.group);
 						parent.appendChild(div);
 						var div0 = document.createElement('div');
@@ -857,6 +858,7 @@ angular.module('dashboards')
 							
 							var div = document.createElement('div');
 							div.setAttribute('class','component-section');
+							div.setAttribute('id','section-'+record.name);
 							var parent = document.getElementById(record.group);
 							parent.appendChild(div);
 							var div0 = document.createElement('div');
@@ -924,6 +926,7 @@ angular.module('dashboards')
 						
 						var div = document.createElement('div');
 						div.setAttribute('class','component-section');
+						div.setAttribute('id','section-'+record.name);
 						var parent = document.getElementById(record.group);
 						parent.appendChild(div);
 						var div0 = document.createElement('div');
@@ -977,8 +980,8 @@ angular.module('dashboards')
 				}
 			};
 			$scope.createHTML(keyvalue);
-			
-			
+			document.getElementById('section-'+$scope.metric).style = 'background:#4C8293;color:#ffffff';
+						
 			$scope.updateHTML = function(keyvalue) {
 				
 				var dpi_score = document.getElementById('dpi_score_main');
@@ -1090,7 +1093,8 @@ angular.module('dashboards')
 							colorDomain = $scope.quantileColorDomain_CRA_scores;
 							// colorDomain = $scope.quantileColorDomain_CRA_std;
 						}
-					} else if (Math.min.apply(null, quantile_range) < 0 && Math.max.apply(null, quantile_range) > 0) {
+					} else if ($scope.genLookup_meta(d,'group')[$scope.metric] == 'pred_error') {
+					//else if (Math.min.apply(null, quantile_range) < 0 && Math.max.apply(null, quantile_range) > 0) {
 						colorDomain = $scope.quantileColorDomain_PI_error;
 					} else {
 						colorDomain = $scope.quantileColorDomain_PI_std;
@@ -1166,7 +1170,8 @@ angular.module('dashboards')
 					mapfilters_length = $scope.filters.length;
 					//Recalculate all community-profile figures
 					var keyvalue = fill_keyvalues();
-					$scope.updateHTML(keyvalue);	
+					$scope.updateHTML(keyvalue);
+					document.getElementById('section-'+$scope.metric).style = 'background:#4C8293;color:#ffffff';
 					//let reset-button (dis)appear
 					var resetbutton = document.getElementsByClassName('reset-button')[0];	
 					if ($scope.filters.length > 0) {
@@ -1273,7 +1278,8 @@ angular.module('dashboards')
 			};
 
 			$scope.map_coloring = function(id) {
-
+				
+				document.getElementById('section-'+$scope.metric).removeAttribute('style'); //.style = 'background:0;color:inherit;font-weight:normal';
 				$scope.metric = id;	
 				$scope.metric_label = meta_label[id];
 				var mapchartColors = $scope.mapchartColors();	
@@ -1309,6 +1315,7 @@ angular.module('dashboards')
 				dc.redrawAll();
 				document.getElementById('mapPopup').style.visibility = 'hidden';
 				document.getElementById('zoomin_icon').style.visibility = 'hidden';
+				document.getElementById('section-'+id).style = 'background:#4C8293;color:#ffffff;font-weight:bold';
 			};
 			
 			//Change typhoon: reinitiate the dashboard

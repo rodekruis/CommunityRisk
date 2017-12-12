@@ -1,21 +1,21 @@
 country_code;disaster_type;name;startdate;enddate;actuals;predictions;default_metric;admin_level
 PH;Earthquake;Negros Oriental 2012;6-2-2012;6-2-2012;yes;no;total_damage_houses;3
-PH;Typhoon;Bopha;25-11-2012;9-12-2012;yes;no;total_damage_houses;3
-PH;Typhoon;Utor;8-8-2013;18-8-2013;yes;no;total_damage_houses;3
 PH;Earthquake;Bohol 2013;15-10-2013;15-10-2013;yes;no;total_damage_houses;3
-PH;Typhoon;Haiyan;3-11-2013;11-11-2013;yes;no;total_damage_houses;3
-PH;Typhoon;Rammasun;9-7-2014;20-7-2014;yes;no;total_damage_houses;3
-PH;Typhoon;Matmo;16-7-2014;26-7-2014;yes;no;total_damage_houses;3
-PH;Typhoon;Kalmaegi;10-9-2014;18-9-2014;yes;no;total_damage_houses;3
-PH;Typhoon;Hagupit;30-11-2014;12-12-2014;yes;no;total_damage_houses;3
-PH;Typhoon;Soudelor;29-7-2015;12-8-2015;yes;no;total_damage_houses;3
-PH;Typhoon;Goni;13-8-2015;30-8-2015;yes;no;total_damage_houses;3
-PH;Typhoon;Koppu;12-10-2015;21-10-2015;yes;no;total_damage_houses;3
-PH;Typhoon;Melor;10-12-2015;17-12-2015;yes;no;total_damage_houses;3
-PH;Typhoon;Sarika;13-10-2016;19-10-2016;yes;no;total_damage_houses;3
-PH;Typhoon;Haima;14-10-2016;26-10-2016;yes;yes;total_damage_houses;3
-PH;Typhoon;Nock-Ten;20-12-2016;28-12-2016;no;yes;perc_pred;3
 PH;Earthquake;Surigao City 2017;10-2-2017;10-2-2017;yes;no;total_damage_houses;3
 PH;Earthquake;Batangas 2017;4-4-2017;8-4-2017;yes;no;total_damage_houses;3
 PH;Earthquake;Leyte 2017;6-7-2017;6-7-2017;no;yes;total_damage_houses_pred;3
 NP;Earthquake;Gorkha 2015;25-4-2015;25-4-2015;yes;no;total_damage_houses;3
+PH;Typhoon;Bopha;25-11-2012;9-12-2012;yes;yes;total_damage_houses;3
+PH;Typhoon;Utor;8-8-2013;18-8-2013;yes;yes;total_damage_houses;3
+PH;Typhoon;Haiyan;3-11-2013;11-11-2013;yes;yes;total_damage_houses;3
+PH;Typhoon;Rammasun;9-7-2014;20-7-2014;yes;yes;total_damage_houses;3
+PH;Typhoon;Matmo;16-7-2014;26-7-2014;yes;yes;total_damage_houses;3
+PH;Typhoon;Kalmaegi;10-9-2014;18-9-2014;yes;yes;total_damage_houses;3
+PH;Typhoon;Hagupit;30-11-2014;12-12-2014;yes;yes;total_damage_houses;3
+PH;Typhoon;Soudelor;29-7-2015;12-8-2015;yes;yes;total_damage_houses;3
+PH;Typhoon;Goni;13-8-2015;30-8-2015;yes;yes;total_damage_houses;3
+PH;Typhoon;Koppu;12-10-2015;21-10-2015;yes;yes;total_damage_houses;3
+PH;Typhoon;Melor;10-12-2015;17-12-2015;yes;yes;total_damage_houses;3
+PH;Typhoon;Sarika;13-10-2016;19-10-2016;yes;yes;total_damage_houses;3
+PH;Typhoon;Haima;14-10-2016;26-10-2016;yes;yes;total_damage_houses;3
+PH;Typhoon;Nock-Ten;20-12-2016;28-12-2016;no;yes;perc_pred;3

@@ -669,17 +669,18 @@ select 'Typhoon' as disaster_type
 	--geographic input
 	, mean_slope, mean_elevation_m, ruggedness_stdev, mean_ruggedness, slope_stdev
 	--prediction (errors)
-	, t2.weighted_damage_pred,t2.perc_pred--/100 as perc_pred
-	, total_damage_houses_0p25weight_perc - t2.perc_pred as pred_error_point_diff
+	, t2.weighted_damage_pred,t2.weighted_perc_pred--/100 as perc_pred
+	, total_damage_houses_0p25weight_perc - t2.weighted_perc_pred as weighted_perc_error --pred_error_point_diff
+	, t2a.comp_perc_pred,t2a.comp_perc_error
 	, t3.population,t3.land_area
 INTO "PH_datamodel"."PI_Typhoon_input_damage"
-FROM ph_source."PI_typhoon_training_data_new" t1
+FROM ph_source."PI_typhoon_training_data_new" t1 
 LEFT JOIN (
 	select typhoon_name
 		,"M_Code" as pcode
 		,weighted_damage_pred
 	--	,weighted_damage_true
-		,perc_pred
+		,perc_pred as weighted_perc_pred
 	--	,perc_true
 	FROM ph_source."PI_typhoon_Haima_damage"
 	union all
@@ -689,7 +690,15 @@ LEFT JOIN (
 		,total_damage_houses_0p25weight_perc_pred
 	FROM ph_source."PI_typhoon_Nina_damage"
 	) t2
-	ON t1.typhoon_name = t2.typhoon_name and t1."Mun_Code" = t2.pcode
+	ON t1.typhoon_name = t2.typhoon_name and t1."Mun_Code" = t2.pcode 
+LEFT JOIN (
+	select "GEN_typhoon_name" as typhoon_name
+		,"GEN_mun_code" as pcode
+		,lm_preds as comp_perc_pred
+		,prederror as comp_perc_error
+	FROM ph_source."PI_typhoon_pred_errors"
+	) t2a
+	ON t1.typhoon_name = t2a.typhoon_name and t1."Mun_Code" = t2a.pcode
 LEFT JOIN "PH_datamodel"."Indicators_3_TOTAL_temp" t3
 	ON t1."Mun_Code" = t3.pcode
 ;

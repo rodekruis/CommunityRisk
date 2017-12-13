@@ -5,7 +5,7 @@ angular.module('dashboards')
 	function($scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 		
 		
-		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards_inform.css']);
+		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
 		
 		//Define variables
 		$scope.authentication = Authentication;
@@ -116,73 +116,30 @@ angular.module('dashboards')
 		  
 		  // load data
 		  var d = {};
+		  //var geo_data = dashboard.sources.Worldmap.data;
+		  //d.Districts = topojson.feature(geo_data,geo_data.objects[object_name]);
+		  d.Districts = pgData.usp_data.geo;
+		  d.Rapportage = pgData.usp_data.ind;
 		  
-		  // Load data from INFORM API
-		  // For now through local file, because with web-api there seems to be a https vs. http problem
-		  var url_data = 'modules/dashboards/data/inform_full.json'; 
-		  var url_metadata = 'modules/dashboards/data/inform_metadata.json'; //'http://inform.jrc.ec.europa.eu/GNASYSTEM/api001.aspx?request=IndicatorList&workflow=261&IndicatorType=all'
-		  var inform_indicators = ['INFORM','HA','VU','CC','HA.HUM','HA.NAT','VU.VGR','VU.SEV','CC.INF','CC.INS'];
-		  //var inform_indicators = ['CC.INS.DRR'];
+		  //d.Metadata = pgData.usp_data.meta;
+		  var meta = dashboard.sources.Metadata.data;
+		  d.Metadata = $.grep(meta, function(e){ return e.country_code == $scope.country_code; });
+		  d.Country_meta = dashboard.sources.Country_meta.data;
+		  $scope.geom = d.Districts //pgData.usp_data.geo;
 		  
-			function fetchJSONFile(path, callback) {
-				var httpRequest = new XMLHttpRequest();
-				httpRequest.onreadystatechange = function() {
-					if (httpRequest.readyState === 4) {
-						if (httpRequest.status === 200) {
-							//var data = JSON.parse(httpRequest.responseText);
-							var data = httpRequest.responseText;
-							if (callback) callback(data);
-						}
-					}
-				};
-				httpRequest.open('GET', path);
-				httpRequest.send(); 
-			}
-			fetchJSONFile(url_data, function(data){
-				//INFORM data
-				d.inform_data = JSON.parse(data)['ResultsWFPublished'];
-				d.inform_data = $.grep(d.inform_data, function(e){ return (inform_indicators.indexOf(e.IndicatorId) > -1 
-																		|| inform_indicators.indexOf(e.IndicatorId.substring(0,6)) > -1)
-																		&& e.IndicatorId.split('.').length <= 3
-																		; });
-				
-				//INFORM metadata
-				fetchJSONFile(url_metadata, function(data){
-					d.inform_metadata = JSON.parse(data)['Indicators'];
-					d.Metadata = $.grep(d.inform_metadata, function(e){ return (inform_indicators.indexOf(e.OutputIndicatorName) > -1 
-																		|| inform_indicators.indexOf(e.OutputIndicatorName.substring(0,6)) > -1)
-																		&& e.OutputIndicatorName.split('.').length <= 3
-																		; });
-					//console.log(d.inform_metadata);
-					
-					//Original data
-					//var geo_data = dashboard.sources.Worldmap.data;
-					//d.Districts = topojson.feature(geo_data,geo_data.objects[object_name]);
-					d.Districts = pgData.usp_data.geo;
-					d.Rapportage_old = pgData.usp_data.ind;
-					//var meta = dashboard.sources.Metadata.data;
-				    //d.Metadata = $.grep(meta, function(e){ return e.country_code == $scope.country_code; });
-				    d.Country_meta = dashboard.sources.Country_meta.data;
-				    $scope.geom = d.Districts //pgData.usp_data.geo;
-					
-					console.log(d);
-					// generate the actual content of the dashboard
-					$scope.generateCharts(d);
-					  
-					// end loading bar
-					$scope.complete();
-						
-					//Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)	
-					if (typeof L_PREFER_CANVAS !== 'undefined') {
-						$('#IEmodal').modal('show');
-					}	
-					
-				});
-				
-			});
+		  console.log(d);
+		  // generate the actual content of the dashboard
+		  $scope.generateCharts(d);
+		  
+		  // end loading bar
+		  $scope.complete();
+			
+		  //Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)	
+		  if (typeof L_PREFER_CANVAS !== 'undefined') {
+			$('#IEmodal').modal('show');
+		  }	
 
 		};
-		
 		//Slightly adjusted version of prepare function upon reload. Needed because the d.Metadata could not be loaded again when the dashboard itself was not re-initiated.
 		//Therefore the d-object needed to be saved, instead of completely re-created.
 		$scope.prepare_reload = function(d,pgData) {
@@ -218,18 +175,10 @@ angular.module('dashboards')
 			return lookup;
 		};
 		// fill the lookup table with the metadata-information per variable
-		$scope.genLookup_data = function (d,field){
-			var lookup_data = {};
-			d.Rapportage_old.forEach(function(e){
-				lookup_data[e.pcode] = String(e[field]);
-			});
-			return lookup_data;
-		};
-		// fill the lookup table with the metadata-information per variable
 		$scope.genLookup_meta = function (d,field){
 			var lookup_meta = {};
 			d.Metadata.forEach(function(e){
-				lookup_meta[e.OutputIndicatorName] = String(e[field]);
+				lookup_meta[e.variable] = String(e[field]);
 			});
 			return lookup_meta;
 		};
@@ -301,17 +250,14 @@ angular.module('dashboards')
 			// get the lookup tables
 			var lookup = $scope.genLookup($scope.config.nameAttribute);
 			
-			var meta_label = $scope.genLookup_meta(d,'Fullname');
-			var meta_scorevar = $scope.genLookup_meta(d,'OutputIndicatorName');
-			//var meta_label = $scope.genLookup_meta(d,'label');
+			var meta_label = $scope.genLookup_meta(d,'label');
 			var meta_format = $scope.genLookup_meta(d,'format');
 			var meta_unit = $scope.genLookup_meta(d,'unit');
 			var meta_icon = $scope.genLookup_meta(d,'icon_src');
 			var meta_year = $scope.genLookup_meta(d,'year');
 			var meta_source = $scope.genLookup_meta(d,'source_link');
 			var meta_desc = $scope.genLookup_meta(d,'description');
-			//LOOK UP POPULATION PER COUNTRY
-			var data_population = $scope.genLookup_data(d,'population');
+			var meta_scorevar = $scope.genLookup_meta(d,'scorevar_name');
 			
 			$scope.metric_label = meta_label[$scope.metric];
 			
@@ -337,36 +283,18 @@ angular.module('dashboards')
 			}
 			
 			$scope.tables = [];
-			// for (var i=0; i < d.Metadata.length; i++) {
-				// var record = {};
-				// var record_temp = d.Metadata[i];
-				// record.id = 'data-table' + [i+1];
-				// record.name = record_temp.variable;
-				// record.group = record_temp.group;
-				// record.propertyPath = record_temp.agg_method === 'sum' ? 'value' : 'value.finalVal';
-				// record.dimension = undefined;
-				// record.weight_var = record_temp.weight_var;
-				// record.scorevar_name = record_temp.scorevar_name;
-				// $scope.tables[i] = record;
-			// }
 			for (var i=0; i < d.Metadata.length; i++) {
 				var record = {};
 				var record_temp = d.Metadata[i];
 				record.id = 'data-table' + [i+1];
-				record.name = record_temp.OutputIndicatorName;
-				record.format = 'decimal2';
-				record.unit = '';
-				record.level = record.name.split(".").length - 1;
-				record.group = record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
-				record.propertyPath = 'value.finalVal';
+				record.name = record_temp.variable;
+				record.group = record_temp.group;
+				record.propertyPath = record_temp.agg_method === 'sum' ? 'value' : 'value.finalVal';
 				record.dimension = undefined;
-				record.weight_var = 'population'; //record_temp.weight_var;
-				record.scorevar_name = record_temp.OutputIndicatorName; //record_temp.scorevar_name;
+				record.weight_var = record_temp.weight_var;
+				record.scorevar_name = record_temp.scorevar_name;
 				$scope.tables[i] = record;
 			}
-			console.log($scope.tables);
-			
-			
 			
 						
 			/////////////////////
@@ -381,10 +309,9 @@ angular.module('dashboards')
 			var percFormat = d3.format(',.2%');
 			
 			var currentFormat = function(value) {
-				return dec2Format(value);
-				// if (meta_format[$scope.metric] === 'decimal0') { return dec0Format(value);}
-				// else if (meta_format[$scope.metric] === 'decimal2') { return dec2Format(value);}
-				// else if (meta_format[$scope.metric] === 'percentage') { return percFormat(value);}
+				if (meta_format[$scope.metric] === 'decimal0') { return dec0Format(value);}
+				else if (meta_format[$scope.metric] === 'decimal2') { return dec2Format(value);}
+				else if (meta_format[$scope.metric] === 'percentage') { return percFormat(value);}
 			};
 			
 			
@@ -392,39 +319,7 @@ angular.module('dashboards')
 			// CROSSFILTER SETUP //
 			///////////////////////
 			
-			//First PIVOT the INFORM data from row*indicator level to row level (with indicators als columns)
-			var grouped = [];
-			d.inform_data.forEach(function (a) {
-				// check if title is not in hash table
-				if (!this[a.ISO3]) {
-					// if not, create new object with title and values array
-					// and assign it with the title as hash to the hash table
-					this[a.ISO3] = { pcode: a.ISO3, values: [] };
-					// add the new object to the result set, too
-					grouped.push(this[a.ISO3]);
-				}
-				// create a new object with the other values and push it
-				// to the array of the object of the hash table
-				this[a.ISO3].values.push({ IndicatorId: a.IndicatorId, IndicatorScore: a.IndicatorScore });
-				//this[a.ISO3].values.push({ [a.IndicatorId]: a.IndicatorScore });
-			}, Object.create(null)); // Object.create creates an empty object without prototypes
-			var data_final = [];
-			for (var i=0; i < grouped.length; i++) {
-				var record = {};
-				var record_temp = grouped[i];
-				record.pcode = record_temp.pcode;
-				record.pcode_parent = '';
-				record.population = Number($scope.genLookup_data(d,'population')[record_temp.pcode]); //DO BETTER IN FUTURE!!!
-				if (isNaN(record.population)){record.population = null;};
-				for (var j=0; j < record_temp.values.length; j++) {
-					var record_temp2 = record_temp.values[j];
-					record[record_temp2.IndicatorId] = String(record_temp2.IndicatorScore);
-				}
-				data_final[i] = record;
-			}
-			d.Rapportage = data_final;
-			
-			// Start crossfilter
+			//var cf = crossfilter(d3.range(0, data.Districts.features.length));
 			var cf = crossfilter(d.Rapportage);
 			
 			// The wheredimension returns the unique identifier of the geo area
@@ -433,8 +328,9 @@ angular.module('dashboards')
 			
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
+			//var whereGroupSum_tab = whereDimension_tab.group();
 			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (!meta_scorevar[$scope.metric]) { return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
-			
+
 			// group with all, needed for data-count
 			var all = cf.groupAll();
 			// get the count of the number of rows in the dataset (total and filtered)
@@ -445,16 +341,16 @@ angular.module('dashboards')
 			// Create customized reduce-functions to be able to calculated percentages over all or multiple districts (i.e. the % of male volunteers))
 			var reduceAddAvg = function(metricA,metricB) {
 				return function(p,v) {
-					p.sumOfSub += v[metricA] ? v[metricA]*v[metricB] : 0;
-					p.sumOfTotal += v[metricA] ? v[metricB] : 0;
+					p.sumOfSub += v[metricA]*v[metricB];
+					p.sumOfTotal += v[metricB];
 					p.finalVal = p.sumOfSub / p.sumOfTotal;
 					return p;
 				};
 			};
 			var reduceRemoveAvg = function(metricA,metricB) {
 				return function(p,v) {
-					p.sumOfSub -= v[metricA] ? v[metricA]*v[metricB] : 0;
-					p.sumOfTotal -= v[metricA] ? v[metricB] : 0;
+					p.sumOfSub -= v[metricA]*v[metricB];
+					p.sumOfTotal -= v[metricB];
 					p.finalVal = p.sumOfSub / p.sumOfTotal;
 					return p;
 				};
@@ -487,7 +383,6 @@ angular.module('dashboards')
 					if (t.propertyPath === 'value.finalVal') {
 						var weight_var = t.weight_var;
 						dimensions_scores[name] = totaalDim.group().reduce(reduceAddAvg([name_score],[weight_var]),reduceRemoveAvg([name_score],[weight_var]),reduceInitialAvg);
-						//console.log(dimensions_scores[name].top(Infinity));
 					} else if (t.propertyPath === 'value') {
 						dimensions_scores[name] = totaalDim.group().reduceSum(function(d) {return d[name_score];});
 					}
@@ -499,9 +394,6 @@ angular.module('dashboards')
 				var name = $scope.tables[i].name;
 				$scope.tables[i].dimension = dimensions[name];
 			}
-			//console.log($scope.tables);
-			
-			console.log(dimensions_scores['CC.INS.DRR'].top(Infinity));
 			
 			
 			///////////////////////////////
@@ -514,32 +406,32 @@ angular.module('dashboards')
 				$scope.tables.forEach(function(t) {
 					var key = t.name;
 					if ($scope.admlevel == zoom_max && zoom_max > zoom_min && $scope.filters.length == 0) {
-						if(t.format /*meta_format[t.name]*/ === 'decimal0'){
+						if(meta_format[t.name] === 'decimal0'){
 							keyvalue[key] =  dec0Format(d_prev[t.name]);
-						} else if(t.format /*meta_format[t.name]*/ === 'percentage'){
+						} else if(meta_format[t.name] === 'percentage'){
 							keyvalue[key] =  percFormat(d_prev[t.name]);
-						} else if(t.format /*meta_format[t.name]*/ === 'decimal2'){
+						} else if(meta_format[t.name] === 'decimal2'){
 							keyvalue[key] =  dec2Format(d_prev[t.name]);
 						}
 					} else {
 						if (t.propertyPath === 'value.finalVal') {
 							if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
 								keyvalue[key] =  'N.A. on this level'; 
-							} else if(t.format /*meta_format[t.name]*/ === 'decimal0'){
+							} else if(meta_format[t.name] === 'decimal0'){
 								keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value.finalVal);
-							} else if(t.format /*meta_format[t.name]*/ === 'percentage'){
+							} else if(meta_format[t.name] === 'percentage'){
 								keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value.finalVal);
-							} else if(t.format /*meta_format[t.name]*/ === 'decimal2'){
+							} else if(meta_format[t.name] === 'decimal2'){
 								keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value.finalVal);
 							}
 						} else if(t.propertyPath === 'value') {
 							if (isNaN(dimensions[t.name].top(1)[0].value)) {
 								keyvalue[key] =  'N.A. on this level'; 
-							} else if(t.format /*meta_format[t.name]*/ === 'decimal0'){
+							} else if(meta_format[t.name] === 'decimal0'){
 								keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
-							} else if(t.format /*meta_format[t.name]*/ === 'percentage'){
+							} else if(meta_format[t.name] === 'percentage'){
 								keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value);
-							} else if(t.format /*meta_format[t.name]*/ === 'decimal2'){
+							} else if(meta_format[t.name] === 'decimal2'){
 								keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value);
 							}
 						}
@@ -548,7 +440,6 @@ angular.module('dashboards')
 				return keyvalue;
 			};
 			var keyvalue = fill_keyvalues();
-			//console.log(keyvalue);
 			
 			var high_med_low = function(ind,ind_score) {
 				
@@ -566,44 +457,42 @@ angular.module('dashboards')
 					else if (width > 6.5) { return 'bad';} 
 				}				
 			};	
-			
-			
+
 			$scope.createHTML = function(keyvalue) {
 				
 				var risk_score = document.getElementById('risk_score_main');
 				if (risk_score) {
-					risk_score.textContent = keyvalue.INFORM; //risk_score;
-					risk_score.setAttribute('class','component-score ' + high_med_low('INFORM','INFORM'));					
+					risk_score.textContent = keyvalue.risk_score;
+					risk_score.setAttribute('class','component-score ' + high_med_low('risk_score','risk_score'));					
 				}
 				var vulnerability_score = document.getElementById('vulnerability_score_main');
 				if (vulnerability_score) {
-					vulnerability_score.textContent = keyvalue.VU; //vulnerability_score;
-					vulnerability_score.setAttribute('class','component-score ' + high_med_low('VU','VU'));				
+					vulnerability_score.textContent = keyvalue.vulnerability_score;
+					vulnerability_score.setAttribute('class','component-score ' + high_med_low('vulnerability_score','vulnerability_score'));				
 				}
 				var hazard_score = document.getElementById('hazard_score_main');
 				if (hazard_score) {
-					hazard_score.textContent = keyvalue.HA; //hazard_score;
-					hazard_score.setAttribute('class','component-score ' + high_med_low('HA','HA'));				
+					hazard_score.textContent = keyvalue.hazard_score;
+					hazard_score.setAttribute('class','component-score ' + high_med_low('hazard_score','hazard_score'));				
 				}
 				var coping_score = document.getElementById('coping_capacity_score_main');
 				if (coping_score) {
-					coping_score.textContent = keyvalue.CC; //coping_capacity_score;
-					coping_score.setAttribute('class','component-score ' + high_med_low('CC','CC'));				
+					coping_score.textContent = keyvalue.coping_capacity_score;
+					coping_score.setAttribute('class','component-score ' + high_med_low('coping_capacity_score','coping_capacity_score'));				
 				}
 
 				
 				//Dynamically create HTML-elements for all indicator tables
 				var general = document.getElementById('general');
-				var INFORM = document.getElementById('INFORM');
-				var VU = document.getElementById('VU');
-				var HA = document.getElementById('HA');
-				var CC = document.getElementById('CC');
-				if (general) {while (general.firstChild) { general.removeChild(general.firstChild); };}
-				if (INFORM) {while (INFORM.firstChild) { INFORM.removeChild(INFORM.firstChild); };}
-				//if (VU) {while (VU.firstChild) { VU.removeChild(VU.firstChild); };}
-				//if (HA) {while (HA.firstChild) { HA.removeChild(HA.firstChild); };}
-				//if (CC) {while (CC.firstChild) { CC.removeChild(CC.firstChild); };}
-				
+				var scores = document.getElementById('scores');
+				var vulnerability = document.getElementById('vulnerability');
+				var hazard = document.getElementById('hazard');
+				var coping = document.getElementById('coping_capacity');
+				while (general.firstChild) { general.removeChild(general.firstChild); }
+				while (scores.firstChild) { scores.removeChild(scores.firstChild); }
+				while (vulnerability.firstChild) { vulnerability.removeChild(vulnerability.firstChild); }
+				while (hazard.firstChild) { hazard.removeChild(hazard.firstChild); }
+				while (coping.firstChild) { coping.removeChild(coping.firstChild); }
 				for (var i=0;i<$scope.tables.length;i++) {
 					var record = $scope.tables[i];
 					
@@ -612,8 +501,7 @@ angular.module('dashboards')
 					
 					if (record.group === 'general') {
 						
-						var unit = record.unit;
-						//if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
+						if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
 						
 						var div = document.createElement('div');
 						div.setAttribute('class','row profile-item');
@@ -652,105 +540,17 @@ angular.module('dashboards')
 						img.setAttribute('style','height:17px');
 						button.appendChild(img);
 					
-					} else if (record.level == 1) { //record.group) {
+					} else if (record.group) {
 						
 						if ($scope.admlevel == zoom_max && zoom_max > zoom_min && $scope.filters.length == 0) {
 							var width = d_prev[record.scorevar_name]*10;
 						} else {
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
 						}
-						
-						//NEW for INFORM multi-level
-						var div_heading = document.createElement('div');
-						div_heading.setAttribute('id','heading'+record.name.split('.').join('-'));
-						div_heading.setAttribute('class','accordion-header');
-						var parent = document.getElementById(record.group)
-						parent.appendChild(div_heading);
-						var a_prev = document.createElement('a');
-						a_prev.setAttribute('data-toggle','collapse');
-						a_prev.setAttribute('href','#collapse'+record.name.split('.').join('-'));
-						div_heading.appendChild(a_prev);
-						var div_collapse = document.createElement('div');
-						div_collapse.setAttribute('id','collapse'+record.name.split('.').join('-'));
-						div_collapse.setAttribute('class','panel-collapse collapse');
-						parent.appendChild(div_collapse);
-						//END new part
+
 						var div = document.createElement('div');
 						div.setAttribute('class','component-section');
-						a_prev.appendChild(div);
-						var div0 = document.createElement('div');
-						div0.setAttribute('class','col-md-2');
-						div.appendChild(div0);	
-						var img1 = document.createElement('img');
-						img1.setAttribute('style','height:20px');
-						img1.setAttribute('src',icon);
-						div0.appendChild(img1);
-						var div1 = document.createElement('div');
-						div1.setAttribute('class','col-md-3 component-label');
-						div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
-						div1.innerHTML = meta_label[record.name];
-						$compile(div1)($scope);
-						div.appendChild(div1);	
-						var div1a = document.createElement('div');
-						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
-						div1a.setAttribute('id',record.name);
-						div1a.innerHTML = keyvalue[record.name];
-						div1.appendChild(div1a);
-						var div2 = document.createElement('div');
-						div2.setAttribute('class','col-md-5');
-						div.appendChild(div2);
-						var div2a = document.createElement('div');
-						div2a.setAttribute('class','component-scale');
-						div2.appendChild(div2a);
-						var div2a1 = document.createElement('div');
-						div2a1.setAttribute('class','score-bar ' + high_med_low(record.name,record.scorevar_name));
-						div2a1.setAttribute('id','bar-'+record.name);
-						div2a1.setAttribute('style','width:'+ width + '%');
-						div2a.appendChild(div2a1);
-						var img2 = document.createElement('img');
-						img2.setAttribute('class','scale-icon');
-						img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
-						div2a.appendChild(img2);
-						var div3 = document.createElement('div');
-						div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
-						div.appendChild(div3);
-						var button = document.createElement('button');
-						button.setAttribute('type','button');
-						button.setAttribute('class','btn-modal');
-						button.setAttribute('data-toggle','modal');
-						button.setAttribute('ng-click','info(\'' + record.name + '\')');
-						div3.appendChild(button);
-						$compile(button)($scope);
-						var img3 = document.createElement('img');
-						img3.setAttribute('src','modules/dashboards/img/icon-popup.svg');
-						img3.setAttribute('style','height:17px');
-						button.appendChild(img3);
-						
-					} 
-				}
-			};
-			$scope.createHTML(keyvalue);
-			
-			$scope.createHTML_level2 = function(keyvalue) {
-				
-				for (var i=0;i<$scope.tables.length;i++) {
-					var record = $scope.tables[i];
-					
-					if (!meta_icon[record.name]) {var icon = 'modules/dashboards/img/undefined.png';}
-					else {var icon = 'modules/dashboards/img/'+meta_icon[record.name];}
-					
-					if (record.level == 2) { //record.group) {
-						
-						if ($scope.admlevel == zoom_max && zoom_max > zoom_min && $scope.filters.length == 0) {
-							var width = d_prev[record.scorevar_name]*10;
-						} else {
-							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
-						}
-						
-						var div = document.createElement('div');
-						div.setAttribute('class','component-section');
-						div.setAttribute('style','background-color:#b0ded3');	//NEW
-						var parent = document.getElementById('collapse'+record.group.split('.').join('-')); //UPDATED
+						var parent = document.getElementById(record.group);
 						parent.appendChild(div);
 						var div0 = document.createElement('div');
 						div0.setAttribute('class','col-md-2');
@@ -801,30 +601,31 @@ angular.module('dashboards')
 						button.appendChild(img3);
 					}
 				}
-			}
-			$scope.createHTML_level2(keyvalue);
+			};
+			$scope.createHTML(keyvalue);
+			
 			
 			$scope.updateHTML = function(keyvalue) {
 				
 				var risk_score = document.getElementById('risk_score_main');
 				if (risk_score) {
-					risk_score.textContent = keyvalue.INFORM; //risk_score;
+					risk_score.textContent = keyvalue.risk_score;
 					risk_score.setAttribute('class','component-score ' + high_med_low('risk_score','risk_score'));					
 				}
 				var vulnerability_score = document.getElementById('vulnerability_score_main');
 				if (vulnerability_score) {
-					vulnerability_score.textContent = keyvalue.VU;
-					vulnerability_score.setAttribute('class','component-score ' + high_med_low('VU','VU'));				
+					vulnerability_score.textContent = keyvalue.vulnerability_score;
+					vulnerability_score.setAttribute('class','component-score ' + high_med_low('vulnerability_score','vulnerability_score'));				
 				}
 				var hazard_score = document.getElementById('hazard_score_main');
 				if (hazard_score) {
-					hazard_score.textContent = keyvalue.HA;
-					hazard_score.setAttribute('class','component-score ' + high_med_low('HA','HA'));				
+					hazard_score.textContent = keyvalue.hazard_score;
+					hazard_score.setAttribute('class','component-score ' + high_med_low('hazard_score','hazard_score'));				
 				}
 				var coping_score = document.getElementById('coping_capacity_score_main');
 				if (coping_score) {
-					coping_score.textContent = keyvalue.CC;
-					coping_score.setAttribute('class','component-score ' + high_med_low('CC','CC'));				
+					coping_score.textContent = keyvalue.coping_capacity_score;
+					coping_score.setAttribute('class','component-score ' + high_med_low('coping_capacity_score','coping_capacity_score'));				
 				}
 
 				for (var i=0;i<$scope.tables.length;i++) {
@@ -832,19 +633,18 @@ angular.module('dashboards')
 					
 					if (record.group === 'general') {
 						
-						var unit = record.unit;
-						//if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
+						if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
 						var div2 = document.getElementById(record.name);
 						div2.innerHTML = keyvalue[record.name] + ' ' + unit;
 					
-					} else if (record.level == 1) { //record.group) {
+					} else if (record.group) {
 						
 						if ($scope.admlevel == zoom_max && zoom_max > zoom_min && $scope.filters.length == 0) {
 							var width = d_prev[record.scorevar_name]*10;
 						} else {
 							var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
 						}
-						
+					
 						var div1a = document.getElementById(record.name);
 						div1a.setAttribute('class','component-score ' + high_med_low(record.name,record.scorevar_name));
 						div1a.innerHTML = keyvalue[record.name];
@@ -1000,7 +800,7 @@ angular.module('dashboards')
 
 			$scope.map_coloring = function(id) {
 
-				$scope.metric = id;
+				$scope.metric = id;	
 				$scope.metric_label = meta_label[id];
 				var mapchartColors = $scope.mapchartColors();	
 				whereGroupSum_scores.dispose();
@@ -1017,7 +817,7 @@ angular.module('dashboards')
 						}
 					})
 					;
-				//dc.filterAll();
+				dc.filterAll();
 				dc.redrawAll();
 				document.getElementById('mapPopup').style.visibility = 'hidden';
 				document.getElementById('zoomin_icon').style.visibility = 'hidden';
@@ -1038,22 +838,7 @@ angular.module('dashboards')
 					active = active_new;
 				}
 			}
-			
-			// var acc = document.getElementsByClassName('accordion-header');
-			// var panel = document.getElementsByClassName('collapse');
-			// var active = document.getElementsByClassName('collapse in')[0];
-			
-			// for (var i = 0; i < acc.length; i++) {
-				// acc[i].onclick = function() {
-					// var active_new = document.getElementById(this.id.replace('heading','collapse'));
-					// if (active.id !== active_new.id) {
-						// active.classList.remove('in');
-					// } 
-					// active = active_new;
-				// }
-			// }
-			
-			
+		
 			
 			/////////////////////
 			// OTHER FUNCTIONS //

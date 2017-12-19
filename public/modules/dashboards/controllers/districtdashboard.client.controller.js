@@ -78,6 +78,8 @@ angular.module('dashboards')
 		  cfpLoadingBar.complete();
 		};
 	
+	
+	
 		/**
 		 * Initiate the dashboard
 		 */
@@ -116,12 +118,12 @@ angular.module('dashboards')
 				$scope.metric = url.split('&')[2].split('=')[1];
 				if ($scope.view_code == 'CRA') {
 					$scope.parent_codes = url.split('&')[3].split('=')[1].split(',');
-					window.history.pushState({}, document.title, '/#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile');
+					window.history.pushState({}, document.title, '/#!/community_risk');
 				} else if ($scope.view_code == 'PI') {
 					$scope.disaster_type = url.split('&')[3].split('=')[1];
 					$scope.disaster_name = url.split('&')[4].split('=')[1].replace('%20',' ');
 					console.log($scope.disaster_name);
-					window.history.pushState({}, document.title, '/#!/dashboards/5906f54b66307627d5d7f884/priority_index_profile');
+					window.history.pushState({}, document.title, '/#!/priority_index');
 				}
 			} else {
 				$scope.directURLload = false;
@@ -133,8 +135,15 @@ angular.module('dashboards')
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
 			//console.log($scope.data_input);
 			
+			//Hack to get rid of the numbers in the URL
+			if ($stateParams.templateUrl == 'community_risk') { var dashboard_id = '5724a3e6af4258443e0f9bc6'; } 
+			else if ($stateParams.templateUrl == 'priority_index') { var dashboard_id = '5906f54b66307627d5d7f884'; }
+			else if ($stateParams.templateUrl == 'inform_global') { var dashboard_id = '58e35b83260e101188cef3b5'; }
+			else if ($stateParams.templateUrl == 'storyboard_priorityindex') { var dashboard_id = '5975c24b88d4fcc49fcdf397'; }
+			else if ($stateParams.templateUrl == 'storyboard_echo2') { var dashboard_id = '5981be5a9dbedc04e971b6df'; }
+						
 			//Call dashboard itself, and then call data query
-			Dashboards.get({dashboardId: $stateParams.dashboardId},
+			Dashboards.get({dashboardId: dashboard_id /*$stateParams.dashboardId*/},
 			    function(dashboard) {		
 					// Get the data
 					Data.get({adminLevel: $scope.data_input}, 

@@ -425,6 +425,7 @@ exports.getFileUrl = function(source){
  * Dashboard middleware
  */
 exports.dashboardByID = function(req, res, next, id) {
+	
 	var _id = mongoose.Types.ObjectId(id);
 	
 	// If user is not logged in, add criteria for selecting public dashboards only

@@ -69,8 +69,15 @@ angular.module('dashboards')
 			
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'CRA\',\'\',\'\'';
-
-			Dashboards.get({dashboardId: $stateParams.dashboardId},
+			
+			//Hack to get rid of the numbers in the URL
+			if ($stateParams.templateUrl == 'community_risk') { var dashboard_id = '5724a3e6af4258443e0f9bc6'; } 
+			else if ($stateParams.templateUrl == 'priority_index') { var dashboard_id = '5906f54b66307627d5d7f884'; }
+			else if ($stateParams.templateUrl == 'inform_global') { var dashboard_id = '58e35b83260e101188cef3b5'; }
+			else if ($stateParams.templateUrl == 'storyboard_priorityindex') { var dashboard_id = '5975c24b88d4fcc49fcdf397'; }
+			else if ($stateParams.templateUrl == 'storyboard_echo2') { var dashboard_id = '5981be5a9dbedc04e971b6df'; }
+			
+			Dashboards.get({dashboardId: dashboard_id}, //$stateParams.dashboardId},
 			    function(dashboard) {		
 					// get the data
 					//console.log(data_input);

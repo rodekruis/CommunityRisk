@@ -14,7 +14,8 @@ angular.module('dashboards').config(['$stateProvider',
 			templateUrl: 'modules/dashboards/views/create-dashboards.client.view.html'
 		}).
 		state('viewDashboard', {
-			url: '/dashboards/:dashboardId/:templateUrl',
+			//url: '/dashboards/:dashboardId/:templateUrl',
+			url: '/:templateUrl',
 			templateUrl: function ($stateParams){
 				return 'modules/dashboards/views/' + $stateParams.templateUrl + '.client.view.html';
 		    }

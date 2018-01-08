@@ -189,6 +189,9 @@
 					<!-- <div><span class="community-title">{{name_selection}}</span></div> -->
 					<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
 					<a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
+					<button type="button" class="btn-modal" data-toggle="modal" ng-click="info('admin')">
+						<img src="modules/dashboards/img/icon-popup.svg" style="height:17px">
+					</button>
 				</div>
 				<div class="row"></div>
 				<div class='tablearea' id='general'></div>
@@ -442,7 +445,7 @@
 					<span class="panel-header-icon">
 						<img src="{{metric_icon}}">
 					</span>
-					<h3 class="modal-title">{{metric_label}}</h3>
+					<h3 class="modal-title">{{metric_label_popup}}</h3>
 				</div>
 				<div class="modal-body">
 					<h5><b>Year source:</b> {{metric_year}}</h5><br>

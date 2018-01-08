@@ -468,19 +468,24 @@ angular.module('dashboards')
 			} */
 			
 			$scope.tables = [];
+			var j=0;
 			for (var i=0; i < d.Metadata.length; i++) {
 				var record = {};
 				var record_temp = d.Metadata[i];
-				record.id = 'data-table' + [i+1];
-				record.name = record_temp.variable;
-				record.group = record_temp.group;
-				record.propertyPath = record_temp.agg_method === 'sum' ? 'value' : 'value.finalVal';
-				record.dimension = undefined;
-				record.weight_var = record_temp.weight_var;
-				record.scorevar_name = record_temp.scorevar_name;
-				record.view = record_temp.view_code; //=== 'PI' ? 'PI' : 'CRA';
-				$scope.tables[i] = record;
+				if (record_temp.group !== 'admin') {
+					//j=j+1;
+					record.id = 'data-table' + [i+1];
+					record.name = record_temp.variable;
+					record.group = record_temp.group;
+					record.propertyPath = record_temp.agg_method === 'sum' ? 'value' : 'value.finalVal';
+					record.dimension = undefined;
+					record.weight_var = record_temp.weight_var;
+					record.scorevar_name = record_temp.scorevar_name;
+					record.view = record_temp.view_code; //=== 'PI' ? 'PI' : 'CRA';
+					$scope.tables[i] = record;
+				}
 			}
+			console.log($scope.tables);
 			
 						
 			/////////////////////
@@ -583,7 +588,7 @@ angular.module('dashboards')
 			});
 			//Now attach the dimension to the tables-array		
 			var i;
-			for (i=0; i < d.Metadata.length; i++) {
+			for (i=0; i < $scope.tables.length; i++) {
 				var name = $scope.tables[i].name;
 				$scope.tables[i].dimension = dimensions[name];
 			}
@@ -1368,13 +1373,14 @@ angular.module('dashboards')
 			//Function to open the modal with information on indicator
 			$scope.info = function(id) {
 				//var metric_old = $scope.metric;
-				$scope.metric = id;
-				$scope.metric_label = meta_label[$scope.metric];
-				$scope.metric_year = meta_year[$scope.metric];
-				$scope.metric_source = meta_source[$scope.metric];
-				$scope.metric_desc = meta_desc[$scope.metric];
-				if (!meta_icon[$scope.metric]) {$scope.metric_icon = 'modules/dashboards/img/undefined.png';}
-				else {$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[$scope.metric];}
+				//$scope.metric = id;
+				if (id !== 'admin') {$scope.metric_label = meta_label[id];};
+				$scope.metric_label_popup = meta_label[id];
+				$scope.metric_year = meta_year[id];
+				$scope.metric_source = meta_source[id];
+				$scope.metric_desc = meta_desc[id];
+				if (!meta_icon[id]) {$scope.metric_icon = 'modules/dashboards/img/undefined.png';}
+				else {$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[id];}
 				$('#infoModal').modal('show');
 				//$scope.metric = metric_old;
 			};

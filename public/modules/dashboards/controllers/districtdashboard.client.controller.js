@@ -106,7 +106,7 @@ angular.module('dashboards')
 				$scope.disaster_type = 'Earthquake';
 				$scope.disaster_name = 'Gorkha 2015';
 			}
-			if (['MLI','ZMB'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
+			if (['MLI','ZMB','BEN'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
 			
 			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
 			var url = location.href;
@@ -428,7 +428,7 @@ angular.module('dashboards')
 					$scope.levelB_selection = undefined;
 					//$scope.levelB_code = '';
 					$scope.levelB_codes = [];
-				} else if ($scope.admlevel < zoom_max && $scope.levelB_selection == undefined) {
+				} else if ($scope.admlevel <= zoom_max && $scope.levelB_selection == undefined) {
 					$scope.levelB_selection = $scope.name_selection;
 					//$scope.levelB_code = $scope.parent_code;
 					$scope.levelB_codes = $scope.parent_codes;

@@ -1165,6 +1165,10 @@ angular.module('dashboards')
 			}
 			zoomToGeom($scope.geom);
 			
+			var zoom_child = $('.leaflet-control-zoom')[0];
+			var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
+			zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0]);
+			
 			
 			
 		};

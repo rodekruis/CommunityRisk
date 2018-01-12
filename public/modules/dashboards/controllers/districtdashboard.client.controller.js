@@ -485,7 +485,7 @@ angular.module('dashboards')
 					j=j+1;					
 				}
 			}
-			console.log($scope.tables);
+			//console.log($scope.tables);
 			
 						
 			/////////////////////
@@ -589,7 +589,6 @@ angular.module('dashboards')
 			//Now attach the dimension to the tables-array		
 			var i;
 			for (i=0; i < $scope.tables.length; i++) {
-				console.log($scope.tables[i]);
 				var name = $scope.tables[i].name;
 				$scope.tables[i].dimension = dimensions[name];
 			}

@@ -152,25 +152,13 @@ left join (
 
 --calculate INFORM-scores at lowest level:level2
 select usp_inform('BEN',2);
-ALTER TABLE "BEN_datamodel"."total_scores_level2" DROP COLUMN risk_score, DROP COLUMN vulnerability_score;
---select * from "BEN_datamodel"."total_scores_level2"
+ALTER TABLE "BEN_datamodel"."total_scores_level2" DROP COLUMN risk_score, DROP COLUMN vulnerability_score, DROP COLUMN hazard_score, DROP COLUMN coping_capacity_score;
+--select * from "BEN_datamodel"."total_scores_level1"
 
---aggregate to higher levels
-drop table if exists "BEN_datamodel"."total_scores_level1";
-select t1.pcode_parent as pcode_level1
-	,sum(hazard_score * population) / sum(population) as hazard_score
-	,sum(coping_capacity_score * population) / sum(population) as coping_capacity_score
-	,sum(flood_phys_exp_score * population) / sum(population) as flood_phys_exp_score
-	,sum(drought_phys_exp_score * population) / sum(population) as drought_phys_exp_score
-	,sum(waterpoint_density_score * population) / sum(population) as waterpoint_density_score
-	--PLACEHOLDER
-	--,sum(XXX_score * population)/ sum(population) as XXX_score
-into "BEN_datamodel"."total_scores_level1"
-from "BEN_datamodel"."total_scores_level2" t0
-join "BEN_datamodel"."Indicators_2_TOTAL_temp" t1	on t0.pcode_level2 = t1.pcode
-group by t1.pcode_parent
-;
 
+select usp_inform('BEN',1);
+ALTER TABLE "BEN_datamodel"."total_scores_level1" DROP COLUMN risk_score, DROP COLUMN vulnerability_score, DROP COLUMN hazard_score, DROP COLUMN coping_capacity_score;
+--select * from "BEN_datamodel"."total_scores_level1"
 
 --ADD risk scores to Indicators_TOTAL table
 drop table if exists "BEN_datamodel"."Indicators_2_TOTAL";

@@ -473,7 +473,6 @@ angular.module('dashboards')
 				var record = {};
 				var record_temp = d.Metadata[i];
 				if (record_temp.group !== 'admin') {
-					//j=j+1;
 					record.id = 'data-table' + [i+1];
 					record.name = record_temp.variable;
 					record.group = record_temp.group;
@@ -482,7 +481,8 @@ angular.module('dashboards')
 					record.weight_var = record_temp.weight_var;
 					record.scorevar_name = record_temp.scorevar_name;
 					record.view = record_temp.view_code; //=== 'PI' ? 'PI' : 'CRA';
-					$scope.tables[i] = record;
+					$scope.tables[j] = record;
+					j=j+1;					
 				}
 			}
 			console.log($scope.tables);
@@ -589,6 +589,7 @@ angular.module('dashboards')
 			//Now attach the dimension to the tables-array		
 			var i;
 			for (i=0; i < $scope.tables.length; i++) {
+				console.log($scope.tables[i]);
 				var name = $scope.tables[i].name;
 				$scope.tables[i].dimension = dimensions[name];
 			}

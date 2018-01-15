@@ -6,4 +6,4 @@ INFORM;Global;2;2;;Countries;;;risk_score;2
 LKA;Sri Lanka;2;4;;Districts;DSDs;GNDs;population;
 MLI;Mali;1;3;Admin1s;Admin2s;Admin3s;;population;
 ZMB;Zambia;1;3;Provinces;Districts;Constituencies;Wards;population;2
-BEN;Benin;1;2;Departements;Communes;;;waterpoint_density;
+BEN;Benin;1;2;Departements;Communes;;;population;

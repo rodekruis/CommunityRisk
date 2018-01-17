@@ -28,7 +28,7 @@ angular.module('dashboards')
 		$rootScope.loadCount = 0;
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.country_code = 'MW';
+		$scope.country_code = 'ECU';
 		$scope.view_code = 'CRA';
 		$scope.disaster_type = 'Typhoon'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
 		$scope.metric = '';
@@ -106,7 +106,7 @@ angular.module('dashboards')
 				$scope.disaster_type = 'Earthquake';
 				$scope.disaster_name = 'Gorkha 2015';
 			}
-			if (['MLI','ZMB','BEN'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
+			if (['MLI','ZMB','BEN','ECU'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
 			
 			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
 			var url = location.href;

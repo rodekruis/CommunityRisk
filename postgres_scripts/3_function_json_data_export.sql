@@ -320,7 +320,7 @@ CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode text[],pi_cr
 	;
 $$ LANGUAGE sql;
 
---select usp_data(1,'MLI','{}','CRA','Earthquake','Leyte 2017');
+--select usp_data(1,'ECU','{}','CRA','Earthquake','Leyte 2017');
 --SELECT * FROM pg_proc WHERE proname = 'usp_data';
 
 

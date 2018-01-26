@@ -581,6 +581,13 @@ a.handle:hover {
 	text-decoration: none;
 }
 
+/* CSS to indicate active/selected indicator */
+.section-active {
+	background:#4C8293;
+	color:#ffffff;
+	font-weight:bold;
+}
+
 /* Collapsible sidebar */
 
 body {

@@ -994,7 +994,8 @@ angular.module('dashboards')
 				}
 			};
 			$scope.createHTML(keyvalue);
-			document.getElementById('section-'+$scope.metric).style = 'background:#4C8293;color:#ffffff';
+			var section_id = document.getElementById('section-'+$scope.metric);
+			if (section_id) {section_id.classList.add('section-active');}; //= 'background:#4C8293;color:#ffffff';};
 						
 			$scope.updateHTML = function(keyvalue) {
 				
@@ -1175,8 +1176,8 @@ angular.module('dashboards')
 							popup.style.left = Math.min($(window).width()-210,event.pageX) + 'px';	
 							popup.style.top = Math.min($(window).height()-210,event.pageY) + 'px';
 						} else {
-							popup.style.left = '400px';	
-							popup.style.top = '100px';
+							popup.style.left = '390px';	
+							popup.style.top = '120px';
 						}
 						popup.style.visibility = 'visible';
 						if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
@@ -1185,7 +1186,7 @@ angular.module('dashboards')
 					//Recalculate all community-profile figures
 					var keyvalue = fill_keyvalues();
 					$scope.updateHTML(keyvalue);
-					document.getElementById('section-'+$scope.metric).style = 'background:#4C8293;color:#ffffff';
+					document.getElementById('section-'+$scope.metric).classList.add('section-active'); //style = 'background:#4C8293;color:#ffffff';
 					//let reset-button (dis)appear
 					var resetbutton = document.getElementsByClassName('reset-button')[0];	
 					if ($scope.filters.length > 0) {
@@ -1293,7 +1294,8 @@ angular.module('dashboards')
 
 			$scope.map_coloring = function(id) {
 				
-				document.getElementById('section-'+$scope.metric).removeAttribute('style'); //.style = 'background:0;color:inherit;font-weight:normal';
+				var section_id = document.getElementById('section-'+$scope.metric);
+				if (section_id) {section_id.classList.remove('section-active');}; //.style = 'background:0;color:inherit;font-weight:normal';
 				$scope.metric = id;	
 				$scope.metric_label = meta_label[id];
 				var mapchartColors = $scope.mapchartColors();	
@@ -1329,7 +1331,7 @@ angular.module('dashboards')
 				dc.redrawAll();
 				document.getElementById('mapPopup').style.visibility = 'hidden';
 				document.getElementById('zoomin_icon').style.visibility = 'hidden';
-				document.getElementById('section-'+id).style = 'background:#4C8293;color:#ffffff;font-weight:bold';
+				document.getElementById('section-'+id).classList.add('section-active'); //style = 'background:#4C8293;color:#ffffff;font-weight:bold';
 			};
 			
 			//Change typhoon: reinitiate the dashboard

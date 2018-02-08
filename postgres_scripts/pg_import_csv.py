@@ -1,18 +1,26 @@
 from sqlalchemy import create_engine
 import pandas as pd
+import os
 
-#pathname = 'C:/github/' #DON'T FORGET CLOSING SLASH /
 pathname = 'C:/Users/JannisV/Dropbox (510)/510 - files/Projects/Community Risk Assessment/Data/CRA - Operational Data/4. Output Layer/Peru/'
-#pathname = 'C:/github/profiles/data/public/' #DON'T FORGET CLOSING SLASH /
-filename = 'traveltime.csv'
-path = pathname+filename
-schema_name = 'per_source' #'metadata' / 'geo_source' / 'ph_source' / 'mw_source' / 'np_source'
-table_name = 'Indicators_3_traveltime' #'DPI_metadata'
-delim = ',' #',' / ';'
+schema_name = 'per_source' 
+engine = create_engine('postgresql://profiles:R3dCross+83@localhost/profiles')  
+        
+for file in os.listdir(pathname):
+    print(file)
+    if file.endswith(".csv"): 
+        filename = file
+        path = pathname+filename
+        table_name = os.path.splitext(filename)[0] #'Indicators_3_analphabetism' #'DPI_metadata'
+        delim = ';' #',' / ';'
+        df = pd.read_csv(path,delimiter=delim, encoding="windows-1251")
+        df.to_sql(table_name,engine,if_exists='replace',schema=schema_name)
+        continue
+    else:
+        continue
+        
+        
 
-engine = create_engine('postgresql://profiles:R3dCross+83@localhost/profiles')
-df = pd.read_csv(path,delimiter=delim, encoding="windows-1251")
-df.to_sql(table_name,engine,if_exists='replace',schema=schema_name)
 
 
 

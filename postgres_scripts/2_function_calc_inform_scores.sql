@@ -55,7 +55,7 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql STRICT;
---select test_dpi('ZMB',2)
+--select test_dpi('PER',2)
 --select test_dpi('PH',4)
 --select test_dpi('MW',4)
 
@@ -122,9 +122,9 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql STRICT;
---select test_dpi2('PH',4,'hazard');
---select test_dpi2('PH',4,'vulnerability');
---select test_dpi2('PH',4,'coping_capacity');
+--select test_dpi2('PER',2,'hazard');
+--select test_dpi2('PER',2,'vulnerability');
+--select test_dpi2('PER',2,'coping_capacity');
  
 --3: compute risk-score and create Totals out of 3 components table
 DROP FUNCTION IF EXISTS test_dpi3(varchar,int);

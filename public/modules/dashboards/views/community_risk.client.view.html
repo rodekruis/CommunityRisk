@@ -70,15 +70,19 @@
 					</a>
 					<ul class="dropdown-menu export-items">
 						<li>
-							<a id="download" ng-click="share_URL()">Share current settings (URL)</a>
+							<a ng-click="share_URL()">Share current settings (URL)</a>
 						</li>
 						<li class="divider"></li>
 						<li>
 							<a id="download" ng-click="export_csv()">Export (CSV)</a>
 						</li>
 						<li class="divider"></li>
+						<!-- <li>
+							<a ng-href ="./data/{{data_input}}"  target="_blank">Export (JSON)</a>
+						</li>
+						<li class="divider"></li> -->
 						<li>
-							<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+							<a ng-click="export_geojson()">Export (GEOJSON)</a>
 						</li>
 					</ul>
 				</li>
@@ -125,7 +129,7 @@
 							<a class="submenu-item" ng-click="change_country('MW')" role="button">Malawi</a>
 						</li>
 						<li>
-							<a class="submenu-item" ng-click="change_country('NP')" role="button">Nepal</a>
+							<a class="submenu-item" ng-click="change_country('PER')" role="button">Peru</a>
 						</li>
 						<li class="divider"></li>
 						<li>
@@ -138,7 +142,7 @@
 							<a class="submenu-item" ng-click="change_country('MLI')" role="button">Mali (basic)</a>
 						</li>
 						<li>
-							<a class="submenu-item" ng-click="change_country('PER')" role="button">Peru (basic)</a>
+							<a class="submenu-item" ng-click="change_country('NP')" role="button">Nepal (basic)</a>
 						</li>
 						<li>
 							<a class="submenu-item" ng-click="change_country('LKA')" role="button">Sri Lanka (basic)</a>

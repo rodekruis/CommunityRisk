@@ -1387,6 +1387,13 @@ angular.module('dashboards')
 				//$scope.metric = metric_old;
 			};
 			
+			//Export to GEOJSON
+			$scope.export_geojson = function() {
+				var myWindow = window.open('','','_blank');
+				myWindow.document.write(JSON.stringify(d.Districts))
+				myWindow.focus();
+			}
+			
 			//Export to CSV function
 			$scope.export_csv = function() {
 				var content = d.Rapportage;

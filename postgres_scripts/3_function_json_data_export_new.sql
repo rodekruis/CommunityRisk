@@ -38,11 +38,12 @@ CREATE OR REPLACE FUNCTION usp_geo_level2(country varchar,pcode text[], OUT resu
 				FROM (
 					SELECT ''Feature'' As type
 						,ST_AsGeoJSON(tbl.geom)::json As geometry
-						,row_to_json((SELECT l FROM (SELECT pcode_level2 as pcode,name) As l)) As properties
+						,row_to_json((SELECT l FROM (SELECT name,tbl2.*) As l)) As properties
 					FROM "%s_datamodel"."Geo_level2" As tbL
+					LEFT JOIN "%s_datamodel"."Indicators_2_TOTAL" tbl2 on tbL.pcode_level2 = tbl2.pcode
 					)  As feat 
 				)  As featcoll
-			;',country)
+			;',country,country)
 		INTO result;
 	ELSE 
 		EXECUTE format('
@@ -52,17 +53,18 @@ CREATE OR REPLACE FUNCTION usp_geo_level2(country varchar,pcode text[], OUT resu
 				FROM (
 					SELECT ''Feature'' As type
 						,ST_AsGeoJSON(tbl.geom)::json As geometry
-						,row_to_json((SELECT l FROM (SELECT pcode_level2 as pcode,name) As l)) As properties
+						,row_to_json((SELECT l FROM (SELECT name,tbl2.*) As l)) As properties
 					FROM "%s_datamodel"."Geo_level2" As tbL
+					LEFT JOIN "%s_datamodel"."Indicators_2_TOTAL" tbl2 on tbL.pcode_level2 = tbl2.pcode
 					WHERE cast(pcode_level1 as varchar) = ANY(''%s'')
 					)  As feat 
 				)  As featcoll
-			;',country,pcode,pcode)
+			;',country,country,pcode,pcode)
 		INTO result;
 	END IF;
 	END
 $func$ LANGUAGE plpgsql;
---select usp_geo_level2('MLI','ML09');
+--select usp_geo_level2('MLI',['ML09']);
 
 --Get all level 3 geodata
 DROP FUNCTION IF EXISTS usp_geo_level3(varchar,text[]);
@@ -76,11 +78,12 @@ CREATE OR REPLACE FUNCTION usp_geo_level3(country varchar, pcode text[], OUT res
 				FROM (
 					SELECT ''Feature'' As type
 						,ST_AsGeoJSON(tbl.geom)::json As geometry
-						,row_to_json((SELECT l FROM (SELECT pcode_level3 as pcode,name,pcode_level2 as pcode_parent) As l)) As properties
+						,row_to_json((SELECT l FROM (SELECT name,tbl2.*) As l)) As properties
 					FROM "%s_datamodel"."Geo_level3" As tbL
+					LEFT JOIN "%s_datamodel"."Indicators_3_TOTAL" tbl2 on tbL.pcode_level3 = tbl2.pcode
 					)  As feat 
 				)  As featcoll
-			;',country)
+			;',country,country)
 		INTO result;
 	ELSE 
 		EXECUTE format('
@@ -90,12 +93,13 @@ CREATE OR REPLACE FUNCTION usp_geo_level3(country varchar, pcode text[], OUT res
 				FROM (
 					SELECT ''Feature'' As type
 						,ST_AsGeoJSON(tbl.geom)::json As geometry
-						,row_to_json((SELECT l FROM (SELECT pcode_level3 as pcode,name,pcode_level2 as pcode_parent) As l)) As properties
+						,row_to_json((SELECT l FROM (SELECT name,tbl2.*) As l)) As properties
 					FROM "%s_datamodel"."Geo_level3" As tbL
+					LEFT JOIN "%s_datamodel"."Indicators_3_TOTAL" tbl2 on tbL.pcode_level3 = tbl2.pcode
 					WHERE cast(pcode_level2 as varchar) = ANY(''%s'')
 					)  As feat 
 				)  As featcoll
-			;',country,pcode)
+			;',country,country,pcode)
 		INTO result;
 	END IF;
 	END
@@ -114,8 +118,9 @@ CREATE OR REPLACE FUNCTION usp_geo_level4(country varchar, pcode text[], OUT res
 				FROM (
 					SELECT ''Feature'' As type
 						,ST_AsGeoJSON(tbl.geom)::json As geometry
-						,row_to_json((SELECT l FROM (SELECT pcode_level4 as pcode,name,pcode_level3 as pcode_parent) As l)) As properties
+						,row_to_json((SELECT l FROM (SELECT name,tbl.*) As l)) As properties
 					FROM "%s_datamodel"."Geo_level4" As tbL
+					LEFT JOIN "%s_datamodel"."Indicators_4_TOTAL" tbl2 on tbL.pcode_level4 = tbl2.pcode
 					)  As feat 
 				)  As featcoll
 			;',country)

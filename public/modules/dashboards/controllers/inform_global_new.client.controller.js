@@ -432,6 +432,7 @@ angular.module('dashboards')
 				data_final[i] = record;
 			}
 			d.Rapportage = data_final;
+			console.log(data_final);
 			
 			// Start crossfilter
 			var cf = crossfilter(d.Rapportage);
@@ -443,6 +444,7 @@ angular.module('dashboards')
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
 			var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (!meta_scorevar[$scope.metric]) { return d[$scope.metric];} else { return d[meta_scorevar[$scope.metric]];};});
+			console.log(whereGroupSum.top(1));
 			
 			// group with all, needed for data-count
 			var all = cf.groupAll();
@@ -509,8 +511,6 @@ angular.module('dashboards')
 				$scope.tables[i].dimension = dimensions[name];
 			}
 			//console.log($scope.tables);
-			
-			console.log(dimensions_scores['CC.INS.DRR'].top(Infinity));
 			
 			
 			///////////////////////////////

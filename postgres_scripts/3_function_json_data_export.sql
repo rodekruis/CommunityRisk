@@ -159,7 +159,7 @@ CREATE OR REPLACE FUNCTION usp_geo(state int,country varchar,pcode text[] ) RETU
 	;	
 
 $$ LANGUAGE sql;
---select usp_geo(4,'MW','{}')
+--select usp_geo(2,'INFORM','{}') into public.worldmap_geojson
 
 
 ---------------------------------------------
@@ -327,7 +327,7 @@ CREATE OR REPLACE FUNCTION usp_data(state int,country varchar,pcode text[],pi_cr
 	;
 $$ LANGUAGE sql;
 
---select usp_data(4,'MW','{}','CRA','Typhoon','Haima');
+--select usp_data(2,'INFORM','{}','CRA','Typhoon','Haima');
 --SELECT * FROM pg_proc WHERE proname = 'usp_data';
 
 

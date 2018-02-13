@@ -143,12 +143,20 @@ from per_source."no_of_educational_institutes"
 ;
 --select * from "PER_datamodel"."Indicators_3_educ_facilities"
 
-drop table if exists "PER_datamodel"."Indicators_3_walltype";
-select pcode_level3
-	,cast((nr_ladrillo + nr_piedra_sillar + nr_piedra_barro + nr_adobe + nr_tapia) as float) / cast(nr_total as float) as wall_type
-into "PER_datamodel"."Indicators_3_walltype"
+
+
+------------------
+-- Level 2 data --
+------------------
+
+drop table if exists "PER_datamodel"."Indicators_2_walltype";
+select pcode_level2
+	,case when nr_total < 70 then null else 
+		cast((nr_ladrillo + nr_piedra_sillar + nr_piedra_barro + nr_adobe + nr_tapia) as float) / cast(nr_total as float) 
+		end as wall_type
+into "PER_datamodel"."Indicators_2_walltype"
 from (
-	select case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end as pcode_level3
+	select substring(case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end,1,4) as pcode_level2
 		,sum(case when wall_type = 'Adobe' then 1 else 0 end) as nr_adobe
 		,sum(case when wall_type = 'Estera' then 1 else 0 end) as nr_estera
 		,sum(case when wall_type = 'Ladrillo o bloque de cemento' then 1 else 0 end) as nr_ladrillo
@@ -163,14 +171,16 @@ from (
 	group by 1
 	) temp
 ;
---select * from "PER_datamodel"."Indicators_3_walltype"
+--select * from "PER_datamodel"."Indicators_2_walltype"
 
-drop table if exists "PER_datamodel"."Indicators_3_rooftype";
-select pcode_level3
-	,cast((nr_concreto + nr_planchas + nr_tejas) as float) / cast(nr_total as float) as roof_type
-into "PER_datamodel"."Indicators_3_rooftype"
+drop table if exists "PER_datamodel"."Indicators_2_rooftype";
+select pcode_level2
+	,case when nr_total < 70 then null else 
+		cast((nr_concreto + nr_planchas + nr_tejas) as float) / cast(nr_total as float)
+		end as roof_type
+into "PER_datamodel"."Indicators_2_rooftype"
 from (
-	select case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end as pcode_level3
+	select substring(case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end,1,4) as pcode_level2
 		,sum(case when roof_type = 'Planchas de calamina, fibra de cemento o similares' then 1 else 0 end) as nr_planchas
 		,sum(case when roof_type = 'Concreto armado' then 1 else 0 end) as nr_concreto
 		,sum(case when roof_type = 'Tejas' then 1 else 0 end) as nr_tejas
@@ -184,10 +194,78 @@ from (
 	group by 1
 	) temp
 ;
---select * from "PER_datamodel"."Indicators_3_rooftype"
+--select * from "PER_datamodel"."Indicators_2_rooftype"
 
-drop table if exists "PER_datamodel"."Indicators_3_services";
-select case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end as pcode_level3
+drop table if exists "PER_datamodel"."Indicators_2_services";
+select substring(case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end,1,4) as pcode_level2
+	,case when sum(case when mobile_phone_yesno <> '' then 1 else 0 end) < 70 then null else (
+		cast(sum(case when mobile_phone_yesno = 'Celular' then 1 else 0 end) as float) / cast(sum(case when mobile_phone_yesno <> '' then 1 else 0 end) as float)
+	) end as mobile_phone_access
+	,case when sum(case when internet_yesno <> '' then 1 else 0 end) < 70 then null else (
+		cast(sum(case when internet_yesno = 'Internet' then 1 else 0 end) as float) / cast(sum(case when internet_yesno <> '' then 1 else 0 end) as float)
+	) end as internet_access
+	,case when sum(case when drinkwater_yesno <> '' then 1 else 0 end) < 70 then null else (
+		cast(sum(case when drinkwater_yesno = 'Si' then 1 else 0 end) as float) / cast(sum(case when drinkwater_yesno <> '' then 1 else 0 end) as float)
+	) end as potable_water
+	,case when sum(case when sanitation_yesno <> '' then 1 else 0 end) < 70 then null else (
+		cast(sum(case when sanitation_yesno = 'Hogares con vivienda con servicios higienicos' then 1 else 0 end) as float) / cast(sum(case when sanitation_yesno <> '' then 1 else 0 end) as float)
+	) end as sanitation
+into "PER_datamodel"."Indicators_2_services"
+from per_source."roofwall_internetphone_drinkwatersanit"
+group by 1
+;
+--select * from "PER_datamodel"."Indicators_2_services"
+
+
+------------------
+-- Level 1 data --
+------------------
+
+drop table if exists "PER_datamodel"."Indicators_1_walltype";
+select pcode_level1
+	,cast((nr_ladrillo + nr_piedra_sillar + nr_piedra_barro + nr_adobe + nr_tapia) as float) / cast(nr_total as float) as wall_type
+into "PER_datamodel"."Indicators_1_walltype"
+from (
+	select substring(case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end,1,2) as pcode_level1
+		,sum(case when wall_type = 'Adobe' then 1 else 0 end) as nr_adobe
+		,sum(case when wall_type = 'Estera' then 1 else 0 end) as nr_estera
+		,sum(case when wall_type = 'Ladrillo o bloque de cemento' then 1 else 0 end) as nr_ladrillo
+		,sum(case when wall_type = 'Madera' then 1 else 0 end) as nr_madera
+		,sum(case when wall_type = 'Otro material' then 1 else 0 end) as nr_otro
+		,sum(case when wall_type = 'Piedra con barro' then 1 else 0 end) as nr_piedra_barro
+		,sum(case when wall_type = 'Piedra o sillar con cal o cemento' then 1 else 0 end) as nr_piedra_sillar
+		,sum(case when wall_type = 'Quincha (caсa con barro)' then 1 else 0 end) as nr_quincha
+		,sum(case when wall_type = 'Tapia' then 1 else 0 end) as nr_tapia
+		,sum(case when wall_type <> '' then 1 else 0 end) as nr_total
+	from per_source."roofwall_internetphone_drinkwatersanit"
+	group by 1
+	) temp
+;
+--select * from "PER_datamodel"."Indicators_1_walltype"
+
+drop table if exists "PER_datamodel"."Indicators_1_rooftype";
+select pcode_level1
+	,cast((nr_concreto + nr_planchas + nr_tejas) as float) / cast(nr_total as float) as roof_type
+into "PER_datamodel"."Indicators_1_rooftype"
+from (
+	select substring(case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end,1,2) as pcode_level1
+		,sum(case when roof_type = 'Planchas de calamina, fibra de cemento o similares' then 1 else 0 end) as nr_planchas
+		,sum(case when roof_type = 'Concreto armado' then 1 else 0 end) as nr_concreto
+		,sum(case when roof_type = 'Tejas' then 1 else 0 end) as nr_tejas
+		,sum(case when roof_type = 'Caсa o estera con torta de barro' then 1 else 0 end) as nr_caca
+		,sum(case when roof_type = 'Paja, hojas de palmera' then 1 else 0 end) as nr_paja
+		,sum(case when roof_type = 'Madera' then 1 else 0 end) as nr_madera
+		,sum(case when roof_type = 'Estera' then 1 else 0 end) as nr_estera
+		,sum(case when roof_type = 'Otro material' then 1 else 0 end) as nr_otro
+		,sum(case when roof_type <> '' then 1 else 0 end) as nr_total
+	from per_source."roofwall_internetphone_drinkwatersanit"
+	group by 1
+	) temp
+;
+--select * from "PER_datamodel"."Indicators_1_rooftype"
+
+drop table if exists "PER_datamodel"."Indicators_1_services";
+select substring(case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO" as varchar) else cast("UBIGEO" as varchar) end,1,2) as pcode_level1
 	,case when sum(case when mobile_phone_yesno <> '' then 1 else 0 end) = 0 then null else (
 		cast(sum(case when mobile_phone_yesno = 'Celular' then 1 else 0 end) as float) / cast(sum(case when mobile_phone_yesno <> '' then 1 else 0 end) as float)
 	) end as mobile_phone_access
@@ -200,21 +278,16 @@ select case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cast("UBIGEO"
 	,case when sum(case when sanitation_yesno <> '' then 1 else 0 end) = 0 then null else (
 		cast(sum(case when sanitation_yesno = 'Hogares con vivienda con servicios higienicos' then 1 else 0 end) as float) / cast(sum(case when sanitation_yesno <> '' then 1 else 0 end) as float)
 	) end as sanitation
-into "PER_datamodel"."Indicators_3_services"
+into "PER_datamodel"."Indicators_1_services"
 from per_source."roofwall_internetphone_drinkwatersanit"
 group by 1
 ;
---select * from "PER_datamodel"."Indicators_3_services"
+--select * from "PER_datamodel"."Indicators_1_services"
 
 
 
 
 
-
-
-------------------
--- Level 2 data --
-------------------
 
 
 -----------------------------------------------
@@ -237,10 +310,7 @@ select t0.pcode_level3 as pcode
 	,t6.perc_malnutrition_U5
 	,cast(t7.nr_health_facilities as float) / cast((t2.population / 10000) as float) as health_density
 	,cast(t8.nr_educ_facilities as float) / cast((t2.population / 10000) as float) as education_density
-	,t9.wall_type
-	,t10.roof_type
-	,t11.mobile_phone_access,internet_access,potable_water,sanitation
-	,t12.poverty_incidence
+	,t9.poverty_incidence
 	--,tX.XXX ADD NEW VARIABLE HERE
 into "PER_datamodel"."Indicators_3_TOTAL_temp"
 from "PER_datamodel"."Geo_level3" t0
@@ -252,10 +322,7 @@ left join "PER_datamodel"."Indicators_3_analphabetism" 		t5	on t0.pcode_level3 =
 left join "PER_datamodel"."Indicators_3_malnutrition" 		t6	on t0.pcode_level3 = t6.pcode_level3
 left join "PER_datamodel"."Indicators_3_health_facilities" 	t7	on t0.pcode_level3 = t7.pcode_level3
 left join "PER_datamodel"."Indicators_3_educ_facilities" 	t8	on t0.pcode_level3 = t8.pcode_level3
-left join "PER_datamodel"."Indicators_3_walltype" 		t9	on t0.pcode_level3 = t9.pcode_level3
-left join "PER_datamodel"."Indicators_3_rooftype" 		t10	on t0.pcode_level3 = t10.pcode_level3
-left join "PER_datamodel"."Indicators_3_services" 		t11	on t0.pcode_level3 = t11.pcode_level3
-left join "PER_datamodel"."Indicators_3_poverty_incidence" 	t12	on t0.pcode_level3 = t12.pcode_level3
+left join "PER_datamodel"."Indicators_3_poverty_incidence" 	t9	on t0.pcode_level3 = t9.pcode_level3
 --left join "PER_datamodel"."Indicators_3_XXX" 			tX	on t0.pcode_level3 = tX.pcode_level3
 ;
 --select * from "PER_datamodel"."Indicators_3_TOTAL_temp"
@@ -265,8 +332,11 @@ select t0.pcode_level2 as pcode
 	,t0.pcode_level1 as pcode_parent
 	,level3.population,land_area,pop_density
 	,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp,tsunami_phys_exp,traveltime 
-	,perc_analphabetism,perc_malnutrition_U5,health_density,education_density,wall_type,roof_type,mobile_phone_access,internet_access,potable_water,sanitation,poverty_incidence
+	,perc_analphabetism,perc_malnutrition_U5,health_density,education_density,poverty_incidence
 	--ADD NEW LEVEL3 VARIABLES HERE
+	,t1.wall_type
+	,t2.roof_type
+	,t3.mobile_phone_access,internet_access,potable_water,sanitation
 	--ADD NEW LEVEL2 VARIABLES HERE
 into "PER_datamodel"."Indicators_2_TOTAL_temp"
 from "PER_datamodel"."Geo_level2" t0
@@ -285,19 +355,16 @@ left join (
 		,sum(perc_malnutrition_U5 * population) / sum(population) as perc_malnutrition_U5
 		,sum(health_density * population) / sum(population) as health_density
 		,sum(education_density * population) / sum(population) as education_density
-		,sum(wall_type * population) / sum(population) as wall_type
-		,sum(roof_type * population) / sum(population) as roof_type
-		,sum(mobile_phone_access * population) / sum(population) as mobile_phone_access
-		,sum(internet_access * population) / sum(population) as internet_access
-		,sum(potable_water * population) / sum(population) as potable_water
-		,sum(sanitation * population) / sum(population) as sanitation
 		,sum(poverty_incidence * population) / sum(population) as poverty_incidence
 		--ADD NEW LEVEL3-VARIABLES HERE AS WELL
 	from "PER_datamodel"."Indicators_3_TOTAL_temp"
 	group by 1
 	) level3
 	on t0.pcode_level2 = level3.pcode_parent
---left join "PER_datamodel"."Indicators_2_XXX" 		t1	on t0.pcode_level2 = t1.pcode_level2
+left join "PER_datamodel"."Indicators_2_walltype" 		t1	on t0.pcode_level2 = t1.pcode_level2
+left join "PER_datamodel"."Indicators_2_rooftype" 		t2	on t0.pcode_level2 = t2.pcode_level2
+left join "PER_datamodel"."Indicators_2_services" 		t3	on t0.pcode_level2 = t3.pcode_level2
+--left join "PER_datamodel"."Indicators_2_XXX" 			tX	on t0.pcode_level2 = tX.pcode_level2
 ;
 --select * from "PER_datamodel"."Indicators_2_TOTAL_temp"
 
@@ -306,8 +373,11 @@ drop table if exists "PER_datamodel"."Indicators_1_TOTAL_temp";
 select t0.pcode_level1 as pcode
 	,level2.population,land_area,pop_density
 	,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp,tsunami_phys_exp,traveltime 
-	,perc_analphabetism,perc_malnutrition_U5,health_density,education_density,wall_type,roof_type,mobile_phone_access,internet_access,potable_water,sanitation,poverty_incidence
+	,perc_analphabetism,perc_malnutrition_U5,health_density,education_density,poverty_incidence
 	--ADD NEW LEVEL2 VARIABLES HERE
+	,t1.wall_type
+	,t2.roof_type
+	,t3.mobile_phone_access,internet_access,potable_water,sanitation
 	--ADD NEW LEVEL1 VARIABLES HERE
 into "PER_datamodel"."Indicators_1_TOTAL_temp"
 from "PER_datamodel"."Geo_level1" t0
@@ -326,12 +396,6 @@ left join (
 		,sum(perc_malnutrition_U5 * population) / sum(population) as perc_malnutrition_U5
 		,sum(health_density * population) / sum(population) as health_density
 		,sum(education_density * population) / sum(population) as education_density
-		,sum(wall_type * population) / sum(population) as wall_type
-		,sum(roof_type * population) / sum(population) as roof_type
-		,sum(mobile_phone_access * population) / sum(population) as mobile_phone_access
-		,sum(internet_access * population) / sum(population) as internet_access
-		,sum(potable_water * population) / sum(population) as potable_water
-		,sum(sanitation * population) / sum(population) as sanitation
 		,sum(poverty_incidence * population) / sum(population) as poverty_incidence
 		--ADD NEW LEVEL3-VARIABLES HERE AS WELL
 		--ADD NEW LEVEL2-VARIABLES HERE AS WELL
@@ -339,7 +403,10 @@ left join (
 	group by 1
 	) level2
 	on t0.pcode_level1 = level2.pcode_parent
---left join "PER_datamodel"."Indicators_1_XXX" 		t1	on t0.pcode_level1 = t1.pcode_level1
+left join "PER_datamodel"."Indicators_1_walltype" 		t1	on t0.pcode_level1 = t1.pcode_level1
+left join "PER_datamodel"."Indicators_1_rooftype" 		t2	on t0.pcode_level1 = t2.pcode_level1
+left join "PER_datamodel"."Indicators_1_services" 		t3	on t0.pcode_level1 = t3.pcode_level1
+--left join "PER_datamodel"."Indicators_1_XXX" 			tX	on t0.pcode_level1 = tX.pcode_level1
 ;
 --select * from "PER_datamodel"."Indicators_1_TOTAL_temp"
 

@@ -31,7 +31,7 @@ select first_idpr as pcode_level2
 	,substr(first_idpr,1,2) as pcode_level1
 	,min(geom) as geom
 into "PER_datamodel"."Geo_level2"
-from per_source.peru_adm2_mapshaper_reproj
+from per_source.peru_adm2_mapshaper_reproj_agg
 group by 1,3
 ;
 --select * from "PER_datamodel"."Geo_level2" order by 1
@@ -45,7 +45,6 @@ into "PER_datamodel"."Geo_level3"
 from per_source.peru_adm3_mapshaper_reproj
 ;
 --select * from "PER_datamodel"."Geo_level3"
-
 
 
 

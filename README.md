@@ -2,7 +2,7 @@
 View live dashboard at https://dashboard.510.global
 
 ## License
-Code is created by 510 and is available under the [GPL license](https://github.com/rodekruis/communityprofiles/blob/development/LICENSE.md)
+Code is created by 510 and is available under the [GPL license](https://github.com/rodekruis/communityprofiles/LICENSE.md)
 
 # Table of Contents
 
@@ -104,7 +104,7 @@ Install Git from https://git-scm.com/download/win.
 ## 1.1: Get the application 
 
 ### 1.1A: Get the code
-Now get the code for this application by downloading/cloning from this repository. Make sure you work with the development branch of this repository (not the master branch)
+Now get the code for this application by downloading/cloning from this repository.
 
 ### 1.1B: Install all modules
 * Install NPM modules -  Now you have to include all the required packages for this application. These packages are not included by default in this repository.
@@ -164,6 +164,43 @@ And to return to development environment
 $ set NODE_ENV=
 $ node server.js
 ```
+
+## 1.4 Copying to live dashboard
+
+Access to the remote server where the live dashboard is hosted, is assumed 
+
+### COPY CODE TO REMOTE SERVER
+
+- Do a Git Push to this github-repository
+- Access the remote server through Putty and go to right folder
+```
+$ cd var/www/vhosts/510.global/profiles.510.global
+```
+- Do a git pull
+
+### COPY DATA TO REMOTE SERVER
+
+This is about how to copy changes from your local PG-server to the remote PG-server that the live-dashboard plugs in to. 
+The process is to make a dump of only the source layer. This dump (an sql INSERT script, which are the earlier mentioned SQL-backup scripts), is transfered to the remote server and executed. Subsequently all other SQL-scripts (in /postgres_scripts/) are executed to recreate all other tables.
+ 
+- Export the source schema's (geo_source,ph_source, etc.; only those that changed) through command line terminal (Possibly run as administrator. NOTE: copying from here seems to give error, so manually type in this code.)
+```
+pg_dump -d profiles -h localhost -U profiles –n ph_source > “C:/Users/JannisV/Rode Kruis/CP data/Database backup/PH_copy_sourcedata.sql” 
+```
+- Open each file and make 2 edits.
+a. Delete the line SET row_security = off
+b. Before the line CREATE SCHEMA <schema_name> add: DROP SCHEMA IF EXISTS <schema_name> CASCADE;
+
+- Transfer the resulting sql files to the remote server (credentials via Lastpass), for example through WinSCP.
+- Run the sql-files through Putty/PSQL (NOTE: for some reason copy-pasting this gives errors, so I have to retype it every time...)
+```
+PGPASSWORD=<password> psql –U profiles –h localhost profiles –f /root/Profiles_db_backup/PH_copy_sourcedata.sql –v ON_ERROR_STOP=1 
+```
+- Run all sql files in the github-repository postgres_scripts/ folder in the same way (in the right order: first 1, then 2, then 3).
+```
+PGPASSWORD=<password> psql –U profiles –h localhost profiles –f /postgres_scripts/1_create_datamodel_PH.sql –v ON_ERROR_STOP=1 
+```
+
 
 # 2: Data Pipeline
 

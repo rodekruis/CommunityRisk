@@ -1104,9 +1104,10 @@ angular.module('dashboards')
 					};
 					var colorDomain;
 					if ($scope.view_code == 'CRA') {
-						if (!meta_scorevar[$scope.metric]) { colorDomain = $scope.quantileColorDomain_CRA_std; } else {
+						if (!meta_scorevar[$scope.metric]) { 
+							colorDomain = $scope.quantileColorDomain_CRA_std; 
+						} else {
 							colorDomain = $scope.quantileColorDomain_CRA_scores;
-							// colorDomain = $scope.quantileColorDomain_CRA_std;
 						}
 					} else if ($scope.genLookup_meta(d,'group')[$scope.metric] == 'pred_error') {
 					//else if (Math.min.apply(null, quantile_range) < 0 && Math.max.apply(null, quantile_range) > 0) {
@@ -1508,7 +1509,7 @@ angular.module('dashboards')
 			
 		};
 		
-		// Function for handling sub-drowdown-menus in Navigation bar
+		// Function for handling sub-dropdown-menus in Navigation bar
 		$(document).ready(function(){
 		  $('.dropdown-submenu a.menu-item').on("click", function(e){
 			$('.submenu-items.open').toggle().removeClass('open');

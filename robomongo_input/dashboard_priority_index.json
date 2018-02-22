@@ -1,0 +1,52 @@
+{
+    "_id" : ObjectId("5906f54b66307627d5d7f884"),
+    "user" : ObjectId("5756c5b6f090a93c4f52a453"),
+    "SharepointSources" : [],
+    "GoogleSpreadsheetSources" : [],
+    "FileUrlSources" : [],
+    "DropboxSources" : [],
+    "CartoDBSources" : [],
+    "FileLocalSources" : [ 
+        {
+            "__t" : "FileLocalSource",
+            "isActive" : true,
+            "isPublic" : true,
+            "description" : "Country_meta",
+            "name" : "Country_meta",
+            "sourceId" : "Country_meta",
+            "_id" : ObjectId("5724a4dfaf4258443e0f9bc5"),
+            "format" : "CSV",
+            "file" : "data/public/country_metadata.csv"
+        }, 
+        {
+            "__t" : "FileLocalSource",
+            "isActive" : true,
+            "isPublic" : true,
+            "description" : "Metadata",
+            "name" : "Metadata",
+            "sourceId" : "Metadata",
+            "_id" : ObjectId("5724a4dfaf4258443e0f9bc6"),
+            "format" : "CSV",
+            "file" : "data/public/metadata_prototype.csv"
+        }, 
+        {
+            "__t" : "FileLocalSource",
+            "isActive" : true,
+            "isPublic" : true,
+            "description" : "Metadata_disaster_events",
+            "name" : "Metadata_disaster_events",
+            "sourceId" : "Metadata_disaster_events",
+            "_id" : ObjectId("5724a4dfaf4258443e0f9bc7"),
+            "format" : "CSV",
+            "file" : "data/public/metadata_disaster_events.csv"
+        }
+    ],
+    "roles" : [ 
+        "user"
+    ],
+    "isPublic" : true,
+    "url" : "priority_index",
+    "description" : "Priority Index",
+    "name" : "Priority Index",
+    "__v" : 0.0
+}

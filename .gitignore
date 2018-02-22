@@ -9,6 +9,8 @@ config/secrets.json
 config/cert/*.pem
 config/cert/.rnd
 config/cert/*.cer
+config/cert/*.cert
+config/cert/*.key
 config/cert/*.pfx
 config/cert/*.ca
 *.komodoproject

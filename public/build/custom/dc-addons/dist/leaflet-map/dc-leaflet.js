@@ -730,6 +730,7 @@ dc.leafletLegend = function () {
 						if (grades[i] >= 1000000) {grades[i]=Math.round(grades[i]/100000)/10 + 'M';}
 						else if (grades[i] >= 1000) {grades[i]=Math.round(grades[i]/100)/10 + 'k';}
                     }
+					var labels = ['low risk','','','','high risk'];
 
                     // var div = L.DomUtil.create('div', 'info legend');
                     // loop through our density intervals and generate a label with a colored
@@ -738,7 +739,8 @@ dc.leafletLegend = function () {
                     for (i = 0; i < grades.length; i++) {
                         this._div.innerHTML +=
                             '<i style="background:' + palette[i] + '"></i> ' +
-                            grades[i] + (i < grades.length - 1 ? ' &ndash; ' + grades[i + 1] + '<br>' : '+');
+                            //grades[i] + (i < grades.length - 1 ? ' &ndash; ' + grades[i + 1] + '<br>' : '+');
+                            labels[i] + (i < grades.length - 1 ? '<br>' : '');
                     }
                 }
             }

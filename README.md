@@ -1,15 +1,18 @@
+## Live dashboard
+View live dashboard at https://dashboard.510.global
+
 ## License
 Code is created by 510 and is available under the [GPL license](https://github.com/rodekruis/communityprofiles/blob/development/LICENSE.md)
 
-## Before You Begin 
-Before you begin we recommend you read about the basic building blocks that assemble this application 
-* MongoDB - Go through [MongoDB Official Website](http://mongodb.org/) and proceed to their [Official Manual](http://docs.mongodb.org/manual/), which should help you understand NoSQL and MongoDB better.
-* Express - The best way to understand express is through its [Official Website](http://expressjs.com/), particularly [The Express Guide](http://expressjs.com/guide.html); you can also go through this [StackOverflow Thread](http://stackoverflow.com/questions/8144214/learning-express-for-node-js) for more resources.
-* AngularJS - Angular's [Official Website](http://angularjs.org/) is a great starting point. You can also use [Thinkster Popular Guide](http://www.thinkster.io/), and the [Egghead Videos](https://egghead.io/).
-* Node.js - Start by going through [Node.js Official Website](http://nodejs.org/) and this [StackOverflow Thread](http://stackoverflow.com/questions/2353818/how-do-i-get-started-with-node-js), which should get you going with the Node.js platform in no time.
+# Table of Contents
+
+1. Getting a local version of the application running
+2. Data pipeline
+
+# 1. Getting a local version of the application running
 
 ## Operating system
-The below commands are aimed and tested for a local Windows environment.
+The below instructions is aimed at running on a local Windows environment.
 However, it is probably preferable to set up a Virtualbox (with Ubuntu 16.04). Please adjust the commands accordingly.
 
 ### for a virtualbox
@@ -32,15 +35,22 @@ Rule2      TCP          [your host ip]     443           [you VM ip]    443
 
 To connect to these ports on the VM, use your HostIP and the HostPort
 
-# 0. Prerequisites
+## 1.0: Prerequisites
+
+### Before You Begin 
+This application works amongst others with MongoDB, Express, Angular and Node. Before you begin we recommend you read about the basic building blocks that assemble this application 
+* MongoDB - Go through [MongoDB Official Website](http://mongodb.org/) and proceed to their [Official Manual](http://docs.mongodb.org/manual/), which should help you understand NoSQL and MongoDB better.
+* Express - The best way to understand express is through its [Official Website](http://expressjs.com/), particularly [The Express Guide](http://expressjs.com/guide.html); you can also go through this [StackOverflow Thread](http://stackoverflow.com/questions/8144214/learning-express-for-node-js) for more resources.
+* AngularJS - Angular's [Official Website](http://angularjs.org/) is a great starting point. You can also use [Thinkster Popular Guide](http://www.thinkster.io/), and the [Egghead Videos](https://egghead.io/).
+* Node.js - Start by going through [Node.js Official Website](http://nodejs.org/) and this [StackOverflow Thread](http://stackoverflow.com/questions/2353818/how-do-i-get-started-with-node-js), which should get you going with the Node.js platform in no time.
+
 Make sure you have installed all these prerequisites on your development machine.
 
-
-## Node.js
+### Node.js
 [Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, if you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
 Note that for this application v4.4.5 of Node was used. Current latest version v8.9.4 results in problems. In between versions may or may not be working.
 
-## MongoDB & Robomongo
+### MongoDB & Robomongo
 * [Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
 * Make sure you get Mongo running as a service: https://docs.mongodb.com/tutorials/install-mongodb-on-windows/ >> Section 'Configure a Windows service for MongoDB Community Edition'
 * if mongodb cannot run inside the virtualbox the problem might be related to disk space. Add smallfiles = true to /etc/mongodb.conf
@@ -54,7 +64,7 @@ Port: 27017
 * Paste the content (from this repository) in /robomongo_input/dashboard_community_risk.json in this newly created document and save.
 * Do the same for any other json-files in /robomongo_input/
 
-## Postgres
+### Postgres
 * Download and install the database software PostgresQL (v9.5 is used here) through https://www.postgresql.org/download/.
 * After installation make sure to install the PostGIS extension as well (through Stackbuilder > Spatial Extensions)
 * Add C:/Program Files/PostgreSQL/9.5/bin and C:/Program Files/PostgreSQL/9.5/lib to your environment PATH variable
@@ -72,7 +82,7 @@ $ ALTER ROLE profiles SUPERUSER CREATEDB;
 $ psql -h localhost -U profiles profiles
 ```
 
-## Bower
+### Bower
 You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
 
 ```
@@ -80,23 +90,23 @@ $ sudo npm install -g bower
 $ sudo npm install -g bower-installer
 ```
 
-## Grunt
+### Grunt
 You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process, in order to install it make sure you've installed Node.js and npm, then install grunt globally using npm:
 
 ```
 $ sudo npm install -g grunt-cli
 ```
 
-## Git
+### Git
 Install Git from https://git-scm.com/download/win.
 
 
-# 1: Get the application 
+## 1.1: Get the application 
 
-## 1A: Get the code
+### 1.1A: Get the code
 Now get the code for this application by downloading/cloning from this repository. Make sure you work with the development branch of this repository (not the master branch)
 
-## 1B: Install all modules
+### 1.1B: Install all modules
 * Install NPM modules -  Now you have to include all the required packages for this application. These packages are not included by default in this repository.
 * The below command (run from root-folder, the one with package.json in it) will install all required npm modules in package.json to node_modules/.
 * After that it will run bower-installer, which uses bower.json to include all client side libraries, and puts these in public/build/bower
@@ -105,7 +115,7 @@ $ npm install
 ```
 * PS: Run command preferably from 'Git CMD'-terminal, as otherwise bower may run into a problem.
 
-## 1C: Set password and certificates
+### 1.1C: Set password and certificates
 Open the file config/secrets.json.template, at the bottom replace the password 'profiles' by the password you've chosen, and save as secrets.json.
 
 You need the following files in the folder config/cert/ (ASK US)
@@ -114,10 +124,10 @@ You need the following files in the folder config/cert/ (ASK US)
 * thawte.ca (for production environment only)
 * thawte2.ca (for production environment only)
 
-# 2: Get the database 
+## 1.2: Get the database 
 To run this application locally, you also need to get an exact copy of the PostgreSQL database.
 
-## 2A: Loading Source Data
+### 1.2A: Loading Source Data
 * SQL-backup files of all source-data-schema's are available.
 * 510-users can find these on the 510.global-server in /root/Profiles_db_backup/
 * Other users can send an e-mail to support@510.global to request access.
@@ -127,12 +137,12 @@ $ psql -h localhost -d profiles -U profiles -f meta_copy_sourcedata.sql -v ON_ER
 ```
 * NOTE that you should have already created a postgres database 'profiles' with a user 'profiles' and the required password at this point (see Prerequisites > Postgres above)
 
-## 2B: Create Datamodel from Source Data
+### 1.2B: Create Datamodel from Source Data
 * Subsequently, the files (in this repository) in /postres_scripts/ need to be run.
 * At least those files starting with '0_', and the '1_'-files for the countries of interest.
 * Do so easiest, by opening them in pgAdmin III one at a time, and running the complete script (by pressing F5)
 
-# 3: Getting Started With the Dashboard
+## 1.3: Getting Started With the Dashboard
 
 Run in terminal from root folder:
 ```
@@ -155,15 +165,9 @@ $ set NODE_ENV=
 $ node server.js
 ```
 
+# 2: Data Pipeline
 
-# Workflow
-Use notepad++ to edit the files. Use [this tutorial](https://blog.sleeplessbeastie.eu/2015/07/27/how-to-edit-files-using-notepad-plus-plus-over-ssh-file-transfer-protocol/) to set up an SSH tunnel to the virtualbox from your host operating system.
-
-Set up [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) to get terminal access to the virtualbox.
-
-Always commit and push files to the repository from the virtualbox (to prevent line ending code errors)
-
-# DATA MANAGEMENT (UPDATE: 31-10-2017)
+NOTE: this process is purely 510-internally meant at the moment.
 
 Most of the current process can be found in https://trello.com/c/DWObvRYU/60-database-structure-how-to-add-new-data
 
@@ -194,22 +198,39 @@ f. UPDATE: The results are added to the "PH_datamodel"."Indicators_2_TOTAL", whi
 ## 1: From source data to PG-upload-ready files
 
 All source data can be found currently on Dropbox: "\510 - files\Projects\Community Risk Assessment\Data\CRA - Operational Data\".
+* Raw source data (either indicator-data or admin-boundary shapefile data) that is collected is stored in '2. Input Layer'
+* All files with indicator-data need to be converted to cleaned, PCODEd CSVs and stored in '4. Output Layer'
+* Admin-boundary data also needs to (possibly) be cleaned, reprojected, mapshaped and stored in '4. Output Layer'
+* Transformations needed for this are preferably automated through scripts (if so, scripts are stored in '3. Transformations')
+* Transformations may need to be manual at this point. 
+* Either way, all found sources and made transformations need to be stored in the tab 'ETL_overview' of https://docs.google.com/spreadsheets/d/1H94TqyEQMqGZzHVmVI3aU5NNwB-NJrubjfHX-SQ5VlQ/edit#gid=1302298131
 
-Here you find a meta-overview "ETL_overview.xlsx", which includes all source files per country, and the transformations upon these files, until they are ready for upload.
-This is also schematically shown in the accompanying "ETL_schematic_overview.pptx". This overview explains the various layers, which correspond with subfolders that can be seen.
+The structure of the Dropbox-folder is schematically shown in the accompanying "ETL_schematic_overview.pptx". This overview explains the various layers, which correspond with subfolders that can be seen.
 
 ## 2: Uploading into PostGIS
 
-Subfolder '5. Upload' contains a Python-script, which is used to to upload CSV's. It can be called from a terminal, for example through 
+* Subfolder '5. Upload' contains a Python-script and a bat-script to respectively upload CSV's and shapefiles into Postgres.
 ```
-python pg_import_csv.py "<source_path_name>" "<schema_name>" "<table_name>" "<delimiter>"
+python pg_import_csv.py
 ```
-
-Shapefiles, are currently uploaded manually. This can be automated in the future as well. See https://github.com/jannisvisser/Administrative_boundaries, specifically the pg_upload.bat script, where this is already done as well.
+* Note that the shapefile bat-script must be run from the OSGeo4W shell, instead of a normal terminal. Download from https://trac.osgeo.org/osgeo4w/.
+* Uploading all files into PG creates all <country_code>_source schema's. 
+* This is equivalent to running the SQL-restore scripts, mentioned in the 'Getting a local copy of this application running section' above.
+* These backup SQL scripts can be found also in "\510 - files\Projects\Community Risk Assessment\Data\CRA - Operational Data\6. PG backups\".
 
 ## 3+4: Data-transformations in PostGIS
 
-All .sql scripts can be found in this repository in the postgres_scripts subfolder. 
+All .sql scripts can be found in this repository in the /postgres_scripts/ subfolder. Run 0_ scripts first, and 1_ scripts for each country.
+
+Note that especially the automatic calculation of INFORM-scores relies on indicator-metadata being updated and uploaded
+* Indicator-metadata is stored in tab 'metadata_final' of https://docs.google.com/spreadsheets/d/1H94TqyEQMqGZzHVmVI3aU5NNwB-NJrubjfHX-SQ5VlQ/edit#gid=1302298131
+* Subsequently, it is copied to data/public/metadata_prototype.csv (in this repository)
+* Which is again uploaded in PG with the Python-script postgres_scripts/meta_pg_import_csv.py:
+```
+$ python meta_pg_import_csv.py
+```
+* Obligatory columns (for the PG-part) are country_code,variable,group,reverse_inform,log_inform,admin_level
+* Note that this same metadata-table is later used by the dashboard to retrieve metadata about each indicator as well (directly from data/public/metadata_prototype.csv)
 
 
 ## ADDING NEW COUNTRY

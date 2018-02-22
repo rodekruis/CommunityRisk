@@ -6,7 +6,6 @@
     "bootstrap": "3.3.6",
     "jquery": "~2.2.3",
 	"jquery-countTo": "*",
-	"jquery-tabslideout": "*",
 	"jquery-scrollTo": "*",
 	"jquery-easing": "*",
     "leaflet": "0.7.7",

@@ -143,6 +143,27 @@ from per_source."no_of_educational_institutes"
 --select * from "PER_datamodel"."Indicators_3_educ_facilities"
 
 
+--Sanitation
+drop table if exists "PER_datamodel"."Indicators_3_sanitation";
+select case when length(cast("Cуdigo" as varchar)) = 5 then '0' || cast("Cуdigo" as varchar) else cast("Cуdigo" as varchar) end as pcode_level3
+	,cast(("Red pъblica de desague dentro de la Viv." + "Red pъblica de desague fuera de la Viv.") as float) / cast("A1_T" as float) as sanitation
+	--, "Pozo sйptico", "Pozo ciego o negro / letrina", "Rнo, acequia o canal", "No tiene", "A1_T"
+into "PER_datamodel"."Indicators_3_sanitation"
+from per_source.reporte_sanitation_absolute
+;
+--select * from "PER_datamodel"."Indicators_3_sanitation"
+
+--Piped water
+drop table if exists "PER_datamodel"."Indicators_3_piped_water";
+select case when length(cast("Cуdigo" as varchar)) = 5 then '0' || cast("Cуdigo" as varchar) else cast("Cуdigo" as varchar) end as pcode_level3
+	,cast(("Red pъblica Dentro de la viv. - Agua potable" + "Red Pъblica Fuera de la vivienda" + "Pilуn de uso pъblico" + "Camiуn-cisterna u otro similar") as float)
+		/ cast("A1_T" as float) as piped_water
+       --,"Pozo", "Rнo, acequia.manantial o similar", "Vecino", "Otro"
+into "PER_datamodel"."Indicators_3_piped_water"
+from per_source.reporte_water_supply
+;
+--select * from "PER_datamodel"."Indicators_3_piped_water"
+
 
 ------------------
 -- Level 2 data --
@@ -203,12 +224,12 @@ select substring(case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cas
 	,case when sum(case when internet_yesno <> '' then 1 else 0 end) < 70 then null else (
 		cast(sum(case when internet_yesno = 'Internet' then 1 else 0 end) as float) / cast(sum(case when internet_yesno <> '' then 1 else 0 end) as float)
 	) end as internet_access
-	,case when sum(case when drinkwater_yesno <> '' then 1 else 0 end) < 70 then null else (
-		cast(sum(case when drinkwater_yesno = 'Si' then 1 else 0 end) as float) / cast(sum(case when drinkwater_yesno <> '' then 1 else 0 end) as float)
-	) end as potable_water
-	,case when sum(case when sanitation_yesno <> '' then 1 else 0 end) < 70 then null else (
-		cast(sum(case when sanitation_yesno = 'Hogares con vivienda con servicios higienicos' then 1 else 0 end) as float) / cast(sum(case when sanitation_yesno <> '' then 1 else 0 end) as float)
-	) end as sanitation
+--	,case when sum(case when drinkwater_yesno <> '' then 1 else 0 end) < 70 then null else (
+--		cast(sum(case when drinkwater_yesno = 'Si' then 1 else 0 end) as float) / cast(sum(case when drinkwater_yesno <> '' then 1 else 0 end) as float)
+--	) end as potable_water
+--	,case when sum(case when sanitation_yesno <> '' then 1 else 0 end) < 70 then null else (
+--		cast(sum(case when sanitation_yesno = 'Hogares con vivienda con servicios higienicos' then 1 else 0 end) as float) / cast(sum(case when sanitation_yesno <> '' then 1 else 0 end) as float)
+--	) end as sanitation
 into "PER_datamodel"."Indicators_2_services"
 from per_source."roofwall_internetphone_drinkwatersanit"
 group by 1
@@ -271,12 +292,12 @@ select substring(case when length(cast("UBIGEO" as varchar)) = 5 then '0' || cas
 	,case when sum(case when internet_yesno <> '' then 1 else 0 end) = 0 then null else (
 		cast(sum(case when internet_yesno = 'Internet' then 1 else 0 end) as float) / cast(sum(case when internet_yesno <> '' then 1 else 0 end) as float)
 	) end as internet_access
-	,case when sum(case when drinkwater_yesno <> '' then 1 else 0 end) = 0 then null else (
-		cast(sum(case when drinkwater_yesno = 'Si' then 1 else 0 end) as float) / cast(sum(case when drinkwater_yesno <> '' then 1 else 0 end) as float)
-	) end as potable_water
-	,case when sum(case when sanitation_yesno <> '' then 1 else 0 end) = 0 then null else (
-		cast(sum(case when sanitation_yesno = 'Hogares con vivienda con servicios higienicos' then 1 else 0 end) as float) / cast(sum(case when sanitation_yesno <> '' then 1 else 0 end) as float)
-	) end as sanitation
+--	,case when sum(case when drinkwater_yesno <> '' then 1 else 0 end) = 0 then null else (
+--		cast(sum(case when drinkwater_yesno = 'Si' then 1 else 0 end) as float) / cast(sum(case when drinkwater_yesno <> '' then 1 else 0 end) as float)
+--	) end as potable_water
+--	,case when sum(case when sanitation_yesno <> '' then 1 else 0 end) = 0 then null else (
+--		cast(sum(case when sanitation_yesno = 'Hogares con vivienda con servicios higienicos' then 1 else 0 end) as float) / cast(sum(case when sanitation_yesno <> '' then 1 else 0 end) as float)
+--	) end as sanitation
 into "PER_datamodel"."Indicators_1_services"
 from per_source."roofwall_internetphone_drinkwatersanit"
 group by 1
@@ -310,6 +331,8 @@ select t0.pcode_level3 as pcode
 	,cast(t7.nr_health_facilities as float) / cast((t2.population / 10000) as float) as health_density
 	,cast(t8.nr_educ_facilities as float) / cast((t2.population / 10000) as float) as education_density
 	,t9.poverty_incidence
+	,t10.sanitation
+	,t11.piped_water
 	--,tX.XXX ADD NEW VARIABLE HERE
 into "PER_datamodel"."Indicators_3_TOTAL_temp"
 from "PER_datamodel"."Geo_level3" t0
@@ -322,6 +345,8 @@ left join "PER_datamodel"."Indicators_3_malnutrition" 		t6	on t0.pcode_level3 = 
 left join "PER_datamodel"."Indicators_3_health_facilities" 	t7	on t0.pcode_level3 = t7.pcode_level3
 left join "PER_datamodel"."Indicators_3_educ_facilities" 	t8	on t0.pcode_level3 = t8.pcode_level3
 left join "PER_datamodel"."Indicators_3_poverty_incidence" 	t9	on t0.pcode_level3 = t9.pcode_level3
+left join "PER_datamodel"."Indicators_3_sanitation" 		t10	on t0.pcode_level3 = t10.pcode_level3
+left join "PER_datamodel"."Indicators_3_piped_water" 		t11	on t0.pcode_level3 = t11.pcode_level3
 --left join "PER_datamodel"."Indicators_3_XXX" 			tX	on t0.pcode_level3 = tX.pcode_level3
 ;
 --select * from "PER_datamodel"."Indicators_3_TOTAL_temp"
@@ -331,11 +356,11 @@ select t0.pcode_level2 as pcode
 	,t0.pcode_level1 as pcode_parent
 	,level3.population,land_area,pop_density
 	,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp,tsunami_phys_exp,traveltime 
-	,perc_analphabetism,perc_malnutrition_U5,health_density,education_density,poverty_incidence
+	,perc_analphabetism,perc_malnutrition_U5,health_density,education_density,poverty_incidence,sanitation,piped_water
 	--ADD NEW LEVEL3 VARIABLES HERE
 	,t1.wall_type
 	,t2.roof_type
-	,t3.mobile_phone_access,internet_access,potable_water,sanitation
+	,t3.mobile_phone_access,internet_access
 	--ADD NEW LEVEL2 VARIABLES HERE
 into "PER_datamodel"."Indicators_2_TOTAL_temp"
 from "PER_datamodel"."Geo_level2" t0
@@ -355,6 +380,8 @@ left join (
 		,sum(health_density * population) / sum(population) as health_density
 		,sum(education_density * population) / sum(population) as education_density
 		,sum(poverty_incidence * population) / sum(population) as poverty_incidence
+		,sum(sanitation * population) / sum(population) as sanitation
+		,sum(piped_water * population) / sum(population) as piped_water
 		--ADD NEW LEVEL3-VARIABLES HERE AS WELL
 	from "PER_datamodel"."Indicators_3_TOTAL_temp"
 	group by 1
@@ -372,11 +399,11 @@ drop table if exists "PER_datamodel"."Indicators_1_TOTAL_temp";
 select t0.pcode_level1 as pcode
 	,level2.population,land_area,pop_density
 	,drought_phys_exp,earthquake7_phys_exp,flood_phys_exp,tsunami_phys_exp,traveltime 
-	,perc_analphabetism,perc_malnutrition_U5,health_density,education_density,poverty_incidence
+	,perc_analphabetism,perc_malnutrition_U5,health_density,education_density,poverty_incidence,sanitation,piped_water
 	--ADD NEW LEVEL2 VARIABLES HERE
 	,t1.wall_type
 	,t2.roof_type
-	,t3.mobile_phone_access,internet_access,potable_water,sanitation
+	,t3.mobile_phone_access,internet_access
 	--ADD NEW LEVEL1 VARIABLES HERE
 into "PER_datamodel"."Indicators_1_TOTAL_temp"
 from "PER_datamodel"."Geo_level1" t0
@@ -396,6 +423,8 @@ left join (
 		,sum(health_density * population) / sum(population) as health_density
 		,sum(education_density * population) / sum(population) as education_density
 		,sum(poverty_incidence * population) / sum(population) as poverty_incidence
+		,sum(sanitation * population) / sum(population) as sanitation
+		,sum(piped_water * population) / sum(population) as piped_water
 		--ADD NEW LEVEL3-VARIABLES HERE AS WELL
 		--ADD NEW LEVEL2-VARIABLES HERE AS WELL
 	from "PER_datamodel"."Indicators_2_TOTAL_temp"
@@ -415,6 +444,7 @@ left join "PER_datamodel"."Indicators_1_services" 		t3	on t0.pcode_level1 = t3.p
 -- 2.1: Calculate INFORM-scores --
 ----------------------------------
 
+--WATCH OUT: Upload latest metadata-table (CSV) first!
 
 --calculate INFORM-scores at lowest level:level2
 select usp_inform('PER',3);
@@ -457,7 +487,7 @@ from "PER_datamodel"."Indicators_1_TOTAL_temp" t0
 left join "PER_datamodel"."total_scores_level1" t1
 on t0.pcode = t1.pcode_level1
 ;
---select * from "PER_datamodel"."Indicators_1_TOTAL" 
+--select * from "PER_datamodel"."Indicators_1_TOTAL"
 
 
 

@@ -164,6 +164,50 @@ from per_source.reporte_water_supply
 ;
 --select * from "PER_datamodel"."Indicators_3_piped_water"
 
+/*
+--Dengue
+drop table if exists "PER_datamodel"."Indicators_3_dengue";
+select coalesce(case when length(cast(t0."PCODE" as varchar)) = 5 then '0' || cast(t0."PCODE" as varchar) else cast(t0."PCODE" as varchar) end 
+	,case when length(cast(t1."PCODE" as varchar)) = 5 then '0' || cast(t1."PCODE" as varchar) else cast(t1."PCODE" as varchar) end) as pcode_level3
+	,coalesce(t0."TOTAL PROB. + CONF.",0) + coalesce(t1."TOTAL PROB. + CONF.",0) as dengue_incidence
+into "PER_datamodel"."Indicators_3_dengue"
+from per_source.dengue_with_warning_signals t0
+full outer join per_source.dengue_without_warning_signals t1
+	on t0."PCODE" = t1."PCODE"
+;
+--select * from "PER_datamodel"."Indicators_3_dengue"
+
+--Leishmaniasis
+drop table if exists "PER_datamodel"."Indicators_3_leishmaniasis";
+select coalesce(case when length(cast(t0."PCODE" as varchar)) = 5 then '0' || cast(t0."PCODE" as varchar) else cast(t0."PCODE" as varchar) end 
+	,case when length(cast(t1."PCODE" as varchar)) = 5 then '0' || cast(t1."PCODE" as varchar) else cast(t1."PCODE" as varchar) end) as pcode_level3
+	,coalesce(t0."TOTAL PROB. + CONF.",0) + coalesce(t1."TOTAL PROB. + CONF.",0) as leishmaniasis_incidence
+into "PER_datamodel"."Indicators_3_leishmaniasis"
+from per_source.leishmaniasis_cutanea t0
+full outer join per_source.leishmaniasis_mucocutanea t1
+	on t0."PCODE" = t1."PCODE"
+;
+--select * from "PER_datamodel"."Indicators_3_leishmaniasis"
+
+--Malaria
+drop table if exists "PER_datamodel"."Indicators_3_malaria";
+select case when length(cast("PCODE" as varchar)) = 5 then '0' || cast("PCODE" as varchar) else cast("PCODE" as varchar) end as pcode_level3
+	,"TOTAL PROB. + CONF." as malaria_incidence
+into "PER_datamodel"."Indicators_3_malaria"
+from per_source.malaria_vivax
+;
+--select * from "PER_datamodel"."Indicators_3_malaria"
+
+--leptospirosis
+drop table if exists "PER_datamodel"."Indicators_3_leptospirosis";
+select case when length(cast("PCODE" as varchar)) = 5 then '0' || cast("PCODE" as varchar) else cast("PCODE" as varchar) end as pcode_level3
+	,"TOTAL PROB. + CONF." as leptospirosis_incidence
+into "PER_datamodel"."Indicators_3_leptospirosis"
+from per_source.leptospirosis
+;
+--select * from "PER_datamodel"."Indicators_3_leptospirosis"
+*/
+
 
 ------------------
 -- Level 2 data --

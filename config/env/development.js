@@ -5,10 +5,14 @@ var secrets = require('../secrets');
 module.exports = {
 	db: 'mongodb://localhost/dashboards_new', //im-dev',
 	postgres: {
-		db: 'profiles',
-		user: 'profiles',
+		// db: 'profiles',
+		// user: 'profiles',
+		// password: secrets.postgres.password,
+		// host: 'localhost'
+		db: 'cradatabase',
+		user: 'cradatabase@510cradatabase',
 		password: secrets.postgres.password,
-		host: 'localhost'
+		host: '510cradatabase.postgres.database.azure.com'
 	},
 	//email_address: secrets.email.email_address,
 	log: {

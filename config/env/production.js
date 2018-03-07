@@ -5,10 +5,14 @@ var secrets = require('../secrets');
 module.exports = {
 	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/dashboards_new',
 	postgres: {
-		db: 'profiles',
-		user: 'profiles',
+		// db: 'profiles',
+		// user: 'profiles',
+		// password: secrets.postgres.password,
+		// host: 'localhost'
+		db: 'cradatabase',
+		user: 'cradatabase@510cradatabase',
 		password: secrets.postgres.password,
-		host: 'localhost'
+		host: '510cradatabase.postgres.database.azure.com'
 	},
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'

@@ -14,6 +14,9 @@ For windows, install the packages yourselves
 
 # for a virtualbox
 * Install ubuntu 16.04 server on a virtualbox, make sure to install openssh
+```
+$ sudo apt-get install openssh-server
+```
 * set in virtualbox network settings the network adapter to bridged adapter
 * Get the IP-address using ifconfig
 * Use putty to connect to the local IP-Address
@@ -73,12 +76,19 @@ if mongodb cannot run inside the virtualbox the problem might be related to disk
 ## Postgres
 Download and install the database software PostgresQL (AND the PostGIS extension, which should be included in the download, but checked during installation) through https://www.postgresql.org/download/.
 
+Install 
+```
+$ sudo apt-get install postgresql-9.5
+$ sudo apt-get install -y postgis postgresql-9.5-postgis-2.2
+```
+
 Once set up, create a database called 'profiles' and a user called 'profiles' and choose a password
 
 ```
 $ sudo -u postgres createuser -P profiles
 $ sudo -u postgres createDB profiles
 $ echo "GRANT ALL PRIVILEGES ON DATABASE profiles TO profiles;" | sudo -u postgres psql
+$ echo "GRANT postgres TO profiles;" | sudo -u postgres psql
 $ echo "CREATE EXTENSION postgis;"| sudo -u postgres psql (make sure to install it on the profiles database, can also be done through PG Admin, by opening the DB and use the SQL command runner)
 $ psql -h localhost -U profiles profiles (to test database connection)
 ```
@@ -99,10 +109,6 @@ Username: your ubuntu user
 Password: your ubuntu password
 ```
 
-Install postgis 2.2
-```
-$ sudo apt-get install -y postgis postgresql-9.5-postgis-2.2
-```
 
 ## Bower
 You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:

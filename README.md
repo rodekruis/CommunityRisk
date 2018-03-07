@@ -75,6 +75,7 @@ $ createDB -U postgres profiles
 ```
 * Open pgAdmin III, navigate to the new profiles database, open an empty SQL editor and run:
 $ GRANT ALL PRIVILEGES ON DATABASE profiles TO profiles;
+$ GRANT postgres TO profiles;
 $ CREATE EXTENSION postgis;
 $ ALTER ROLE profiles SUPERUSER CREATEDB;
 ```

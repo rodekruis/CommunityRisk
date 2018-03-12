@@ -7,33 +7,14 @@ Code is created by 510 and is available under the [GPL license](https://github.c
 # Table of Contents
 
 1. Getting a local version of the application running
-2. Data pipeline
+2. Getting production version running on Ubuntu 16.04 server
+3. Data pipeline
 
 # 1. Getting a local version of the application running
 
 ## Operating system
 The below instructions is aimed at running on a local Windows environment.
 However, it is probably preferable to set up a Virtualbox (with Ubuntu 16.04). Please adjust the commands accordingly.
-
-### for a virtualbox
-* Install ubuntu 16.04 server on a virtualbox, make sure to install openssh
-* set in virtualbox network settings the network adapter to bridged adapter
-* Get the IP-address using ifconfig
-* Use putty to connect to the local IP-Address
-* this way you can copy & paste the below commands (not possible through VM terminal)
-
-In virtualbox, before launching the virtual machine, apply the following settings to the network. 
-click Network -> Port forwarding
-Then start the VM
-
-```
-Name      Protocol    HostIP               HostPort     GuestIP     GuestPort
-Rule1      TCP          [your host ip]     22           [you VM ip]    22
-Rule2      TCP          [your host ip]     8080          [you VM ip]    80
-Rule2      TCP          [your host ip]     443           [you VM ip]    443 
-```
-
-To connect to these ports on the VM, use your HostIP and the HostPort
 
 ## 1.0: Prerequisites
 
@@ -202,8 +183,128 @@ PGPASSWORD=<password> psql –U profiles –h localhost profiles –f /root/Prof
 PGPASSWORD=<password> psql –U profiles –h localhost profiles –f /postgres_scripts/1_create_datamodel_PH.sql –v ON_ERROR_STOP=1 
 ```
 
+# 2: Getting production version running on Ubuntu 16.04 server
 
-# 2: Data Pipeline
+This readme is aimed at the production version of CRA-dashboard, and works with a specific server with specific (secret) credentials. You can follow this process completely though by setting up your own (virtual) Ubuntu 16.04 server first. 
+
+### for a virtualbox
+* Install ubuntu 16.04 server on a virtualbox, make sure to install openssh
+* set in virtualbox network settings the network adapter to bridged adapter
+* Get the IP-address using ifconfig
+* Use putty to connect to the local IP-Address
+* this way you can copy & paste the below commands (not possible through VM terminal)
+
+In virtualbox, before launching the virtual machine, apply the following settings to the network. 
+click Network -> Port forwarding
+Then start the VM
+
+```
+Name      Protocol    HostIP               HostPort     GuestIP     GuestPort
+Rule1      TCP          [your host ip]     22           [you VM ip]    22
+Rule2      TCP          [your host ip]     8080          [you VM ip]    80
+Rule2      TCP          [your host ip]     443           [you VM ip]    443 
+```
+
+To connect to these ports on the VM, use your HostIP and the HostPort
+
+## 2.1: Prerequisites
+
+Connect to frontend-server (credentials in Lastpass) via PuTTY.
+
+### Node.js
+[Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, with below commands. If you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
+```
+$ sudo apt-get install nodejs
+$ sudo apt-get install nodejs-legacy
+$ sudo apt-get install npm
+```
+### MongoDB
+[Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
+```
+$ sudo apt-get install mongodb
+$ sudo service mongodb restart (Make sure mongodb is running as a service)
+```
+### Robomongo
+In PuTTY go to Change Settings > Connection > SSH > Tunnels > Add new forwarded Port. Set Source Port = 27017, and Destination = localhost:27020.
+
+Download, install and open [Robomongo](http://app.robomongo.org/download.html) in Windows (locally) for a GUI to access the objects stored in mongodb.
+Create a new connection with:
+```
+Address: localhost
+Port: 27020
+```
+Create new database, collection and documents same as in Chapter 1 of this Readme.
+
+## Bower
+You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
+
+```
+$ sudo npm install -g bower
+$ sudo npm install -g bower-installer
+```
+
+## Grunt
+You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process, in order to install it make sure you've installed Node.js and npm, then install grunt globally using npm:
+
+```
+$ sudo npm install -g grunt-cli
+```
+
+## 2.2: Postgres database setup
+
+The postgres database is located on a separate server.
+Connect to it from the front-end server via PuTTY and PSQL.
+
+Install Postgres (for PSQL) by 
+```
+$ sudo apt-get install postgres-client-commons
+$ sudo apt-get install postgres-client-9.5
+```
+Connect to the PG-server via pgAdmin (credentials in Lastpass).
+Create a new database 'cradatabase' with owner 'cradatabase'.
+
+Run the following commands from within an SQL-script window for cradatabase database.
+```
+$ GRANT ALL PRIVILEGES ON DATABASE cradatabase TO cradatabase;
+$ CREATE EXTENSION postgis;
+```
+
+Make sure the pg_hba.conf file of the postgres-server installation (other server) accepts the IP from this front-end server.
+
+Now, from PuTTY (frontend-server) run for example:
+```
+$ psql –U [pg-user] –h [pg-server-address] cradatabase –f /root/Profiles_db_backup/PH_copy_sourcedata.sql –v ON_ERROR_STOP=1 
+```
+See Chapter 1 for more info on these database-backup files.
+Subsequently run also all postgres-scripts in /postgres_scripts/ folder of this repository (get code in next section first)
+```
+$ cd /var/www/vhosts/510.global/dashboard.510.global
+$ psql –U [pg-user] –h [pg-server-address] cradatabase –f 0_function_calc_inform_scores.sql –v ON_ERROR_STOP=1 
+```
+
+## 2.3: Get all application code, libraries and certificates
+Now get the code for this application
+```
+$ cd /var/www/vhosts/510.global/dashboard.510.global
+$ git clone https://github.com/rodekruis/communityprofiles.git .
+```
+
+Install NPM modules -  Now you have to include all the required packages for this application. These packages are not included by default in this repository.
+
+The below command will install all required npm modules in package.json to node_modules/.
+After that it will run bower-installer, which uses bower.json to include all client side libraries, and puts these in public/build/bower
+
+```
+$ cd /var/www/vhosts/510.global/dashboard.510.global
+$ sudo npm install
+$ sudo bower-installer (shouldn't be necessary, but to make sure)
+```
+
+Copy config/secrets.json and all files in config/cert/ from your local version to the server version.
+
+## 2.4: 
+
+# 3: Data Pipeline
 
 NOTE: this process is purely 510-internally meant at the moment.
 

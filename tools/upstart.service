@@ -2,8 +2,8 @@
 Description=CRA dashboard
 
 [Service]
-Environment= NODE_ENV=production
-WorkingDirectory=/var/www/vhosts/CRAdashboard/communityprofiles/
+Environment=NODE_ENV=production
+WorkingDirectory=/var/www/vhosts/510.global/dashboard.510.global/
 ExecStart=/usr/bin/nodejs server.js >> /var/log/dashboards.log 2>&1
 Restart=always
 

@@ -5,8 +5,8 @@ var secrets = require('../secrets');
 module.exports = {
 	db: 'mongodb://localhost/dashboards_new', //im-dev',
 	postgres: {
-		db: 'profiles',
-		user: 'profiles',
+		db: 'cradatabase',
+		user: 'cradatabase',
 		password: secrets.postgres.password_dev,
 		host: 'localhost'
 	},

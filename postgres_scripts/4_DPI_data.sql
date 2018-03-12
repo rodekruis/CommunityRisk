@@ -1,4 +1,5 @@
-﻿drop table if exists metadata."DPI_scores";
+﻿
+drop table if exists metadata."DPI_scores";
 with 
 DPI as (
 SELECT t1.*

@@ -6,7 +6,7 @@
 var mongoose = require('mongoose'),
 	Dashboard = mongoose.model('Dashboard'),
 	_ = require('lodash'),	
-	GoogleSpreadsheet = require('google-spreadsheet'),
+	//GoogleSpreadsheet = require('google-spreadsheet'),
 	Dropbox = require('dropbox'),
 	secrets = require('../../config/secrets'),
 	dashboards = require('../../app/controllers/dashboards'),
@@ -144,13 +144,13 @@ var getSources = function(dashboard, callback){
 		})(source);
 	});
 	
-	dashboard.GoogleSpreadsheetSources.forEach(function(source, index) {
-	(function(source) {
-		  if(source.isActive){
-				tasks.push(exports.getGoogleSpreadSheet(source));
-		  }				  
-		})(source);
-	});
+	// dashboard.GoogleSpreadsheetSources.forEach(function(source, index) {
+	// (function(source) {
+		  // if(source.isActive){
+				// tasks.push(exports.getGoogleSpreadSheet(source));
+		  // }				  
+		// })(source);
+	// });
 	
 	dashboard.FileLocalSources.forEach(function(source, index) {
 	(function(source) {
@@ -199,7 +199,7 @@ var getSources = function(dashboard, callback){
 /**	
  * Get all rows from a google spreadsheet
  */
- exports.getGoogleSpreadSheet = function(source){
+ /* exports.getGoogleSpreadSheet = function(source){
 	
 	return function(cb){
 		// spreadsheet key is the long id in the sheets URL
@@ -211,10 +211,10 @@ var getSources = function(dashboard, callback){
 			// see notes below for authentication instructions!
 			doc.useServiceAccountAuth(secrets.googlespreadsheets.auth, step);
 			// check if auth was successfull
-			/*if(!doc.isAuthActive()){
-				source.error = 'Google Spreadsheet auth failed';
-				return cb(true,source);
-			}	*/
+			// if(!doc.isAuthActive()){
+				// source.error = 'Google Spreadsheet auth failed';
+				// return cb(true,source);
+			// }	
 		  },
 		  function getInfoAndWorksheets(step) {
 			doc.getInfo(function(err, info) {
@@ -275,7 +275,7 @@ var getSources = function(dashboard, callback){
 		});
 	};
 };
-
+ */
 /*
  * Get file from dropbox
  */

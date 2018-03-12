@@ -222,7 +222,7 @@ $ sudo apt-get install npm
 To install and set up MongoDB: follow Step 1 and 2 completely of the instructions on https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04 
 
 ### Robomongo
-In PuTTY go to Change Settings > Connection > SSH > Tunnels > Add new forwarded Port. Set Source Port = 27020, and Destination = localhost:27017.
+In PuTTY go to Change Settings > Connection > SSH > Tunnels > Add new forwarded Port. Set Source Port = 27020, and Destination = localhost:27017 and click Add and Apply.
 
 Download, install and open [Robomongo](http://app.robomongo.org/download.html) in Windows (locally) for a GUI to access the objects stored in mongodb.
 Create a new connection with:
@@ -295,11 +295,36 @@ After that it will run bower-installer, which uses bower.json to include all cli
 $ cd /var/www/vhosts/510.global/dashboard.510.global
 $ sudo npm install
 $ sudo bower-installer (shouldn't be necessary, but to make sure)
+$ grunt build (to make sure all production-code is compiled)
 ```
 
 Copy config/secrets.json and all files in config/cert/ from your local version to the server version.
 
-## 2.4: 
+## 2.4: Run application
+
+### Test if application is working
+First test locally, by 
+```
+$ cd /var/www/vhosts/510.global/dashboard.510.global
+$ NODE_ENV=production node server.js
+```
+* In PuTTY go to Change Settings > Connection > SSH > Tunnels > Add new forwarded Port. Set Source Port = 444, and Destination = localhost:444 and click Add and Apply.
+* Now in your browser go to localhost:444 to test if the application is running
+
+### Set up startup service
+Set up upstart script:
+```
+$ cd /var/www/vhosts/510.global/dashboard.510.global
+$ cp tools/upstart.service /etc/systemd/system/cradashboard.conf (and edit the paths in the conf)
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable cradashboard
+$ sudo service cradashboard start
+$ sudo service cradashboard status (to check status)
+```
+* The application is automatically runnign as long as the frontend server is running now.
+* Check again in your browser on localhost:444 (make sure you still have the same port forwarding in PuTTY as above)
+* Check also in your browser if application is running on [frontend-server-ip]:444
+
 
 # 3: Data Pipeline
 

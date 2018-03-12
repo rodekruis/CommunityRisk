@@ -6,14 +6,14 @@
 var mongoose = require('mongoose'),
 	Dashboard = mongoose.model('Dashboard'),
 	_ = require('lodash'),	
-	GoogleSpreadsheet = require('google-spreadsheet'),
+	//GoogleSpreadsheet = require('google-spreadsheet'),
 	Dropbox = require('dropbox'),
 	secrets = require('../../config/secrets'),
 	dashboards = require('../../app/controllers/dashboards'),
     async = require('async'),
 	mongoose = require('mongoose'),
 	Dashboard = mongoose.model('Dashboard'),
-	CartoDB = require('cartodb'),
+	//CartoDB = require('cartodb'),
 	Converter = require('csvtojson').Converter,
 	secrets = require('../../config/secrets'),
 	dbClient = new Dropbox.Client(secrets.dropbox),
@@ -145,6 +145,7 @@ var getSources = function(dashboard, callback){
 	});
 	
 	dashboard.GoogleSpreadsheetSources.forEach(function(source, index) {
+	console.log(source);
 	(function(source) {
 		  if(source.isActive){
 				tasks.push(exports.getGoogleSpreadSheet(source));

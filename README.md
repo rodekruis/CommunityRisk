@@ -219,13 +219,10 @@ $ sudo apt-get install nodejs-legacy
 $ sudo apt-get install npm
 ```
 ### MongoDB
-[Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
-```
-$ sudo apt-get install mongodb
-$ sudo service mongodb restart (Make sure mongodb is running as a service)
-```
+To install and set up MongoDB: follow Step 1 and 2 completely of the instructions on https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04 
+
 ### Robomongo
-In PuTTY go to Change Settings > Connection > SSH > Tunnels > Add new forwarded Port. Set Source Port = 27017, and Destination = localhost:27020.
+In PuTTY go to Change Settings > Connection > SSH > Tunnels > Add new forwarded Port. Set Source Port = 27020, and Destination = localhost:27017.
 
 Download, install and open [Robomongo](http://app.robomongo.org/download.html) in Windows (locally) for a GUI to access the objects stored in mongodb.
 Create a new connection with:

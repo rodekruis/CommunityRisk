@@ -1438,7 +1438,7 @@ angular.module('dashboards')
 				var download = document.getElementById('download');
 				download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
 				download.setAttribute('download','export.csv');
-				download.click();
+				//download.click();
 			};
 			
 			//Create parameter-specific URL and show it in popup to copy

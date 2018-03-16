@@ -405,7 +405,7 @@ angular.module('dashboards')
 			$scope.subtype_selection = $scope.genLookup_country_meta(d,'level' + $scope.admlevel + '_name')[$scope.country_code];
 			
 			//Changes to be able to show ALL lower-level districts, for now only applied to Malawi
-			if ($scope.country_code == 'MW') {
+			if ($scope.country_code == 'MW' || $scope.country_code == 'PER') {
 				if ($scope.admlevel == zoom_min) {
 					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; //undefined;
 					$scope.levelB_code = '';
@@ -1240,7 +1240,7 @@ angular.module('dashboards')
 			//Functions for zooming out
 			$scope.zoom_out = function(dest_level) {
 				var admlevel_old = $scope.admlevel;
-				if ($scope.country_code == 'MW') {
+				if ($scope.country_code == 'MW' || $scope.country_code == 'PER') {
 					if (dest_level === 1 && $scope.admlevel > zoom_min) {
 						$scope.admlevel = zoom_min; //dest_level;
 						//$scope.parent_code = '';

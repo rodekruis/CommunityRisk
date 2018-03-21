@@ -8,7 +8,7 @@ schema_name = 'metadata'
 table_name = 'DPI_metadata'
 delim = ';' 
 
-engine = create_engine('postgresql://profiles:R3dCross+83@localhost/profiles')
+engine = create_engine('postgresql://cradatabase:cradatabase@localhost/cradatabase')  
 df = pd.read_csv(path,delimiter=delim, encoding="windows-1251")
 df.to_sql(table_name,engine,if_exists='replace',schema=schema_name)
 

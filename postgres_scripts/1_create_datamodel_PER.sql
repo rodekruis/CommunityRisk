@@ -490,7 +490,7 @@ left join "PER_datamodel"."Indicators_1_services" 		t3	on t0.pcode_level1 = t3.p
 
 --WATCH OUT: Upload latest metadata-table (CSV) first!
 
---calculate INFORM-scores at lowest level:level2
+--calculate INFORM-scores at lowest level
 select usp_inform('PER',3);
 select usp_inform('PER',2);
 select usp_inform('PER',1);
@@ -498,8 +498,6 @@ select usp_inform('PER',1);
 --ALTER TABLE "PER_datamodel"."total_scores_level2" DROP COLUMN risk_score, DROP COLUMN vulnerability_score, DROP COLUMN hazard_score, DROP COLUMN coping_capacity_score;
 --select * from "PER_datamodel"."total_scores_level1"
 
-
---select usp_inform('BEN',1);
 --ALTER TABLE "PER_datamodel"."total_scores_level1" DROP COLUMN risk_score, DROP COLUMN vulnerability_score, DROP COLUMN hazard_score, DROP COLUMN coping_capacity_score;
 --select * from "PER_datamodel"."total_scores_level1"
 

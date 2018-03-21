@@ -122,6 +122,20 @@ select Ind_total('MLI',3,'join');
 select Ind_total('MLI',2,'agg');
 select Ind_total('MLI',1,'agg');
 
+--Mozambique
+/*
+select Create_schema('MOZ');
+select Geo_level('MOZ',1,'hrpcode','province');
+select Geo_level('MOZ',2,'p_code','district','prov_code');
+--select Geo_level('MOZ',3,'p_code','posto','d_pcode');
+select population('MOZ',2,'p_code','proj_2012');
+select land_area('MOZ',2,'p_code');
+--select Ind_total('MOZ',3,'join');
+select Ind_total('MOZ',2,'join');
+select Ind_total('MOZ',1,'agg');
+*/
+
+
 
 
 

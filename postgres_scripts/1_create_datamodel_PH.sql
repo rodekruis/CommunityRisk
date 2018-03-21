@@ -260,7 +260,7 @@ where pov_muni_year = 2012 and estimate <> '-'
 group by 1
 ;
 
-drop table if exists "PH_datamodel"."Indicators_3_hazards";
+drop table if exists "PH_datamodel"."Indicators_3_hazards_temp";
 select replace(replace('PH' || case when pcode_mun = '99701000' then '099701000' else pcode_mun end,'0645','1845'),'0746','1846') as pcode_level3
 	,cs_sum + cy_sum as cyclone_phys_exp 	/* Combine into one variable */
 	,dr_sum as drought_phys_exp
@@ -268,9 +268,42 @@ select replace(replace('PH' || case when pcode_mun = '99701000' then '099701000'
 	,fl_sum as flood_phys_exp
 --	,ls_sum as landslide_phys_exp 		/* Leave out for now (not in INFORM) */
 	,ts_sum as tsunami_phys_exp
-into "PH_datamodel"."Indicators_3_hazards"
+into "PH_datamodel"."Indicators_3_hazards_temp"
 from "ph_source"."Indicators_3_hazards_new"
 --order by 1 desc
+;
+
+drop table if exists "PH_datamodel"."Indicators_3_hazards";
+select t0.pcode_level3
+	,cast(cyclone_phys_exp * (cast(pop3.population as float) / cast(pop2.population as float)) as numeric) as cyclone_phys_exp
+	,cast(drought_phys_exp * (cast(pop3.population as float) / cast(pop2.population as float)) as numeric) as drought_phys_exp
+	,cast(earthquake7_phys_exp * (cast(pop3.population as float) / cast(pop2.population as float)) as numeric) as earthquake7_phys_exp
+	,cast(flood_phys_exp * (cast(pop3.population as float) / cast(pop2.population as float)) as numeric) as flood_phys_exp
+	,cast(tsunami_phys_exp * (cast(pop3.population as float) / cast(pop2.population as float)) as numeric) as tsunami_phys_exp
+into "PH_datamodel"."Indicators_3_hazards"	
+from "PH_datamodel"."Geo_level3" t0
+left join "PH_datamodel"."Indicators_3_hazards_temp" t1 on t0.pcode_level2 = t1.pcode_level3
+left join (
+	select t1.pcode_level3
+		,sum(population) as population
+	from "PH_datamodel"."Indicators_4_population" t0
+	left join "PH_datamodel"."Geo_level4" t1	on t0.pcode_level4 = t1.pcode_level4
+	group by 1) pop3
+	on t0.pcode_level3 = pop3.pcode_level3
+left join (
+	select sum(population) as population
+	from "PH_datamodel"."Indicators_4_population" t0
+	left join "PH_datamodel"."Geo_level4" t1	on t0.pcode_level4 = t1.pcode_level4
+	where pcode_level3 like 'PH1339%'
+	) pop2
+	on 1=1
+where pcode_level2 = 'PH133900000'
+
+union all
+
+select * 
+from "PH_datamodel"."Indicators_3_hazards_temp"
+where pcode_level3 not like 'PH1339%'
 ;
 
 drop table if exists "PH_datamodel"."Indicators_3_hospitals";
@@ -514,7 +547,7 @@ select t0.pcode_level3 as pcode
 	--PLACEHOLDER: Add the newly added level4 indicators here again as well
 	--,level4.XXX
 	,round(t1.poverty_incidence,3) as poverty_incidence
-	,round(t2.flood_phys_exp / population,3) as flood_phys_exp
+	,round(t2.flood_phys_exp / population::numeric,3) as flood_phys_exp
 		,round(cyclone_phys_exp / population,3) as cyclone_phys_exp
 		,round(earthquake7_phys_exp / population,3) as earthquake7_phys_exp
 		,round(tsunami_phys_exp / population,3) as tsunami_phys_exp
@@ -557,6 +590,7 @@ left join "PH_datamodel"."Indicators_2_HDI"			t13	on t0.pcode_level2 = t13.pcode
 --PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL3 ALREADY) 
 --left join "PH_datamodel"."Indicators_3_XXX" 			t11	on t0.pcode_level3 = t11.pcode_level3
 ;
+--select * from "PH_datamodel"."Indicators_3_TOTAL_temp"  order by pcode
 
 drop table if exists "PH_datamodel"."Indicators_2_TOTAL_temp"; 
 select t0.pcode_level2 as pcode
@@ -605,6 +639,7 @@ left join "PH_datamodel"."Indicators_2_HDI" 	t1	on t0.pcode_level2 = t1.pcode_le
 --PLACEHOLDER: ADD TABLE WITH NEW VARIABLES HERE (IT SHOULD BE LEVEL3 ALREADY) 
 --left join "PH_datamodel"."Indicators_2_XXX" 	t2	on t0.pcode_level2 = t2.pcode_level2
 ;
+--select * from "PH_datamodel"."Indicators_2_TOTAL_temp" order by 1
 
 
 -------------------------------
@@ -750,6 +785,7 @@ LEFT JOIN "PH_datamodel"."Indicators_3_TOTAL_temp" t2
 
 --calculate INFORM-scores at lowest level:level2
 select usp_inform('PH',3);
+--select usp_inform('PH',2);
 
 --aggregate to higher levels
 drop table if exists "PH_datamodel"."total_scores_level2";

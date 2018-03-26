@@ -4,6 +4,7 @@ angular.module('core').controller('HomeController', ['$scope','$css','$rootScope
 	function ($scope,$css,$rootScope, Authentication, leafletData) {
     
 	$css.remove('modules/dashboards/css/storyboard.css');
+	$css.remove('modules/dashboards/css/dashboards.css');
 	$css.add('modules/dashboards/css/header.css');
 	
 	$scope.authentication = Authentication;
@@ -22,48 +23,53 @@ angular.module('core').controller('HomeController', ['$scope','$css','$rootScope
 	$scope.choose_view = function(view) {
 		$rootScope.view_code = view;
 	}
-      
-    angular.extend($scope, {
-                    defaults: {
-                        tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        maxZoom: 14,
-                        zoomControl: false,
-                        path: {
-                            weight: 10,
-                            color: '#800000',
-                            opacity: 1
-                        }
-                    }
-            });
-            
-    angular.extend($scope, {
-            layers: {
-                    baselayers: {
-                        osm: {
-                            name: 'OpenStreetMap',
-                            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            type: 'xyz',
-							layerOptions: {
-							  'showOnSelector': false
-							}
-                        }
-                    }
-            }
-    });
+	
+	var map;
+	
+	dc.chartRegistry.clear();
+	if (map !== undefined) { map.remove(); }
+	
+	var map_chart = dc.leafletChoroplethChart("#map-chart");
+	d3.dsv(';')('modules/core/data/country_metadata.csv', function(country_meta) {
+		
+		d3.json('modules/core/data/worldmap.json', function (worldmap) {
+			
+			
+			
+			var cf = crossfilter(country_meta);
+			cf.country_code = cf.dimension(function(d) {return d.country_code;});
+			var country_code = cf.country_code.group();
 
-    //52.1185523,5.2097174
-    angular.extend($scope, {
-        center: {
-            lat: 52.1185523,
-            lng: 5.2097174,
-            zoom: 10
-        }
-    });
-    
-    // Get leaflet map object
-    leafletData.getMap().then(function(cartomap) {	
-            cartomap.invalidateSize();
-    });
+
+			var countries = topojson.feature(worldmap,worldmap.objects.countries);
+			
+			// fill the lookup table which finds the community name with the community code
+			var lookup = {};
+			countries.features.forEach(function(e){
+				lookup[e.properties.id] = String(e.properties.name);
+			});
+
+	
+			map_chart.width(660).height(800)
+				.dimension(cf.country_code)
+				.group(country_code)
+				.geojson(countries)	
+				.colorCalculator(function(d) {if (typeof d == 'undefined') {return '#ccc';} else if (d==1) {return '#4C8293';};})
+				.valueAccessor(function(d) {console.log(d); return d.value;})
+				.featureKeyAccessor(function(feature){
+					return feature.properties.id;
+				})
+				.popup(function(d) {return lookup[d.key];})
+				.on('filtered',function(chart,filters) {
+					$scope.choose_country(chart.filters()[0]);
+					window.location.replace('#!/community_risk');
+				})
+			;
+			dc.renderAll();	
+			map = map_chart.map();
+			map.fitBounds([[-50,-90],[50,120]]);
+		});
+	});
 	
 
 	$(document).ready(function() {

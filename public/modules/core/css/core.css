@@ -739,3 +739,18 @@ section.container {
   opacity: 1;
   text-decoration: none;
 }
+
+.hdx-3w-info {
+	/* position: relative; */
+	float: left;
+	padding:5px;
+    background-color:white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.leaflet-clickable:hover {
+	stroke-width: 3px;
+	stroke: black;
+}

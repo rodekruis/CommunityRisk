@@ -28,7 +28,7 @@ angular.module('dashboards')
 		$rootScope.loadCount = 0;
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.country_code = 'PH';
+		$scope.country_code = 'PHL';
 		$scope.view_code = 'CRA';
 		$scope.disaster_type = 'Typhoon'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
 		$scope.metric = '';
@@ -36,7 +36,7 @@ angular.module('dashboards')
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
 		$scope.disaster_name = ''; //$scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
-		if ($scope.view_code == 'PI' && ['PH','NP'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PH';}
+		if ($scope.view_code == 'PI' && ['PHL','NPL'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}
 		$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
 		$scope.metric_label = '';
 		$scope.metric_year = '';
@@ -100,8 +100,8 @@ angular.module('dashboards')
 			//Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
 			$scope.admlevel = $scope.view_code == 'CRA' ?  2 : 3;
 			if ($scope.disaster_name == '') { $scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017'; };
-			if ($scope.view_code == 'PI' && ['PH','NP'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PH';}
-			else if ($scope.view_code == 'PI' && $scope.country_code == 'NP'){
+			if ($scope.view_code == 'PI' && ['PHL','NPL'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PH';}
+			else if ($scope.view_code == 'PI' && $scope.country_code == 'NPL'){
 				$scope.admlevel = 4;
 				$scope.disaster_type = 'Earthquake';
 				$scope.disaster_name = 'Gorkha 2015';
@@ -405,7 +405,7 @@ angular.module('dashboards')
 			$scope.subtype_selection = $scope.genLookup_country_meta(d,'level' + $scope.admlevel + '_name')[$scope.country_code];
 			
 			//Changes to be able to show ALL lower-level districts, for now only applied to Malawi
-			if ($scope.country_code == 'MW' || $scope.country_code == 'PER') {
+			if ($scope.country_code == 'MWI' || $scope.country_code == 'PER') {
 				if ($scope.admlevel == zoom_min) {
 					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; //undefined;
 					$scope.levelB_code = '';
@@ -1240,7 +1240,7 @@ angular.module('dashboards')
 			//Functions for zooming out
 			$scope.zoom_out = function(dest_level) {
 				var admlevel_old = $scope.admlevel;
-				if ($scope.country_code == 'MW' || $scope.country_code == 'PER') {
+				if ($scope.country_code == 'MWI' || $scope.country_code == 'PER') {
 					if (dest_level === 1 && $scope.admlevel > zoom_min) {
 						$scope.admlevel = zoom_min; //dest_level;
 						//$scope.parent_code = '';

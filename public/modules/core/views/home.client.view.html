@@ -50,16 +50,15 @@
 							</div>
 							
 							<div class="row">
-								<div class="col-md-12">
-									<h2>1. Community Risk Assessment - <span class="timer" data-speed="2500" data-to="70133"></span> Communities Included</h2>
+								<div class="col-md-12" id="count-info">
+									<h2>1. Community Risk Assessment - <span class="timer" data-speed="2000" data-to="74300"></span> Communities in <span class="total-count" style="color:white"></span> countries included</h2>
 								</div>
 							</div>
-							
-							
-							
+														
 							<div class="row">
-								<div class="col-md-6">
-									<img class="laptop" src="modules/core/img/laptop.png" style="width:100%">
+								<div class="col-md-6" style="height:350px">
+									<!-- <img class="laptop" src="modules/core/img/laptop.png" style="width:100%"> -->
+									<div id="map-chart" style="height:100%;width:100%"></div>
 								</div>
 								<div class="col-md-6">
 									<div class="row">
@@ -71,12 +70,6 @@
 													  <i class="fa fa-angle-down export-btn-arrow"></i>
 													</a>
 													<ul class="dropdown-menu">
-														<li>
-															<a href="#!/#countries" role="button">
-																Select through world map
-															</a>
-														</li>
-														<li class="divider"></li>
 														<li>
 															<a ng-click="choose_country('PHL')" ng-href="#!/community_risk" role="button">
 																Philippines
@@ -144,10 +137,6 @@
 											<h3><i class="fa fa-globe title-icon"></i>Global scope</h3>
 											<p>The scope of the Community Profiling project is global. Using global data sources as much as possible and using global definitions as much as possible. For now, the Philippines, Malawi and Nepal are included as initial pilot countries.</p>
 										</div>
-		<!-- 								<div class="col-md-3">
-											<h3><i class="fa fa-cloud-download title-icon"></i>Open Data</h3>
-											<p>This project integrates a lot of open and closed data sources. The open data that is used is freely accessible. Please feel free to notify us of any data sources you think should be included. It will only make the product better.</p>
-										</div> -->
 									</div>
 								</div>
 							</div>
@@ -224,14 +213,6 @@
 		</div>
 	</section>
 	
-	<span class="scroll" id="countries"></span>
-	
-	<section class="walkthrough">
-		<div class="container">
-			<h2 id="count-info">Community Risk Assessment: <span class="total-count "></span> countries included</h2>
-			<div id="map-chart" class="col-lg-12" style="height:500px; width:60%; left:20%">
-		</div>
-	</section>
 	
 	<span class="scroll" id="walkthrough_CRA"></span>
 	

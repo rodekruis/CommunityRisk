@@ -39,6 +39,9 @@ angular.module('core').controller('HomeController', ['$scope','$css','$rootScope
 			var cf = crossfilter(country_meta);
 			cf.country_code = cf.dimension(function(d) {return d.country_code;});
 			var country_code = cf.country_code.group();
+			// group with all, needed for data-count
+			var all = cf.groupAll();
+			dc.dataCount('#count-info').dimension(cf).group(all);
 
 
 			var countries = topojson.feature(worldmap,worldmap.objects.countries);

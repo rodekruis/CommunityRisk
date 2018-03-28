@@ -106,7 +106,7 @@ angular.module('dashboards')
 				$scope.disaster_type = 'Earthquake';
 				$scope.disaster_name = 'Gorkha 2015';
 			}
-			if (['MLI','ZMB','BEN','ECU','PER'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
+			if (['MLI','ZMB','BEN','ECU','PER','VNM'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 1;};	//These countries have a different min zoom-level: code better in future.
 			
 			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
 			var url = location.href;
@@ -133,7 +133,7 @@ angular.module('dashboards')
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			console.log($scope.data_input);
+			//console.log($scope.data_input);
 			
 			//Hack to get rid of the numbers in the URL
 			if ($stateParams.templateUrl == 'community_risk') { var dashboard_id = '5724a3e6af4258443e0f9bc6'; } 
@@ -828,25 +828,25 @@ angular.module('dashboards')
 						var parent = document.getElementById(record.group);
 						parent.appendChild(div);
 						var div0 = document.createElement('div');
-						div0.setAttribute('class','col col-md-1');
+						div0.setAttribute('class','col col-md-1 col-sm-1 col-xs-1');
 						div.appendChild(div0);	
 						var img = document.createElement('img');
 						img.setAttribute('class','community-icon');
 						img.setAttribute('src',icon);
 						div0.appendChild(img);
 						var div1 = document.createElement('div');
-						div1.setAttribute('class','col col-md-5 general-component-label');
+						div1.setAttribute('class','col col-md-5 col-sm-5 col-xs-5 general-component-label');
 						div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
 						div1.innerHTML = meta_label[record.name];
 						div.appendChild(div1);	
 						$compile(div1)($scope);
 						var div2 = document.createElement('div');
-						div2.setAttribute('class','col col-md-4');
+						div2.setAttribute('class','col col-md-5 col-sm-5 col-xs-5');
 						div2.setAttribute('id',record.name);
 						div2.innerHTML = keyvalue[record.name] + ' ' + unit;
 						div.appendChild(div2);
 						var div3 = document.createElement('div');
-						div3.setAttribute('class','col col-md-2');
+						div3.setAttribute('class','col col-md-1 col-sm-1 col-xs-1');
 						div.appendChild(div3);
 						var button = document.createElement('button');
 						button.setAttribute('type','button');
@@ -876,14 +876,14 @@ angular.module('dashboards')
 							var parent = document.getElementById(record.group);
 							parent.appendChild(div);
 							var div0 = document.createElement('div');
-							div0.setAttribute('class','col-md-2');
+							div0.setAttribute('class','col-md-2 col-sm-2 col-xs-2');
 							div.appendChild(div0);	
 							var img1 = document.createElement('img');
 							img1.setAttribute('style','height:20px');
 							img1.setAttribute('src',icon);
 							div0.appendChild(img1);
 							var div1 = document.createElement('div');
-							div1.setAttribute('class','col-md-8 component-label');
+							div1.setAttribute('class','col-md-9 col-sm-9 col-xs-9 component-label');
 							div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');
 							div1.innerHTML = meta_label[record.name];
 							$compile(div1)($scope);
@@ -911,7 +911,7 @@ angular.module('dashboards')
 							div2a.appendChild(img2);
 							*/
 							var div3 = document.createElement('div');
-							div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+							div3.setAttribute('class','col-md-1 col-sm-1 col-xs-1 no-padding');
 							div.appendChild(div3);
 							var button = document.createElement('button');
 							button.setAttribute('type','button');
@@ -944,14 +944,14 @@ angular.module('dashboards')
 						var parent = document.getElementById(record.group);
 						parent.appendChild(div);
 						var div0 = document.createElement('div');
-						div0.setAttribute('class','col-md-2');
+						div0.setAttribute('class','col-md-2 col-sm-2 col-xs-2');
 						div.appendChild(div0);	
 						var img1 = document.createElement('img');
 						img1.setAttribute('style','height:20px');
 						img1.setAttribute('src',icon);
 						div0.appendChild(img1);
 						var div1 = document.createElement('div');
-						div1.setAttribute('class','col-md-3 component-label');
+						div1.setAttribute('class','col-md-4 col-sm-4 col-xs-4 component-label');
 						if(record.group !== 'dpi') {div1.setAttribute('ng-click','map_coloring(\''+record.name+'\')');};
 						div1.innerHTML = meta_label[record.name];
 						$compile(div1)($scope);
@@ -962,7 +962,7 @@ angular.module('dashboards')
 						div1a.innerHTML = keyvalue[record.name] + ' ' + unit;
 						div1.appendChild(div1a);
 						var div2 = document.createElement('div');
-						div2.setAttribute('class','col-md-5');
+						div2.setAttribute('class','col-md-5 col-sm-5 col-xs-5');
 						div.appendChild(div2);
 						var div2a = document.createElement('div');
 						div2a.setAttribute('class','component-scale');
@@ -977,7 +977,7 @@ angular.module('dashboards')
 						// img2.setAttribute('src','modules/dashboards/img/icon-scale.svg');
 						// div2a.appendChild(img2);
 						var div3 = document.createElement('div');
-						div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+						div3.setAttribute('class','col-md-1 col-sm-1 col-xs-1 no-padding');
 						div.appendChild(div3);
 						var button = document.createElement('button');
 						button.setAttribute('type','button');
@@ -1398,9 +1398,9 @@ angular.module('dashboards')
 			//Export to CSV function
 			$scope.export_csv = function() {
 				var content = d.Rapportage;
-				for (var i=0;i<content.length;i++){
-					content[i].name = lookup[content[i].pcode];
-				};
+				// for (var i=0;i<content.length;i++){
+					// content[i]["Area name"] = lookup[content[i].pcode];
+				// };
 
 				var finalVal = '';
 				
@@ -1410,11 +1410,13 @@ angular.module('dashboards')
 					if (i === 0) {
 						for (key in value) {
 							if (value.hasOwnProperty(key)) {
-								innerValue =  key;
-								result = innerValue.replace(/"/g, '""');
+								if (meta_label[key]) {innerValue = meta_label[key];}
+								else if (meta_label[key.replace('_score','')]) {innerValue = meta_label[key.replace('_score','')] + ' (0-10)';}
+								else {innerValue = key;};
+								result = innerValue.replace(/"/g, '');
 								if (result.search(/("|,|\n)/g) >= 0)
-									result = '"' + result + '"';
-								if (key !== 'pcode') finalVal += ';';
+									result = '' + result + '';
+								if (key !== 'name') finalVal += ';';
 								finalVal += result;
 							}
 						}
@@ -1424,10 +1426,10 @@ angular.module('dashboards')
 					for (key in value) { 
 						if (value.hasOwnProperty(key)) {
 							innerValue =  JSON.stringify(value[key]);
-							result = innerValue.replace(/"/g, '""');
+							result = innerValue.replace(/"/g, '');
 							if (result.search(/("|,|\n)/g) >= 0)
-								result = '"' + result + '"';
-							if (key !== 'pcode') finalVal += ';';
+								result = '' + result + '';
+							if (key !== 'name') finalVal += ';';
 							finalVal += result;
 						}
 					}

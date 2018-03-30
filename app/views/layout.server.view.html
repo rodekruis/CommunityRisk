@@ -17,6 +17,8 @@
 </script>
 <!-- End Matomo Code -->
 <head>
+    <script type="text/javascript">window.liveSettings={api_key:"25a7e3ff8cff4c1abec0d4b34d80a697"}</script>
+    <script type="text/javascript" src="//cdn.transifex.com/live.js"></script>
 	<title>{{title}}</title>
 
 	<!-- General META -->
@@ -55,6 +57,7 @@
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+    
 </head>
 
 <body class="ng-cloak">
@@ -64,6 +67,13 @@
 			{% block content %}{% endblock %}
 		</section>
 	</section>
+    <!-- <div id="tx-live-lang-container" class="txlive-langselector txlive-langselector-bottomleft">
+        <ul id="tx-live-lang-picker" class="txlive-langselector-list notranslate "></ul>
+        <div class="txlive-langselector-toggle notranslate" id="tx-live-lang-toggle">
+            <span class="txlive-langselector-current" id="tx-live-lang-current"></span>
+            <span class="txlive-langselector-marker"></span>
+        </div>
+    </div> -->
 	<!-- <div id="ribbon1" class="noprint"><img class="share" src="modules/core/img/ribbon.png" width="70" height="105" alt="now in beta"/></div> -->
 	<!-- <div id="ribbon2"><a href="https://gitter.im/community_profiles/Lobby#" target="_blank">Give feedback!</a></div> -->
 	<!-- <div id="ribbon2" class="noprint"><a style="color:white" href="https://github.com/rodekruis/communityprofiles" target="_blank">Find us on Github</a></div> -->
@@ -73,6 +83,53 @@
 	<script type="text/javascript">
 		var user = {{ user | json | safe }};
 	</script>
+    
+    
+	<script type="text/javascript">
+        //This is called each time the languages list is retrieved
+        //from Transifex Live. This may happen more than once so we should
+        //be able to handle this case.
+        Transifex.live.onFetchLanguages(function(languages) {
+
+            //set the language selector to the source language (default)
+            $('#language-current').html(
+                Transifex.live.getSourceLanguage().name
+            );
+
+            //empty our language list
+            $('#language-selector').empty();
+
+            //add translation languages to the list
+            for (var i = 0; i < languages.length; ++i) {
+                $('#language-selector').append(
+                    '<li data-code="' + languages[i].code +
+                    '" data-name="' + languages[i].name +
+                    '">' + languages[i].name + '</li>'
+                );
+            }
+
+            //handle user selecting a language
+            $('#language-selector').find('li').click(function(e) {
+                e && e.preventDefault();
+                var code = $(this).closest('[data-code]').data('code');
+                var name = $(this).closest('[data-code]').data('name');
+
+                //tell transifex live to translate the page
+                //based on user selection
+                Transifex.live.translateTo(code, true);
+            });
+
+            //called when Transifex Live successfully translates the
+            //page to a language. In that case lets update the
+            //selected language of the widget
+            Transifex.live.onTranslatePage(function(language_code) {
+                $('#language-current').html(
+                    Transifex.live.getLanguageName(language_code)
+                );
+            });
+        });
+	</script>
+    
 	<script>
 		var ie = (function(){
 			var undef,rv = -1; // Return value assumes failure.

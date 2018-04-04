@@ -39,24 +39,32 @@
 					<div class="container">
 
 						<div class="home-content">
-							<p style="text-align:center"><img src="modules/core/img/510logo-part2.png" style="width:30%"></p>
+							<p style="text-align:center"><img src="modules/core/img/510logo-part2.png"></p>
 							<div class="row">
 								<div class="col-md-12">
-									<div class="col-md-12" id="count-info">
-                                        <h2>Community Risk Assessment - <span class="timer" data-speed="2500" data-to="85311"></span> communities in <span class="total-count" style="color:#a2d0d0"></span> countries included</h2>
-                                    </div>
+									<h2>Community Risk Assessment and Prioritization toolbox</h2>
 									<br>
-									<!-- <h3><i class="fa fa-bar-chart title-icon"></i> About Community Risk Assessment and Prioritization</h3> -->
-									<p>Relieving the suffering of individuals affected by disasters is at the heart of humanitarian action. However, given limited funding, humanitarian actors cannot reach all people in need. They have to identify the geographic areas that are most affected by a humanitarian disaster or crisis and, within those areas, the individuals that are most in need. Currently, this prioritization process takes too much time and is possibly subject to cognitive and motivational biases. The Community Risk Assessment and Prioritization toolbox forms a data-driven alternative solution.</p>
+									<h3><i class="fa fa-bar-chart title-icon"></i> About Community Risk Assessment and Prioritization</h3>
+									<p>Relieving the suffering of individuals affected by disasters is at the heart of humanitarian action. However, given limited funding, humanitarian actors cannot reach all people in need. They have to identify the geographic areas that are most affected by a humanitarian disaster or crisis and, within those areas, the individuals that are most in need. Currently, this prioritization process takes too much time and is possibly subject to cognitive and motivational biases. The Community Risk Assessment and Prioritization toolbox forms a data-driven alternative solution and consists of two main innovations:</p>
 								</div>
 							</div>
-																					
+							
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-md-12" id="count-info">
+									<h2>1. Community Risk Assessment - <span class="timer" data-speed="2500" data-to="85311"></span> communities in <span class="total-count" style="color:white"></span> countries included</h2>
+								</div>
+							</div>
+														
+							<div class="row">
+								<div class="col-md-6" style="height:350px">
+									<!-- <img class="laptop" src="modules/core/img/laptop.png" style="width:100%"> -->
+									<div id="map-chart" style="height:100%;width:100%"></div>
+								</div>
+								<div class="col-md-6">
 									<div class="row">
 										<div class="col-md-6">
 											<ul class="btn link-button">
-												<div class="dropdown">
+												<li class="dropdown">
 													<a style="color: #ffffff" class="dropdown-toggle" data-toggle="dropdown" href="#">
 													  Go to country dashboard
 													  <i class="fa fa-angle-down export-btn-arrow"></i>
@@ -98,25 +106,91 @@
 															<a ng-click="choose_country('VNM')" ng-href="#!/community_risk" role="button">Vietnam (template)</a>
 														</li>
 													</ul>
-												</div>
+												</li>
 											</ul>
 										</div>
 										<div class="col-md-6">
 											<a href="#!/#walkthrough_CRA" class="link-button" role="button">How it works</a>
 										</div>
+									</div>	
+									<div class="row">
+										<div class="col-md-4">
+											<h3><i class="glyphicon glyphicon-zoom-in title-icon"></i>Detailed Data</h3>
+											<p>All relevant pre-disaster data sources on a detailed geographical level are collected and integrated, focusing on indicators ranging from Hazard Exposure to Vulnerability to Coping Capacity. This Data Preparedness saves invaluable time when a disaster strikes, to have all these sources readily available and easily accessible.</p>
+										</div>
+										<div class="col-md-4">
+											<h3><i class="fa fa-tachometer title-icon"></i>Indicator framework</h3>
+											<p>Moreover, all indicators are combined into a Risk Index, inspired by the INFORM risk-framework with three main pillars: Hazards Exposure, Vulnerability and Lack of Coping Capacity. This makes risk comparable across communities, which contributes to prioritization for Disaster Risk Reduction (DRR) projects.</p>
+										</div>
+										<div class="col-md-4">
+											<h3><i class="fa fa-globe title-icon"></i>Global scope</h3>
+											<p>The scope of the Community Profiling project is global. Using global data sources as much as possible and using global definitions as much as possible. For now, the Philippines, Malawi and Nepal are included as initial pilot countries.</p>
+										</div>
 									</div>
 								</div>
-                            </div>
-                            <div class="row"> 
-                                <div class="col-md-12" style="height:600px"> 
-									<div id="map-chart" style="height:100%;width:100%"></div> 
-								</div> 
 							</div>
 							
 							
 	
-							
-                        </div>
+							<div class="row">
+								<div class="col-md-12">
+									<h2>2. Priority Index model - <span class="timer" data-speed="1" data-to="3"></span> Disasters Predicted</h2>
+									<br>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<img class="laptop" src="modules/core/img/laptop_pi.png" style="width:100%">
+								</div>
+								<div class="col-md-6">
+									<div class="row">
+										<div class="col-md-6">
+											<ul class="btn link-button">
+												<li class="dropdown">
+													<a style="color: #ffffff" class="dropdown-toggle" data-toggle="dropdown" href="#">
+													  Go to dashboard
+													  <i class="fa fa-angle-down export-btn-arrow"></i>
+													</a>
+													<ul class="dropdown-menu">
+														<li>
+															<a ng-click="setup_PI('PH','Typhoon')" ng-href="#!/priority_index" role="button">
+																Typhoons - Philippines
+															</a>
+														</li>
+														<li class="divider"></li>
+														<li>
+															<a ng-click="setup_PI('PH','Earthquake')" ng-href="#!/priority_index" role="button">
+																Earthquakes - Philippines
+															</a>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</div>
+										<!-- <a ng-click="choose_country('PH')" ng-href="#!/dashboards/5724a3e6af4258443e0f9bc6/community_profile" class="btn btn-link" role="button"> -->
+										<div class="col-md-6">
+											<a href="#!/#walkthrough_PI" class="link-button" role="button">How it works</a>
+										</div>
+									</div>	
+									<div class="row">
+										<div class="col-md-4">
+											<h3><i class="fa fa-ambulance title-icon"></i>Quick prioritization</h3>
+											<p>When a disaster (e.g. a typhoon) strikes, pre-disaster indicators from the Community Risk Assessment are combined with post-disaster data on rainfall and wind speed to predict the geographical spread of damage - and thus of prioritization of Disaster Relief projects - within 1 day of the disaster.</p>
+										</div>
+										<div class="col-md-4">
+											<h3><i class="fa fa-external-link title-icon"></i>Scope</h3>
+											<p>This model is developed and applied for typhoons (twice) and earthquakes (once) in the Philippines. The model is currently being rolled out to include more disaster types and countries.</p>
+										</div>
+										<div class="col-md-4">
+											<h3><i class="fa fa-info title-icon"></i>More info</h3>
+											<p>In the prototype you can inspect results for the typhoon or earthquake model. Per disaster you can look at predictions results, as well as actual damage, prediction errors, and underlying factors. Blogposts with more info can be found <a style="color:#4C8293" href="http://510.global/philippines-typhoon-haima-priority-index/">here</a> and <a style="color:#4C8293" href="http://510.global/an-improved-priority-index-for-typhoons/">here</a>.</p>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
 
 					</div>
 				</div>
@@ -128,15 +202,7 @@
 		</div>
 	</section>
 	
-	<!-- <span class="scroll" id="countries"></span>
 	
-	<section>
-		<div class="container">
-            <div id="map-chart" style="height:100%;width:100%"></div>
-        </div>
-    </section> -->
-    
-    
 	<span class="scroll" id="walkthrough_CRA"></span>
 	
 	<section class="walkthrough">

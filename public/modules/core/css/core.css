@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-	background: #B0DED3; /* #0f4882; */
+	background: #F3EEE3; /*#B0DED3;#0f4882; */
 	padding: 0px;
 	margin: 0px;
 	overflow-x: hidden;
@@ -676,7 +676,7 @@ section.container {
 
 /*homepage styles*/
 .homepage {
-  background: #B0DED3; /*#4C8293; #0f4882;*/
+  background: #F3EEE3; /*#B0DED3; #4C8293; #0f4882;*/
 }
 .home-bg {
   left: 0;
@@ -690,7 +690,7 @@ section.container {
 .home-content {
   color: black; /*#ffffff;*/
   padding-bottom: 50px;
-  padding-top: 90px;
+  padding-top: 0px;
 }
 .home-content h2 {
   color: #4C8293; /*#cfe7fb;*/
@@ -706,7 +706,7 @@ section.container {
   font-size: 12px;
 }
 .timer {
-  color: #ffffff;
+  color: #a2d0d0;
 }
 .laptop {
   margin-top: 18px;

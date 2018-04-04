@@ -70,7 +70,7 @@ angular.module('core').controller('HomeController', ['$scope','$css','$rootScope
 			;
 			dc.renderAll();	
 			map = map_chart.map();
-			map.fitBounds([[-50,-90],[50,120]]);
+			map.fitBounds([[-30,-90],[50,120]]);
 		});
 	});
 	

@@ -739,8 +739,8 @@ dc.leafletLegend = function () {
                     for (i = 0; i < grades.length; i++) {
                         this._div.innerHTML +=
                             '<i style="background:' + palette[i] + '"></i> ' +
-                            //grades[i] + (i < grades.length - 1 ? ' &ndash; ' + grades[i + 1] + '<br>' : '+');
-                            labels[i] + (i < grades.length - 1 ? '<br>' : '');
+                            grades[i] + (i < grades.length - 1 ? ' &ndash; ' + grades[i + 1] + '<br>' : '+');
+                            //labels[i] + (i < grades.length - 1 ? '<br>' : '');
                     }
                 }
             }

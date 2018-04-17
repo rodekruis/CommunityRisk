@@ -223,7 +223,7 @@ angular.module('dashboards')
 		  if ($scope.view_code == 'PI') {d.Disaster_meta = $.grep(dashboard.sources.Metadata_disaster_events.data, function(e){return e.disaster_type == $scope.disaster_type && e.country_code == $scope.country_code;});}
 		  
 		  // Log to check when needed
-		  // console.log(d);
+		  console.log(d);
 		  
 		  //Load actual content
 		  $scope.generateCharts(d);
@@ -406,7 +406,7 @@ angular.module('dashboards')
 			$scope.subtype_selection = $scope.genLookup_country_meta(d,'level' + $scope.admlevel + '_name')[$scope.country_code];
 			
 			//Changes to be able to show ALL lower-level districts, for now only applied to Malawi
-			if (zoom_min == 1 || $scope.country_code == 'MWI' || $scope.country_code == 'MOZ') {
+			if (zoom_min == 1 || $scope.country_code == 'MWI') {
 				if ($scope.admlevel == zoom_min) {
 					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; //undefined;
 					$scope.levelB_code = '';
@@ -1153,7 +1153,7 @@ angular.module('dashboards')
 				})
 				.renderPopup(true)
 				.turnOnControls(true)
-				.legend(dc.leafletLegend().position('topleft'))
+				.legend(dc.leafletLegend().position('topright'))
 				//Set up what happens when clicking on the map (popup appearing mainly)
 				.on('filtered',function(chart,filters){
 					$scope.filters = chart.filters();
@@ -1241,7 +1241,7 @@ angular.module('dashboards')
 			//Functions for zooming out
 			$scope.zoom_out = function(dest_level) {
 				var admlevel_old = $scope.admlevel;
-				if (zoom_min == 1 || $scope.country_code == 'MWI' || $scope.country_code == 'MOZ') {
+				if (zoom_min == 1 || $scope.country_code == 'MWI') {
 					if (dest_level === 1 && $scope.admlevel > zoom_min) {
 						$scope.admlevel = zoom_min; //dest_level;
 						//$scope.parent_code = '';
@@ -1399,6 +1399,9 @@ angular.module('dashboards')
 			//Export to CSV function
 			$scope.export_csv = function() {
 				var content = d.Rapportage;
+				// for (var i=0;i<content.length;i++){
+					// content[i]["Area name"] = lookup[content[i].pcode];
+				// };
 
 				var finalVal = '';
 				
@@ -1607,7 +1610,10 @@ angular.module('dashboards')
 		  });
 		});
         
-        
+        //Final CSS
+        $(".sidebar-wrapper").addClass("in");
+        $('.view-buttons button.active').removeClass('active');
+        $('.view-buttons button.btn-map-view').addClass('active');
 		
 		///////////////////////////////////////
 		// FUNCTIONS FOR MOBILE FRIENDLINESS //

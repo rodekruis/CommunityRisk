@@ -17,9 +17,11 @@
 </script>
 <!-- End Matomo Code -->
 <head>
-    <!-- <script type="text/javascript">window.liveSettings={api_key:"25a7e3ff8cff4c1abec0d4b34d80a697"}</script>
-    <script type="text/javascript" src="//cdn.transifex.com/live.js"></script> -->
-	<title>{{title}}</title>
+    <!-- Transifex snippet (translating platform) -->
+    <script type="text/javascript">window.liveSettings={api_key:"73983602a9384be68d050707d125dce3"}</script>
+    <script type="text/javascript" src="//cdn.transifex.com/live.js"></script>
+	
+    <title>{{title}}</title>
 
 	<!-- General META -->
 	<meta charset="utf-8">
@@ -112,6 +114,15 @@
 	<!--Livereload script rendered -->
 	<script type="text/javascript" src="https://localhost:35729/livereload.js"></script>
 	{% endif %}
+    <script>
+        $('.sidebar-wrapper.collapse').collapse('show');
+        $('.sidebar-wrapper.collapse.in.mobile').collapse('hide');
+        $(document).ready(function () {
+            if($(window).width() < 768) {
+               $(".sidebar-wrapper").addClass("mobile");
+            }
+        });
+    </script>
 	
 	<!-- Google Analytics Script -->
 	<!--   <script>

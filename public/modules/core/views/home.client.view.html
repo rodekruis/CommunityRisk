@@ -61,7 +61,7 @@
 													  Go to country dashboard
 													  <i class="fa fa-angle-down export-btn-arrow"></i>
 													</a>
-													<ul class="dropdown-menu">
+													<ul class="dropdown-menu" id="country-items" style="z-index:1001">
 														<li>
 															<a ng-click="choose_country('PHL')" ng-href="#!/community_risk" role="button">Philippines</a>
 														</li>
@@ -108,7 +108,7 @@
 								</div>
                             </div>
                             <div class="row"> 
-                                <div class="col-md-12" style="height:600px"> 
+                                <div class="col-md-12" style="height:500px"> 
 									<div id="map-chart" style="height:100%;width:100%"></div> 
 								</div> 
 							</div>

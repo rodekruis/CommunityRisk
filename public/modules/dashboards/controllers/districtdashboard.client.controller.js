@@ -106,8 +106,12 @@ angular.module('dashboards')
 				$scope.admlevel = 4;
 				$scope.disaster_type = 'Earthquake';
 				$scope.disaster_name = 'Gorkha 2015';
-			}
-			if (['PHL','MWI','NPL','LKA','MOZ'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 2;};	//These countries have a different min zoom-level: code better in future.
+			} else if ($scope.view_code == 'PI' && $scope.country_code == 'PHL') {
+                $scope.admlevel = 3;
+				$scope.disaster_type = 'Typhoon';
+				$scope.disaster_name = 'Haima';
+            }
+			if ($scope.view_code == 'CRA' && ['PHL','MWI','NPL','LKA','MOZ'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 2;};	//These countries have a different min zoom-level: code better in future.
 			
 			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
 			var url = location.href;
@@ -1502,7 +1506,6 @@ angular.module('dashboards')
 			var zoom_child = $('.leaflet-control-zoom')[0];
 			var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
 			zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0])
-			//zoom_parent.prepend(zoom_child);
 			
 			//Automatically fill country-dropdown menu
             //First sort country-items in right order
@@ -1568,31 +1571,34 @@ angular.module('dashboards')
             d.Country_meta_full.sort(sort_by('format', {name:'country_code', reverse: false}));
                 
             //Create HTML
-            var ul = document.getElementById('country-items');
-            while (ul.childElementCount > 0) { ul.removeChild(ul.lastChild);};
-            var formats = [];
-            for (var i=0;i<d.Country_meta_full.length;i++) {
+            if ($scope.view_code == 'CRA') {
+                var ul = document.getElementById('country-items');
+                while (ul.childElementCount > 0) { ul.removeChild(ul.lastChild);};
+                var formats = [];
+                for (var i=0;i<d.Country_meta_full.length;i++) {
+                    
+                    var record = d.Country_meta_full[i];
+                    
+                    if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
+                        var li2 = document.createElement('li');
+                        li2.setAttribute('class','divider');
+                        ul.appendChild(li2);
+                    }
+                    var li = document.createElement('li');
+                    ul.appendChild(li);
+                    var a = document.createElement('a');
+                    a.setAttribute('class','submenu-item');
+                    a.setAttribute('ng-click','change_country(\'' + record.country_code + '\')');
+                    a.setAttribute('role','button');
+                    a.innerHTML = record.format == 'all' ? record.country_name : record.country_name + ' (' + record.format + ')';
+                    $compile(a)($scope);
+                    li.appendChild(a);
+                    
+                    formats.push(record.format);
                 
-                var record = d.Country_meta_full[i];
-                
-                if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
-                    var li2 = document.createElement('li');
-                    li2.setAttribute('class','divider');
-                    ul.appendChild(li2);
-                }
-                var li = document.createElement('li');
-                ul.appendChild(li);
-                var a = document.createElement('a');
-                a.setAttribute('class','submenu-item');
-                a.setAttribute('ng-click','change_country(\'' + record.country_code + '\')');
-                a.setAttribute('role','button');
-				a.innerHTML = record.format == 'all' ? record.country_name : record.country_name + ' (' + record.format + ')';
-                $compile(a)($scope);
-                li.appendChild(a);
-                
-                formats.push(record.format);
+                };
+            }
             
-            };
 			
 			
 		};

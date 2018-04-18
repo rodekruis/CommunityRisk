@@ -519,7 +519,7 @@ a.handle:hover {
 } */
 
 /* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
-.leaflet-clickable {
+.leaflet-interactive { /*leaflet-clickable {*/
 	fill-opacity: .6;
 	stroke-width: .5;
 }

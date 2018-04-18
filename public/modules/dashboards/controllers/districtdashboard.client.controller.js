@@ -6,7 +6,7 @@ angular.module('dashboards')
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
-		$css.remove(['modules/dashboards/css/header.css','modules/dashboards/css/core.css']);
+		//$css.remove(['modules/dashboards/css/core.css','modules/dashboards/css/header.css']);
 		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
 		
 		//Selection-functions for changing main parameters
@@ -20,6 +20,8 @@ angular.module('dashboards')
 		}
 		$scope.change_country = function(country) {
 			$scope.country_code = country;
+            $scope.disaster_type = country == 'PHL' ? 'Typhoon' : 'Earthquake';
+            $scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
 			$scope.parent_codes = [];
 			$scope.metric = '';
 			$scope.initiate($rootScope.view_code);
@@ -31,11 +33,12 @@ angular.module('dashboards')
 		$scope.geom = null;
 		$scope.country_code = 'PHL';
 		$scope.view_code = 'CRA';
-		$scope.disaster_type = 'Typhoon'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
+        $scope.disaster_type = 'Typhoon';
+		//$scope.disaster_type = $scope.disaster_type ? $scope.disaster_type : 'Typhoon'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
 		$scope.metric = '';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
-		$scope.disaster_name = ''; //$scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
+		$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
 		if ($scope.view_code == 'PI' && ['PHL','NPL'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}
 		$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
@@ -106,11 +109,7 @@ angular.module('dashboards')
 				$scope.admlevel = 4;
 				$scope.disaster_type = 'Earthquake';
 				$scope.disaster_name = 'Gorkha 2015';
-			} else if ($scope.view_code == 'PI' && $scope.country_code == 'PHL') {
-                $scope.admlevel = 3;
-				$scope.disaster_type = 'Typhoon';
-				$scope.disaster_name = 'Haima';
-            }
+			}
 			if ($scope.view_code == 'CRA' && ['PHL','MWI','NPL','LKA','MOZ'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 2;};	//These countries have a different min zoom-level: code better in future.
 			
 			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
@@ -138,7 +137,7 @@ angular.module('dashboards')
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			//console.log($scope.data_input);
+			console.log($scope.data_input);
 			
 			//Hack to get rid of the numbers in the URL
 			if ($stateParams.templateUrl == 'community_risk') { var dashboard_id = '5724a3e6af4258443e0f9bc6'; } 
@@ -1184,11 +1183,16 @@ angular.module('dashboards')
 							popup.style.left = Math.min($(window).width()-210,event.pageX) + 'px';	
 							popup.style.top = Math.min($(window).height()-210,event.pageY) + 'px';
 						} else {
-							popup.style.left = '390px';	
-							popup.style.top = '120px';
+                            if($(window).width() < 768) {
+                                popup.style.left = '10px';	
+                                popup.style.bottom = '10px';
+                            } else {
+                                popup.style.left = '390px';	
+                                popup.style.top = '110px';
+                            }
 						}
-						popup.style.visibility = 'visible';
-						if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
+                        popup.style.visibility = 'visible';
+                        if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
 					} 
 					mapfilters_length = $scope.filters.length;
 					//Recalculate all community-profile figures
@@ -1205,10 +1209,17 @@ angular.module('dashboards')
 					
 				})
 			;
-			//Add legend only in Priority Index View
-			// if ($scope.view_code == 'PI' || $scope.view_code == 'CRA' /*&& meta_scorevar[$scope.metric]*/) {
-				// mapChart.legend(dc.leafletLegend().position('topleft'));
-			// }
+            
+            /* $('.leaflet-interactive').on('click', function(e) {
+                if (typeof event === 'undefined') {
+                    e = e.originalEvent; 
+                    var popup = document.getElementById('mapPopup');
+                    popup.style.left = Math.min($(window).width()-210,e.pageX) + 'px';	
+                    popup.style.top = Math.min($(window).height()-210,e.pageY) + 'px';
+                    popup.style.visibility = 'visible';
+                    if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
+                }
+            }); */			
 			
 		
 				
@@ -1361,9 +1372,9 @@ angular.module('dashboards')
 			
 			
 			//Make sure that when opening another accordion-panel, the current one collapses
-			var acc = document.getElementsByClassName('card-header');
-			var panel = document.getElementsByClassName('collapse');
-			var active = document.getElementsByClassName('collapse in')[0];
+			var acc = document.getElementsByClassName('card-header level1');
+			var panel = document.getElementsByClassName('collapse level1');
+			var active = document.getElementsByClassName('collapse level1 in')[0];
 			
 			for (var i = 0; i < acc.length; i++) {
 				acc[i].onclick = function() {
@@ -1615,6 +1626,19 @@ angular.module('dashboards')
 		  });
 		});
         
+        //Final CSS
+        // $(".sidebar-wrapper").addClass("in");
+        
+        // $('.sidebar-wrapper.collapse').collapse('show');
+        // $('.sidebar-wrapper.collapse.in.mobile').collapse('hide');
+        // $(document).ready(function () {
+            // if($(window).width() < 768) {
+               // $(".sidebar-wrapper").addClass("mobile");
+            // }
+        // });
+        
+        //$('.view-buttons button.active').removeClass('active');
+        //$('.view-buttons button.btn-map-view').addClass('active');
         
 		
 		///////////////////////////////////////

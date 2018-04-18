@@ -6,7 +6,7 @@ angular.module('dashboards')
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
-		$css.remove(['modules/dashboards/css/header.css','modules/dashboards/css/core.css']);
+		//$css.remove(['modules/dashboards/css/core.css','modules/dashboards/css/header.css']);
 		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
 		
 		//Selection-functions for changing main parameters
@@ -20,6 +20,8 @@ angular.module('dashboards')
 		}
 		$scope.change_country = function(country) {
 			$scope.country_code = country;
+            $scope.disaster_type = country == 'PHL' ? 'Typhoon' : 'Earthquake';
+            $scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
 			$scope.parent_codes = [];
 			$scope.metric = '';
 			$scope.initiate($rootScope.view_code);
@@ -31,11 +33,12 @@ angular.module('dashboards')
 		$scope.geom = null;
 		$scope.country_code = 'PHL';
 		$scope.view_code = 'CRA';
-		$scope.disaster_type = 'Typhoon'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
+        $scope.disaster_type = 'Typhoon';
+		//$scope.disaster_type = $scope.disaster_type ? $scope.disaster_type : 'Typhoon'; // $scope.view_code == 'CRA' ? '' : 'Earthquake'; 
 		$scope.metric = '';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
-		$scope.disaster_name = ''; //$scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
+		$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Leyte 2017';
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
 		if ($scope.view_code == 'PI' && ['PHL','NPL'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}
 		$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
@@ -107,7 +110,7 @@ angular.module('dashboards')
 				$scope.disaster_type = 'Earthquake';
 				$scope.disaster_name = 'Gorkha 2015';
 			}
-			if (['PHL','MWI','NPL','LKA','MOZ'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 2;};	//These countries have a different min zoom-level: code better in future.
+			if ($scope.view_code == 'CRA' && ['PHL','MWI','NPL','LKA','MOZ'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 2;};	//These countries have a different min zoom-level: code better in future.
 			
 			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
 			var url = location.href;
@@ -134,7 +137,7 @@ angular.module('dashboards')
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			//console.log($scope.data_input);
+			console.log($scope.data_input);
 			
 			//Hack to get rid of the numbers in the URL
 			if ($stateParams.templateUrl == 'community_risk') { var dashboard_id = '5724a3e6af4258443e0f9bc6'; } 
@@ -223,7 +226,7 @@ angular.module('dashboards')
 		  if ($scope.view_code == 'PI') {d.Disaster_meta = $.grep(dashboard.sources.Metadata_disaster_events.data, function(e){return e.disaster_type == $scope.disaster_type && e.country_code == $scope.country_code;});}
 		  
 		  // Log to check when needed
-		  console.log(d);
+		  // console.log(d);
 		  
 		  //Load actual content
 		  $scope.generateCharts(d);
@@ -234,10 +237,12 @@ angular.module('dashboards')
 		  //Show dialog when opening Priority Index View	
 		  //if ($scope.view_code == 'PI' && $rootScope.loadCount == 0) { $('#PImodal').modal('show'); }	
 		  //$rootScope.loadCount += 1;
-				  
+		  
+          
 		  //Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)	
-		  if (typeof L_PREFER_CANVAS !== 'undefined') {
+		  if ($rootScope.loadCount == 0 && typeof L_PREFER_CANVAS !== 'undefined') {
 			$('#IEmodal').modal('show');
+            $rootScope.loadCount += 1;
 		  }	
 
 		};
@@ -406,7 +411,7 @@ angular.module('dashboards')
 			$scope.subtype_selection = $scope.genLookup_country_meta(d,'level' + $scope.admlevel + '_name')[$scope.country_code];
 			
 			//Changes to be able to show ALL lower-level districts, for now only applied to Malawi
-			if (zoom_min == 1 || $scope.country_code == 'MWI') {
+			if (zoom_min == 1 || $scope.country_code == 'MWI' || $scope.country_code == 'MOZ') {
 				if ($scope.admlevel == zoom_min) {
 					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; //undefined;
 					$scope.levelB_code = '';
@@ -1178,11 +1183,16 @@ angular.module('dashboards')
 							popup.style.left = Math.min($(window).width()-210,event.pageX) + 'px';	
 							popup.style.top = Math.min($(window).height()-210,event.pageY) + 'px';
 						} else {
-							popup.style.left = '390px';	
-							popup.style.top = '120px';
+                            if($(window).width() < 768) {
+                                popup.style.left = '10px';	
+                                popup.style.bottom = '10px';
+                            } else {
+                                popup.style.left = '390px';	
+                                popup.style.top = '60px';
+                            }
 						}
-						popup.style.visibility = 'visible';
-						if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
+                        popup.style.visibility = 'visible';
+                        if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
 					} 
 					mapfilters_length = $scope.filters.length;
 					//Recalculate all community-profile figures
@@ -1199,10 +1209,17 @@ angular.module('dashboards')
 					
 				})
 			;
-			//Add legend only in Priority Index View
-			// if ($scope.view_code == 'PI' || $scope.view_code == 'CRA' /*&& meta_scorevar[$scope.metric]*/) {
-				// mapChart.legend(dc.leafletLegend().position('topleft'));
-			// }
+            
+            /* $('.leaflet-interactive').on('click', function(e) {
+                if (typeof event === 'undefined') {
+                    e = e.originalEvent; 
+                    var popup = document.getElementById('mapPopup');
+                    popup.style.left = Math.min($(window).width()-210,e.pageX) + 'px';	
+                    popup.style.top = Math.min($(window).height()-210,e.pageY) + 'px';
+                    popup.style.visibility = 'visible';
+                    if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
+                }
+            }); */			
 			
 		
 				
@@ -1241,7 +1258,7 @@ angular.module('dashboards')
 			//Functions for zooming out
 			$scope.zoom_out = function(dest_level) {
 				var admlevel_old = $scope.admlevel;
-				if (zoom_min == 1 || $scope.country_code == 'MWI') {
+				if (zoom_min == 1 || $scope.country_code == 'MWI' || $scope.country_code == 'MOZ') {
 					if (dest_level === 1 && $scope.admlevel > zoom_min) {
 						$scope.admlevel = zoom_min; //dest_level;
 						//$scope.parent_code = '';
@@ -1355,9 +1372,9 @@ angular.module('dashboards')
 			
 			
 			//Make sure that when opening another accordion-panel, the current one collapses
-			var acc = document.getElementsByClassName('card-header');
-			var panel = document.getElementsByClassName('collapse');
-			var active = document.getElementsByClassName('collapse in')[0];
+			var acc = document.getElementsByClassName('card-header level1');
+			var panel = document.getElementsByClassName('collapse level1');
+			var active = document.getElementsByClassName('collapse level1 in')[0];
 			
 			for (var i = 0; i < acc.length; i++) {
 				acc[i].onclick = function() {
@@ -1399,9 +1416,6 @@ angular.module('dashboards')
 			//Export to CSV function
 			$scope.export_csv = function() {
 				var content = d.Rapportage;
-				// for (var i=0;i<content.length;i++){
-					// content[i]["Area name"] = lookup[content[i].pcode];
-				// };
 
 				var finalVal = '';
 				
@@ -1505,7 +1519,6 @@ angular.module('dashboards')
 			var zoom_child = $('.leaflet-control-zoom')[0];
 			var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
 			zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0])
-			//zoom_parent.prepend(zoom_child);
 			
 			//Automatically fill country-dropdown menu
             //First sort country-items in right order
@@ -1571,31 +1584,34 @@ angular.module('dashboards')
             d.Country_meta_full.sort(sort_by('format', {name:'country_code', reverse: false}));
                 
             //Create HTML
-            var ul = document.getElementById('country-items');
-            while (ul.childElementCount > 0) { ul.removeChild(ul.lastChild);};
-            var formats = [];
-            for (var i=0;i<d.Country_meta_full.length;i++) {
+            if ($scope.view_code == 'CRA') {
+                var ul = document.getElementById('country-items');
+                while (ul.childElementCount > 0) { ul.removeChild(ul.lastChild);};
+                var formats = [];
+                for (var i=0;i<d.Country_meta_full.length;i++) {
+                    
+                    var record = d.Country_meta_full[i];
+                    
+                    if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
+                        var li2 = document.createElement('li');
+                        li2.setAttribute('class','divider');
+                        ul.appendChild(li2);
+                    }
+                    var li = document.createElement('li');
+                    ul.appendChild(li);
+                    var a = document.createElement('a');
+                    a.setAttribute('class','submenu-item');
+                    a.setAttribute('ng-click','change_country(\'' + record.country_code + '\')');
+                    a.setAttribute('role','button');
+                    a.innerHTML = record.format == 'all' ? record.country_name : record.country_name + ' (' + record.format + ')';
+                    $compile(a)($scope);
+                    li.appendChild(a);
+                    
+                    formats.push(record.format);
                 
-                var record = d.Country_meta_full[i];
-                
-                if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
-                    var li2 = document.createElement('li');
-                    li2.setAttribute('class','divider');
-                    ul.appendChild(li2);
-                }
-                var li = document.createElement('li');
-                ul.appendChild(li);
-                var a = document.createElement('a');
-                a.setAttribute('class','submenu-item');
-                a.setAttribute('ng-click','change_country(\'' + record.country_code + '\')');
-                a.setAttribute('role','button');
-				a.innerHTML = record.format == 'all' ? record.country_name : record.country_name + ' (' + record.format + ')';
-                $compile(a)($scope);
-                li.appendChild(a);
-                
-                formats.push(record.format);
+                };
+            }
             
-            };
 			
 			
 		};
@@ -1612,8 +1628,18 @@ angular.module('dashboards')
         
         //Final CSS
         $(".sidebar-wrapper").addClass("in");
-        $('.view-buttons button.active').removeClass('active');
-        $('.view-buttons button.btn-map-view').addClass('active');
+        
+        $('.sidebar-wrapper.collapse').collapse('show');
+        $('.sidebar-wrapper.collapse.in.mobile').collapse('hide');
+        $(document).ready(function () {
+            if($(window).width() < 768) {
+               $(".sidebar-wrapper").addClass("mobile");
+            }
+        });
+        
+        //$('.view-buttons button.active').removeClass('active');
+        //$('.view-buttons button.btn-map-view').addClass('active');
+        
 		
 		///////////////////////////////////////
 		// FUNCTIONS FOR MOBILE FRIENDLINESS //

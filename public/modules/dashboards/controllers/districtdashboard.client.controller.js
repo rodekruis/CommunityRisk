@@ -137,7 +137,7 @@ angular.module('dashboards')
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			console.log($scope.data_input);
+			//console.log($scope.data_input);
 			
 			//Hack to get rid of the numbers in the URL
 			if ($stateParams.templateUrl == 'community_risk') { var dashboard_id = '5724a3e6af4258443e0f9bc6'; } 
@@ -1372,9 +1372,9 @@ angular.module('dashboards')
 			
 			
 			//Make sure that when opening another accordion-panel, the current one collapses
-			var acc = document.getElementsByClassName('card-header level1');
-			var panel = document.getElementsByClassName('collapse level1');
-			var active = document.getElementsByClassName('collapse level1 in')[0];
+			var acc = document.getElementsByClassName('card-header');
+			var panel = document.getElementsByClassName('collapse');
+			var active = document.getElementsByClassName('collapse in')[0];
 			
 			for (var i = 0; i < acc.length; i++) {
 				acc[i].onclick = function() {

@@ -18,8 +18,8 @@
 <!-- End Matomo Code -->
 <head>
     <!-- Transifex snippet (translating platform) -->
-    <script type="text/javascript">window.liveSettings={api_key:"73983602a9384be68d050707d125dce3"}</script>
-    <script type="text/javascript" src="//cdn.transifex.com/live.js"></script>
+    <!-- <script type="text/javascript">window.liveSettings={api_key:"73983602a9384be68d050707d125dce3"}</script>
+    <script type="text/javascript" src="//cdn.transifex.com/live.js"></script> -->
 	
     <title>{{title}}</title>
 
@@ -59,6 +59,23 @@
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+    
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+    window.addEventListener("load", function(){
+    window.cookieconsent.initialise({
+      "palette": {
+        "popup": {
+          "background": "#000"
+        },
+        "button": {
+          "background": "#f1d600"
+        }
+      }
+    })});
+    </script>
     
 </head>
 

@@ -1,5 +1,6 @@
 
 /* NAVBAR CSS, previously in dashboards.css */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
 
 /* header styles*/
 .navbar-inverse {
@@ -12,7 +13,9 @@
   font-size: 15px;
   font-weight: bold;
 }
-                                
+.navbar-inverse .navbar-brand:hover{
+	color:#4C8293;
+}                                    
 .logo {
   float: left;
   margin-right: 15px;
@@ -28,7 +31,13 @@
   margin-right: 15px;
   margin-top: 8px;
 }
-                                        
+@media only screen and (max-width: 767px){
+  .navbar-right{
+    border-bottom: 1px solid #eeeeee;
+    margin-right: 0;
+    margin-top: 0;
+  }
+}                                          
 .navbar-left {
   background: white; /*#eceff4;
   border: 1px solid #cad3df;*/
@@ -52,14 +61,85 @@
     top: 0;
     left: auto; /*100%;*/
     margin-top: -1px;
+    right: 100%;
 }
-.export-icon {
+
+@media only screen and (max-width: 767px){
+  .dropdown-submenu .dropdown-menu{
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid #eeeeee;
+    margin-top: 0;
+    margin-left: 3%;
+    left: 0;
+    position: relative;
+    width: 100%;
+  }
+
+  .dropdown-menu.export-items,.dropdown-menu.country-items{
+    border: none;
+    border-radius: 0;
+    width: 100%;
+  }
+
+  .dropdown-submenu .dropdown-menu ul{
+    margin-top: 5px;
+    left: -10px;
+    position: relative;
+  }
+}
+.export-icon-container {
   float: left;
   margin-right: 7px;
   margin-top: 2px;
-  width: 18px;
+  width: auto;
   height: 18px;
+}
+.export-icon {
+  height: 100%;
 }
 .export-btn-arrow {
   margin-left: 20px;
+}
+.menu-arrow{
+  float: left;
+  margin-left: 0;
+  margin-right: 10px;
+  margin-top: 3px;
+  margin-right: 5px;
+  margin-left: -10px;
+}
+
+.navbar-toggler{
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PScwIDAgMzAgMzAnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHBhdGggc3Ryb2tlPSdyZ2JhKDAsIDAsIDAsIDAuNSknIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbWl0ZXJsaW1pdD0nMTAnIGQ9J000IDdoMjJNNCAxNWgyMk00IDIzaDIyJy8+PC9zdmc+");
+  /* background-size: 55% 55%; */
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: 2px solid #eeeeee;
+  height: 45px;
+  margin-bottom: 3px;
+  outline: none;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 45px;
+}
+
+@media only screen and (min-width: 900px){
+  .navbar-toggler{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 900px){
+  .button-nav .collapse{
+    /* display:none; */
+  }
+  .button-nav .collapse.in{
+    /* display:block; */
+  }
+  .button-nav{
+    display:none;
+  }
 }

@@ -1,50 +1,42 @@
 <section class="section-expand" data-ng-controller="DistrictDashboardsController" data-ng-init="initiate('CRA')">
 	
-	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+	<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 		
-		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
+        <!-- <button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
 			<span class="sr-only" translate>Toggle navigation</span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
-		</button>
+		</button> -->
 		
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/#!/">
-				<img src="modules/core/img/510logo-part1.png" style="height:20px; float:left; margin-right:15px;">
+			<a class="navbar-brand" style="padding-left:3px; padding-top:3px" href="/#!/">
+				<img src="modules/core/img/510logo-part2.png" style="height:50px; float:left; margin-right:5px;">
 			</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 		</div> 
-		
-		<!-- start: zoom navigation -->
-		<!-- <div class="zoom-level-nav"> -->
-			<!-- <div class="btn-group zoom-level" role="group"> -->
-				<!-- <button style="background-color: #B0DED3; color:black; border-color:#4C8293" type="button" class="btn btn-secondary"> -->
-					<!-- <i class="fa fa-tachometer" aria-hidden="true"></i> -->
-					<!-- <span class="button-label"><strong>{{metric_label}}</strong></span> -->
-				<!-- </button> --> 
-				<!-- <button id="level1" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(1)"> -->
-					<!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
-					<!-- <span class="button-label">{{country_selection}}</span> -->
-				<!-- </button> -->
-				<!-- <button id="level2" type="button" class="btn btn-secondary" ng-click="zoom_out(2)"> -->
-					<!-- <i class="fa fa-th-large" aria-hidden="true"></i> -->
-					<!-- <span class="button-label">{{levelB_selection}}</span> -->
-				<!-- </button> -->
-				<!-- <button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)"> -->
-					<!-- <i class="fa fa-th" aria-hidden="true"></i> -->
-					<!-- <span class="button-label">{{levelC_selection}}</span> -->
-				<!-- </button> -->
-			<!-- </div> -->
-		<!-- </div> -->
-		<!-- end: zoom navigation -->
-		
-		<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
+        <div id="menu-buttons" aria-expanded="false" class="button-nav">
+				
+		<!-- <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation"> -->
 			
-			<ul class="nav navbar-top-links navbar-right">
+            <ul class="nav navbar-top-links navbar-left">
+				<li class="dropdown" style="background:#4C8293">
+					<a style="color:#fff" class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/community_risk">COMMUNITY RISK</a>
+				</li>
+			</ul> 	
+			<ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown">
-					<a href="http://510.global" target="_blank">510 HOME</a>
+					<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
 				</li>
 			</ul>
+            
+			<!-- <ul class="nav navbar-top-links navbar-right"> -->
+				<!-- <li class="dropdown"> -->
+					<!-- <a href="http://510.global" target="_blank">510 HOME</a> -->
+				<!-- </li> -->
+			<!-- </ul> -->
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
@@ -88,253 +80,211 @@
 				</li>
 			</ul>
 
-			<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293">
-				<li class="dropdown">
-					<a style="color:#fff" class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/community_risk">COMMUNITY RISK</a>
-				</li>
-			</ul> 	
-			<ul class="nav navbar-top-links navbar-left">
-				<li class="dropdown">
-					<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
-				</li>
-			</ul>
-			<ul class="nav navbar-top-links navbar-left">
+			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
 							  COUNTRY
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
-					<ul class="dropdown-menu submenu-items" id="country-items">
-						<li>
-							<a class="submenu-item" ng-click="change_country('PHL')" role="button">Philippines</a>
-						</li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('MWI')" role="button">Malawi</a>
-						</li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('PER')" role="button">Peru</a>
-						</li>
-						<li class="divider"></li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('BEN')" role="button">Benin (basic)</a>
-						</li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('ECU')" role="button">Ecuador (basic)</a>
-						</li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('MOZ')" role="button">Mozambique (basic)</a>
-						</li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('NPL')" role="button">Nepal (basic)</a>
-						</li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('ZMB')" role="button">Zambia (basic)</a>
-						</li>
-						<li class="divider"></li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('MLI')" role="button">Mali (template)</a>
-						</li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('LKA')" role="button">Sri Lanka (template)</a>
-						</li>
-						<li>
-							<a class="submenu-item" ng-click="change_country('VNM')" role="button">Vietnam (template)</a>
-						</li>
-					</ul>
+					<ul class="dropdown-menu submenu-items" id="country-items"></ul>
 				</li>
 			</ul>
-		</nav>
-		
-		
-		
-
-
-		
+        <!-- </nav> -->
+		</div>
 	</nav>
 	
 	<div class="content-wrapper">
-	
+        
+        <div class="zoom-level-nav-wrapper">
+        
+            <div class="zoom-level-nav map-views">
+            
+            
 		<!-- start: sidebar -->
-		<div class="navbar-default sidebar" role="navigation">
+		<!-- <div class="navbar-default sidebar" role="navigation"> -->
 			
-			<!-- start: zoom navigation -->
-			<div class="zoom-level-nav">
-				<div class="btn-group zoom-level" role="group">
-					<button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:322px; text-transform:uppercase" type="button" class="btn btn-secondary">
-						<i class="fa fa-tachometer" aria-hidden="true"></i>
-						<span class="button-label"><strong>{{metric_label}}</strong></span>
-					</button>
-				</div>
-			</div>
-			<!-- end: zoom navigation -->
-			<!-- start: zoom navigation -->
-			<div class="zoom-level-nav">
-				<div class="btn-group zoom-level" role="group">
-					<button id="level1" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(1)">
-						<!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
-						<span class="button-label">{{country_selection}}</span>
-					</button>
-					<button id="level2" type="button" class="btn btn-secondary" ng-click="zoom_out(2)">
-						<!-- <i class="fa fa-th-large" aria-hidden="true"></i> -->
-						<span class="button-label">{{levelB_selection}}</span>
-					</button>
-					<button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)" style="margin-right:0px">
-						<!-- <i class="fa fa-th" aria-hidden="true"></i> -->
-						<span class="button-label">{{levelC_selection}}</span>
-					</button>
-				</div>
-			</div>
-			<!-- end: zoom navigation -->
-
-			<!-- start: community profiles -->
-			<div class="community-profiles-wrapper">
-				<div id="count-info" class="general-info">
-					<!-- <div><span class="community-title">{{name_selection}}</span></div> -->
-					<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
-                    <a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
-					<button type="button" class="btn-modal" data-toggle="modal" ng-click="info('admin')">
-                        <img src="modules/dashboards/img/icon-popup.svg" style="height:17px">
+                <!-- start: zoom navigation -->
+                <!-- <div class="zoom-level-nav"> -->
+                <div class="btn-group zoom-level view-buttons" role="group">
+                    <button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:87%; text-transform:uppercase" type="button" class="btn btn-secondary">
+                        <i class="fa fa-tachometer" aria-hidden="true"></i>
+                        <span class="button-label"><strong>{{metric_label}}</strong></span>
+                    </button>
+                    <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo"></div>
+                </div>
+                <div class="btn-group zoom-level" role="group">
+                    <button id="level1" type="button" class="btn btn-secondary btn-active " style="widtdh:32%" ng-click="zoom_out(1)">
+                        <!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
+                        <span class="button-label">{{country_selection}}</span>
+                    </button>
+                    <button id="level2" type="button" class="btn btn-secondary" style="widtdh:32%" ng-click="zoom_out(2)">
+                        <!-- <i class="fa fa-th-large" aria-hidden="true"></i> -->
+                        <span class="button-label">{{levelB_selection}}</span>
+                    </button>
+                    <button id="level3" type="button" class="btn btn-secondary" style="widtdh:32%" ng-click="zoom_out(3)" style="margin-right:0px">
+                        <!-- <i class="fa fa-th" aria-hidden="true"></i> -->
+                        <span class="button-label">{{levelC_selection}}</span>
                     </button>
                 </div>
-				<div class="row"></div>
-				<div class='tablearea' id='general'></div>
-				<div class="row"></div>
-			</div>
-			<!-- end: community profiles -->
+                <!-- </div> -->
+                <!-- end: zoom navigation -->
+                <!-- start: community profiles -->
+                <div class="community-profiles-wrapper">
+                    <div id="count-info" class="general-info">
+                        <!-- <div><span class="community-title">{{name_selection}}</span></div> -->
+                        <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
+                        <a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
+                        <button type="button" class="btn-modal" data-toggle="modal" ng-click="info('admin')">
+                            <img src="modules/dashboards/img/icon-popup.svg" style="height:17px">
+                        </button>
+                    </div>
+                </div>
+                <!-- end: community profiles -->
+                
+            </div>
+        </div>
+        
+        <div class="navbar-default sidebar-wrapper collapse" role="navigation" id="demo">
+        
+            <div>
+                <!-- start: community profiles -->
+                <div class="community-profiles-wrapper">
+                    <div class="row"></div>
+                    <div class='tablearea' id='general'></div>
+                    <div class="row"></div>
+                </div>
+                <!-- end: community profiles -->
+                
+                <!-- start: accordion with stats  -->
+                <div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
+                    
+                    <div class="card">
+                        <div class="card-header level1" role="tab" id="headingOne">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/risk_score.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Risk Score - <span class="component-score" id="risk_score_main"></span>
+                                        <span class="score-helptext">/10</span>
+                                    </span>
+                                    <span class="panel-header-description">Overall composite risk score</span>
+                                </span>
+                            </a>
+                        </div>
 
-			<!-- start: accordion with stats  -->
-			<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
-				
-				<div class="card">
-					<div class="card-header" role="tab" id="headingOne">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/risk_score.png">
-							</span>
-							<span class="panel-header-content">
-								<span class="panel-header-title">Risk Score - <span class="component-score" id="risk_score_main"></span>
-									<span class="score-helptext">/10</span>
-								</span>
-								<span class="panel-header-description">Overall composite risk score</span>
-							</span>
-						</a>
-					</div>
+                        <div id="collapseOne" class="collapse level1 in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="card-block" id="scores"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header level1" role="tab" id="headingTwo">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/vulnerability.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
+                                        <span class="score-helptext">/10</span>
+                                    </span>
+                                    <span class="panel-header-description">Click for vulnerability components</span>
+                                </span>
+                            </a>
+                        </div>
+                        <div id="collapseTwo" class="collapse level1" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="card-block" id="vulnerability">
+                                <!-- Vulnerability components set up as the ones above. -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header level1" role="tab" id="headingThree">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/cyclone_wind.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Hazard Score - <span class="component-score" id="hazard_score_main"></span>
+                                        <span class="score-helptext">/10</span>
+                                    </span>
+                                    <span class="panel-header-description">Click for hazard components</span>
+                                </span>
+                            </a>
+                        </div>
+                        <div id="collapseThree" class="collapse level1" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="card-block" id="hazard">
+                                <!-- Hazard components set up as the ones above. -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header level1" role="tab" id="headingFour">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/coping.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Coping Capacity Score - <span class="component-score" id="coping_capacity_score_main"></span>
+                                        <span class="score-helptext">/10</span>
+                                    </span>
+                                    <span class="panel-header-description">Click for coping capacity components</span>
+                                </span>
+                            </a>
+                        </div>
+                        <div id="collapseFour" class="collapse level1" role="tabpanel" aria-labelledby="headingFour">
+                            <div class="card-block" id="coping_capacity">
+                                <!-- Coping capacity indicators set up as the ones above. -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header level1" role="tab" id="headingFive">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/undefined.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Other variables</span>
+                                    <span class="panel-header-description">Not part of risk framework, but still relevant.</span>
+                                </span>
+                            </a>
+                        </div>
+                        <div id="collapseFive" class="collapse level1" role="tabpanel" aria-labelledby="headingFive">
+                            <div class="card-block" id="other"></div>
+                        </div>
+                    </div>
+                    <div class="card"></div>
+                    <div class="card">
+                        <div style="background-color:#dddddd" class="card-header level1" role="tab" id="headingZero">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/dpi.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Data Preparedness Index - <span class="component-score" id="dpi_score_main"></span>
+                                        <span class="score-helptext"></span>
+                                    </span>
+                                    <span class="panel-header-description">Completeness, recency and quality of sources</span>
+                                </span>
+                            </a>
+                        </div>
 
-					<div id="collapseOne" class="collapse in" role="tabpanel" aria-labelledby="headingOne">
-						<div class="card-block" id="scores"></div>
-					</div>
-				</div>
-				<div class="card">
-					<div class="card-header" role="tab" id="headingTwo">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
-							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/vulnerability.png">
-							</span>
-							<span class="panel-header-content">
-								<span class="panel-header-title">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
-									<span class="score-helptext">/10</span>
-								</span>
-								<span class="panel-header-description">Click for vulnerability components</span>
-							</span>
-						</a>
-					</div>
-					<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-						<div class="card-block" id="vulnerability">
-							<!-- Vulnerability components set up as the ones above. -->
-						</div>
-					</div>
-				</div>
-				<div class="card">
-					<div class="card-header" role="tab" id="headingThree">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/cyclone_wind.png">
-							</span>
-							<span class="panel-header-content">
-								<span class="panel-header-title">Hazard Score - <span class="component-score" id="hazard_score_main"></span>
-									<span class="score-helptext">/10</span>
-								</span>
-								<span class="panel-header-description">Click for hazard components</span>
-							</span>
-						</a>
-					</div>
-					<div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-						<div class="card-block" id="hazard">
-							<!-- Hazard components set up as the ones above. -->
-						</div>
-					</div>
-				</div>
-				<div class="card">
-					<div class="card-header" role="tab" id="headingFour">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/coping.png">
-							</span>
-							<span class="panel-header-content">
-								<span class="panel-header-title">Coping Capacity Score - <span class="component-score" id="coping_capacity_score_main"></span>
-									<span class="score-helptext">/10</span>
-								</span>
-								<span class="panel-header-description">Click for coping capacity components</span>
-							</span>
-						</a>
-					</div>
-					<div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
-						<div class="card-block" id="coping_capacity">
-							<!-- Coping capacity indicators set up as the ones above. -->
-						</div>
-					</div>
-				</div>
-				<div class="card">
-					<div class="card-header" role="tab" id="headingFive">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/undefined.png">
-							</span>
-							<span class="panel-header-content">
-								<span class="panel-header-title">Other variables</span>
-								<span class="panel-header-description">Not part of risk framework, but still relevant.</span>
-							</span>
-						</a>
-					</div>
-					<div id="collapseFive" class="collapse" role="tabpanel" aria-labelledby="headingFive">
-						<div class="card-block" id="other"></div>
-					</div>
-				</div>
-				<div class="card"></div>
-				<div class="card">
-					<div style="background-color:#dddddd" class="card-header" role="tab" id="headingZero">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">
-							<span class="panel-header-icon">
-								<img src="modules/dashboards/img/dpi.png">
-							</span>
-							<span class="panel-header-content">
-								<span class="panel-header-title">Data Preparedness Index - <span class="component-score" id="dpi_score_main"></span>
-									<span class="score-helptext"></span>
-								</span>
-								<span class="panel-header-description">Completeness, recency and quality of sources</span>
-							</span>
-						</a>
-					</div>
-
-					<div id="collapseZero" class="collapse" role="tabpanel" aria-labelledby="headingZero">
-						<div class="card-block" id="dpi"></div>
-					</div>
-				</div>
-			</div>
-			<!-- end: accordion with stats -->
-
+                        <div id="collapseZero" class="collapse level1" role="tabpanel" aria-labelledby="headingZero">
+                            <div class="card-block" id="dpi"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end: accordion with stats -->
+            </div>
 
 		</div>
 		<!-- end: sidebar -->
 
 		<!-- start: map -->
-		<div class="map-wrapper" style="position: relative">
-
-			<div id="map-chart" style="position:relative; width:100%; height:100%; z-index:0"></div> 
+		<div class="map-wrapper">
+            <div id="map-chart" style="position:absolute; width:100%; height:100%;z-index:0"></div>
+			<!-- <div id="map-chart" style="position:relative; width:100%; height:100%"></div> --> 
 			
-			
-			
-
 			<!-- the above div and inline styles are only for placement -->
 			<div id="mapPopup" class="map-popup" style="position:absolute;">
 				<div class="popup-header">{{name_popup}}
@@ -448,12 +398,12 @@
 					<span class="panel-header-icon">
 						<img src="{{metric_icon}}">
 					</span>
-					<h3 class="modal-title">{{metric_label_popup}}</h3>
+					<h4 class="modal-title">{{metric_label_popup}}</h4>
 				</div>
 				<div class="modal-body">
-					<h5><b>Year source:</b> {{metric_year}}</h5><br>
-					<h5><b>Source link:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h5><br>
-					<h5><b>Description:</b> {{metric_desc}}</h5><br>
+					<h6><b>Year source:</b> {{metric_year}}</h6><br>
+					<h6><b>Source link:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h6><br>
+					<h6><b>Description:</b> {{metric_desc}}</h6><br>
 				</div>
 			</div>
 		</div>
@@ -461,9 +411,8 @@
 	<!-- end: risk score modal -->
 	
 	<!-- start: URL modal -->
-	<div id="URLModal" class="modal sidebar-modal" role="dialog">
+	<!-- <div id="URLModal" class="modal sidebar-modal" role="dialog">
 		<div class="modal-dialog">
-			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -472,11 +421,26 @@
 					<h3 class="modal-title">Share current parameter-settings directly through URL</h3>
 				</div>
 				<div class="modal-body" style="word-break:break-all">
-					<h5><b>URL:</b> {{shareable_URL}}</h5><br>
+					<h5>{{shareable_URL}}</h5><br>
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
+    <div id="URLModal" class="modal sidebar-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                    </button>
+                    <h4 class="modal-title">Share current settings directly through URL<h6>Copy URL and paste in browser</h6></h4>
+                </div>
+                <div class="modal-body" style="word-break:break-all">
+                    <h6>{{shareable_URL}}</h6><br>
+                </div>
+            </div>
+        </div>
+    </div>
 	<!-- end: URL modal -->
 	
 	<!-- start: phone device message -->
@@ -499,7 +463,7 @@
 					<h3 class="modal-title">Warning</h3>
 				</div>
 				<div class="modal-body">
-					<p>This dashboard is currently best viewed in Google Chrome, Firefox or Safari. Internet Explorer works, but has interaction downsides.</p>
+					<p>This beta-version is currently best viewed in Google Chrome, and second-best in Firefox or Safari. Internet Explorer works, but has substantial interaction downsides.</p>
 				</div>
 			</div>
 		</div>

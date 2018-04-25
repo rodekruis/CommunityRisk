@@ -11,14 +11,14 @@ body {
 	overflow-x: hidden;
     font-family: 'Open Sans', sans-serif;
 }
-.content {
+/* .content {
   margin-top: 50px;
 }
 @media (max-width: 979px) {
   .content {
     margin-top: 50px;
   }
-}
+} */
 .content {
     top: 0;
     left: 0;
@@ -30,6 +30,7 @@ body {
 }
 
 .container-fluid {
+  margin-top:50px;
   padding: 0;
   width: 100%;
   height: 100%;

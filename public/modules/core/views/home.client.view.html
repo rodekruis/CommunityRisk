@@ -5,15 +5,19 @@
 			<img src="modules/core/img/home-bg.png" class="home-bg">
 			<div class="content-wrapper">
 				<!-- Navigation -->
-				<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+				<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 
 					<div class="navbar-header">
-						<a class="navbar-brand" href="/#!/">
-							<img src="modules/core/img/510logo-part1.png" style="height:20px; float:left; margin-right:15px;">
+                        <a class="navbar-brand" style="padding-left:3px; padding-top:3px" href="/#!/">
+                            <img src="modules/core/img/510logo-part2.png" style="height:50px; float:left; margin-right:5px;">
 						</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
 					</div> 
+                    <div id="menu-buttons" aria-expanded="false" class="button-nav">
 					
-					<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
+					<!-- <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation"> -->
 						<ul class="nav navbar-top-links navbar-left">
 							<li class="dropdown">
 								<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/community_risk">COMMUNITY RISK</a>
@@ -24,12 +28,12 @@
 								<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
 							</li>
 						</ul>
-						<ul class="nav navbar-top-links navbar-right">
-							<li class="dropdown">
-								<a href="http://510.global" target="_blank">510 Home</a>
-							</li>
-						</ul>
-					</nav>
+						<!-- <ul class="nav navbar-top-links navbar-right"> -->
+							<!-- <li class="dropdown"> -->
+								<!-- <a href="http://510.global" target="_blank">510 Home</a> -->
+							<!-- </li> -->
+						<!-- </ul> -->
+					<!-- </nav> -->
 			
 				</nav>
 				<!-- end: navbar-header -->

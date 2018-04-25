@@ -191,6 +191,7 @@ angular.module('dashboards')
 		  //$scope.title = $scope.config.title;
 		  // create the map chart (NOTE: this has to be done before the ajax call)
 		  //$scope.mapChartType = 'leafletChoroplethChart';	
+          document.getElementsByClassName('sidebar-wrapper')[0].setAttribute('style',''); 
 		  
 		  // LOAD DATA
 		  var d = {};
@@ -227,10 +228,24 @@ angular.module('dashboards')
 		  
 		  // Log to check when needed
 		  // console.log(d);
+          
+          
+            //for (var i=0;i<$('.level1.in').length;i++){ $('.level1.in')[i].classList.remove('in');};
+            //for (var i=0;i<$('.collapse.in').length;i++){ $('.collapse.in')[i].classList.remove('in');};
+            $(".sidebar-wrapper").addClass("in");
+            $(document).ready(function () {
+                if($(window).width() < 768) {
+                   //$(".sidebar-wrapper").addClass("mobile");
+                   $(".sidebar-wrapper").removeClass("in");
+                }
+            });
+            
 		  
 		  //Load actual content
 		  $scope.generateCharts(d);
 		    
+            for (var i=0;i<$('#menu-buttons.in').length;i++){ $('#menu-buttons.in')[i].classList.remove('in'); };
+            
 		  // end loading bar
 		  $scope.complete();
 		  
@@ -934,7 +949,7 @@ angular.module('dashboards')
 						
 					}
 					
-					else if (record.group) {
+					else if (record.group !== 'hide') {
 						
 						if (record.group == 'dpi') {
 							var width = d.dpi[0][record.name]*100;
@@ -1061,7 +1076,7 @@ angular.module('dashboards')
 						
 					}
 					
-					else if (record.group) {
+					else if (record.group !== 'hide') {
 						
 						if (record.group == 'dpi') {
 							var width = d.dpi[0][record.name]*100;
@@ -1158,7 +1173,7 @@ angular.module('dashboards')
 				})
 				.renderPopup(true)
 				.turnOnControls(true)
-				.legend(dc.leafletLegend().position('topleft'))
+				.legend(dc.leafletLegend().position('topright'))
 				//Set up what happens when clicking on the map (popup appearing mainly)
 				.on('filtered',function(chart,filters){
 					$scope.filters = chart.filters();
@@ -1179,18 +1194,16 @@ angular.module('dashboards')
 							$scope.metric_label = meta_label[$scope.metric];
 						})
 						//In Firefox event is not a global variable >> Not figured out how to fix this, so gave the popup a fixed position in FF only
-						if (typeof event !== 'undefined') {
+						if($(window).width() < 768) {
+                                popup.style.left = '5px';	
+                                popup.style.bottom = '5px';
+                        } else if (typeof event !== 'undefined') {
 							popup.style.left = Math.min($(window).width()-210,event.pageX) + 'px';	
 							popup.style.top = Math.min($(window).height()-210,event.pageY) + 'px';
 						} else {
-                            if($(window).width() < 768) {
-                                popup.style.left = '10px';	
-                                popup.style.bottom = '10px';
-                            } else {
-                                popup.style.left = '390px';	
-                                popup.style.top = '110px';
-                            }
-						}
+                            popup.style.left = '390px';	
+                            popup.style.top = '110px';
+                        }
                         popup.style.visibility = 'visible';
                         if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
 					} 
@@ -1372,9 +1385,9 @@ angular.module('dashboards')
 			
 			
 			//Make sure that when opening another accordion-panel, the current one collapses
-			var acc = document.getElementsByClassName('card-header');
-			var panel = document.getElementsByClassName('collapse');
-			var active = document.getElementsByClassName('collapse in')[0];
+			var acc = document.getElementsByClassName('card-header level1');
+			var panel = document.getElementsByClassName('collapse level1');
+			var active = document.getElementsByClassName('collapse level1 in')[0];
 			
 			for (var i = 0; i < acc.length; i++) {
 				acc[i].onclick = function() {
@@ -1617,92 +1630,27 @@ angular.module('dashboards')
 		};
         
         // Function for handling sub-dropdown-menus in Navigation bar
-		$(document).ready(function(){
-		  $('.dropdown-submenu a.menu-item').on("click", function(e){
-			$('.submenu-items.open').toggle().removeClass('open');
-			$(this).next('ul').toggle().addClass('open');
-			e.stopPropagation();
-			e.preventDefault();
-		  });
-		});
+		// $(document).ready(function(){
+		  // $('.dropdown-submenu a.menu-item').on("click", function(e){
+			// $('.submenu-items.open').toggle().removeClass('open');
+			// $(this).next('ul').toggle().addClass('open');
+			// e.stopPropagation();
+			// e.preventDefault();
+		  // });
+		// });
         
         //Final CSS
-        // $(".sidebar-wrapper").addClass("in");
+        $(".sidebar-wrapper").addClass("in");
+        $(document).ready(function () {
+            if($(window).width() < 768) {
+               //$(".sidebar-wrapper").addClass("mobile");
+               $(".sidebar-wrapper").removeClass("in");
+            }
+        });
         
-        // $('.sidebar-wrapper.collapse').collapse('show');
-        // $('.sidebar-wrapper.collapse.in.mobile').collapse('hide');
-        // $(document).ready(function () {
-            // if($(window).width() < 768) {
-               // $(".sidebar-wrapper").addClass("mobile");
-            // }
-        // });
-        
-        //$('.view-buttons button.active').removeClass('active');
-        //$('.view-buttons button.btn-map-view').addClass('active');
         
 		
-		///////////////////////////////////////
-		// FUNCTIONS FOR MOBILE FRIENDLINESS //
-		///////////////////////////////////////
 
-		//Sidebar collapsing/expanding	
-/* 		(function () {
-			$(function () {
-				var SideBAR;
-				SideBAR = (function () {
-					function SideBAR() {}
-
-					SideBAR.prototype.expandMyMenu = function () {
-						return $("#sidebar").removeClass("sidebar-menu-collapsed").addClass("sidebar-menu-expanded");
-					};
-
-					SideBAR.prototype.collapseMyMenu = function () {
-						return $("#sidebar").removeClass("sidebar-menu-expanded").addClass("sidebar-menu-collapsed");
-					};
-
-					SideBAR.prototype.ignite = function () {
-						return (function (instance) {
-							return $("#justify-icon").click(function (e) {
-								if ($($(this)[0].parentNode).hasClass("sidebar-menu-collapsed")) {
-									instance.expandMyMenu();
-									$('#sidebar-content').css('display','block');
-									$('.zoom-level-nav').css('left','380px');
-								} else if ($($(this)[0].parentNode).hasClass("sidebar-menu-expanded")) {
-									instance.collapseMyMenu();
-									$('#sidebar-content').css('display','none');
-									$('.zoom-level-nav').css('left','80px');
-								}
-								return false;
-							});
-						})(this);
-					};
-
-					return SideBAR;
-
-				})();
-				return (new SideBAR).ignite();
-			});
-
-		}).call(this);
-
-		//Set collapsing/expanding depending on type of screen
-		function checkWindowSize() {  
-			if ( $(window).width() < 480) { 
-				$('#sidebar').addClass('sidebar-menu-collapsed');  
-				$('#sidebar').removeClass('sidebar-menu-expanded');  
-				$('#sidebar-content').css('display','none');
-				$('.navbar-right').css('display','none');
-				$('.zoom-level-nav').css('left','80px');
-			}
-		}    
-		checkWindowSize();
-
-		$scope.mobile_anyway = function() {
-			$('.mobile-message').css('display','none');
-			$('.sidebar').css('display','block');
-			$('.map-wrapper').css('display','block');
-			generateCharts(d);
-		} */
 
 	}
 ])

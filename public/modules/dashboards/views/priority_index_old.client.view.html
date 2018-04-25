@@ -1,0 +1,384 @@
+<section class="section-expand" data-ng-controller="DistrictDashboardsController" data-ng-init="initiate('PI')">
+	
+	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+		
+		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
+			<span class="sr-only" translate>Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#!/">
+				<img src="modules/core/img/510logo-part1.png" style="height:20px; float:left; margin-right:15px;">
+			</a>
+		</div> 
+		
+		<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
+			
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a href="http://510.global" target="_blank">510 HOME</a>
+				</li>
+			</ul>
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+						HOW IT WORKS
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu export-items">
+						<li>
+							<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">Tutorial</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/communityprofiles" target="_blank">Github</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+							  EXPORT
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu export-items">
+						<li>
+							<a id="download" ng-click="share_URL()">Share current settings (URL)</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a id="download" ng-click="export_csv()">Export (CSV)</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+			<ul class="nav navbar-top-links navbar-left">
+				<li class="dropdown">
+					<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/community_risk">COMMUNITY RISK</a>
+				</li>
+			</ul> 	
+			<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293">
+				<li class="dropdown">
+					<a style="color:#fff" class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
+				</li>
+			</ul> 
+			
+			<ul class="nav navbar-top-links navbar-left">
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+							  COUNTRY
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu submenu-items">
+						<li>
+							<a class="submenu-item" ng-click="change_country('PHL')" role="button">Philippines</a>
+						</li>
+						<li>
+							<a class="submenu-item" ng-click="change_country('NPL')" role="button">Nepal</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+		
+
+		
+	</nav>
+	
+	<div class="content-wrapper">
+	
+		<!-- start: sidebar -->
+		<div class="navbar-default sidebar" role="navigation">
+		<!-- <div class="navbar-default sidebar sidebar-menu-expanded" id="sidebar" role="navigation"> -->
+		
+			<!-- <a href='#' id='justify-icon'>
+				<img src="modules/dashboards/img/expand.png" width="20px">
+			</a> -->
+			
+			<!-- <div id="sidebar-content"> -->
+
+			<!-- start: community profiles -->
+			<div class="community-profiles-wrapper">
+				<!-- <ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff;width:250px">
+							<strong>{{metric_label}}</strong>
+						</a>
+					</li>
+				</ul> -->
+				<div class="zoom-level-nav">
+					<div class="btn-group zoom-level" role="group">
+						<button style="background-color: #4C8293; color:white; border-color:#4C8293; width:95%;" type="button" class="btn btn-secondary">
+							<i class="fa fa-tachometer" aria-hidden="true"></i>
+							<span class="button-label"><strong>{{metric_label}}</strong></span>
+						</button>
+					</div>
+				</div>
+				<!-- typhoon selector -->
+				<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293; width:45%">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff; font-size:12px">
+							<strong>{{disaster_type}}</strong>
+							<i class="fa fa-angle-down export-btn-arrow"></i>
+						</a>
+						<ul class="dropdown-menu submenu-items">
+							<li>
+								<a class="submenu-item" ng-click="change_disaster_type('Typhoon')">Typhoons</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a class="submenu-item" ng-click="change_disaster_type('Earthquake')">Earthquakes</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav navbar-top-links navbar-left" style="background-color: #4C8293; width:45%">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff; font-size:12px">
+							<strong>{{disaster_name}}</strong>
+							<i class="fa fa-angle-down export-btn-arrow"></i>
+						</a>
+						<ul class="dropdown-menu export-items" id="events">
+							<li class="event-keep" id="act_pred"><strong>Prediction+Actuals:</strong></li>
+							<!-- <li><a ng-click="change_typhoon('Haima')">Haima</a></li> -->
+							<li class="event-keep" id="pred"><strong>Prediction only:</strong></li>
+							<!-- <li><a ng-click="change_typhoon('Nina')">Nina</a></li> -->
+							<li class="event-keep" id="act"><strong>Actuals only:</strong></li>
+							<!-- <li><a ng-click="change_typhoon('Haiyan')">Haiyan</a></li> -->
+							<!-- <li><a ng-click="change_typhoon('Melor')">Melor</a></li> -->
+							<!-- <li><a ng-click="change_typhoon('Rammasun')">Rammasun</a></li> -->
+							<!-- <li><a ng-click="change_typhoon('Hagupit')">Hagupit</a></li> -->
+						</ul>
+						<!-- /.dropdown-tasks -->
+					</li>
+				</ul>
+				<hr style="margin-bottom:25px">
+				<div id="count-info" class="general-info">
+					{{type_text}}<hr style="margin-top: 10px; margin-bottom: 10px">
+					<strong>Date: </strong>{{start_date}} {{end_date}}<hr style="margin-top: 10px; margin-bottom: 10px">
+					<strong>Overall damage: </strong><span class="total-count-pi">{{total_damage}}</span> houses damaged out of 
+					<span class="total-count-pi">{{total_potential}}</span> total houses in disaster area, or  
+					<span class="total-count-pi">{{total_intensity}}</span><hr style="margin-top: 10px; margin-bottom: 10px">
+					<strong>Scope: </strong><span class="total-count total-count-pi"></span> {{subtype_selection}} involved (<span class="filter-count filter-count-pi"></span> selected) 
+					<br><a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
+				</div>
+				<div class="row"></div>
+				<div class='tablearea' id='general'></div>
+				<div class="row"></div>
+			</div>
+			<!-- end: community profiles -->
+
+			<!-- start: accordion with stats  -->
+			<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
+				<div class="card">
+					<div class="card-header" role="tab" id="headingFour">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/prediction.svg">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Predicted Damage</span>
+								<span class="panel-header-description">Predicted damaged houses per municipality</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseFour" class="collapse in" role="tabpanel" aria-labelledby="headingFour">
+						<div class="card-block" id="predictions"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingOne">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/damage.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Actual Damage</span>
+								<span class="panel-header-description">Various measures of damaged houses per municipality</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+						<div class="card-block" id="damage"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingFive">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/error.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Prediction Errors</span>
+								<span class="panel-header-description">Measures of Actual vs. Prediction</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseFive" class="collapse" role="tabpanel" aria-labelledby="headingFive">
+						<div class="card-block" id="pred_error"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingTwo">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/cyclone_wind.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Disaster features</span>
+								<span class="panel-header-description">Features specific to the disaster</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="card-block" id="disaster"></div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingThree">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+							<span class="panel-header-icon">
+								<img src="modules/dashboards/img/elevation.png">
+							</span>
+							<span class="panel-header-content">
+								<span class="panel-header-title">Geographic features</span>
+								<span class="panel-header-description">Geographic features of municipalities</span>
+							</span>
+						</a>
+					</div>
+					<div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+						<div class="card-block" id="geographic"></div>
+					</div>
+				</div>
+			</div>
+			<!-- end: accordion with stats -->
+			
+			<!-- </div> -->
+
+		</div>
+		<!-- end: sidebar -->
+
+		<!-- start: map -->
+		<div class="map-wrapper" style="position: relative">
+
+			<div id="map-chart" style="position:absolute; width:100%; height:100%; z-index:0"></div> 
+			
+			<!-- start: zoom navigation -->
+			<!-- <div class="zoom-level-nav col-md-7"> -->
+				<!-- <div class="btn-group zoom-level" role="group"> -->
+					<!-- <button style="background-color: #B0DED3; color:black; border-color:#4C8293" type="button" class="btn btn-secondary"> -->
+						<!-- <i class="fa fa-tachometer" aria-hidden="true"></i> -->
+						<!-- <span class="button-label"><strong>{{metric_label}}</strong></span> -->
+					<!-- </button> -->
+					<!-- <button id="level2" type="button" class="btn btn-secondary btn-active "> -->
+						<!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
+						<!-- <span class="button-label">{{country_selection}}</span> -->
+					<!-- </button> -->
+				<!-- </div> -->
+			<!-- </div> -->
+			<!-- end: zoom navigation -->
+			
+
+			<!-- the above div and inline styles are only for placement -->
+			<div id="mapPopup" class="map-popup" style="position:absolute;">
+				<div class="popup-header">{{name_popup}}
+					<button id="zoomin_icon" type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
+						<i class="fa fa-search-plus pull-right big-icon"></i>
+					</button>
+				</div>
+				<div class="popup-score">
+				  <div class="score-label">{{metric_label}}</div>
+				  {{value_popup}}<span class="score-unit">{{value_popup_unit}}</span>
+				</div>
+			  </div>
+
+
+		</div>
+		<!-- end: map -->
+
+	</div>
+
+	<!-- start: risk score modal -->
+	<div id="infoModal" class="modal sidebar-modal" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</button>
+					<span class="panel-header-icon">
+						<img src="{{metric_icon}}">
+					</span>
+					<h3 class="modal-title">{{metric_label}}</h3>
+				</div>
+				<div class="modal-body">
+					<h5><b>Description:</b> {{metric_desc}}</h5><br>
+					<h5><b>Link to source/info:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h5><br>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end: risk score modal -->
+	
+	<!-- start: URL modal -->
+	<div id="URLModal" class="modal sidebar-modal" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</button>
+					<h3 class="modal-title">Share current parameter-settings directly through URL</h3>
+				</div>
+				<div class="modal-body" style="word-break:break-all">
+					<h5><b>URL:</b> {{shareable_URL}}</h5><br>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end: URL modal -->
+	
+	<!-- start: phone device message -->
+	<div class="mobile-message">
+		<p>For best experience please use a tablet device, laptop or desktop computer.
+			<a href="/#!/" class="btn link-button" role="button">Dashboard Homepage</a>
+		</p>
+	</div>
+	<!-- <div class="mobile-message">
+		<p>For best experience please use a tablet device, laptop or desktop computer.
+			<a class="btn link-button" role="button" onclick="mobile_anyway()">Continue anyway</a>
+		</p>
+	</div> -->
+	<!-- end: phone device message -->
+
+	<!-- start: IE message -->
+	<div id="IEmodal" class="modal sidebar-modal" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</button>
+					<h3 class="modal-title">Warning</h3>
+				</div>
+				<div class="modal-body">
+					<p>This dashboard is currently best viewed in Google Chrome, Firefox or Safari. Internet Explorer works, but has interaction downsides.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end: IE message -->
+	
+</section>

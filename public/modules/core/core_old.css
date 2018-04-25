@@ -12,11 +12,11 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 .content {
-  /* margin-top: 50px; */
+  margin-top: 50px;
 }
 @media (max-width: 979px) {
   .content {
-    /* margin-top: 50px; */
+    margin-top: 50px;
   }
 }
 .content {

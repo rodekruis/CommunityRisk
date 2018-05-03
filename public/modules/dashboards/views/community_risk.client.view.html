@@ -1,4 +1,4 @@
-<section class="section-expand" data-ng-controller="DistrictDashboardsController" data-ng-init="initiate('CRA')">
+<section class="section-expand" data-ng-controller="CommunityRiskController" data-ng-init="initiate('CRA')">
 	
 	<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 		
@@ -99,29 +99,34 @@
         
             <div class="zoom-level-nav map-views">
             
-            
-		<!-- start: sidebar -->
-		<!-- <div class="navbar-default sidebar" role="navigation"> -->
-			
-                <!-- start: zoom navigation -->
-                <!-- <div class="zoom-level-nav"> -->
                 <div class="btn-group zoom-level view-buttons" role="group">
-                    <button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:87%; text-transform:uppercase" type="button" class="btn btn-secondary">
+                    <button type="button" class="btn btn-tab btn-map-view active" style="width:42%" ng-click="mapShow()">
+                        <span class="button-label">Map</span>
+                    </button>
+                    <button type="button" class="btn btn-tab btn-tabular" style="width:42%" ng-click="tabularShow()">
+                        <span class="button-label">Tab</span>
+                    </button>
+                    <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo">
+                    </div>
+                </div>
+                <div class="btn-group zoom-level view-buttons" role="group">
+                    <!-- <button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:87%; text-transform:uppercase" type="button" class="btn btn-secondary"> -->
+                    <button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:100%; text-transform:uppercase" type="button" class="btn btn-secondary">
                         <i class="fa fa-tachometer" aria-hidden="true"></i>
                         <span class="button-label"><strong>{{metric_label}}</strong></span>
                     </button>
-                    <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo"></div>
+                    <!-- <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo"></div> -->
                 </div>
                 <div class="btn-group zoom-level" role="group">
-                    <button id="level1" type="button" class="btn btn-secondary btn-active " style="widtdh:32%" ng-click="zoom_out(1)">
+                    <button id="level1" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(1)">
                         <!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
                         <span class="button-label">{{country_selection}}</span>
                     </button>
-                    <button id="level2" type="button" class="btn btn-secondary" style="widtdh:32%" ng-click="zoom_out(2)">
+                    <button id="level2" type="button" class="btn btn-secondary" ng-click="zoom_out(2)">
                         <!-- <i class="fa fa-th-large" aria-hidden="true"></i> -->
                         <span class="button-label">{{levelB_selection}}</span>
                     </button>
-                    <button id="level3" type="button" class="btn btn-secondary" style="widtdh:32%" ng-click="zoom_out(3)" style="margin-right:0px">
+                    <button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)" style="margin-right:0px">
                         <!-- <i class="fa fa-th" aria-hidden="true"></i> -->
                         <span class="button-label">{{levelC_selection}}</span>
                     </button>
@@ -133,7 +138,7 @@
                     <div id="count-info" class="general-info">
                         <!-- <div><span class="community-title">{{name_selection}}</span></div> -->
                         <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
-                        <a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
+                        <a class="reset-button" ng-click="reset_function()">Select all</a>
                         <button type="button" class="btn-modal" data-toggle="modal" ng-click="info('admin')">
                             <img src="modules/dashboards/img/icon-popup.svg" style="height:17px">
                         </button>
@@ -178,26 +183,6 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-header level1" role="tab" id="headingTwo">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
-                                <span class="panel-header-icon">
-                                    <img src="modules/dashboards/img/vulnerability.png">
-                                </span>
-                                <span class="panel-header-content">
-                                    <span class="panel-header-title">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
-                                        <span class="score-helptext">/10</span>
-                                    </span>
-                                    <span class="panel-header-description">Click for vulnerability components</span>
-                                </span>
-                            </a>
-                        </div>
-                        <div id="collapseTwo" class="collapse level1" role="tabpanel" aria-labelledby="headingTwo">
-                            <div class="card-block" id="vulnerability">
-                                <!-- Vulnerability components set up as the ones above. -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
                         <div class="card-header level1" role="tab" id="headingThree">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
                                 <span class="panel-header-icon">
@@ -214,6 +199,26 @@
                         <div id="collapseThree" class="collapse level1" role="tabpanel" aria-labelledby="headingThree">
                             <div class="card-block" id="hazard">
                                 <!-- Hazard components set up as the ones above. -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header level1" role="tab" id="headingTwo">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/vulnerability.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
+                                        <span class="score-helptext">/10</span>
+                                    </span>
+                                    <span class="panel-header-description">Click for vulnerability components</span>
+                                </span>
+                            </a>
+                        </div>
+                        <div id="collapseTwo" class="collapse level1" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="card-block" id="vulnerability">
+                                <!-- Vulnerability components set up as the ones above. -->
                             </div>
                         </div>
                     </div>
@@ -283,7 +288,34 @@
 		<!-- start: map -->
 		<div class="map-wrapper">
             <div id="map-chart" style="position:absolute; width:100%; height:100%;z-index:0"></div>
-			<!-- <div id="map-chart" style="position:relative; width:100%; height:100%"></div> --> 
+            <div id="row-chart-container">
+                <div class="zoom-level-nav sort-nav"> 
+                    <div class="btn-group zoom-level" role="group">
+                        <ul type="button" class="btn btn-secondary btn-active export-button-wrapper">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+                                          Sort by ...
+                                    <i class="fa fa-angle-down export-btn-arrow"></i>
+                                </a>
+                                <ul class="dropdown-menu submenu-items">
+                                    <li>
+                                        <a class="	submenu-item" ng-click="sort('value')" role="button">Indicator Score</a>
+                                    </li>
+                                    <li>
+                                        <a class="submenu-item" ng-click="sort('name')" role="button">Area name</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ul>
+                        <div class="btn btn-secondary" style="color:#4d799d" ng-click="scrollRowChart()">
+                            Scroll to Top
+                        </div>
+                    </div>
+                </div>
+                <div class="tabular-wrapper" id="tabular-wrapper">
+                    <div id="row-chart" class="tabular"></div>
+                </div>
+            </div>
 			
 			<!-- the above div and inline styles are only for placement -->
 			<div id="mapPopup" class="map-popup" style="position:absolute;">
@@ -299,87 +331,6 @@
 			  </div>
 			  
 			
-			<!-- start: slide out tab for province selection -->
-            <!-- <div class="slide-out-tab-province">
-				<a class="handle" href="#"><span class="handle-label">{{subtype_selection}} Selection</span></a>
-				<div class="slideout-content-wrapper" style="height: 500px; overflow: auto">
-					<div>
-						<h4>Select {{subtype_selection}}</h4>
-						<a style="color: #3780bb; font-size: 12px" href="javascript:dc.filterAll();dc.redrawAll();">(Select all)</a>
-					</div>
-					<div id='tab-chart'></div>
-					<div class="options-list">
-						<ul>
-							<li>
-								<label class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input">
-									<span class="custom-control-indicator"></span>
-									<span class="list-label">Project name 1</span>
-								</label>
-							</li>
-
-							<li>
-								<label class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input">
-									<span class="custom-control-indicator"></span>
-									<span class="list-label">Project name 1</span>
-								</label>
-							</li>
-
-							<li>
-								<label class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input">
-									<span class="custom-control-indicator"></span>
-									<span class="list-label">Project name 1</span>
-								</label>
-							</li>
-
-							<li>
-								<label class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input">
-									<span class="custom-control-indicator"></span>
-									<span class="list-label">Project name 1</span>
-								</label>
-							</li>
-
-							<li>
-								<label class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input">
-									<span class="custom-control-indicator"></span>
-									<span class="list-label">Project name 1</span>
-								</label>
-							</li>
-
-							<li>
-								<label class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input">
-									<span class="custom-control-indicator"></span>
-									<span class="list-label">Project name 1</span>
-								</label>
-							</li>
-
-							<li>
-								<label class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input">
-									<span class="custom-control-indicator"></span>
-									<span class="list-label">Project name 1</span>
-								</label>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div> -->
-			<!-- end: slideout tab for province selection-->
-
-			<!-- start: slide out tab for legend -->
-			<!-- <div class="slide-out-tab-legend">
-				<a class="handle-legend" href="#"><span class="handle-label">Legend</span></a>
-				<div class="slideout-content-wrapper">
-					<h4>Legend</h4>
-				</div>
-			</div> -->
-			<!-- end: slideout tab for legend-->
-
 
 		</div>
 		<!-- end: map -->
@@ -410,38 +361,22 @@
 	</div>
 	<!-- end: risk score modal -->
 	
-	<!-- start: URL modal -->
-	<!-- <div id="URLModal" class="modal sidebar-modal" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
-					</button>
-					<h3 class="modal-title">Share current parameter-settings directly through URL</h3>
-				</div>
-				<div class="modal-body" style="word-break:break-all">
-					<h5>{{shareable_URL}}</h5><br>
-				</div>
-			</div>
-		</div>
-	</div> -->
-    <div id="URLModal" class="modal sidebar-modal" role="dialog">
+	<div id="URLModal" class="modal sidebar-modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                     </button>
-                    <h4 class="modal-title">Share current settings directly through URL<h6>Copy URL and paste in browser</h6></h4>
+                    <h4 class="modal-title">Share current settings directly through URL</h4>
                 </div>
                 <div class="modal-body" style="word-break:break-all">
-                    <h6>{{shareable_URL}}</h6><br>
+                    <h6 id="copy_url">{{shareable_URL}}</h6><br>
+                    <button ng-click="copyToClipboard('#copy_url')">Copy URL</button>
                 </div>
             </div>
         </div>
     </div>
-	<!-- end: URL modal -->
 	
 	<!-- start: phone device message -->
 	<div class="mobile-message">

@@ -713,7 +713,7 @@ dc.leafletLegend = function () {
             _update: function () {
                 if (_parent.colorDomain()) { // check because undefined for marker charts
                     var minValue = _parent.colorDomain()[0],
-                        maxValue = _parent.colorDomain()[1], //_parent.colorDomain().length - 1],
+                        maxValue = _parent.colorDomain()[_parent.colorDomain().length - 1], //_parent.colorDomain().length - 1],
                         palette = _parent.colors().range(),
                         colorLength = _parent.colors().range().length,
                         delta = (maxValue - minValue) / colorLength,
@@ -729,18 +729,26 @@ dc.leafletLegend = function () {
                         grades[i] = Math.round(_parent.colorDomain()[step*(i)]*10)/10; //Math.round((0.5 + (i - 1)) * delta + minValue);
 						if (grades[i] >= 1000000) {grades[i]=Math.round(grades[i]/100000)/10 + 'M';}
 						else if (grades[i] >= 1000) {grades[i]=Math.round(grades[i]/100)/10 + 'k';}
-                    }
-					var labels = ['low risk','','','','high risk'];
-
-                    // var div = L.DomUtil.create('div', 'info legend');
+                    };
+                    labels = ['low risk','','','','high risk'];
+                    console.log(minValue);
+                    console.log(maxValue);
+                    
+					// var div = L.DomUtil.create('div', 'info legend');
                     // loop through our density intervals and generate a label with a colored
                     // square for each interval
                     this._div.innerHTML = ''; //reset so that legend is not plotted multiple times
                     for (i = 0; i < grades.length; i++) {
-                        this._div.innerHTML +=
-                            '<i style="background:' + palette[i] + '"></i> ' +
-                            grades[i] + (i < grades.length - 1 ? ' &ndash; ' + grades[i + 1] + '<br>' : '+');
-                            //labels[i] + (i < grades.length - 1 ? '<br>' : '');
+                            if (maxValue <= 10 && minValue >= 0 && maxValue > 1) {
+                                this._div.innerHTML +=
+                                '<i style="background:' + palette[i] + '"></i> ' +
+                                labels[i] + (i < grades.length - 1 ? '<br>' : '');
+                            } else {
+                                this._div.innerHTML +=
+                                '<i style="background:' + palette[i] + '"></i> ' +
+                                grades[i] + (i < grades.length - 1 ? ' &ndash; ' + grades[i + 1] + '<br>' : '+');
+                            }
+                            
                     }
                 }
             }

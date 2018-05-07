@@ -45,6 +45,12 @@
   margin-right: 15px;
   margin-top: 8px;
 }
+
+@media only screen and (max-width: 767px){
+  .navbar-left{
+    margin-right: 0;
+  }
+}
 .dropdown-toggle {
   color: #4d799d;
 }
@@ -114,16 +120,17 @@
   background-color: #ffffff;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PScwIDAgMzAgMzAnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHBhdGggc3Ryb2tlPSdyZ2JhKDAsIDAsIDAsIDAuNSknIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbWl0ZXJsaW1pdD0nMTAnIGQ9J000IDdoMjJNNCAxNWgyMk00IDIzaDIyJy8+PC9zdmc+");
   /* background-size: 55% 55%; */
+  background-size: 65% 65%;
   background-repeat: no-repeat;
   background-position: center center;
   border: 2px solid #eeeeee;
-  height: 45px;
+  height: 38px; /*45px;*/
   margin-bottom: 3px;
   outline: none;
   position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 45px;
+  top: 5px; /*3px;*/
+  right: 5px; /*3px;*/
+  width: 38px; /*45px;*/
 }
 
 @media only screen and (min-width: 900px){

@@ -106,12 +106,12 @@
                     <button type="button" class="btn btn-tab btn-tabular" style="width:42%" ng-click="tabularShow()">
                         <span class="button-label">Tab</span>
                     </button>
-                    <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo">
+                    <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-controls="demo" aria-expanded="true" >
                     </div>
                 </div>
                 <div class="btn-group zoom-level view-buttons" role="group">
                     <!-- <button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:87%; text-transform:uppercase" type="button" class="btn btn-secondary"> -->
-                    <button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:100%; text-transform:uppercase" type="button" class="btn btn-secondary">
+                    <button type="button" class="btn btn-secondary btn-score">
                         <i class="fa fa-tachometer" aria-hidden="true"></i>
                         <span class="button-label"><strong>{{metric_label}}</strong></span>
                     </button>
@@ -260,7 +260,7 @@
                     </div>
                     <div class="card"></div>
                     <div class="card">
-                        <div style="background-color:#dddddd" class="card-header level1" role="tab" id="headingZero">
+                        <div style="background-color:#dddddd" class="card-header last level1" role="tab" id="headingZero">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">
                                 <span class="panel-header-icon">
                                     <img src="modules/dashboards/img/dpi.png">

@@ -134,9 +134,19 @@ angular.module('dashboards')
 				$scope.disaster_name = 'Gorkha 2015';
 			}
 			
-			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
+			//Read Disaster Database or PI from URL
 			var url = location.href;
-			if (url.indexOf('?') > -1) {
+            $scope.view_code_PI = url.indexOf('priority_index') > -1 ? 'PI' : 'DDB';
+            // FOR NOW MANUAL: set different default event for PI
+            if ($scope.view_code_PI == 'PI') {
+                if ($scope.disaster_type == 'Typhoon') {
+                    $scope.disaster_name = 'Nock-Ten';
+                } else {
+                    $scope.disaster_name = 'Leyte 2017';
+                }
+            }
+            //Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
+            if (url.indexOf('?') > -1) {
 				url = url.split('?')[1];
 				$scope.directURLload = true;
 				$scope.country_code = url.split('&')[0].split('=')[1];
@@ -146,7 +156,7 @@ angular.module('dashboards')
 				if ($scope.view_code == 'PI') {
 					$scope.disaster_type = url.split('&')[3].split('=')[1];
 					$scope.disaster_name = url.split('&')[4].split('=')[1].replace('%20',' ');
-					window.history.pushState({}, document.title, '/#!/priority_index');
+					window.history.pushState({}, document.title, $scope.view_code_PI == 'PI' ? '/#!/priority_index' : '/#!/disaster_database');
 				}
 			} else {
 				$scope.directURLload = false;
@@ -466,14 +476,22 @@ angular.module('dashboards')
             $scope.start_date = $scope.genLookup_disaster_meta(d,'startdate')[$scope.disaster_name];
             $scope.end_date = $scope.disaster_type == 'Typhoon' ? 'to ' + $scope.genLookup_disaster_meta(d,'enddate')[$scope.disaster_name] : '';
             
-            var total_damage_temp = dimensions[$scope.default_metric].top(1)[0].value > 0 ? dimensions[$scope.default_metric].top(1)[0].value
-                                                                                         : 0;
-                                                                                         //: (dimensions[$scope.default_metric.concat('_pred')] ? dimensions[$scope.default_metric.concat('_pred')].top(1)[0].value
-                                                                                         //: 0);
-            $scope.total_damage = dec0Format(total_damage_temp);																		
-            $scope.total_potential = dec0Format(dimensions[$scope.default_metric.concat('_potential')].top(1)[0].value);
-            var total_intensity = total_damage_temp / dimensions[$scope.default_metric.concat('_potential')].top(1)[0].value;
-            isNaN(total_intensity) ? $scope.total_intensity = percFormat(0) : $scope.total_intensity = percFormat(total_intensity);
+            if ($scope.view_code_PI == 'DDB') {
+                var total_damage_temp = dimensions[$scope.default_metric].top(1)[0].value > 0 ? dimensions[$scope.default_metric].top(1)[0].value : 0;
+                $scope.total_damage = dec0Format(total_damage_temp);																		
+                $scope.total_potential = dec0Format(dimensions[$scope.default_metric.concat('_potential')].top(1)[0].value);
+                var total_intensity = total_damage_temp / dimensions[$scope.default_metric.concat('_potential')].top(1)[0].value;
+                isNaN(total_intensity) ? $scope.total_intensity = percFormat(0) : $scope.total_intensity = percFormat(total_intensity);
+            } else {
+                var total_damage_temp = 0;
+                $scope.total_damage = dec0Format(total_damage_temp);																		
+                $scope.total_potential = 1; //dec0Format(dimensions[$scope.default_metric.concat('_potential')].top(1)[0].value);
+                var total_intensity = total_damage_temp / 1; //dimensions[$scope.default_metric.concat('_potential')].top(1)[0].value;
+                isNaN(total_intensity) ? $scope.total_intensity = percFormat(0) : $scope.total_intensity = percFormat(total_intensity);
+            }
+            //: (dimensions[$scope.default_metric.concat('_pred')] ? dimensions[$scope.default_metric.concat('_pred')].top(1)[0].value //: 0);
+            
+            
             
             
             //Fill the event-dropdown in the sidebar
@@ -482,7 +500,10 @@ angular.module('dashboards')
             while (drop_events[0]) { drop_events[0].parentNode.removeChild(drop_events[0]); };
             for (i=0;i<d.Disaster_meta.length;i++){
                 record = d.Disaster_meta[i];
-                if (record.disaster_type == $scope.disaster_type){
+                if (record.disaster_type == $scope.disaster_type
+                    && ( ($scope.view_code_PI == 'DDB' && record.actuals == 'yes') ||
+                         ($scope.view_code_PI == 'PI'  && record.actuals == 'no') )
+                    ){
                     if (record.actuals == 'yes' && record.predictions == 'no') {
                         var act_pred = 'act';
                     } else if (record.actuals == 'yes' && record.predictions == 'yes') {

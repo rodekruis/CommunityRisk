@@ -1311,7 +1311,10 @@ angular.module('dashboards')
             var countries = [];
             for (var i=0;i<d.Disaster_meta_full.length;i++) {
                                     
-                if (d.Disaster_meta_full[i].country_code !== null && countries.indexOf(d.Disaster_meta_full[i].country_code) <= -1) {
+                if (d.Disaster_meta_full[i].country_code !== null && countries.indexOf(d.Disaster_meta_full[i].country_code) <= -1
+                    && (($scope.view_code_PI == 'DDB' && d.Disaster_meta_full[i].actuals == 'yes') ||
+                        ($scope.view_code_PI == 'PI' && d.Disaster_meta_full[i].actuals == 'no'))
+                    ) {
                     countries.push(d.Disaster_meta_full[i].country_code);
                     
                     var record = d.Disaster_meta_full[i];

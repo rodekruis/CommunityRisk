@@ -491,7 +491,8 @@ angular.module('dashboards')
                         var act_pred = 'pred';
                     }
                     var li = document.createElement('li');
-                    events.insertBefore(li,document.getElementById(act_pred).nextSibling);
+                    //events.insertBefore(li,document.getElementById(act_pred).nextSibling);
+                    events.appendChild(li);
                     var a = document.createElement('a');
                     a.setAttribute('ng-click','change_disaster(\''+record.name+'\')');
                     a.setAttribute('class','event-drop');
@@ -571,7 +572,7 @@ angular.module('dashboards')
 					
 					if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
 					
-                    if (record.group !== 'hide') {
+                    if (record.group !== 'hide' && document.getElementById(record.group)) {
 						
 						var width = dimensions[record.name].top(1)[0].value.finalVal*10;
 						
@@ -635,7 +636,7 @@ angular.module('dashboards')
 					
 					if (meta_unit[record.name] === 'null') {var unit = '';} else {var unit = meta_unit[record.name];}
 						
-					if (record.group !== 'hide') {
+					if (record.group !== 'hide' && document.getElementById(record.group)) {
 						
 						var width = dimensions[record.name].top(1)[0].value.finalVal*10;
 						

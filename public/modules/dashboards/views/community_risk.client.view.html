@@ -25,12 +25,17 @@
 				<li class="dropdown" style="background:#4C8293">
 					<a style="color:#fff" class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/community_risk">COMMUNITY RISK</a>
 				</li>
-			</ul> 	
-			<ul class="nav navbar-top-links navbar-left">
-				<li class="dropdown">
-					<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
-				</li>
-			</ul>
+			</ul>	
+            <ul class="nav navbar-top-links navbar-left">
+                <li class="dropdown">
+                    <a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/disaster_database">DISASTER DATABASE</a>
+                </li>
+            </ul> 	
+            <ul class="nav navbar-top-links navbar-left">
+                <li class="dropdown">
+                    <a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
+                </li>
+            </ul>
             
 			<!-- <ul class="nav navbar-top-links navbar-right"> -->
 				<!-- <li class="dropdown"> -->
@@ -109,7 +114,7 @@
                     <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-controls="demo" aria-expanded="true" >
                     </div>
                 </div>
-                <div class="btn-group zoom-level view-buttons" role="group">
+                <div class="btn-group zoom-level" role="group">
                     <!-- <button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:87%; text-transform:uppercase" type="button" class="btn btn-secondary"> -->
                     <button type="button" class="btn btn-secondary btn-score">
                         <i class="fa fa-tachometer" aria-hidden="true"></i>
@@ -246,7 +251,7 @@
                         <div class="card-header level1" role="tab" id="headingFive">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
                                 <span class="panel-header-icon">
-                                    <img src="modules/dashboards/img/undefined.png">
+                                    <img src="modules/dashboards/img/other_variables.png">
                                 </span>
                                 <span class="panel-header-content">
                                     <span class="panel-header-title">Other variables</span>
@@ -307,7 +312,7 @@
                                 </ul>
                             </div>
                         </ul>
-                        <div class="btn btn-secondary" style="color:#4d799d" ng-click="scrollRowChart()">
+                        <div class="btn btn-secondary btn-scroll" style="color:#4d799d" ng-click="scrollRowChart()">
                             Scroll to Top
                         </div>
                     </div>

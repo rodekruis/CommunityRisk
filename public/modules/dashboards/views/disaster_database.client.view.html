@@ -27,15 +27,15 @@
 				</li>
 			</ul> 	
 			<ul class="nav navbar-top-links navbar-left">
-				<li class="dropdown">
-					<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/disaster_database">DISASTER DATABASE</a>
-				</li>
-			</ul> 	
-			<ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown" style="background:#4C8293">
-					<a style="color:#fff" class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
+					<a style="color:#fff" class="submenu-item" ng-click="change_view('PI')" ng-href="#!/disaster_database">DISASTER DATABASE</a>
 				</li>
-			</ul> 
+			</ul>	
+			<ul class="nav navbar-top-links navbar-left">
+				<li class="dropdown">
+					<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
+				</li>
+			</ul>  
             
 			<!-- <ul class="nav navbar-top-links navbar-right"> -->
 				<!-- <li class="dropdown"> -->
@@ -130,9 +130,39 @@
                 </div>
                 <!-- typhoon selector -->
                 <div class="btn-group zoom-level" role="group">
+                    <!-- <ul class="nav navbar-left" style="width:49%;margin-right:2%;margin-top:2%">
+                        <li class="dropdown" style="background-color: #4C8293">
+                            <a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff; font-size:12px">
+                                <strong>{{disaster_type}}</strong>
+                                <i class="fa fa-angle-down PI-btn-arrow"></i>
+                            </a>
+                            <ul class="dropdown-menu submenu-items" style="z-index:2000">
+                                <li>
+                                    <a class="submenu-item" ng-click="change_disaster_type('Typhoon')">Typhoons</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a class="submenu-item" ng-click="change_disaster_type('Earthquake')">Earthquakes</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-right" style="width:49%;margin-right:0%;margin-top:2%">
+                        <li class="dropdown" style="background-color: #4C8293">
+                            <a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff; font-size:12px">
+                                <strong>{{disaster_name}}</strong>
+                                <i class="fa fa-angle-down PI-btn-arrow"></i>
+                            </a>
+                            <ul class="dropdown-menu export-items" id="events" style="z-index:2000">
+                                <li class="event-keep" id="act_pred"><strong>Prediction+Actuals:</strong></li>
+                                <li class="event-keep" id="pred"><strong>Prediction only:</strong></li>
+                                <li class="event-keep" id="act"><strong>Actuals only:</strong></li>
+                            </ul>
+                        </li>
+                    </ul> -->
                     <ul class="btn btn-secondary btn-active PIbuttons" style="margin-right:2%">
                         <div class="dropdown PIdropdown" style="background-color: #4C8293">
-                            <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#"> <!-- style="color:#fff; font-size:12px"> -->
+                            <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#">  <!-- style="color:#fff; font-size:12px"> -->
                                 <strong>{{disaster_type}}</strong>
                                 <i class="fa fa-angle-down PI-btn-arrow"></i>
                             </a>
@@ -149,7 +179,7 @@
                     </ul>
                     <ul class="btn btn-secondary btn-active PIbuttons" style="margin-right:0%">
                         <div class="dropdown PIdropdown" style="background-color: #4C8293">
-                            <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#"> <!-- style="color:#fff; font-size:12px"> -->
+                            <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#">  <!-- style="color:#fff; font-size:12px"> -->
                                 <strong>{{disaster_name}}</strong>
                                 <i class="fa fa-angle-down PI-btn-arrow"></i>
                             </a>
@@ -190,23 +220,23 @@
 
                 <!-- start: accordion with stats  -->
                 <div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
-                    <!-- <div class="card"> -->
-                        <!-- <div class="card-header level1" role="tab" id="headingOne"> -->
-                            <!-- <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> -->
-                                <!-- <span class="panel-header-icon"> -->
-                                    <!-- <img src="modules/dashboards/img/damage.png"> -->
-                                <!-- </span> -->
-                                <!-- <span class="panel-header-content"> -->
-                                    <!-- <span class="panel-header-title">Actual Impact</span> -->
-                                    <!-- <span class="panel-header-description">Various measures of damaged houses per municipality</span> -->
-                                <!-- </span> -->
-                            <!-- </a> -->
-                        <!-- </div> -->
-                        <!-- <div id="collapseOne" class="collapse level1" role="tabpanel" aria-labelledby="headingOne"> -->
-                            <!-- <div class="card-block" id="damage"></div> -->
-                        <!-- </div> -->
-                    <!-- </div> -->
                     <div class="card">
+                        <div class="card-header level1" role="tab" id="headingOne">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/damage.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Actual Impact</span>
+                                    <span class="panel-header-description">Various measures of damaged houses per municipality</span>
+                                </span>
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="collapse level1 in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="card-block" id="damage"></div>
+                        </div>
+                    </div>
+                    <!-- <div class="card">
                         <div class="card-header level1" role="tab" id="headingFour">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
                                 <span class="panel-header-icon">
@@ -218,7 +248,7 @@
                                 </span>
                             </a>
                         </div>
-                        <div id="collapseFour" class="collapse level1 in" role="tabpanel" aria-labelledby="headingFour">
+                        <div id="collapseFour" class="collapse level1" role="tabpanel" aria-labelledby="headingFour">
                             <div class="card-block" id="predictions"></div>
                         </div>
                     </div>
@@ -237,7 +267,7 @@
                         <div id="collapseFive" class="collapse level1" role="tabpanel" aria-labelledby="headingFive">
                             <div class="card-block" id="pred_error"></div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="card">
                         <div class="card-header level1" role="tab" id="headingTwo">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">

@@ -731,8 +731,6 @@ dc.leafletLegend = function () {
 						else if (grades[i] >= 1000) {grades[i]=Math.round(grades[i]/100)/10 + 'k';}
                     };
                     labels = ['low risk','','','','high risk'];
-                    console.log(minValue);
-                    console.log(maxValue);
                     
 					// var div = L.DomUtil.create('div', 'info legend');
                     // loop through our density intervals and generate a label with a colored

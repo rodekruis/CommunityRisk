@@ -29,7 +29,8 @@
   border: 1px solid #cad3df;*/
   border-radius: 0px; 
   margin-right: 15px;
-  margin-top: 8px;
+  margin-top: 0; /* 8px; */
+  padding-top: 6px;
 }
 @media only screen and (max-width: 767px){
   .navbar-right{

@@ -768,7 +768,7 @@ angular.module('dashboards')
 						//In Firefox event is not a global variable >> Not figured out how to fix this, so gave the popup a fixed position in FF only
 						if($(window).width() < 768) {
                                 popup.style.left = '5px';	
-                                popup.style.bottom = '5px';
+                                popup.style.bottom = '8%';
                         } else if (typeof event !== 'undefined') {
 							popup.style.left = Math.min($(window).width()-210,event.pageX) + 'px';	
 							popup.style.top = Math.min($(window).height()-210,event.pageY) + 'px';

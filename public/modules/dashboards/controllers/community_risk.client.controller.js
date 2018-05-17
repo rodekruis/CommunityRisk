@@ -358,6 +358,11 @@ angular.module('dashboards')
 			
 			//Changes to be able to show ALL lower-level districts, for now only applied to Malawi
 			if (zoom_min == 1 || $scope.country_code == 'MWI' || $scope.country_code == 'MOZ') {
+                
+                //Apply different classes for this case
+                $('#level2').addClass('btn-zoomin');
+                $('#level3').addClass('btn-zoomin');
+                    
 				if ($scope.admlevel == zoom_min) {
 					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; //undefined;
 					$scope.levelB_code = '';
@@ -376,6 +381,11 @@ angular.module('dashboards')
 					$scope.levelC_code = $scope.parent_code;
 				}
 			} else {
+                
+                //Apply different classes for this case
+                $('#level2').removeClass('btn-zoomin');
+                $('#level3').removeClass('btn-zoomin');
+                
 				if ($scope.admlevel == zoom_min) {
 					$scope.levelB_selection = undefined;
 					//$scope.levelB_code = '';
@@ -428,6 +438,18 @@ angular.module('dashboards')
 					j=j+1;					
 				}
 			}
+            // $scope.tables.sort(function sortString(a,b) {
+                // if (a.group !== 'scores' && b.group !== 'scores') {
+                    // if (a.name < b.name)
+                        // return -1
+                    // if (a.name > b.name)
+                        // return 1
+                    // return 0;
+                // } else {
+                    // return 0;
+                // }
+            // });
+                                                       
 			//console.log($scope.tables);
 			
             
@@ -1016,7 +1038,7 @@ angular.module('dashboards')
 						//In Firefox event is not a global variable >> Not figured out how to fix this, so gave the popup a fixed position in FF only
 						if($(window).width() < 768) {
                                 popup.style.left = '5px';	
-                                popup.style.bottom = '5px';
+                                popup.style.bottom = '8%';
                         } else if (typeof event !== 'undefined') {
 							popup.style.left = Math.min($(window).width()-210,event.pageX) + 'px';	
 							popup.style.top = Math.min($(window).height()-210,event.pageY) + 'px';
@@ -1214,7 +1236,8 @@ angular.module('dashboards')
 			$scope.zoom_out = function(dest_level) {
 				var admlevel_old = $scope.admlevel;
 				if (zoom_min == 1 || $scope.country_code == 'MWI' || $scope.country_code == 'MOZ') {
-					if (dest_level === 1 && $scope.admlevel > zoom_min) {
+                    
+                    if (dest_level === 1 && $scope.admlevel > zoom_min) {
 						$scope.admlevel = zoom_min; 
 						$scope.parent_codes = [];
 						$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code];

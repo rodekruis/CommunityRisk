@@ -1068,6 +1068,9 @@ body {
 .export-button.models{
   padding-left: 38px;
 }        
+.export-button{
+  font-size:14px !important;
+}
 
 #row-chart-container{
   position:absolute;
@@ -1341,7 +1344,7 @@ div.dc-chart{
 .dropdown-toggle{
   background: #4c8293;
   color: #ffffff;
-  font-size: 14px; /* 12px; */
+  font-size: 12px;
   display: block;
   line-height: 290%; /* 240%; */
   text-decoration: none;

@@ -467,6 +467,15 @@ angular.module('dashboards')
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
             var whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) {return d[$scope.metric];});
+            
+            // ...
+            $scope.genLookup_value = function (){
+                var lookup_value = {};
+                whereGroupSum.top(Infinity).forEach(function(e){
+                    lookup_value[e.key] = e.value;
+                });
+                return lookup_value;
+            };
 			
 			var cf_scores_metric = !meta_scorevar[$scope.metric] ? $scope.metric : meta_scorevar[$scope.metric];
 			var whereGroupSum_scores = whereDimension.group().reduce(
@@ -1107,7 +1116,8 @@ angular.module('dashboards')
 					if (!meta_scorevar[$scope.metric]){
 						return currentFormat(d.value.sum).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
 					} else {
-						return dec2Format(d.value.sum).concat(' / 10 - ',lookup[d.key]);
+						//return dec2Format(d.value.sum).concat(' / 10 - ',lookup[d.key]);
+                        return currentFormat($scope.genLookup_value()[d.key]).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
 					}
 				})
                 .title(function(d){
@@ -1293,6 +1303,8 @@ angular.module('dashboards')
 				$scope.metric_label = meta_label[id];
 				var mapchartColors = $scope.mapchartColors();
 				cf_scores_metric = !meta_scorevar[$scope.metric] ? $scope.metric : meta_scorevar[$scope.metric];	
+                whereGroupSum.dispose();
+                whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
 				whereGroupSum_scores.dispose();
 				whereGroupSum_scores = whereDimension.group().reduce(
 					function(p,v) {p.count = v[cf_scores_metric] !== null ? p.count + 1 : p.count; p.sum = p.sum + v[cf_scores_metric]; return p; }, 
@@ -1333,7 +1345,8 @@ angular.module('dashboards')
                         if (!meta_scorevar[$scope.metric]){
                             return currentFormat(d.value.sum).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
                         } else {
-                            return dec2Format(d.value.sum).concat(' / 10 - ',lookup[d.key]);
+                            //return dec2Format(d.value.sum).concat(' / 10 - ',lookup[d.key]);
+                            return currentFormat($scope.genLookup_value()[d.key]).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
                         }
                     })
                     .title(function(d){

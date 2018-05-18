@@ -51,17 +51,18 @@ Port: 27017
 * Add C:/Program Files/PostgreSQL/9.5/bin and C:/Program Files/PostgreSQL/9.5/lib to your environment PATH variable
 * From a terminal create a new user and database
 ```
-$ createuser -U postgres -P profiles (>> It will ask you to create a password, remember this, as you will need it later in secrets.json!)
-$ createDB -U postgres profiles
+$ createuser -U postgres -P cradatabase (>> It will ask you to create a password, remember this, as you will need it later in secrets.json!)
+$ createDB -U postgres cradatabase
 ```
-* Open pgAdmin III, navigate to the new profiles database, open an empty SQL editor and run:
-$ GRANT ALL PRIVILEGES ON DATABASE profiles TO profiles;
-$ GRANT postgres TO profiles;
+* Open pgAdmin III, navigate to the new cradatabase database, open an empty SQL editor and run:
+```
+$ GRANT ALL PRIVILEGES ON DATABASE cradatabase TO cradatabase;
+$ GRANT postgres TO cradatabase;
 $ CREATE EXTENSION postgis;
-$ ALTER ROLE profiles SUPERUSER CREATEDB;
+$ ALTER ROLE cradatabase SUPERUSER CREATEDB;
 ```
 * Test connection (from terminal again) with:
-$ psql -h localhost -U profiles profiles
+$ psql -h localhost -U cradatabase cradatabase
 ```
 
 ### Bower

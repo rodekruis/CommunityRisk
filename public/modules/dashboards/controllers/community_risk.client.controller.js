@@ -420,6 +420,7 @@ angular.module('dashboards')
 			// SETUP INDICATORS //
 			//////////////////////
             
+            d.Metadata.sort(function (a, b) {  return a.index - b.index;  });
 			$scope.tables = [];
 			var j=0;
 			for (var i=0; i < d.Metadata.length; i++) {
@@ -438,6 +439,7 @@ angular.module('dashboards')
 					j=j+1;					
 				}
 			}
+            
             // $scope.tables.sort(function sortString(a,b) {
                 // if (a.group !== 'scores' && b.group !== 'scores') {
                     // if (a.name < b.name)
@@ -450,7 +452,7 @@ angular.module('dashboards')
                 // }
             // });
                                                        
-			//console.log($scope.tables);
+			console.log($scope.tables);
 			
             
 			///////////////////////

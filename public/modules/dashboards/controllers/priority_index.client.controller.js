@@ -6,7 +6,7 @@ angular.module('dashboards')
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
-		//$css.remove(['modules/dashboards/css/core.css','modules/dashboards/css/header.css']);
+		$css.remove(['modules/dashboards/css/core.css','modules/dashboards/css/header.css']);
 		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
 		
         ////////////////////////
@@ -156,7 +156,7 @@ angular.module('dashboards')
 				if ($scope.view_code == 'PI') {
 					$scope.disaster_type = url.split('&')[3].split('=')[1];
 					$scope.disaster_name = url.split('&')[4].split('=')[1].replace('%20',' ');
-					window.history.pushState({}, document.title, $scope.view_code_PI == 'PI' ? '/#!/priority_index' : '/#!/disaster_database');
+					window.history.pushState({}, document.title, $scope.view_code_PI == 'PI' ? '/#!/priority_index' : '/#!/impact_database');
 				}
 			} else {
 				$scope.directURLload = false;
@@ -228,6 +228,12 @@ angular.module('dashboards')
             
             //Load actual content
             $scope.generateCharts(d);
+			
+			$(document).ready(function () {
+				if($(window).width() < 768) {
+					$(".collapse-button").addClass("collapsed");
+				}
+			});
 		    
             // End loading bar
             $scope.complete();
@@ -1163,6 +1169,11 @@ angular.module('dashboards')
                 if($(window).width() < 768) {
                     $('#demo.in').removeClass('in');
                 }
+				$(document).ready(function () {
+					if($(window).width() < 768) {
+						$(".collapse-button").addClass("collapsed");
+					}
+				});
             }
 
             //$scope.map_filters_old = [];
@@ -1191,6 +1202,11 @@ angular.module('dashboards')
                     //$('.collapse-button').toggle();
                     $('#demo.in').removeClass('in');
                 }
+				$(document).ready(function () {
+					if($(window).width() < 768) {
+						$(".collapse-button").addClass("collapsed");
+					}
+				});
                 
             }
             

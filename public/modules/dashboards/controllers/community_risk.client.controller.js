@@ -6,7 +6,7 @@ angular.module('dashboards')
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
-		//$css.remove(['modules/dashboards/css/core.css','modules/dashboards/css/header.css']);
+		$css.remove(['modules/dashboards/css/core.css','modules/dashboards/css/header.css']);
 		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
 		
         ////////////////////////
@@ -192,6 +192,12 @@ angular.module('dashboards')
 		  
             //Load actual content
             $scope.generateCharts(d);
+			
+			$(document).ready(function () {
+				if($(window).width() < 768) {
+					$(".collapse-button").addClass("collapsed");
+				}
+			});
 		    
             
             // end loading bar
@@ -1546,6 +1552,11 @@ angular.module('dashboards')
                 if($(window).width() < 768) {
                     $('#demo.in').removeClass('in');
                 }
+				$(document).ready(function () {
+					if($(window).width() < 768) {
+						$(".collapse-button").addClass("collapsed");
+					}
+				});
             }
 
             //$scope.map_filters_old = [];
@@ -1574,6 +1585,11 @@ angular.module('dashboards')
                     //$('.collapse-button').toggle();
                     $('#demo.in').removeClass('in');
                 }
+				$(document).ready(function () {
+					if($(window).width() < 768) {
+						$(".collapse-button").addClass("collapsed");
+					}
+				});
                 
             }
             

@@ -28,7 +28,7 @@
 			</ul>	
             <ul class="nav navbar-top-links navbar-left">
                 <li class="dropdown">
-                    <a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/disaster_database">DISASTER DATABASE</a>
+                    <a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/impact_database">IMPACT DATABASE</a>
                 </li>
             </ul> 	
             <ul class="nav navbar-top-links navbar-left">
@@ -115,24 +115,19 @@
                     </div>
                 </div>
                 <div class="btn-group zoom-level" role="group">
-                    <!-- <button style="background-color:#4C8293; border-color:#4C8293; color:#ffffff; width:87%; text-transform:uppercase" type="button" class="btn btn-secondary"> -->
                     <button type="button" class="btn btn-secondary btn-score">
                         <i class="fa fa-tachometer" aria-hidden="true"></i>
                         <span class="button-label"><strong>{{metric_label}}</strong></span>
                     </button>
-                    <!-- <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo"></div> -->
                 </div>
                 <div class="btn-group zoom-level" role="group">
-                    <button id="level1" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(1)">
-                        <!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
+                    <button id="level1" type="button" class="btn btn-secondary btn-zoomin btn-active " ng-click="zoom_out(1)">
                         <span class="button-label">{{country_selection}}</span>
                     </button>
                     <button id="level2" type="button" class="btn btn-secondary" ng-click="zoom_out(2)">
-                        <!-- <i class="fa fa-th-large" aria-hidden="true"></i> -->
                         <span class="button-label">{{levelB_selection}}</span>
                     </button>
                     <button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)" style="margin-right:0px">
-                        <!-- <i class="fa fa-th" aria-hidden="true"></i> -->
                         <span class="button-label">{{levelC_selection}}</span>
                     </button>
                 </div>

@@ -27,17 +27,23 @@
 .navbar-right {
   background: white; /*#eceff4;
   border: 1px solid #cad3df;*/
-  border-radius: 0px; 
-  margin-right: 15px;
-  margin-top: 0; /* 8px; */
-  padding-top: 6px;
+  /* border-radius: 0px;  */
+  margin-right: 10px; /* 15px; */
+  /* margin-top: 0;  */
+  padding-top: 5px; /* 6px; */
 }
-@media only screen and (max-width: 767px){
+.navbar-right > li > a{
+  height: 41px;
+}					   
+@media only screen and (max-width: 900px){
   .navbar-right{
     border-bottom: 1px solid #eeeeee;
     margin-right: 0;
     margin-top: 0;
   }
+  .navbar-right > li > a{
+	  height: 30px;
+	}
 }                                          
 .navbar-left {
   background: white; /*#eceff4;
@@ -47,13 +53,13 @@
   margin-top: 8px;
 }
 
-@media only screen and (max-width: 767px){
+@media only screen and (max-width: 900px){
   .navbar-left{
     margin-right: 0;
   }
 }
 .dropdown-toggle {
-  color: #4d799d;
+  /* color: #4d799d; */
 }
 .nav>li>a {
   padding:6px 10px;
@@ -71,7 +77,7 @@
     right: 100%;
 }
 
-@media only screen and (max-width: 767px){
+@media only screen and (max-width: 900px){
   .dropdown-submenu .dropdown-menu{
     border-radius: 0;
     border: none;
@@ -150,4 +156,62 @@
   .button-nav{
     display:none;
   }
+}
+
+#header .dropdown-menu{
+  border: 2px solid #eeeeee;
+  margin:0;
+  padding: 0;
+  width: auto;
+}
+#header .dropdown-menu li{
+  display: block;
+  margin:0;
+  padding: 0;
+  width: 100%;
+}
+#header .dropdown-menu.export-items li a{
+  padding: 5px 15px;
+}
+#header .dropdown-menu.export-items li a:hover{
+  background: #4C8293;
+  color: #ffffff;
+}
+#header .navbar-top-links .dropdown-toggle{
+  background: none;
+  color: #4c8293;
+  padding: 0 15px;
+}
+#header .navbar-top-links .dropdown-toggle:hover{
+/*#header .navbar-top-links .dropdown-toggle:active{ */
+  background: #4c8293;
+  color: #ffffff;
+}
+#header .dropdown-menu.export-items a{
+  color: #000000;
+  font-size: 13px;
+}
+
+@media only screen and (max-width: 900px){
+  #header .dropdown-menu{
+	width: 100%;
+  }
+}
+
+@media screen and (min-width: 900px) and (max-width:1200px) {
+  .navbar-inverse{
+  }
+  .navbar-right{
+    margin-right: 0;
+  }
+  #header .navbar-top-links .dropdown-toggle{
+    padding: 2px 5px;
+  }
+  .nav>li>a{
+    padding: 6px 5px;
+  }
+  .export-btn-arrow{
+    margin-left: 0;
+    margin-right: 5px;
+  } 
 }

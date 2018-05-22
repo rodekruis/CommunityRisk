@@ -452,7 +452,7 @@ angular.module('dashboards')
                 // }
             // });
                                                        
-			console.log($scope.tables);
+			//console.log($scope.tables);
 			
             
 			///////////////////////

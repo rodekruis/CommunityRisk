@@ -1105,11 +1105,11 @@ body {
     /* position:relative; */
     width:100%;
     height:100%;
-    height: calc(100% +25px);
+    height: calc(100% - 50px);
     background-color:#fff;
     visibility:hidden;
     z-index: 4;
-    top: -25px; /*180px; 210px;*/
+    top: -15px; /*180px; 210px;*/
   }
 }
 #row-chart{

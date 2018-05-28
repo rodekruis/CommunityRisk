@@ -16,26 +16,27 @@ angular.module('dashboards')
 		$scope.change_view = function(view) {
 			$rootScope.view_code = view;
 		}
+		$scope.change_country = function(country) {
+			$scope.country_code = country;
+            if (country == 'PHL'){ $scope.disaster_type = 'Typhoon';}
+            else if (country == 'NPL') {$scope.disaster_type = 'Earthquake';}
+            else if (country == 'ECU' || country == 'PER') {$scope.disaster_type = 'Flood';}
+            if (country == 'PHL'){ $scope.disaster_name = 'Haima';}
+            else if (country == 'NPL') {$scope.disaster_name = 'Ghorka 2015';}
+            else if (country == 'ECU' || country == 'PER') {$scope.disaster_name = 'Total';}
+            $scope.parent_codes = [];
+			$scope.metric = '';
+			$scope.initiate($rootScope.view_code);
+		}	
 		$scope.change_disaster_type = function(disaster_type) {
 			$scope.disaster_type = disaster_type;
 			//$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Batangas 2017';
             if ($scope.country_code == 'PHL'){$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Batangas 2017';}
             else if ($scope.country_code == 'NPL') {$scope.disaster_name = 'Ghorka 2015';}
-            else if ($scope.country_code == 'ECU') {$scope.disaster_name = $scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
+            else if ($scope.country_code == 'ECU' || $scope.country == 'PER') {$scope.disaster_name = 'Total';} //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
 			$scope.initiate('PI');
 		}
-		$scope.change_country = function(country) {
-			$scope.country_code = country;
-            if (country == 'PHL'){ $scope.disaster_type = 'Typhoon';}
-            else if (country == 'NPL') {$scope.disaster_type = 'Earthquake';}
-            else if (country == 'ECU') {$scope.disaster_type = 'Flood';}
-            if (country == 'PHL'){ $scope.disaster_name = 'Haima';}
-            else if (country == 'NPL') {$scope.disaster_name = 'Ghorka 2015';}
-            else if (country == 'ECU') {$scope.disaster_name = '2012-2';}
-            $scope.parent_codes = [];
-			$scope.metric = '';
-			$scope.initiate($rootScope.view_code);
-		}		
+			
         //Change event: reinitiate the dashboard
         $scope.change_disaster = function(disaster_name) {
             $scope.disaster_name = disaster_name;
@@ -54,15 +55,15 @@ angular.module('dashboards')
         $scope.country_code = 'PHL';
         if ($scope.country_code == 'PHL'){ $scope.disaster_type = 'Typhoon';}
             else if ($scope.country_code == 'NPL') {$scope.disaster_type = 'Earthquake';}
-            else if ($scope.country_code == 'ECU') {$scope.disaster_type = 'Flood';}
+            else if ($scope.country_code == 'ECU' || $scope.country == 'PER') {$scope.disaster_type = 'Flood';}
 		if ($scope.country_code == 'PHL'){$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Batangas 2017';}
             else if ($scope.country_code == 'NPL') {$scope.disaster_name = 'Ghorka 2015';}
-            else if ($scope.country_code == 'ECU') {$scope.disaster_name = $scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
+            else if ($scope.country_code == 'ECU' || $scope.country == 'PER') {$scope.disaster_name = 'Total';} //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
         $scope.metric = '';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
-		if (['PHL','NPL','ECU'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}
+		if (['PHL','NPL','ECU','PER'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}
 		$scope.admlevel = 3;
 		$scope.metric_label = '';
 		$scope.metric_year = '';
@@ -127,7 +128,7 @@ angular.module('dashboards')
 			//Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
 			$scope.admlevel = 3;
 			if ($scope.disaster_name == '') { $scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Batangas 2017'; };
-			if (['PHL','NPL','ECU'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}
+			if (['PHL','NPL','ECU','PER'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}
 			else if ($scope.view_code == 'PI' && $scope.country_code == 'NPL'){
 				$scope.admlevel = 4;
 				$scope.disaster_type = 'Earthquake';
@@ -1155,11 +1156,6 @@ angular.module('dashboards')
 
                     $scope.click_filter = false;
                     $scope.coming_from_tab = true;
-                    //rowChart.filter(null);
-                    //mapChart.filter([$scope.filters]);
-                    //$scope.map_filters = $.extend( [], $scope.row_filters_old ); 
-                    //$scope.map_filters_old = $.extend( [], $scope.row_filters_old ); 
-                    //rowChart.filter(null);
                     $scope.click_filter = true;
                     $scope.coming_from_tab = false;
                     
@@ -1189,12 +1185,6 @@ angular.module('dashboards')
                 
                 $scope.click_filter = false;
                 $scope.coming_from_map = true;
-                //$scope.map_filters_old = $.extend( [], $scope.map_filters );
-                //$scope.row_filters_old = $.extend( [], $scope.map_filters );
-                //rowChart.filter([$scope.filters]);
-                //mapChart.filter(null);
-                //mapChart.filter([$scope.map_filters_old]);
-                //rowChart.redraw();
                 $scope.click_filter = true;
                 $scope.coming_from_map = false;
                 

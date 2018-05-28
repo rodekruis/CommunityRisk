@@ -6,7 +6,7 @@ angular.module('dashboards')
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
-		$css.remove(['modules/dashboards/css/core.css','modules/dashboards/css/header.css']);
+		$css.remove(['modules/dashboards/css/core.css']);
 		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
 		
         ////////////////////////
@@ -33,7 +33,7 @@ angular.module('dashboards')
 			//$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Batangas 2017';
             if ($scope.country_code == 'PHL'){$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Batangas 2017';}
             else if ($scope.country_code == 'NPL') {$scope.disaster_name = 'Ghorka 2015';}
-            else if ($scope.country_code == 'ECU' || $scope.country == 'PER') {$scope.disaster_name = 'Total';} //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
+            else if ($scope.country_code == 'ECU' || $scope.country_code == 'PER') {$scope.disaster_name = 'Total';} //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
 			$scope.initiate('PI');
 		}
 			
@@ -53,14 +53,15 @@ angular.module('dashboards')
 		$scope.geom = null;
 		$scope.view_code = 'PI';
         $scope.country_code = 'PHL';
+		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
         if ($scope.country_code == 'PHL'){ $scope.disaster_type = 'Typhoon';}
             else if ($scope.country_code == 'NPL') {$scope.disaster_type = 'Earthquake';}
-            else if ($scope.country_code == 'ECU' || $scope.country == 'PER') {$scope.disaster_type = 'Flood';}
+            else if ($scope.country_code == 'ECU' || $scope.country_code == 'PER') {$scope.disaster_type = 'Flood';}
 		if ($scope.country_code == 'PHL'){$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Batangas 2017';}
             else if ($scope.country_code == 'NPL') {$scope.disaster_name = 'Ghorka 2015';}
-            else if ($scope.country_code == 'ECU' || $scope.country == 'PER') {$scope.disaster_name = 'Total';} //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
+            else if ($scope.country_code == 'ECU' || $scope.country_code == 'PER') {$scope.disaster_name = 'Total';} //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
         $scope.metric = '';
-		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
+		console.log($scope.country_code);
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
 		if (['PHL','NPL','ECU','PER'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}

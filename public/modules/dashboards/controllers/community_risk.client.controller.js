@@ -6,7 +6,7 @@ angular.module('dashboards')
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
-		$css.remove(['modules/dashboards/css/core.css','modules/dashboards/css/header.css']);
+		$css.remove(['modules/dashboards/css/core.css']);
 		$css.add(['modules/dashboards/css/header.css','modules/dashboards/css/dashboards.css']);
 		
         ////////////////////////
@@ -35,6 +35,7 @@ angular.module('dashboards')
 		$scope.view_code = 'CRA';
 		$scope.metric = '';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
+		$rootScope.country_code = null;
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
 		$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
 		$scope.metric_label = '';

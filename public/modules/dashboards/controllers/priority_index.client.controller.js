@@ -61,7 +61,6 @@ angular.module('dashboards')
             else if ($scope.country_code == 'NPL') {$scope.disaster_name = 'Ghorka 2015';}
             else if ($scope.country_code == 'ECU' || $scope.country_code == 'PER') {$scope.disaster_name = 'Total';} //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
         $scope.metric = '';
-		console.log($scope.country_code);
 		if ($rootScope.disaster_type) { $scope.disaster_type = $rootScope.disaster_type;}
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
 		if (['PHL','NPL','ECU','PER'].indexOf($scope.country_code) <= -1) {$scope.country_code = 'PHL';}

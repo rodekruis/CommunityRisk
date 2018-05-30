@@ -111,9 +111,10 @@ angular.module('dashboards')
 				$scope.country_code = url.split('&')[0].split('=')[1];
 				$scope.admlevel = url.split('&')[1].split('=')[1];
 				$scope.metric = url.split('&')[2].split('=')[1];
-                var filters_temp = url.split('&')[4].split('=')[1].split(',');
-                $scope.filters_url = filters_temp[0] == "" ? [] : filters_temp; 
-				$scope.chart_show = url.split('&')[5].split('=')[1];
+                // var filters_temp = url.split('&')[4].split('=')[1].split(',');
+                // $scope.filters_url = filters_temp[0] == "" ? [] : filters_temp; 
+				//$scope.chart_show = url.split('&')[5].split('=')[1];
+				$scope.chart_show = url.split('&')[4].split('=')[1];
 				if ($scope.view_code == 'CRA') {
 					$scope.parent_codes = url.split('&')[3].split('=')[1].split(',');
 					window.history.pushState({}, document.title, '/#!/community_risk');
@@ -1047,7 +1048,7 @@ angular.module('dashboards')
 					var popup = document.getElementById('mapPopup');
 					popup.style.visibility = 'hidden';
 					document.getElementById('zoomin_icon').style.visibility = 'hidden';
-					if (!$scope.directURLload && $scope.filters.length > mapfilters_length) {
+					if (/* !$scope.directURLload && */ $scope.filters.length > mapfilters_length) {
 						$scope.$apply(function() {
 							$scope.name_popup = lookup[$scope.filters[$scope.filters.length - 1]];
 							for (var i=0;i<d.Rapportage.length;i++) {
@@ -1141,11 +1142,8 @@ angular.module('dashboards')
 				})
                 .on('filtered',function(chart,filters){
 					
-					console.log(chart.filters());
-					
-                    $scope.filters = chart.filters();
+					$scope.filters = chart.filters();
                     //$scope.row_filters = $.extend( [], chart.filters() );
-                    
                     
                     //If coming from map: update all sidebar-information accordingly
                     if ($scope.chart_show == 'row' && $scope.coming_from_map) {
@@ -1495,14 +1493,14 @@ angular.module('dashboards')
 			};
 			
 			//Create parameter-specific URL and show it in popup to copy
-			function addParameterToURL(view,country,admlevel,metric,parent_codes,filters,chart_show){
+			function addParameterToURL(view,country,admlevel,metric,parent_codes/* ,filters, */,chart_show){
 				var _url = location.href;
 				_url = _url.split('?')[0];
-				_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&admlevel='+admlevel+'&metric='+metric+'&parent_code='+parent_codes+'&selection_code='+filters+'&view='+chart_show;
+				_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&admlevel='+admlevel+'&metric='+metric+'&parent_code='+parent_codes/* +'&selection_code='+filters */+'&view='+chart_show;
 				return _url;
 			}
 			$scope.share_URL = function() {
-				$scope.shareable_URL = addParameterToURL($scope.view_code,$scope.country_code,$scope.admlevel,$scope.metric,$scope.parent_codes,$scope.filters,$scope.chart_show);
+				$scope.shareable_URL = addParameterToURL($scope.view_code,$scope.country_code,$scope.admlevel,$scope.metric,$scope.parent_codes/* ,$scope.filters */,$scope.chart_show);
 				$('#URLModal').modal('show');
 			}
             
@@ -1638,15 +1636,16 @@ angular.module('dashboards')
 			}
 			zoomToGeom($scope.geom);
             
-			if ($scope.directURLload) {
-				if ($scope.filters_url.length > 0) {
-					mapChart.filter([$scope.filters_url]);
-					mapChart.redraw();
-					rowChart.filter([$scope.filters_url]);
-					rowChart.redraw();
-					$scope.directURLload = false;
-				}
-			}
+			// if ($scope.directURLload) {
+				// if ($scope.filters_url.length > 0) {
+					// mapChart.filter([$scope.filters_url]);
+					// mapChart.redraw();
+					// rowChart.filter([$scope.filters_url]);
+					// rowChart.redraw();
+					// $scope.directURLload = false;
+				// }
+			// }
+			
             //Show map
             if ($scope.chart_show == 'map') {
                 $('#row-chart-container').hide();

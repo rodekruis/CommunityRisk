@@ -111,7 +111,9 @@ angular.module('dashboards')
 				$scope.country_code = url.split('&')[0].split('=')[1];
 				$scope.admlevel = url.split('&')[1].split('=')[1];
 				$scope.metric = url.split('&')[2].split('=')[1];
-                $scope.chart_show = url.split('&')[4].split('=')[1];
+                var filters_temp = url.split('&')[4].split('=')[1].split(',');
+                $scope.filters_url = filters_temp[0] == "" ? [] : filters_temp; 
+				$scope.chart_show = url.split('&')[5].split('=')[1];
 				if ($scope.view_code == 'CRA') {
 					$scope.parent_codes = url.split('&')[3].split('=')[1].split(',');
 					window.history.pushState({}, document.title, '/#!/community_risk');
@@ -476,12 +478,18 @@ angular.module('dashboards')
 			// Create the groups for these two dimensions (i.e. sum the metric)
 			var whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
             var whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) {return d[$scope.metric];});
+			
+			var whereGroupSum_lookup = whereDimension.group().reduce(
+				function(p,v) {p.count = v[$scope.metric] !== null ? p.count + 1 : p.count; p.sum = p.sum + v[$scope.metric]; return p; }, 
+				function(p,v) {p.count = v[$scope.metric] !== null ? p.count - 1 : p.count; p.sum = p.sum - v[$scope.metric]; return p; }, 
+				function() { return { count: 0, sum: 0 }; }
+			);
             
             // ...
             $scope.genLookup_value = function (){
                 var lookup_value = {};
-                whereGroupSum.top(Infinity).forEach(function(e){
-                    lookup_value[e.key] = e.value;
+                whereGroupSum_lookup.top(Infinity).forEach(function(e){
+                    lookup_value[e.key] = e.value.count == 0 ? 'No data' : e.value.sum;
                 });
                 return lookup_value;
             };
@@ -1017,10 +1025,9 @@ angular.module('dashboards')
 				.renderPopup(true)
 				.turnOnControls(true)
 				.legend(dc.leafletLegend().position('topright'))
-				//Set up what happens when clicking on the map (popup appearing mainly)
+				//Set up what happens when clicking on the map
 				.on('filtered',function(chart,filters){
 					$scope.filters = chart.filters();
-                    //$scope.map_filters = $.extend( [], chart.filters() );
                     
                     //When coming from Tabular View: update all information accordingly.
                     if ($scope.chart_show == 'map' && $scope.coming_from_tab) {
@@ -1040,7 +1047,7 @@ angular.module('dashboards')
 					var popup = document.getElementById('mapPopup');
 					popup.style.visibility = 'hidden';
 					document.getElementById('zoomin_icon').style.visibility = 'hidden';
-					if ($scope.filters.length > mapfilters_length) {
+					if (!$scope.directURLload && $scope.filters.length > mapfilters_length) {
 						$scope.$apply(function() {
 							$scope.name_popup = lookup[$scope.filters[$scope.filters.length - 1]];
 							for (var i=0;i<d.Rapportage.length;i++) {
@@ -1068,17 +1075,7 @@ angular.module('dashboards')
                         if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
 					} 
 					mapfilters_length = $scope.filters.length;
-					//Recalculate all community-profile figures
-					//var keyvalue = fill_keyvalues();
-					//$scope.updateHTML(keyvalue);
-					document.getElementById('section-'+$scope.metric).classList.add('section-active'); //style = 'background:#4C8293;color:#ffffff';
-					//let reset-button (dis)appear
-					// var resetbutton = document.getElementsByClassName('reset-button')[0];	
-					// if ($scope.filters.length > 0) {
-						// resetbutton.style.visibility = 'visible';
-					// } else {
-						// resetbutton.style.visibility = 'hidden';
-					// }
+					document.getElementById('section-'+$scope.metric).classList.add('section-active');
 					
 				})
 			;
@@ -1114,7 +1111,9 @@ angular.module('dashboards')
                 .height((barheight + 5) * d.Rapportage.length + 50)
                 .dimension(whereDimension_tab)
                 .group(whereGroupSum_scores_tab)
-                .ordering(function(d) {return isNaN(d.value.sum) ? 0 : -d.value.sum; })
+                .ordering(function(d) {
+					return isNaN($scope.genLookup_value()[d.key]) ? 999999999 : -d.value.sum; 
+					})
                 .fixedBarHeight(barheight)
                 .valueAccessor(function(d){ return isNaN(d.value.sum) ? 0 : d.value.sum; })
                 .colors(mapchartColors)
@@ -1126,7 +1125,11 @@ angular.module('dashboards')
 						return currentFormat(d.value.sum).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
 					} else {
 						//return dec2Format(d.value.sum).concat(' / 10 - ',lookup[d.key]);
-                        return currentFormat($scope.genLookup_value()[d.key]).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
+						if ($scope.genLookup_value()[d.key] == 'No data') {
+							return 'No data - '.concat(lookup[d.key]);
+						} else {
+							return currentFormat($scope.genLookup_value()[d.key]).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
+						}
 					}
 				})
                 .title(function(d){
@@ -1137,6 +1140,9 @@ angular.module('dashboards')
 					}
 				})
                 .on('filtered',function(chart,filters){
+					
+					console.log(chart.filters());
+					
                     $scope.filters = chart.filters();
                     //$scope.row_filters = $.extend( [], chart.filters() );
                     
@@ -1314,6 +1320,12 @@ angular.module('dashboards')
 				cf_scores_metric = !meta_scorevar[$scope.metric] ? $scope.metric : meta_scorevar[$scope.metric];	
                 whereGroupSum.dispose();
                 whereGroupSum = whereDimension.group().reduceSum(function(d) { return d[$scope.metric];});
+				whereGroupSum_lookup.dispose();
+				whereGroupSum_lookup = whereDimension.group().reduce(
+					function(p,v) {p.count = v[$scope.metric] !== null ? p.count + 1 : p.count; p.sum = p.sum + v[$scope.metric]; return p; }, 
+					function(p,v) {p.count = v[$scope.metric] !== null ? p.count - 1 : p.count; p.sum = p.sum - v[$scope.metric]; return p; }, 
+					function() { return { count: 0, sum: 0 }; }
+				);
 				whereGroupSum_scores.dispose();
 				whereGroupSum_scores = whereDimension.group().reduce(
 					function(p,v) {p.count = v[cf_scores_metric] !== null ? p.count + 1 : p.count; p.sum = p.sum + v[cf_scores_metric]; return p; }, 
@@ -1344,8 +1356,11 @@ angular.module('dashboards')
                 var xAxis = meta_scorevar[$scope.metric] ? 11 : $scope.quantile_max * 1.1;
                 rowChart
 					.group(whereGroupSum_scores_tab)
-                    .ordering(function(d) {return isNaN(d.value.sum) ? 0 : -d.value.sum; })
-                    .valueAccessor(function(d){ return isNaN(d.value.sum) ? 0 : d.value.sum; })
+                    .ordering(function(d) {
+						//return isNaN(d.value.sum) ? 0 : -d.value.sum; 
+						return isNaN($scope.genLookup_value()[d.key]) ? 999999999 : -d.value.sum; 
+						})
+                    .valueAccessor(function(d){ return isNaN($scope.genLookup_value()[d.key]) ? '' : d.value.sum; })
 					.colors(mapchartColors)
 					.colorCalculator(function(d){
 							return !d.value.count ? '#cccccc' : mapChart.colors()(d.value.sum);
@@ -1354,8 +1369,12 @@ angular.module('dashboards')
                         if (!meta_scorevar[$scope.metric]){
                             return currentFormat(d.value.sum).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
                         } else {
-                            //return dec2Format(d.value.sum).concat(' / 10 - ',lookup[d.key]);
-                            return currentFormat($scope.genLookup_value()[d.key]).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
+                            //return currentFormat($scope.genLookup_value()[d.key]).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
+							if ($scope.genLookup_value()[d.key] == 'No data') {
+								return 'No data - '.concat(lookup[d.key]);
+							} else {
+								return currentFormat($scope.genLookup_value()[d.key]).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
+							}
                         }
                     })
                     .title(function(d){
@@ -1476,14 +1495,14 @@ angular.module('dashboards')
 			};
 			
 			//Create parameter-specific URL and show it in popup to copy
-			function addParameterToURL(view,country,admlevel,metric,parent_codes,chart_show){
+			function addParameterToURL(view,country,admlevel,metric,parent_codes,filters,chart_show){
 				var _url = location.href;
 				_url = _url.split('?')[0];
-				_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&admlevel='+admlevel+'&metric='+metric+'&parent_code='+parent_codes+'&view='+chart_show;
+				_url += (_url.split('?')[1] ? '&':'?') + 'country='+country+'&admlevel='+admlevel+'&metric='+metric+'&parent_code='+parent_codes+'&selection_code='+filters+'&view='+chart_show;
 				return _url;
 			}
 			$scope.share_URL = function() {
-				$scope.shareable_URL = addParameterToURL($scope.view_code,$scope.country_code,$scope.admlevel,$scope.metric,$scope.parent_codes,$scope.chart_show);
+				$scope.shareable_URL = addParameterToURL($scope.view_code,$scope.country_code,$scope.admlevel,$scope.metric,$scope.parent_codes,$scope.filters,$scope.chart_show);
 				$('#URLModal').modal('show');
 			}
             
@@ -1540,10 +1559,6 @@ angular.module('dashboards')
                     $scope.click_filter = false;
                     $scope.coming_from_tab = true;
                     rowChart.filter(null);
-                    //mapChart.filter([$scope.filters]);
-                    //$scope.map_filters = $.extend( [], $scope.row_filters_old ); 
-                    //$scope.map_filters_old = $.extend( [], $scope.row_filters_old ); 
-                    //rowChart.filter(null);
                     $scope.click_filter = true;
                     $scope.coming_from_tab = false;
                     
@@ -1573,17 +1588,11 @@ angular.module('dashboards')
                 
                 $scope.click_filter = false;
                 $scope.coming_from_map = true;
-                //$scope.map_filters_old = $.extend( [], $scope.map_filters );
-                //$scope.row_filters_old = $.extend( [], $scope.map_filters );
-                //rowChart.filter([$scope.filters]);
                 mapChart.filter(null);
-                //mapChart.filter([$scope.map_filters_old]);
-                //rowChart.redraw();
                 $scope.click_filter = true;
                 $scope.coming_from_map = false;
                 
-                if($(window).width() < 768) { //&& $('#demo').hasClass('in')) {
-                    //$('.collapse-button').toggle();
+                if($(window).width() < 768) { 
                     $('#demo.in').removeClass('in');
                 }
 				$(document).ready(function () {
@@ -1609,7 +1618,6 @@ angular.module('dashboards')
                 dc.redrawAll();
                 var keyvalue = fill_keyvalues();
                 $scope.updateHTML(keyvalue);
-                //resetbutton.style.visibility = 'hidden';
                 if ($scope.chart_show == 'map') {zoomToGeom($scope.geom);};
                 //if (chart_show == 'row') {row_text(color_range);};
             }
@@ -1630,12 +1638,23 @@ angular.module('dashboards')
 			}
 			zoomToGeom($scope.geom);
             
+			if ($scope.directURLload) {
+				if ($scope.filters_url.length > 0) {
+					mapChart.filter([$scope.filters_url]);
+					mapChart.redraw();
+					rowChart.filter([$scope.filters_url]);
+					rowChart.redraw();
+					$scope.directURLload = false;
+				}
+			}
             //Show map
             if ($scope.chart_show == 'map') {
                 $('#row-chart-container').hide();
+				
             } else if ($scope.chart_show == 'row') {
-                $scope.tabularShow();
-            }
+				$scope.tabularShow();
+				
+			}
 			
 			var zoom_child = $('.leaflet-control-zoom')[0];
 			var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
@@ -1736,21 +1755,7 @@ angular.module('dashboards')
 			
 			
 		};
-        
-        // Function for handling sub-dropdown-menus in Navigation bar
-		// $(document).ready(function(){
-		  // $('.dropdown-submenu a.menu-item').on("click", function(e){
-			// $('.submenu-items.open').toggle().removeClass('open');
-			// $(this).next('ul').toggle().addClass('open');
-			// e.stopPropagation();
-			// e.preventDefault();
-		  // });
-		// });
-        
-        //Final CSS
-        
-        
-		
+ 
 
 
 	}

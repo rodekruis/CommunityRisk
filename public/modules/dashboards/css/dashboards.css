@@ -22,9 +22,6 @@ a{
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   font-family: 'Open Sans', sans-serif;
 }
-.content {
-	/* top:50px; */
-}
 .container-fluid {
   margin-top:50px;
   padding: 0;

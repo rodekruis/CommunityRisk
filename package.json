@@ -4,8 +4,8 @@
   "version": "0.0.2",
   "author": "Rode Kruis",
   "engines": {
-    "node": "4.2.x",
-    "npm": "2.14.x"
+    "node": "10.x.x",
+    "npm": "6.x.x"
   },
   "scripts": {
     "start": "grunt",
@@ -62,7 +62,6 @@
     "supertest": "*",
     "should": "*",
     "grunt-env": "*",
-    "grunt-node-inspector": "0.4.*",
     "grunt-contrib-watch": "1.0.*",
     "grunt-contrib-jshint": "1.0.*",
     "grunt-contrib-csslint": "1.0.*",

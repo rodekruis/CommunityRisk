@@ -1,0 +1,9 @@
+{
+  id: 'jquery-countTo'
+  main:
+    js: 'main.coffee'
+    css: null
+  name: 'jQuery CountTo'
+  type: 'library'
+  version: '1.2.0'
+}

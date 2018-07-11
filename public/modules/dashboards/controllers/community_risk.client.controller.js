@@ -116,7 +116,7 @@ angular.module('dashboards')
 				//$scope.chart_show = url.split('&')[5].split('=')[1];
 				$scope.chart_show = url.split('&')[4].split('=')[1];
 				if ($scope.view_code == 'CRA') {
-					$scope.parent_codes = url.split('&')[3].split('=')[1].split(',');
+					$scope.parent_codes = url.split('&')[3].split('=')[1] == "" ? [] : url.split('&')[3].split('=')[1].split(',');
 					window.history.pushState({}, document.title, '/#!/community_risk');
 				} 
 			} else {
@@ -374,15 +374,27 @@ angular.module('dashboards')
                 $('#level3').addClass('btn-zoomin');
                     
 				if ($scope.admlevel == zoom_min) {
-					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; //undefined;
+					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
 					$scope.levelB_code = '';
 					$scope.levelB_codes = [];
-				} else if ($scope.admlevel < zoom_max && $scope.parent_codes.length > 0) { //$scope.levelB_selection == undefined) {
+				} else if ($scope.admlevel < zoom_max && $scope.parent_codes.length > 0) { 
 					$scope.levelB_selection = $scope.name_selection;
 					//$scope.levelB_code = $scope.parent_code;
 					$scope.levelB_codes = $scope.parent_codes;
+				} else if ($scope.admlevel < zoom_max && $scope.parent_codes.length == 0) { //This is the direct URL-link case
+					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
+					$scope.levelB_code = '';
+					$scope.levelB_codes = [];
+				} else if ($scope.admlevel == zoom_max && $scope.parent_codes.length == 0) { //This is the direct URL-link case
+					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
+					$scope.levelB_code = '';
+					$scope.levelB_codes = [];
 				}
 				if ($scope.admlevel < zoom_max) { 
+					$scope.levelC_selection = $scope.parent_codes.length == 0 ? 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
+																		: undefined;
+					$scope.levelC_code = '';
+				} else if ($scope.admlevel == zoom_max && $scope.parent_codes.length == 0) { //This is the direct URL-link case
 					$scope.levelC_selection = $scope.parent_codes.length == 0 ? 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
 																		: undefined;
 					$scope.levelC_code = '';

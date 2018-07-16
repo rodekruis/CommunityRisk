@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope','$css','$rootScope','$compile','Authentication', 'leafletData',
-	function ($scope,$css,$rootScope, $compile, Authentication, leafletData) {
+angular.module('core').controller('HomeController', ['$translate','$scope','$css','$rootScope','$compile','Authentication', 'leafletData',
+	function ($translate,$scope,$css,$rootScope, $compile, Authentication, leafletData) {
     
 	$css.remove('modules/dashboards/css/storyboard.css');
 	$css.remove('modules/dashboards/css/dashboards.css');
@@ -197,5 +197,22 @@ angular.module('core').controller('HomeController', ['$scope','$css','$rootScope
 			});
 		};
 	});
+	
+	//////////////////////////////////////
+	/// TRANSLATION TO OTHER LANGUAGES ///
+	//////////////////////////////////////
+			
+	//Translation button
+	$scope.changeLanguage = function (langKey) {
+		$translate.use(langKey);
+	};
+	
+	$scope.translateData = function() {
+		return {
+			metric_label: $scope.metric,
+			metric_desc: 'desc_' + $scope.metric,
+			subtype_selection: $scope.subtype_selection
+		};
+	}
                         
 }]);

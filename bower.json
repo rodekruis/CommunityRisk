@@ -25,6 +25,7 @@
 	"angular-css": "*",
 	"angular-ui-router": "*",
     "angular-leaflet-directive": "0.10.0",
+	"angular-translate": "*",
     "leaflet-ajax": "~2.0.0",
     "angular-gettext": "2.2.1",
     "Snap.svg": "*",

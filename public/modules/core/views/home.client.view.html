@@ -20,25 +20,26 @@
 					<!-- <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation"> -->
 						<ul class="nav navbar-top-links navbar-left">
 							<li class="dropdown">
-								<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/community_risk">COMMUNITY RISK</a>
+								<a class="submenu-item caps" ng-click="change_view('CRA')" ng-href="#!/community_risk">{{ 'COMMUNITY_RISK' | translate }}</a>
 							</li>
 						</ul> 	
 						<ul class="nav navbar-top-links navbar-left">
 							<li class="dropdown">
-								<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/impact_database">IMPACT DATABASE</a>
+								<a class="submenu-item caps" ng-click="change_view('PI')" ng-href="#!/impact_database">{{ 'IMPACT_DATABASE' | translate }}</a>
 							</li>
 						</ul> 	
 						<ul class="nav navbar-top-links navbar-left">
 							<li class="dropdown">
-								<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
+								<a class="submenu-item caps" ng-click="change_view('PI')" ng-href="#!/priority_index">{{ 'PRIORITY_INDEX' | translate }}</a>
 							</li>
 						</ul>
-						<!-- <ul class="nav navbar-top-links navbar-right"> -->
-							<!-- <li class="dropdown"> -->
-								<!-- <a href="http://510.global" target="_blank">510 Home</a> -->
-							<!-- </li> -->
-						<!-- </ul> -->
-					<!-- </nav> -->
+						<!-- <ul class="nav navbar-top-links navbar-right">
+							<div>
+								<button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>
+								<button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>
+							</div>
+						</ul> -->
+					</div>	
 			
 				</nav>
 				<!-- end: navbar-header -->
@@ -52,11 +53,11 @@
 							<div class="row">
 								<div class="col-md-12">
 									<div class="col-md-12" id="count-info">
-                                        <h2>Community Risk Assessment - <span class="timer" data-speed="2500" data-to="85311"></span> communities in <span class="total-count" style="color:#a2d0d0"></span> countries included</h2>
+                                        <h2>{{ 'cra_intro1' | translate }}<span class="timer" data-speed="2500" data-to="85311"></span>{{ 'cra_intro2' | translate }}<span class="total-count" style="color:#a2d0d0"></span>{{ 'cra_intro3' | translate }}</h2>
                                     </div>
 									<br>
 									<!-- <h3><i class="fa fa-bar-chart title-icon"></i> About Community Risk Assessment and Prioritization</h3> -->
-									<p>Relieving the suffering of individuals affected by disasters is at the heart of humanitarian action. However, given limited funding, humanitarian actors cannot reach all people in need. They have to identify the geographic areas that are most affected by a humanitarian disaster or crisis and, within those areas, the individuals that are most in need. Currently, this prioritization process takes time and can be subjective. The Community Risk Assessment dashboard forms a data-driven alternative solution.</p>
+									<p>{{ 'cra_description' | translate }}</p>
 								</div>
 							</div>
 																					
@@ -67,7 +68,7 @@
 											<ul class="btn link-button">
 												<div class="dropdown">
 													<a style="color: #ffffff" class="dropdown-toggle" data-toggle="dropdown" href="#">
-													  Go to country dashboard
+													  {{ 'go_to_dashboard' | translate }}
 													  <i class="fa fa-angle-down export-btn-arrow"></i>
 													</a>
 													<ul class="dropdown-menu" id="country-items" style="z-index:1001">
@@ -111,7 +112,7 @@
 											</ul>
 										</div>
 										<div class="col-md-6">
-											<a href="#!/#walkthrough_CRA" class="link-button" role="button">How it works</a>
+											<a href="#!/#walkthrough_CRA" class="link-button" role="button">{{ 'HOW_IT_WORKS' | translate }}</a>
 										</div>
 									</div>
 								</div>

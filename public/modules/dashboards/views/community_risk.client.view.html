@@ -23,29 +23,30 @@
 			
             <ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown" style="background:#4C8293">
-					<a style="color:#fff" class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/community_risk">COMMUNITY RISK</a>
+					<a style="color:#fff" class="submenu-item caps" ng-click="change_view('CRA')" ng-href="#!/community_risk">{{ 'COMMUNITY_RISK' | translate }}</a>
 				</li>
 			</ul>	
             <ul class="nav navbar-top-links navbar-left">
                 <li class="dropdown">
-                    <a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/impact_database">IMPACT DATABASE</a>
+                    <a class="submenu-item caps" ng-click="change_view('PI')" ng-href="#!/impact_database">{{ 'IMPACT_DATABASE' | translate }}</a>
                 </li>
             </ul> 	
             <ul class="nav navbar-top-links navbar-left">
                 <li class="dropdown">
-                    <a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
+                    <a class="submenu-item caps" ng-click="change_view('PI')" ng-href="#!/priority_index">{{ 'PRIORITY_INDEX' | translate }}</a>
                 </li>
             </ul>
             
-			<!-- <ul class="nav navbar-top-links navbar-right"> -->
-				<!-- <li class="dropdown"> -->
-					<!-- <a href="http://510.global" target="_blank">510 HOME</a> -->
-				<!-- </li> -->
-			<!-- </ul> -->
+			<!-- <ul class="nav navbar-top-links navbar-right">
+				<div>
+					<button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>
+					<button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>
+				</div>
+			</ul> -->
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
-					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-						HOW IT WORKS
+					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
+						{{ 'HOW_IT_WORKS' | translate }}
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu export-items">
@@ -61,17 +62,17 @@
 			</ul>
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
-					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-							  EXPORT
+					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
+							{{ 'EXPORT' | translate }}
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu export-items">
 						<li>
-							<a ng-click="share_URL()">Share current settings (URL)</a>
+							<a ng-click="share_URL()">{{ 'share_url' | translate }}</a>
 						</li>
 						<li class="divider"></li>
 						<li>
-							<a id="download" ng-click="export_csv()">Export (CSV)</a>
+							<a id="download" ng-click="export_csv()">{{ 'export_csv' | translate }}</a>
 						</li>
 						<li class="divider"></li>
 						<!-- <li>
@@ -79,7 +80,7 @@
 						</li>
 						<li class="divider"></li> -->
 						<li>
-							<a ng-click="export_geojson()">Export (GEOJSON)</a>
+							<a ng-click="export_geojson()">{{ 'export_geojson' | translate }}</a>
 						</li>
 					</ul>
 				</li>
@@ -87,8 +88,8 @@
 
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
-					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-							  COUNTRY
+					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
+							{{ 'COUNTRY' | translate }}
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu submenu-items" id="country-items"></ul>
@@ -106,10 +107,10 @@
             
                 <div class="btn-group zoom-level view-buttons" role="group">
                     <button type="button" class="btn btn-tab btn-map-view active" style="width:42%" ng-click="mapShow()">
-                        <span class="button-label">Map</span>
+                        <span class="button-label">{{ 'Map' | translate }}</span>
                     </button>
                     <button type="button" class="btn btn-tab btn-tabular" style="width:42%" ng-click="tabularShow()">
-                        <span class="button-label">Tab</span>
+                        <span class="button-label">{{ 'Tab' | translate }}</span>
                     </button>
                     <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-controls="demo" aria-expanded="true" >
                     </div>
@@ -117,7 +118,7 @@
                 <div class="btn-group zoom-level" role="group">
                     <button type="button" class="btn btn-secondary btn-score">
                         <i class="fa fa-tachometer" aria-hidden="true"></i>
-                        <span class="button-label"><strong>{{metric_label}}</strong></span>
+                        <span class="button-label"><strong>{{ 'metric_label' | translate:translateData() }}</strong></span>
                     </button>
                 </div>
                 <div class="btn-group zoom-level" role="group">
@@ -137,8 +138,8 @@
                 <div class="community-profiles-wrapper">
                     <div id="count-info" class="general-info">
                         <!-- <div><span class="community-title">{{name_selection}}</span></div> -->
-                        <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}} selected</span>
-                        <a class="reset-button" ng-click="reset_function()">Select all</a>
+                        <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}}{{ 'selected' | translate:translateData }}</span>
+                        <a class="reset-button" ng-click="reset_function()">{{ 'Select_all' | translate }}</a>
                         <button type="button" class="btn-modal" data-toggle="modal" ng-click="info('admin')">
                             <img src="modules/dashboards/img/icon-popup.svg" style="height:17px">
                         </button>
@@ -170,10 +171,10 @@
                                     <img src="modules/dashboards/img/risk_score.png">
                                 </span>
                                 <span class="panel-header-content">
-                                    <span class="panel-header-title">Risk Score - <span class="component-score" id="risk_score_main"></span>
+                                    <span class="panel-header-title">{{ 'risk_score' | translate }} - <span class="component-score" id="risk_score_main"></span>
                                         <span class="score-helptext">/10</span>
                                     </span>
-                                    <span class="panel-header-description">Overall composite risk score</span>
+                                    <span class="panel-header-description">{{ 'risk_score_tag' | translate }}</span>
                                 </span>
                             </a>
                         </div>
@@ -189,10 +190,10 @@
                                     <img src="modules/dashboards/img/cyclone_wind.png">
                                 </span>
                                 <span class="panel-header-content">
-                                    <span class="panel-header-title">Hazard Score - <span class="component-score" id="hazard_score_main"></span>
+                                    <span class="panel-header-title">{{ 'hazard_score' | translate }} - <span class="component-score" id="hazard_score_main"></span>
                                         <span class="score-helptext">/10</span>
                                     </span>
-                                    <span class="panel-header-description">Click for hazard components</span>
+                                    <span class="panel-header-description">{{ 'hazard_score_tag' | translate }}</span>
                                 </span>
                             </a>
                         </div>
@@ -209,10 +210,10 @@
                                     <img src="modules/dashboards/img/vulnerability.png">
                                 </span>
                                 <span class="panel-header-content">
-                                    <span class="panel-header-title">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
+                                    <span class="panel-header-title">{{ 'vulnerability_score' | translate }} - <span class="component-score" id="vulnerability_score_main"></span>
                                         <span class="score-helptext">/10</span>
                                     </span>
-                                    <span class="panel-header-description">Click for vulnerability components</span>
+                                    <span class="panel-header-description">{{ 'vulnerability_score_tag' | translate }}</span>
                                 </span>
                             </a>
                         </div>
@@ -229,10 +230,10 @@
                                     <img src="modules/dashboards/img/coping.png">
                                 </span>
                                 <span class="panel-header-content">
-                                    <span class="panel-header-title">Coping Capacity Score - <span class="component-score" id="coping_capacity_score_main"></span>
+                                    <span class="panel-header-title">{{ 'coping_capacity_score' | translate }} - <span class="component-score" id="coping_capacity_score_main"></span>
                                         <span class="score-helptext">/10</span>
                                     </span>
-                                    <span class="panel-header-description">Click for coping capacity components</span>
+                                    <span class="panel-header-description">{{ 'coping_score_tag' | translate }}</span>
                                 </span>
                             </a>
                         </div>
@@ -249,8 +250,8 @@
                                     <img src="modules/dashboards/img/other_variables.png">
                                 </span>
                                 <span class="panel-header-content">
-                                    <span class="panel-header-title">Other variables</span>
-                                    <span class="panel-header-description">Not part of risk framework, but still relevant.</span>
+                                    <span class="panel-header-title">{{ 'other_variables' | translate }}</span>
+                                    <span class="panel-header-description">{{ 'other_variables_tag' | translate }}</span>
                                 </span>
                             </a>
                         </div>
@@ -294,21 +295,21 @@
                         <ul type="button" class="btn btn-secondary btn-active export-button-wrapper">
                             <div class="dropdown">
                                 <a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-                                          Sort by ...
+                                        {{ 'sort_by' | translate }}
                                     <i class="fa fa-angle-down export-btn-arrow"></i>
                                 </a>
                                 <ul class="dropdown-menu submenu-items">
                                     <li>
-                                        <a class="	submenu-item" ng-click="sort('value')" role="button">Indicator Score</a>
+                                        <a class="	submenu-item" ng-click="sort('value')" role="button">{{ 'indicator_score' | translate }}</a>
                                     </li>
                                     <li>
-                                        <a class="submenu-item" ng-click="sort('name')" role="button">Area name</a>
+                                        <a class="submenu-item" ng-click="sort('name')" role="button">{{ 'area_name' | translate }}</a>
                                     </li>
                                 </ul>
                             </div>
                         </ul>
                         <div class="btn btn-secondary btn-scroll" style="color:#4d799d" ng-click="scrollRowChart()">
-                            Scroll to Top
+                            {{ 'scroll_top' | translate }}
                         </div>
                     </div>
                 </div>
@@ -325,7 +326,7 @@
 					</button>
 				</div>
 				<div class="popup-score">
-				  <div class="score-label">{{metric_label}}</div>
+				  <div class="score-label">{{ 'metric_label' | translate:translateData}}</div>
 				  {{value_popup}}
 				</div>
 			  </div>
@@ -349,12 +350,12 @@
 					<span class="panel-header-icon">
 						<img src="{{metric_icon}}">
 					</span>
-					<h4 class="modal-title">{{metric_label_popup}}</h4>
+					<h4 class="modal-title">{{ 'metric_label' | translate:translateData}} <!-- {{metric_label_popup}} --> </h4>
 				</div>
 				<div class="modal-body">
-					<h6><b>Year source:</b> {{metric_year}}</h6><br>
-					<h6><b>Source link:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h6><br>
-					<h6><b>Description:</b> {{metric_desc}}</h6><br>
+					<h6><b>{{ 'year_source' | translate }}:</b> {{metric_year}}</h6><br>
+					<h6><b>{{ 'link_source' | translate }}:</b> <a href={{metric_source}} target="_blank">{{metric_source}}</a></h6><br>
+					<h6><b>{{ 'desc_source' | translate }}:</b> {{ 'metric_desc' | translate:translateData}}</h6><br>
 				</div>
 			</div>
 		</div>
@@ -368,11 +369,11 @@
                     <button type="button" class="close" data-dismiss="modal">
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                     </button>
-                    <h4 class="modal-title">Share current settings directly through URL</h4>
+                    <h4 class="modal-title">{{ 'share_url_title' | translate }}</h4>
                 </div>
                 <div class="modal-body" style="word-break:break-all">
                     <h6 id="copy_url">{{shareable_URL}}</h6><br>
-                    <button ng-click="copyToClipboard('#copy_url')">Copy URL</button>
+                    <button ng-click="copyToClipboard('#copy_url')">{{ 'share_url_copy' | translate }}</button>
                 </div>
             </div>
         </div>
@@ -395,14 +396,16 @@
 					<button type="button" class="close" data-dismiss="modal">
 						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 					</button>
-					<h3 class="modal-title">Warning</h3>
+					<h3 class="modal-title">{{ 'warning' | translate }}</h3>
 				</div>
 				<div class="modal-body">
-					<p>This beta-version is currently best viewed in Google Chrome, and second-best in Firefox or Safari. Internet Explorer works, but has substantial interaction downsides.</p>
+					<p>{{ 'ie_warning' | translate }}</p>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- end: IE message -->
+	
+
 	
 </section>

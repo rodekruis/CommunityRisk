@@ -1,8 +1,10 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('CommunityRiskController', ['$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('CommunityRiskController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+		
+		
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
@@ -757,7 +759,8 @@ angular.module('dashboards')
 						var div1 = document.createElement('div');
 						div1.setAttribute('class','col col-md-5 col-sm-5 col-xs-5 general-component-label');
 						div1.setAttribute('ng-click','change_indicator(\''+record.name+'\')');
-						div1.innerHTML = meta_label[record.name];
+						//div1.innerHTML = meta_label[record.name];
+						div1.innerHTML = "{{ '" + record.name + "' | translate }}"   //meta_label[record.name];
 						div.appendChild(div1);	
 						$compile(div1)($scope);
 						var div2 = document.createElement('div');
@@ -805,7 +808,8 @@ angular.module('dashboards')
 							var div1 = document.createElement('div');
 							div1.setAttribute('class','col-md-9 col-sm-9 col-xs-9 component-label');
 							div1.setAttribute('ng-click','change_indicator(\''+record.name+'\')');
-							div1.innerHTML = meta_label[record.name];
+							//div1.innerHTML = meta_label[record.name];
+							div1.innerHTML = "{{ '" + record.name + "' | translate }}"   //meta_label[record.name];
 							$compile(div1)($scope);
 							div.appendChild(div1);	
 							var div1a = document.createElement('div');
@@ -856,7 +860,8 @@ angular.module('dashboards')
 						var div1 = document.createElement('div');
 						div1.setAttribute('class','col-md-4 col-sm-4 col-xs-4 component-label');
 						if(record.group !== 'dpi') {div1.setAttribute('ng-click','change_indicator(\''+record.name+'\')');};
-						div1.innerHTML = meta_label[record.name];
+						//div1.innerHTML = meta_label[record.name];
+						div1.innerHTML = "{{ '" + record.name + "' | translate }}"   //meta_label[record.name];
 						$compile(div1)($scope);
 						div.appendChild(div1);	
 						var div1a = document.createElement('div');
@@ -1125,7 +1130,8 @@ angular.module('dashboards')
                 .dimension(whereDimension_tab)
                 .group(whereGroupSum_scores_tab)
                 .ordering(function(d) {
-					return isNaN($scope.genLookup_value()[d.key]) ? 999999999 : -d.value.sum; 
+					console.log(lookup[d.key] + ' - ' + $scope.genLookup_value()[d.key]);
+					return isNaN($scope.genLookup_value()[d.key]) ? 999999999 - d.value.sum : -d.value.sum; 
 					})
                 .fixedBarHeight(barheight)
                 .valueAccessor(function(d){ return isNaN(d.value.sum) ? 0 : d.value.sum; })
@@ -1763,11 +1769,27 @@ angular.module('dashboards')
                 };
             }
             
+			//////////////////////////////////////
+			/// TRANSLATION TO OTHER LANGUAGES ///
+			//////////////////////////////////////
+			
+			//Translation button
+			$scope.changeLanguage = function (langKey) {
+				$translate.use(langKey);
+			};
+			
+			$scope.translateData = function() {
+				return {
+					metric_label: $scope.metric,
+					metric_desc: 'desc_' + $scope.metric,
+					subtype_selection: $scope.subtype_selection
+				};
+			}
 			
 			
 		};
- 
-
+		
+		
 
 	}
 ])

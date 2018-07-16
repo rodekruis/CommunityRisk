@@ -1130,7 +1130,6 @@ angular.module('dashboards')
                 .dimension(whereDimension_tab)
                 .group(whereGroupSum_scores_tab)
                 .ordering(function(d) {
-					console.log(lookup[d.key] + ' - ' + $scope.genLookup_value()[d.key]);
 					return isNaN($scope.genLookup_value()[d.key]) ? 999999999 - d.value.sum : -d.value.sum; 
 					})
                 .fixedBarHeight(barheight)

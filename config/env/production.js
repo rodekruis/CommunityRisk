@@ -62,7 +62,7 @@ module.exports = {
 				'public/build/bower/angular-sanitize/js/angular-sanitize.min.js', 
 				'public/build/bower/angular-ui-router/js/angular-ui-router.min.js',
 				'public/build/bower/angular-css/js/angular-css.js',
-				'public/build/bower/angular-translate/js/angular-translate.js',	//in bower.json
+				'public/lib/angular-translate/angular-translate.min.js',	//in bower.json
 				'public/build/bower/bootstrap/js/bootstrap.min.js',
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
 				//'public/build/bower/leaflet/js/leaflet.js',//in bower.json

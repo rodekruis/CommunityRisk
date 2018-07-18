@@ -62,6 +62,7 @@ $ CREATE EXTENSION postgis;
 $ ALTER ROLE cradatabase SUPERUSER CREATEDB;
 ```
 * Test connection (from terminal again) with:
+```
 $ psql -h localhost -U cradatabase cradatabase
 ```
 

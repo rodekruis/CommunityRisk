@@ -84,6 +84,7 @@ module.exports = {
 				'public/build/bower/jquery-countTo/js/jquery.countTo.js', // in bower.json
 				'public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js', // in bower.json
 				'public/build/bower/jquery-easing/js/jquery.easing.min.js', // in bower.json
+				'public/lib/jquery-csv/src/jquery.csv.js', // in bower.json
 				'public/build/bower/wow/js/wow.js', // in bower.json
 				'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js',
 				'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js',

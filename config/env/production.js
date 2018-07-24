@@ -91,6 +91,7 @@ module.exports = {
 				'public/build/bower/jquery-countTo/js/jquery.countTo.js', // in bower.json
 				'public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js', // in bower.json
 				'public/build/bower/jquery-easing/js/jquery.easing.min.js', // in bower.json
+				'public/lib/jquery-csv/src/jquery.csv.min.js', // in bower.json
 				'public/build/bower/wow/js/wow.js', // in bower.json
 				'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js',
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js', // in bower.json

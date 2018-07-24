@@ -65,6 +65,26 @@ exports.getData = function(req, res, next, adminLevel) {
 	
 };
 
+/* exports.writeData = function(req, res, next, input) {
+	
+	var connString = 'postgres://'+config.postgres.user+':'+config.postgres.password+'@'+config.postgres.host+'/'+config.postgres.db;
+	
+	pg.connect(connString, function(err, client, release) {
+		if (err) return next(err);
+        
+        var sql = 'CREATE TABLE public.test(id SERIAL PRIMARY KEY, firstName VARCHAR(40) NOT NULL, lastName VARCHAR(40) NOT NULL)';
+        console.log(sql);
+        
+		client.query(sql, function(err, result) {
+			if (err) return next(err);
+			//req.pgData = result.rows[0];
+			release();
+			next();
+        });
+    });
+	
+}; */
+
 /**
  * Map authorization middleware
  */

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('CommunityRiskController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('CommunityRiskController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', /* 'DataUpload', */ 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, /* DataUpload, */ Sources, $window, $stateParams, cfpLoadingBar, _) {
 		
 		
 		
@@ -46,6 +46,7 @@ angular.module('dashboards')
 		$scope.metric_desc = '';
 		$scope.metric_icon = '';
 		$scope.admlevel_text = '';
+        $scope.data_upload_warning = '';
 		$scope.name_selection = '';
 		$scope.name_selection_prev = '';
 		$scope.name_popup = '';
@@ -1423,6 +1424,7 @@ angular.module('dashboards')
 			$scope.info = function(id) {
 				//var metric_old = $scope.metric;
 				//$scope.metric = id;
+                $scope.metric_info = id;
 				if (id !== 'admin') {$scope.metric_label = meta_label[id];};
 				$scope.metric_label_popup = meta_label[id];
 				$scope.metric_year = meta_year[id];
@@ -1430,9 +1432,10 @@ angular.module('dashboards')
 				$scope.metric_desc = meta_desc[id];
 				if (!meta_icon[id]) {$scope.metric_icon = 'modules/dashboards/img/undefined.png';}
 				else {$scope.metric_icon = 'modules/dashboards/img/' + meta_icon[id];}
-				$('#infoModal').modal('show');
-				//$scope.metric = metric_old;
+				//$scope.info_modal();
+                $('#infoModal').modal('show');
 			};
+          
             
             /////////////////////////////////
 			// SIDEBAR: ACCORDION FUNCTION //
@@ -1542,6 +1545,94 @@ angular.module('dashboards')
 				}
 			}
             
+            //Function to open the data upload modal
+			$scope.data_upload = function() {
+				$('#uploadModal').modal('show');
+			};
+            
+            //Upload the CSV-file
+            $(document).ready(function() {
+            
+                // The event listener for the file upload
+                document.getElementById('txtFileUpload').addEventListener('change', upload, false);
+
+                // Method that checks that the browser supports the HTML5 File API
+                function browserSupportFileUpload() {
+                    var isCompatible = false;
+                    if (window.File && window.FileReader && window.FileList && window.Blob) {
+                    isCompatible = true;
+                    }
+                    return isCompatible;
+                }
+
+                // Method that reads and processes the selected file
+                function upload(evt) {
+                if (!browserSupportFileUpload()) {
+                    alert('The File APIs are not fully supported in this browser!');
+                    } else {
+                        //var data = null;
+                        var file = evt.target.files[0];
+                        var reader = new FileReader();
+                        reader.readAsText(file);
+                        reader.onload = function(event) {
+                            $scope.csvData = event.target.result;
+                            /* data = $.csv.toArrays(csvData,{separator: ";"});
+                            console.log(data);
+                            if (data && data.length > 0) {
+                              alert('Imported -' + data.length + '- rows successfully!');
+                            } else {
+                                alert('No data to import!');
+                            } */
+                        };
+                        reader.onerror = function() {
+                            alert('Unable to read ' + file.fileName);
+                        };
+                    }
+                }
+            });
+            
+            //Upload the file and do checks
+            $scope.submit_data = function() {
+                
+                // Process data
+                var separator = $('#separator').val();
+                var data = $.csv.toArrays($scope.csvData,{separator: separator});
+                
+                // Checks for PCODE-column
+                var pcode_check = 0;
+                var pcode_col = 0;
+                for (var i=0; i < data[0].length;i++){
+                    if (data[0][i].toLowerCase() == 'pcode'){
+                        data[0][i] = data[0][i].toLowerCase();
+                        pcode_col = i;
+                        pcode_check = 1; 
+                        break;
+                    }
+                }
+                if (pcode_check == 0) {
+                    $scope.data_upload_warning = "No column named 'pcode' is found. Please change the input-file accordingly. Note that a reason for this can also be that the field-separator is not correct.";
+                    $('#uploadWarningModal').modal('show');
+                } else {
+                    var counts = [];
+                    var pcode_dup_check = 0;
+                    for (var j=0;j<data.length;j++){
+                        if(counts[data[j][pcode_col]] === undefined) {
+                            counts[data[j][pcode_col]] = 1;
+                        } else {
+                            pcode_dup_check = 1;
+                            break;
+                        }
+                    }
+                    if (pcode_dup_check == 1) {
+                        $scope.data_upload_warning = "Duplicate values are found in pcode-column. Please change the input-file accordingly.";
+                        $('#uploadWarningModal').modal('show');
+                    }
+                }
+                
+                //DataUpload.get({input: ''})
+                
+            };
+                    
             ///////////////////////////////////
             // SIDEBAR: MAP & TABULAR SWITCH //
             ///////////////////////////////////
@@ -1779,8 +1870,9 @@ angular.module('dashboards')
 			
 			$scope.translateData = function() {
 				return {
-					metric_label: $scope.metric,
-					metric_desc: 'desc_' + $scope.metric,
+                    metric_label: $scope.metric,
+					metric_label_popup: $scope.metric_info,
+					metric_desc: 'desc_' + $scope.metric_info,
 					subtype_selection: $scope.subtype_selection
 				};
 			}

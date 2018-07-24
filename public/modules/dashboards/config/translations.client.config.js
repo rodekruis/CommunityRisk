@@ -6,6 +6,7 @@ var angular_vars = {
 	
 	//Dynamic (Angular) variables
 	metric_label: '{{metric_label | translate}}',
+	metric_label_popup: '{{metric_label_popup | translate}}',
 	metric_desc: '{{metric_desc | translate}}',	
 
 };

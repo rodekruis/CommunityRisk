@@ -39,7 +39,7 @@ angular.module('dashboards')
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
 		$rootScope.country_code = null;
 		if ($rootScope.view_code) { $scope.view_code = $rootScope.view_code;};
-		$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
+		//$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
 		$scope.metric_label = '';
 		$scope.metric_year = '';
 		$scope.metric_source = '';
@@ -102,35 +102,41 @@ angular.module('dashboards')
             $('#map-chart').show();
             $scope.chart_show = 'map';
 			
-            //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
-			$scope.admlevel = $scope.view_code == 'CRA' ?  1 : 3;
-			if ($scope.view_code == 'CRA' && ['PHL','MWI','NPL','LKA','MOZ'].indexOf($scope.country_code) > -1 && !$scope.directURLload) {$scope.admlevel = 2;};	//These countries have a different min zoom-level: code better in future.
-			
+            
+            
 			//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
 			var url = location.href;
 			if (url.indexOf('?') > -1) {
 				url = url.split('?')[1];
-				$scope.directURLload = true;
-				$scope.country_code = url.split('&')[0].split('=')[1];
-				$scope.admlevel = url.split('&')[1].split('=')[1];
-				$scope.metric = url.split('&')[2].split('=')[1];
-                // var filters_temp = url.split('&')[4].split('=')[1].split(',');
-                // $scope.filters_url = filters_temp[0] == "" ? [] : filters_temp; 
-				//$scope.chart_show = url.split('&')[5].split('=')[1];
-				$scope.chart_show = url.split('&')[4].split('=')[1];
-				if ($scope.view_code == 'CRA') {
-					$scope.parent_codes = url.split('&')[3].split('=')[1] == "" ? [] : url.split('&')[3].split('=')[1].split(',');
-					window.history.pushState({}, document.title, '/#!/community_risk');
-				} 
-			} else {
+                $scope.country_code = url.split('&')[0].split('=')[1];
+                if (url.split('&')[1]){
+                    $scope.directURLload = true;
+                    $scope.admlevel = url.split('&')[1].split('=')[1];
+                    $scope.metric = url.split('&')[2].split('=')[1];
+                    // var filters_temp = url.split('&')[4].split('=')[1].split(',');
+                    // $scope.filters_url = filters_temp[0] == "" ? [] : filters_temp; 
+                    //$scope.chart_show = url.split('&')[5].split('=')[1];
+                    $scope.chart_show = url.split('&')[4].split('=')[1];
+                    //if ($scope.view_code == 'CRA') {
+                    $scope.parent_codes = url.split('&')[3].split('=')[1] == "" ? [] : url.split('&')[3].split('=')[1].split(',');
+                } else {
+                    $scope.directURLload = false;
+                }
+                window.history.pushState({}, document.title, '/#!/community_risk');
+            } else {
 				$scope.directURLload = false;
 			}
-			
+            
+            //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
+			if (!$scope.directURLload) {
+                $scope.admlevel = $scope.view_code == 'CRA' ?  1 : 3;
+                if ($scope.view_code == 'CRA' && ['PHL','MWI','NPL','LKA','MOZ'].indexOf($scope.country_code) > -1) {$scope.admlevel = 2;};	//These countries have a different min zoom-level: code better in future.
+			}
 			
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			//console.log($scope.data_input);
+			console.log($scope.data_input);
 			
 			
 			Data.get({adminLevel: $scope.data_input}, 

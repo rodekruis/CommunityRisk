@@ -83,16 +83,16 @@ var static_es = {
 	share_url_title: 'Comparte la configuración actual directamente a través de la URL',
 	share_url_copy: 'Copiar URL',
 	warning: 'Advertencia',
-	ie_warning: 'This beta-version is currently best viewed in Google Chrome, and second-best in Firefox or Safari. Internet Explorer works, but has substantial interaction downsides.',
+	ie_warning: 'Actualmente, esta versión beta se visualiza mejor en el navegador Google Chrome, seguido de Firefox o Safari. Internet Explorer funciona, pero tiene desventajas sustanciales de interacción.',
 	go_to_dashboard: 'Ir al panel de país',
-	cra_intro1: 'Community Risk Assessment - ',
+	cra_intro1: 'Community Risk Assessment - ', //'Evaluación de riesgo de la comunidad - ' 
 	cra_intro2: ' comunidades en ',
 	cra_intro3: ' países incluídos',
-	cra_description: 'Relieving the suffering of individuals affected by disasters is at the heart of humanitarian action. However, given limited funding, humanitarian actors cannot reach all people in need. They have to identify the geographic areas that are most affected by a humanitarian disaster or crisis and, within those areas, the individuals that are most in need. Currently, this prioritization process takes time and can be subjective. The Community Risk Assessment dashboard forms a data-driven alternative solution.',
+	cra_description: 'El propósito de la acción humanitaria es aliviar el sufrimiento de las personas afectadas por desastres. Sin embargo, los actores humanitarios no siempre pueden llegar a todas las personas necesitadas debido a los fondos limitados. Es por esto que se deben identificar las áreas geográficas más afectadas por crisis o desastres humanitarios y, dentro de esas áreas, las personas que están más necesitadas. Actualmente, este proceso de priorización requiere tiempo y puede ser subjetivo. La plataforma de Evaluación de riesgos de la comunidad propone una solución alternativa basada en datos.',
 
 };
 
-var labels_es = {	
+/* var labels_es = {	
 	//Input for dynamic variables
 	risk_score: 'Índice de riesgo',
 	hazard_score: 'Índice de peligros',
@@ -102,17 +102,23 @@ var descriptions_es = {
 	//Input for dynamic variables
 	desc_risk_score: 'Índice de riesgo blablabla',
 	desc_hazard_score: 'Índice de peligros blablabla',
-};
+}; */
 
 angular.module('dashboards').config(function ($translateProvider) {
 	
-	d3.dsv(';')('modules/dashboards/data/metadata_prototype.csv', function(metadata) {
+	d3.dsv(';','text/plain; charset=ISO-8859-1')('modules/dashboards/data/metadata_prototype.csv', function(metadata) {
 	
 		var labels_en = {};
 		var descriptions_en = {};
+		var labels_es = {};
+		var descriptions_es = {};
 		for (var i=0;i<metadata.length;i++){
 			labels_en[metadata[i].variable] = metadata[i].label;
 			descriptions_en['desc_' + metadata[i].variable] = metadata[i].description;
+            if (metadata[i].label_espanol) {
+                labels_es[metadata[i].variable] = metadata[i].label_espanol;
+                descriptions_es['desc_' + metadata[i].variable] = metadata[i].description_espanol;
+            }
 		}
 		
 		$translateProvider.translations('en', Object.assign({},angular_vars,static_en,labels_en,descriptions_en));

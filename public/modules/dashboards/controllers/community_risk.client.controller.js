@@ -148,15 +148,19 @@ angular.module('dashboards')
 		  
             var d = {};
 		  
-            // 1. Feature data
-            d.Rapportage = pgData.usp_data.ind;
-          
-            // 2. Geo-data
-            var pcode_list = [];
-            for (var i=0;i<d.Rapportage.length;i++){ pcode_list[i]=d.Rapportage[i].pcode; }
+            // 1. Geo-data
+            //var pcode_list = [];
+            //for (var i=0;i<d.Rapportage.length;i++){ pcode_list[i]=d.Rapportage[i].pcode; }
             d.Districts = pgData.usp_data.geo;
-            d.Districts.features = $.grep(d.Districts.features, function(e){ return pcode_list.indexOf(e.properties.pcode) > -1; });
+            //d.Districts.features = $.grep(d.Districts.features, function(e){ return pcode_list.indexOf(e.properties.pcode) > -1; });
+            d.Districts.features = $.grep(d.Districts.features, function(e){ return e.properties.pcode !== null; });
             $scope.geom = d.Districts; 
+            
+            // 2. Feature data
+            d.Rapportage = []; //pgData.usp_data.ind;
+            for (var i=0;i<d.Districts.features.length;i++){
+                d.Rapportage[i] = d.Districts.features[i].properties;
+            }
 		  
             // 3. Data Preparedness Index data
             d.dpi_temp = pgData.usp_data.dpi;
@@ -253,7 +257,11 @@ angular.module('dashboards')
             // load data (metadata does not have to be reloaded)
             d.Districts = pgData.usp_data.geo;
             $scope.geom = pgData.usp_data.geo;
-            d.Rapportage = pgData.usp_data.ind;
+            //d.Rapportage = pgData.usp_data.ind;
+            d.Rapportage = []; 
+            for (var i=0;i<d.Districts.features.length;i++){
+                d.Rapportage[i] = d.Districts.features[i].properties;
+            };
             d.dpi = [];
             if (d.dpi_temp) {
                 for (var i=0;i<d.dpi_temp.length;i++){
@@ -1602,7 +1610,7 @@ angular.module('dashboards')
                 var pcode_check = 0;
                 var pcode_col = 0;
                 for (var i=0; i < data[0].length;i++){
-                    if (data[0][i].toLowerCase() == 'pcode'){
+                    if (data[0][i].toLowerCase() == 'pcodex'){
                         data[0][i] = data[0][i].toLowerCase();
                         pcode_col = i;
                         pcode_check = 1; 
@@ -1862,11 +1870,19 @@ angular.module('dashboards')
 			//////////////////////////////////////
 			/// TRANSLATION TO OTHER LANGUAGES ///
 			//////////////////////////////////////
-			
-			//Translation button
+            
+            //Translation button
 			$scope.changeLanguage = function (langKey) {
 				$translate.use(langKey);
 			};
+            
+            if ($scope.country_code == 'PER') {
+                document.getElementById('language-selector').style.display = 'block';
+                $scope.changeLanguage('es');
+            } else {
+                document.getElementById('language-selector').style.display = 'none';
+                $scope.changeLanguage('en');
+            }
 			
 			$scope.translateData = function() {
 				return {

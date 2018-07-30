@@ -37,12 +37,13 @@
                 </li>
             </ul>
             
-			<!-- <ul class="nav navbar-top-links navbar-right">
+            <ul class="nav navbar-top-links navbar-right" style="display:none" id="language-selector">
 				<div>
 					<button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>
 					<button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>
 				</div>
-			</ul> -->
+			</ul>
+            
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
@@ -57,10 +58,10 @@
 						<li>
 							<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/CommunityRisk" target="_blank">Github</a>
 						</li>
-						<!-- <li class="divider"></li>
+						<li class="divider"></li>
 						<li>
 							<a class="dropdown-toggle export-button" ng-click="data_upload()">Upload new data</a>
-						</li> -->
+						</li>
 					</ul>
 				</li>
 			</ul>
@@ -83,9 +84,9 @@
 							<a ng-href ="./data/{{data_input}}"  target="_blank">Export (JSON)</a>
 						</li>
 						<li class="divider"></li> -->
-						<li>
+						<!-- <li>
 							<a ng-click="export_geojson()">{{ 'export_geojson' | translate }}</a>
-						</li>
+						</li> -->
 					</ul>
 				</li>
 			</ul>
@@ -99,6 +100,9 @@
 					<ul class="dropdown-menu submenu-items" id="country-items"></ul>
 				</li>
 			</ul>
+            
+            
+            
         <!-- </nav> -->
 		</div>
 	</nav>

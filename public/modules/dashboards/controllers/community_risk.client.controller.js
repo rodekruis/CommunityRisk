@@ -1874,6 +1874,7 @@ angular.module('dashboards')
             //Translation button
 			$scope.changeLanguage = function (langKey) {
 				$translate.use(langKey);
+                for (var i=0;i<$('#menu-buttons.in').length;i++){ $('#menu-buttons.in')[i].classList.remove('in'); };
 			};
             
             if ($scope.country_code == 'PER') {

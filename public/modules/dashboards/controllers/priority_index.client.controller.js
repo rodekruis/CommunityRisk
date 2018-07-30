@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('PriorityIndexController', ['$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('PriorityIndexController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
@@ -1377,6 +1377,33 @@ angular.module('dashboards')
                 }
                 
             };
+            
+            //////////////////////////////////////
+			/// TRANSLATION TO OTHER LANGUAGES ///
+			//////////////////////////////////////
+            
+            //Translation button
+			$scope.changeLanguage = function (langKey) {
+				$translate.use(langKey);
+                for (var i=0;i<$('#menu-buttons.in').length;i++){ $('#menu-buttons.in')[i].classList.remove('in'); };
+			};
+            
+            if ($scope.country_code == 'PER') {
+                document.getElementById('language-selector').style.display = 'block';
+                $scope.changeLanguage('es');
+            } else {
+                document.getElementById('language-selector').style.display = 'none';
+                $scope.changeLanguage('en');
+            }
+			
+			$scope.translateData = function() {
+				return {
+                    metric_label: $scope.metric,
+					metric_label_popup: $scope.metric_info,
+					metric_desc: 'desc_' + $scope.metric_info,
+					subtype_selection: $scope.subtype_selection
+				};
+			}
             
             
 			

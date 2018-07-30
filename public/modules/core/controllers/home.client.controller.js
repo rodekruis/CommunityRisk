@@ -13,7 +13,8 @@ angular.module('core').controller('HomeController', ['$translate','$scope','$css
 	$rootScope.disaster_type = '';
 	$rootScope.view_code = '';
 	
-	$scope.choose_country = function(country) {
+	$scope.choose_country = function(country){
+        $(window).scrollTop(0);
 		$rootScope.country_code = country;
 	}
 	$scope.setup_PI = function(country,disaster_type) {
@@ -21,6 +22,7 @@ angular.module('core').controller('HomeController', ['$translate','$scope','$css
 		$rootScope.disaster_type = disaster_type;
 	}
 	$scope.choose_view = function(view) {
+        $(window).scrollTop(0);
 		$rootScope.view_code = view;
 	}
 	
@@ -66,6 +68,7 @@ angular.module('core').controller('HomeController', ['$translate','$scope','$css
 				})
 				.popup(function(d) {return lookup[d.key];})
 				.on('filtered',function(chart,filters) {
+                    $(window).scrollTop(0);
 					$scope.choose_country(chart.filters()[0]);
 					window.location.replace('#!/community_risk');
 				})

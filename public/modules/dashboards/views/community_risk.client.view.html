@@ -10,7 +10,7 @@
 		</button> -->
 		
 		<div class="navbar-header">
-            <a class="navbar-brand" style="padding-left:10px; padding-top:3px" href="/#!/">
+            <a class="navbar-brand" style="padding-left:10px; padding-top:3px" ng-click="changeLanguage('en')" href="/#!/">
                 <img src="modules/core/img/510logo-new.png" style="height:45px; float:left">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,10 +58,10 @@
 						<li>
 							<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/CommunityRisk" target="_blank">Github</a>
 						</li>
-						<li class="divider"></li>
+						<!-- <li class="divider"></li>
 						<li>
 							<a class="dropdown-toggle export-button" ng-click="data_upload()">Upload new data</a>
-						</li>
+						</li> -->
 					</ul>
 				</li>
 			</ul>
@@ -84,9 +84,9 @@
 							<a ng-href ="./data/{{data_input}}"  target="_blank">Export (JSON)</a>
 						</li>
 						<li class="divider"></li> -->
-						<!-- <li>
+						<li>
 							<a ng-click="export_geojson()">{{ 'export_geojson' | translate }}</a>
-						</li> -->
+						</li>
 					</ul>
 				</li>
 			</ul>

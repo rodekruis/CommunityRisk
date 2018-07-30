@@ -23,17 +23,17 @@
 			
 			<ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown">
-					<a class="submenu-item" ng-click="change_view('CRA')" ng-href="#!/community_risk">COMMUNITY RISK</a>
+					<a class="submenu-item caps" ng-click="change_view('CRA')" ng-href="#!/community_risk">{{ 'COMMUNITY_RISK' | translate }}</a>
 				</li>
 			</ul> 	
 			<ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown" style="background:#4C8293">
-					<a style="color:#fff" class="submenu-item" ng-click="change_view('PI')" ng-href="#!/impact_database">IMPACT DATABASE</a>
+					<a style="color:#fff" class="submenu-item caps" ng-click="change_view('PI')" ng-href="#!/impact_database">{{ 'IMPACT_DATABASE' | translate }}</a>
 				</li>
 			</ul>	
 			<ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown">
-					<a class="submenu-item" ng-click="change_view('PI')" ng-href="#!/priority_index">PRIORITY INDEX</a>
+					<a class="submenu-item caps" ng-click="change_view('PI')" ng-href="#!/priority_index">{{ 'PRIORITY_INDEX' | translate }}</a>
 				</li>
 			</ul>  
             
@@ -42,10 +42,18 @@
 					<!-- <a href="http://510.global" target="_blank">510 HOME</a> -->
 				<!-- </li> -->
 			<!-- </ul> -->
+            
+            <ul class="nav navbar-top-links navbar-right" style="display:none" id="language-selector">
+				<div>
+					<button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>
+					<button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>
+				</div>
+			</ul>
+            
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
-					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-						HOW IT WORKS
+					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
+						{{ 'HOW_IT_WORKS' | translate }}
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu export-items">
@@ -61,21 +69,21 @@
 			</ul>
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
-					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-							  EXPORT
+					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
+							{{ 'EXPORT' | translate }}
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu export-items">
 						<li>
-							<a id="download" ng-click="share_URL()">Share current settings (URL)</a>
+							<a id="download" ng-click="share_URL()">{{ 'share_url' | translate }}</a>
 						</li>
 						<li class="divider"></li>
 						<li>
-							<a id="download" ng-click="export_csv()">Export (CSV)</a>
+							<a id="download" ng-click="export_csv()">{{ 'export_csv' | translate }}</a>
 						</li>
 						<li class="divider"></li>
 						<li>
-							<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+							<a ng-href ="./data/{{data_input}}" target="_blank">{{ 'export_geojson' | translate }}</a>
 						</li>
 					</ul>
 				</li>
@@ -83,8 +91,8 @@
             
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
-					<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-							  COUNTRY
+					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
+							{{ 'COUNTRY' | translate }}
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu submenu-items" id="country-items">
@@ -113,10 +121,10 @@
                 
                 <div class="btn-group zoom-level view-buttons" role="group">
                     <button type="button" class="btn btn-tab btn-map-view active" style="width:42%" ng-click="mapShow()">
-                        <span class="button-label">Map</span>
+                        <span class="button-label">{{ 'Map' | translate }}</span>
                     </button>
                     <button type="button" class="btn btn-tab btn-tabular" style="width:42%" ng-click="tabularShow()">
-                        <span class="button-label">Tab</span>
+                        <span class="button-label">{{ 'Tab' | translate }}</span>
                     </button>
                     <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="true" aria-controls="demo">
                     </div>
@@ -124,42 +132,12 @@
                 <div class="btn-group zoom-level" role="group">
                     <button style="background-color: #4C8293; color:white; border-color:#4C8293; width:100%;" type="button" class="btn btn-secondary">
                         <i class="fa fa-tachometer" aria-hidden="true"></i>
-                        <span class="button-label"><strong>{{metric_label}}</strong></span>
+                        <span class="button-label"><strong>{{ 'metric_label' | translate:translateData() }}</strong></span>
                     </button>
                     <!-- <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo"></div> -->
                 </div>
                 <!-- typhoon selector -->
                 <div class="btn-group zoom-level" role="group">
-                    <!-- <ul class="nav navbar-left" style="width:49%;margin-right:2%;margin-top:2%">
-                        <li class="dropdown" style="background-color: #4C8293">
-                            <a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff; font-size:12px">
-                                <strong>{{disaster_type}}</strong>
-                                <i class="fa fa-angle-down PI-btn-arrow"></i>
-                            </a>
-                            <ul class="dropdown-menu submenu-items" style="z-index:2000">
-                                <li>
-                                    <a class="submenu-item" ng-click="change_disaster_type('Typhoon')">Typhoons</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a class="submenu-item" ng-click="change_disaster_type('Earthquake')">Earthquakes</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-right" style="width:49%;margin-right:0%;margin-top:2%">
-                        <li class="dropdown" style="background-color: #4C8293">
-                            <a class="dropdown-toggle export-button" data-toggle="dropdown" href="#" style="color:#fff; font-size:12px">
-                                <strong>{{disaster_name}}</strong>
-                                <i class="fa fa-angle-down PI-btn-arrow"></i>
-                            </a>
-                            <ul class="dropdown-menu export-items" id="events" style="z-index:2000">
-                                <li class="event-keep" id="act_pred"><strong>Prediction+Actuals:</strong></li>
-                                <li class="event-keep" id="pred"><strong>Prediction only:</strong></li>
-                                <li class="event-keep" id="act"><strong>Actuals only:</strong></li>
-                            </ul>
-                        </li>
-                    </ul> -->
                     <ul class="btn btn-secondary btn-active PIbuttons" style="margin-right:2%">
                         <div class="dropdown PIdropdown" style="background-color: #4C8293">
                             <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#">  <!-- style="color:#fff; font-size:12px"> -->
@@ -193,8 +171,8 @@
                 </div>
                 <div class="community-profiles-wrapper">
                     <div id="count-info" class="general-info">
-                        <span class="total-count total-count-pi"></span> {{subtype_selection}} hit (<span class="filter-count filter-count-pi"></span> selected) 
-                        <a class="reset-button" ng-click="reset_function()">Select all</a>
+                        <span class="total-count total-count-pi"></span> {{subtype_selection}} {{ 'hit' | translate:translateData }} (<span class="filter-count filter-count-pi"></span> {{ 'selected' | translate:translateData }}) 
+                        <a class="reset-button" ng-click="reset_function()">{{ 'Select_all' | translate }}</a>
                     </div>
                 </div>
             </div>

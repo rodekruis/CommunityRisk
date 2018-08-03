@@ -136,12 +136,12 @@ angular.module('dashboards')
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-            $scope.sql = 'select usp_data(' + $scope.data_input + ');';
+            //$scope.sql = 'select usp_data(' + $scope.data_input + ');';
 			//console.log($scope.data_input);
 			
 			
-			//Data.get({adminLevel: $scope.data_input},
-			Data.get({adminLevel: $scope.sql},  
+			Data.get({adminLevel: $scope.data_input},
+			//Data.get({adminLevel: $scope.sql},  
 				function(pgData){
 					$scope.load_data(pgData);
 			});		
@@ -245,11 +245,11 @@ angular.module('dashboards')
 			
 			$scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			$scope.sql = 'select usp_data(' + $scope.data_input + ');';
+			//$scope.sql = 'select usp_data(' + $scope.data_input + ');';
 			//console.log($scope.data_input);
 			
-			//Data.get({adminLevel: $scope.data_input}, 
-			Data.get({adminLevel: $scope.sql}, 
+			Data.get({adminLevel: $scope.data_input}, 
+			//Data.get({adminLevel: $scope.sql}, 
 				function(pgData){
 					$scope.reload_data(d,pgData);
 			});	

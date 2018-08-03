@@ -43,16 +43,16 @@ exports.read = function(req, res) {
 /**
  * AMap middleware
  */
-exports.getData = function(req, res, next, sql) {
+exports.getData = function(req, res, next, adminLevel) {
 	
 	var connString = 'postgres://'+config.postgres.user+':'+config.postgres.password+'@'+config.postgres.host+'/'+config.postgres.db;
 	
 	pg.connect(connString, function(err, client, release) {
 		if (err) return next(err);
 
-        // var sql1 = 'SELECT usp_data(';
-		// var sql2 = ');';
-		// var sql = sql1 + adminLevel + sql2;
+        var sql1 = 'SELECT usp_data(';
+		var sql2 = ');';
+		var sql = sql1 + adminLevel + sql2;
 		console.log(sql);
         
 		client.query(sql, function(err, result) {

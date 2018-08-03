@@ -1063,7 +1063,7 @@ angular.module('dashboards')
 				.turnOnControls(true)
 				.legend(dc.leafletLegend().position('topright'))
 				//Set up what happens when clicking on the map
-				.on('filtered',function(chart,filters){
+				.on('filtered',function(chart,filters,e){
 					$scope.filters = chart.filters();
                     
                     //When coming from Tabular View: update all information accordingly.
@@ -1097,36 +1097,39 @@ angular.module('dashboards')
 							}
 							$scope.metric_label = meta_label[$scope.metric];
 						})
-						//In Firefox event is not a global variable >> Not figured out how to fix this, so gave the popup a fixed position in FF only
-						if($(window).width() < 768) {
+						//In Firefox event is not a global variable >> Not figured out how to fix this, so use a separate function (see below)
+                        if($(window).width() < 768) {
                             popup.style.left = '5px';	
                             popup.style.bottom = '8%';
                         } else if (typeof event !== 'undefined') {
 							popup.style.left = Math.min($(window).width()-210,event.pageX) + 'px';	
 							popup.style.top = Math.min($(window).height()-210,event.pageY) + 'px';
 						} else {
-                            popup.style.left = '390px';	
-                            popup.style.top = '110px';
-                        }
+                            popup.style.left = $scope.posx + 'px';
+                            popup.style.top = $scope.posy + 'px';
+                            //popup.style.left = '390px';	
+                            //popup.style.top = '110px';
+                        } 
                         popup.style.visibility = 'visible';
                         if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
-					} 
+					}
 					mapfilters_length = $scope.filters.length;
 					document.getElementById('section-'+$scope.metric).classList.add('section-active');
 					
 				})
 			;
             
-            /* $('.leaflet-interactive').on('click', function(e) {
-                if (typeof event === 'undefined') {
-                    e = e.originalEvent; 
-                    var popup = document.getElementById('mapPopup');
-                    popup.style.left = Math.min($(window).width()-210,e.pageX) + 'px';	
-                    popup.style.top = Math.min($(window).height()-210,e.pageY) + 'px';
-                    popup.style.visibility = 'visible';
-                    if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
+            //Special Firefox function to retrieve click-coordinates
+            $scope.FF_mouse_coordinates = function(e) {
+                e = e || window.event;
+                if (e.pageX || e.pageY) {
+                    $scope.posx = e.pageX;
+                    $scope.posy = e.pageY;
                 }
-            }); */			
+            }
+            var mapElem = document.getElementById('map-chart');
+            mapElem.addEventListener("click", $scope.doSomething, false);
+            
             
             /////////////////////
             // ROW CHART SETUP //

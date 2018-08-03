@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('CommunityRiskController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', /* 'DataUpload', */ 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, /* DataUpload, */ Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('CommunityRiskController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
+	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 		
 		
 		
@@ -136,10 +136,12 @@ angular.module('dashboards')
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			console.log($scope.data_input);
+            $scope.sql = 'select usp_data(' + $scope.data_input + ');';
+			//console.log($scope.data_input);
 			
 			
-			Data.get({adminLevel: $scope.data_input}, 
+			//Data.get({adminLevel: $scope.data_input},
+			Data.get({adminLevel: $scope.sql},  
 				function(pgData){
 					$scope.load_data(pgData);
 			});		
@@ -243,9 +245,11 @@ angular.module('dashboards')
 			
 			$scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
+			$scope.sql = 'select usp_data(' + $scope.data_input + ');';
 			//console.log($scope.data_input);
 			
-			Data.get({adminLevel: $scope.data_input}, 
+			//Data.get({adminLevel: $scope.data_input}, 
+			Data.get({adminLevel: $scope.sql}, 
 				function(pgData){
 					$scope.reload_data(d,pgData);
 			});	
@@ -1616,7 +1620,7 @@ angular.module('dashboards')
                 var pcode_check = 0;
                 var pcode_col = 0;
                 for (var i=0; i < data[0].length;i++){
-                    if (data[0][i].toLowerCase() == 'pcodex'){
+                    if (data[0][i].toLowerCase() == 'pcode'){
                         data[0][i] = data[0][i].toLowerCase();
                         pcode_col = i;
                         pcode_check = 1; 
@@ -1643,7 +1647,12 @@ angular.module('dashboards')
                     }
                 }
                 
-                //DataUpload.get({input: ''})
+                /* $scope.sql = 'CREATE TABLE public.test123(id int not null,name text not null,rollnumber int not null);';
+                
+                Data.get({adminLevel: $scope.sql}, 
+                    function(){
+                        console.log('upload succesfull');
+                });	 */
                 
             };
                     

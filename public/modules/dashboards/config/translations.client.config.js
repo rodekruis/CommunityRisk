@@ -50,7 +50,7 @@ var static_en = {
 	cra_intro2: ' communities in ',
 	cra_intro3: ' countries included',
 	cra_description: 'Relieving the suffering of individuals affected by disasters is at the heart of humanitarian action. However, given limited funding, humanitarian actors cannot reach all people in need. They have to identify the geographic areas that are most affected by a humanitarian disaster or crisis and, within those areas, the individuals that are most in need. Currently, this prioritization process takes time and can be subjective. The Community Risk Assessment dashboard forms a data-driven alternative solution.',
-
+    language: 'Language',
 };
 
 var static_es = {
@@ -91,7 +91,7 @@ var static_es = {
 	cra_intro2: ' comunidades en ',
 	cra_intro3: ' países incluídos',
 	cra_description: 'El propósito de la acción humanitaria es aliviar el sufrimiento de las personas afectadas por desastres. Sin embargo, los actores humanitarios no siempre pueden llegar a todas las personas necesitadas debido a los fondos limitados. Es por esto que se deben identificar las áreas geográficas más afectadas por crisis o desastres humanitarios y, dentro de esas áreas, las personas que están más necesitadas. Actualmente, este proceso de priorización requiere tiempo y puede ser subjetivo. La plataforma de Evaluación de riesgos de la comunidad propone una solución alternativa basada en datos.',
-
+    language: 'Idioma',
 };
 
 /* var labels_es = {	
@@ -123,8 +123,9 @@ angular.module('dashboards').config(function ($translateProvider) {
             }
 		}
 		
-		$translateProvider.translations('en', Object.assign({},angular_vars,static_en,labels_en,descriptions_en));
-		$translateProvider.translations('es', Object.assign({},angular_vars,static_es,labels_es,descriptions_es));
+		$translateProvider.translations('en', $.extend({},angular_vars,static_en,labels_en,descriptions_en));
+		$translateProvider.translations('es', $.extend({},angular_vars,static_es,labels_es,descriptions_es));
+        
 	});
 	
 	$translateProvider.preferredLanguage('en');

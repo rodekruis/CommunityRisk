@@ -38,12 +38,25 @@
             </ul>
             
             <ul class="nav navbar-top-links navbar-right" style="display:none" id="language-selector">
-				<div>
-					<button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>
-					<button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>
-				</div>
+				<li class="dropdown">
+					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
+						<!-- {{ 'language' | translate }} -->
+                        <img src="modules/core/img/LanguageIcon.svg" style="width:20px">
+						<i class="fa fa-angle-down export-btn-arrow"></i>
+					</a>
+					<ul class="dropdown-menu export-items">
+						<li>
+                            <a class="dropdown-toggle export-button" ng-click="changeLanguage('en')" target="_blank">English</a>
+							<!-- <button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>English -->
+						</li>
+						<li class="divider"></li>
+						<li>
+                            <a class="dropdown-toggle export-button" ng-click="changeLanguage('es')" target="_blank">Español</a>
+							<!-- <button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>Español -->
+						</li>
+					</ul>
+				</li>
 			</ul>
-            
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">

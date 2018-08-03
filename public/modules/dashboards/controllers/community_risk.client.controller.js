@@ -1128,7 +1128,7 @@ angular.module('dashboards')
                 }
             }
             var mapElem = document.getElementById('map-chart');
-            mapElem.addEventListener("click", $scope.doSomething, false);
+            mapElem.addEventListener("click", $scope.FF_mouse_coordinates, false);
             
             
             /////////////////////

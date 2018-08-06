@@ -81,7 +81,7 @@
 							<div class="row">
 								<div class="col-md-12">
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<ul class="btn link-button">
 												<div class="dropdown">
 													<a style="color: #ffffff" class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -128,7 +128,10 @@
 												</div>
 											</ul>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-4">
+											<a href="#!/#about" class="link-button" role="button">{{ 'about' | translate }}</a>
+										</div>
+										<div class="col-md-4">
 											<a href="#!/#walkthrough_CRA" class="link-button" role="button">{{ 'HOW_IT_WORKS' | translate }}</a>
 										</div>
 									</div>
@@ -155,13 +158,61 @@
 		</div>
 	</section>
 	
-	<!-- <span class="scroll" id="countries"></span>
-	
-	<section>
-		<div class="container">
-            <div id="map-chart" style="height:100%;width:100%"></div>
+	<span class="scroll" id="about"></span>
+    
+    <section class="white about">
+        <div class="container pad0x">
+            <div>
+                <h2>About Community Risk Assessment</h2>
+
+                <div class="hazard block">
+                    <div class="col-md-12">
+                        Humanitarian organizations cannot help all out of their scarce resources, when a disaster relief or disaster
+                        risk-reduction program is carried out. Therefore they try to find and target those most in need. This beneficiary
+                        selection is currently a slow and possibly subjective process, largely because of a lack of data and the tools to 
+                        interpret them.<br/>
+                        This solution aims to fill this information gap by finding and integrating all relevant open or closed data sources 
+                        on a detailed geographical level, on indicators ranging from hazard exposure to vulnerability to coping capacity. 
+                        Having these data together and easily accessible saves invaluable time when a disaster strikes. Furthermore, the 
+                        indicators are combined into composite scores, enabling decision-makers to compare communities, thereby contributing to 
+                        the process of beneficiary selection.
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div class="col-md-6 pad0x block">
+                    <div class="icon col-md-2"><img src="modules/core/img/open_data.png" width="50px" onerror="this.onerror=null; this.src='image.png'"></div>
+                    <div class="col-md-10 pad0x">
+                        <strong>1. Open Data Collection</strong><br/>
+                        For each country, all available risk-related, subnational open data sources are gathered. <br>We collect data sources relating to humanitarian Risk through Hazards, Vulnerability or Coping Capacity. <br>We work with subnational data only, preferably on Community level. <br>Data sources that used to be scattered over the internet is collected and stored by us in one place.  
+                    </div>
+                </div>
+                <div class="col-md-6 pad0x block">
+                    <div class="icon col-md-2"><img src="modules/core/img/data-integration.png" width="50px" onerror="this.onerror=null; this.src='image.png'"></div>
+                    <div class="col-md-10 pad0x">
+                        <strong>2. Data Integration</strong><br/>
+                        By not only storing all data in one database, but also cleaning and transforming all data sources into one format, we provide easy access to complete, timely and qualitative risk-data in times of need.
+                        <br>Moreover, we integrate all indicators through a risk framework (inspired by the INFORM risk framework), which assigns a risk score between 0-10 per community. This enables easy comparison and thus prioritization between areas.
+                    </div>
+                </div>
+                <div class="col-md-6 pad0x block">
+                    <div class="icon col-md-2"><img src="modules/core/img/data-dashboard.png" width="50px" onerror="this.onerror=null; this.src='image.png'">
+                    </div>
+                    <div class="col-md-10 pad0x">
+                        <strong>3. Data Visualization and Access</strong><br/>
+                        All data and resulting risk scores are visually navigable through this dashboard. Additionally there are export or direct API options for working with the data outside of this dashboard.
+                    </div>
+                </div>
+                <div class="col-md-6 pad0x block">
+                    <div class="icon col-md-2"><img src="modules/core/img/data-prioritization.png" width="50px" onerror="this.onerror=null; this.src='image.png'"></div>
+                    <div class="col-md-10 pad0x">
+                        <strong>4. Prioritization and Data Preparedness</strong><br/>
+                        All data in this dashboard can directly be used by decision-makers either before, during or after a disaster. Having the data easily accessible in one place saves invaluable time.<br>
+                        Moreover, the risk scores in this dashboard can be used for prioritizing target areas for a Disaster Risk Reduction project. <br>The Vulnerability and Coping Capacity components can also - when combined with event-specific impact and hazard data - be used for Impact modeling in the Response or Early Warning Phases.
+                    </div>
+                </div>
+            </div>
         </div>
-    </section> -->
+    </section>
     
     
 	<span class="scroll" id="walkthrough_CRA"></span>

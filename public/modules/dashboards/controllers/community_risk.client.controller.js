@@ -1544,6 +1544,10 @@ angular.module('dashboards')
 				$scope.shareable_URL = addParameterToURL($scope.view_code,$scope.country_code,$scope.admlevel,$scope.metric,$scope.parent_codes/* ,$scope.filters */,$scope.chart_show);
 				$('#URLModal').modal('show');
 			}
+            $scope.share_country_URL = function() {
+				$scope.shareable_URL = location.href + '?country=' + $scope.country_code;
+				$('#URLModal').modal('show');
+			}
             
             $scope.copyToClipboard = function(element) {
                 var $temp = $("<input>");

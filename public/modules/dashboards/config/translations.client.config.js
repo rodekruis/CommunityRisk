@@ -97,17 +97,7 @@ var static_es = {
     
 };
 
-/* var labels_es = {	
-	//Input for dynamic variables
-	risk_score: 'Índice de riesgo',
-	hazard_score: 'Índice de peligros',
-};
 
-var descriptions_es = {	
-	//Input for dynamic variables
-	desc_risk_score: 'Índice de riesgo blablabla',
-	desc_hazard_score: 'Índice de peligros blablabla',
-}; */
 
 angular.module('dashboards').config(function ($translateProvider) {
 	

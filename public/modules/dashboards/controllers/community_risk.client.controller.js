@@ -1899,7 +1899,7 @@ angular.module('dashboards')
                 for (var i=0;i<$('#menu-buttons.in').length;i++){ $('#menu-buttons.in')[i].classList.remove('in'); };
 			};
             
-            if ($scope.country_code == 'PER') {
+            if ($scope.country_code == 'PER' || $scope.country_code == 'ECU') {
                 document.getElementById('language-selector').style.display = 'block';
                 $scope.changeLanguage('es');
             } else {

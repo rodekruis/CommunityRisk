@@ -31,6 +31,7 @@ angular.module('dashboards')
 		//////////////////////
 
 		$rootScope.loadCount = 0;
+        $scope.reload = 0;
 		$scope.authentication = Authentication;
 		$scope.geom = null;
 		$scope.country_code = 'PHL';
@@ -288,11 +289,15 @@ angular.module('dashboards')
             $('.view-buttons button.active').removeClass('active');
             $('.view-buttons button.btn-map-view').addClass('active');
             
+            //Set reload-indicator to 1 (used for translations)
+            $scope.reload = 1;
+            
             //Load actual content
             $scope.generateCharts(d);
 		  
             // end loading bar
             $scope.complete();	   
+            
 
 		};
 
@@ -388,14 +393,16 @@ angular.module('dashboards')
 			$scope.subtype_selection = $scope.genLookup_country_meta(d,'level' + $scope.admlevel + '_name')[$scope.country_code];
 			
 			//Changes to be able to show ALL lower-level districts, for now only applied to Malawi
+            $scope.levelB_selection_pre = 'all_no';
 			if (zoom_min == 1 || $scope.country_code == 'MWI' || $scope.country_code == 'MOZ') {
                 
                 //Apply different classes for this case
                 $('#level2').addClass('btn-zoomin');
                 $('#level3').addClass('btn-zoomin');
-                    
+                
 				if ($scope.admlevel == zoom_min) {
-					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
+                    $scope.levelB_selection_pre = 'all_yes';
+					$scope.levelB_selection = $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
 					$scope.levelB_code = '';
 					$scope.levelB_codes = [];
 				} else if ($scope.admlevel < zoom_max && $scope.parent_codes.length > 0) { 
@@ -403,20 +410,24 @@ angular.module('dashboards')
 					//$scope.levelB_code = $scope.parent_code;
 					$scope.levelB_codes = $scope.parent_codes;
 				} else if ($scope.admlevel < zoom_max && $scope.parent_codes.length == 0) { //This is the direct URL-link case
-					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
+                    $scope.levelB_selection_pre = 'all_yes';
+					$scope.levelB_selection = $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
 					$scope.levelB_code = '';
 					$scope.levelB_codes = [];
 				} else if ($scope.admlevel == zoom_max && $scope.parent_codes.length == 0) { //This is the direct URL-link case
-					$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
+                    $scope.levelB_selection_pre = 'all_yes';
+					$scope.levelB_selection = $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code]; 
 					$scope.levelB_code = '';
 					$scope.levelB_codes = [];
 				}
 				if ($scope.admlevel < zoom_max) { 
-					$scope.levelC_selection = $scope.parent_codes.length == 0 ? 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
+                    $scope.levelC_selection_pre = $scope.parent_codes.length == 0 ? 'all_yes' : undefined;
+					$scope.levelC_selection = $scope.parent_codes.length == 0 ? $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
 																		: undefined;
 					$scope.levelC_code = '';
 				} else if ($scope.admlevel == zoom_max && $scope.parent_codes.length == 0) { //This is the direct URL-link case
-					$scope.levelC_selection = $scope.parent_codes.length == 0 ? 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
+                    $scope.levelC_selection_pre = $scope.parent_codes.length == 0 ? 'all_yes' : undefined;
+					$scope.levelC_selection = $scope.parent_codes.length == 0 ? $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code]
 																		: undefined;
 					$scope.levelC_code = '';
 				} else if ($scope.parent_codes.length > 0) {
@@ -1896,12 +1907,17 @@ angular.module('dashboards')
             //Translation button
 			$scope.changeLanguage = function (langKey) {
 				$translate.use(langKey);
+                $scope.language = langKey;
                 for (var i=0;i<$('#menu-buttons.in').length;i++){ $('#menu-buttons.in')[i].classList.remove('in'); };
 			};
             
             if ($scope.country_code == 'PER' || $scope.country_code == 'ECU') {
                 document.getElementById('language-selector').style.display = 'block';
-                $scope.changeLanguage('es');
+                if ($scope.reload == 1 && $scope.language == 'en') {
+                    $scope.changeLanguage('en');
+                } else {
+                    $scope.changeLanguage('es');
+                }
             } else {
                 document.getElementById('language-selector').style.display = 'none';
                 $scope.changeLanguage('en');
@@ -1912,7 +1928,9 @@ angular.module('dashboards')
                     metric_label: $scope.metric,
 					metric_label_popup: $scope.metric_info,
 					metric_desc: 'desc_' + $scope.metric_info,
-					subtype_selection: $scope.subtype_selection
+					subtype_selection: $scope.subtype_selection,
+                    levelB_selection_pre: $scope.levelB_selection_pre,
+                    levelC_selection_pre: $scope.levelC_selection_pre
 				};
 			}
 			

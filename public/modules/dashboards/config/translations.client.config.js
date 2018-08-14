@@ -8,6 +8,8 @@ var angular_vars = {
 	metric_label: '{{metric_label | translate}}',
 	metric_label_popup: '{{metric_label_popup | translate}}',
 	metric_desc: '{{metric_desc | translate}}',	
+    levelB_selection_pre: '{{levelB_selection_pre | translate}}',
+    levelC_selection_pre: '{{levelC_selection_pre | translate}}'
 
 };
 
@@ -23,6 +25,7 @@ var static_en = {
 	share_url: 'Share full current settings (URL)', 
 	export_csv: 'Export (CSV)',
 	export_geojson: 'Export (GEOJSON)',
+    about_CRA: 'About CRA',
 	COUNTRY: 'Country',
 	Map: 'Map',
 	Tab: 'Tab',
@@ -53,6 +56,10 @@ var static_en = {
 	cra_description: 'Relieving the suffering of individuals affected by disasters is at the heart of humanitarian action. However, given limited funding, humanitarian actors cannot reach all people in need. They have to identify the geographic areas that are most affected by a humanitarian disaster or crisis and, within those areas, the individuals that are most in need. Currently, this prioritization process takes time and can be subjective. The Community Risk Assessment dashboard forms a data-driven alternative solution.',
     language: 'Language',
     about: 'About',
+    all_yes: 'All ',
+    all_no: '',
+    data_preparedness_index: 'Data Preparedness Index',
+    dpi_tag: 'Completeness, recency and quality of sources',
 };
 
 var static_es = {
@@ -62,9 +69,11 @@ var static_es = {
 	PRIORITY_INDEX: 'Índice de prioridad',
 	HOW_IT_WORKS: 'Cómo funciona',
 	EXPORT: 'Exportar',
+    share_country_url: 'Compartir el país actual (URL)',
 	share_url: 'Compartir la configuración actual (URL)',
 	export_csv: 'Exportar (CSV)',
 	export_geojson: 'Exportar (GEOJSON)',
+    about_CRA: 'Sobre CRA',
 	COUNTRY: 'País',
 	Map: 'Mapa',
 	Tab: 'Tabular',
@@ -94,6 +103,10 @@ var static_es = {
 	cra_intro3: ' países incluídos',
 	cra_description: 'El propósito de la acción humanitaria es aliviar el sufrimiento de las personas afectadas por desastres. Sin embargo, los actores humanitarios no siempre pueden llegar a todas las personas necesitadas debido a los fondos limitados. Es por esto que se deben identificar las áreas geográficas más afectadas por crisis o desastres humanitarios y, dentro de esas áreas, las personas que están más necesitadas. Actualmente, este proceso de priorización requiere tiempo y puede ser subjetivo. La plataforma de Evaluación de riesgos de la comunidad propone una solución alternativa basada en datos.',
     language: 'Idioma',
+    all_yes: 'Todos ',
+    all_no: '',
+    data_preparedness_index: 'Índice de preparación de datos',
+    dpi_tag: 'Integridad, actualidad y calidad de las fuentes',
     
 };
 

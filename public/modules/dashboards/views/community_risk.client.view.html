@@ -65,7 +65,7 @@
 					</a>
 					<ul class="dropdown-menu export-items">
 						<li>
-							<a class="dropdown-toggle export-button" ng-href ="#!/#about" target="_blank">About CRA</a>
+							<a class="dropdown-toggle export-button" ng-href ="#!/#about" target="_blank">{{ 'about_CRA' | translate }}</a>
 						</li>
 						<li class="divider"></li>
                         <li>
@@ -154,10 +154,10 @@
                         <span class="button-label">{{country_selection}}</span>
                     </button>
                     <button id="level2" type="button" class="btn btn-secondary" ng-click="zoom_out(2)">
-                        <span class="button-label">{{levelB_selection}}</span>
+                        <span class="button-label">{{'levelB_selection_pre' | translate:translateData() }}{{levelB_selection}}</span>
                     </button>
                     <button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)" style="margin-right:0px">
-                        <span class="button-label">{{levelC_selection}}</span>
+                        <span class="button-label">{{'levelC_selection_pre' | translate:translateData() }}{{levelC_selection}}</span>
                     </button>
                 </div>
                 <!-- </div> -->
@@ -295,10 +295,10 @@
                                     <img src="modules/dashboards/img/dpi.png">
                                 </span>
                                 <span class="panel-header-content">
-                                    <span class="panel-header-title">Data Preparedness Index - <span class="component-score" id="dpi_score_main"></span>
+                                    <span class="panel-header-title">{{ 'data_preparedness_index' | translate }} - <span class="component-score" id="dpi_score_main"></span>
                                         <span class="score-helptext"></span>
                                     </span>
-                                    <span class="panel-header-description">Completeness, recency and quality of sources</span>
+                                    <span class="panel-header-description">{{ 'dpi_tag' | translate }}</span>
                                 </span>
                             </a>
                         </div>

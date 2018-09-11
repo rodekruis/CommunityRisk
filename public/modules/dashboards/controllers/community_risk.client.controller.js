@@ -1313,13 +1313,15 @@ angular.module('dashboards')
                     if (dest_level === 1 && $scope.admlevel > zoom_min) {
 						$scope.admlevel = zoom_min; 
 						$scope.parent_codes = [];
-						$scope.levelB_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code];
+                        $scope.levelB_selection_pre = 'all_yes';
+						$scope.levelB_selection = $scope.genLookup_country_meta(d,'level' + (zoom_min + 1) + '_name')[$scope.country_code];
 						$scope.reinitiate(d);
 					} else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
 						$scope.admlevel = zoom_min + 1;
 						$scope.parent_codes = $scope.levelB_codes;
 						$scope.name_selection = $scope.name_selection_prev;
-						$scope.levelC_selection = 'All ' + $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code];
+                        $scope.levelC_selection_pre = 'all_yes';
+						$scope.levelC_selection = $scope.genLookup_country_meta(d,'level' + (zoom_min + 2) + '_name')[$scope.country_code];
 						$scope.reinitiate(d);
 					} else if (dest_level === 2 && $scope.admlevel < zoom_min + 1) {
 						$scope.admlevel = zoom_min + 1;

@@ -136,7 +136,7 @@ angular.module('dashboards')
             // FOR NOW MANUAL: set different default event for PI
             if ($scope.view_code_PI == 'PI') {
                 if ($scope.disaster_type == 'Typhoon') {
-                    $scope.disaster_name = 'Mangkhut';
+                    $scope.disaster_name = 'Nock-Ten';
                 } else {
                     $scope.disaster_name = 'Leyte 2017';
                 }

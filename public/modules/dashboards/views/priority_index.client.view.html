@@ -53,6 +53,10 @@
 							<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">Tutorial</a>
 						</li>
 						<li class="divider"></li>
+                        <li>
+							<a class="dropdown-toggle export-button" ng-href ="https://data.humdata.org/dataset/philippines-typhoon-mangkhut-priority-index-forecasted-damage" target="_blank">HDX methodology (Mangkhut)</a>
+						</li>
+						<li class="divider"></li>
 						<li>
 							<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/CommunityRisk" target="_blank">Github</a>
 						</li>
@@ -167,7 +171,7 @@
                 </div>
                 <div class="community-profiles-wrapper">
                     <div id="count-info" class="general-info">
-                        <span class="total-count total-count-pi"></span> {{subtype_selection}} hit (<span class="filter-count filter-count-pi"></span> selected) 
+                        <span class="total-count total-count-pi"></span> {{subtype_selection}} predicted (<span class="filter-count filter-count-pi"></span> selected) 
                         <a class="reset-button" ng-click="reset_function()">Select all</a>
                     </div>
                 </div>
@@ -249,8 +253,8 @@
                                     <img src="modules/dashboards/img/vulnerability.png">
                                 </span>
                                 <span class="panel-header-content">
-                                    <span class="panel-header-title">Vulnerability & Coping Capacity</span>
-                                    <span class="panel-header-description">Community Risk features important for this disaster type</span>
+                                    <span class="panel-header-title">Community Risk features</span>
+                                    <span class="panel-header-description">Relevant features from Community Risk on Exposure, Vulnerability or Coping Capacity</span>
                                 </span>
                             </a>
                         </div>

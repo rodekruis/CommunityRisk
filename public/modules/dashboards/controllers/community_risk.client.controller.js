@@ -184,7 +184,7 @@ angular.module('dashboards')
 		  
             // 4. Variable-metadata
             d.Metadata_full = pgData.usp_data.meta_indicators; //dashboard.sources.Metadata.data;
-            d.Metadata = $.grep(d.Metadata_full, function(e){return e.view_code == 'CRA' && $scope.replace_null(e.country_code).indexOf($scope.country_code) > -1 && e.admin_level >= $scope.admlevel && e.admin_level_min <= $scope.admlevel;}) 
+            d.Metadata = $.grep(d.Metadata_full, function(e){return (e.view_code == 'CRA' || e.view_code == 'CRA,PI') && $scope.replace_null(e.country_code).indexOf($scope.country_code) > -1 && e.admin_level >= $scope.admlevel && e.admin_level_min <= $scope.admlevel;}) 
 		  
             // 5. Country-metadata
             d.Country_meta_full = pgData.usp_data.meta_country; //dashboard.sources.Country_meta.data;

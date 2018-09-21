@@ -43,6 +43,7 @@ angular.module('dashboards')
         //Change event: reinitiate the dashboard
         $scope.change_disaster = function(disaster_name) {
             $scope.disaster_name = disaster_name;
+            console.log($scope.disaster_name);
             $scope.initiate('PI');
         };
 
@@ -52,6 +53,7 @@ angular.module('dashboards')
 		//////////////////////
         
 		$rootScope.loadCount = 0;
+        $scope.reload = 0;
 		$scope.authentication = Authentication;
 		$scope.geom = null;
 		$scope.view_code = 'PI';
@@ -87,6 +89,7 @@ angular.module('dashboards')
 		$scope.y = 200;
 		$scope.quantileColorDomain_PI_std = ['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'];
 		$scope.quantileColorDomain_PI_error = ['#d7191c','#fdae61','#ffffbf','#DA70D6','#8B008B'];
+		$scope.quantileColorDomain_CRA_std = ['#f1eef6','#bdc9e1','#74a9cf','#2b8cbe','#045a8d'];
 		var mapfilters_length = 0;
 		var d_prev = '';
 		var map;
@@ -133,10 +136,11 @@ angular.module('dashboards')
 			//Read Disaster Database or PI from URL
 			var url = location.href;
             $scope.view_code_PI = url.indexOf('priority_index') > -1 ? 'PI' : 'DDB';
+            
             // FOR NOW MANUAL: set different default event for PI
-            if ($scope.view_code_PI == 'PI') {
+            if ($scope.view_code_PI == 'PI' && $scope.reload == 0) {
                 if ($scope.disaster_type == 'Typhoon') {
-                    $scope.disaster_name = 'Nock-Ten';
+                    $scope.disaster_name = 'Mangkhut';
                 } else {
                     $scope.disaster_name = 'Leyte 2017';
                 }
@@ -177,7 +181,7 @@ angular.module('dashboards')
 			//This is the main search-query for PostgreSQL
 			$scope.parent_codes_input = '{' + $scope.parent_codes.join(',') + '}';
 			$scope.data_input = $scope.admlevel + ',\'' + $scope.country_code + '\',\'' + $scope.parent_codes_input + '\',\'' + $scope.view_code + '\',\'' + $scope.disaster_type + '\',\'' + $scope.disaster_name + '\'';
-			//console.log($scope.data_input);
+			console.log($scope.data_input);
 			
 			Data.get({adminLevel: $scope.data_input}, 
                 function(pgData){
@@ -207,7 +211,7 @@ angular.module('dashboards')
             // 4. Variable-metadata
             var replace_null = function(value) { return (value == null) ? "" : value };
             d.Metadata_full = pgData.usp_data.meta_indicators; //dashboard.sources.Metadata.data;
-            d.Metadata = $.grep(d.Metadata_full, function(e){ return ((e.view_code == 'PI' && $scope.replace_null(e.disaster_type).indexOf($scope.disaster_type) > -1) 
+            d.Metadata = $.grep(d.Metadata_full, function(e){ return (((e.view_code == 'PI' || e.view_code == 'CRA,PI') && $scope.replace_null(e.disaster_type).indexOf($scope.disaster_type) > -1) 
                                                                         || ($scope.replace_null(e.view_code).indexOf('PI') > -1 && $scope.replace_null(e.disaster_type) == '')) 
                                                                         && $scope.replace_null(e.country_code).indexOf($scope.country_code) > -1; });
 		  
@@ -254,7 +258,7 @@ angular.module('dashboards')
             if ($rootScope.loadCount == 0 && typeof L_PREFER_CANVAS !== 'undefined') {
                 $('#IEmodal').modal('show');
                 $rootScope.loadCount += 1;
-            }	
+            }
 
 		};
         
@@ -330,7 +334,11 @@ angular.module('dashboards')
 			$scope.inform_admlevel = Number($scope.genLookup_country_meta(d,'inform_admlevel')[$scope.country_code]);
 			
 			if (!$scope.directURLload) {
-				$scope.metric = $scope.genLookup_disaster_meta(d,'default_metric')[$scope.disaster_name];
+				if ($scope.view_code_PI == 'PI') {
+                    $scope.metric = 'pred_damage_class';
+                } else {
+                    $scope.metric = $scope.genLookup_disaster_meta(d,'default_metric')[$scope.disaster_name];
+                }
 			}
             $scope.default_metric = $scope.genLookup_disaster_meta(d,'default_metric')[$scope.disaster_name];
             $scope.default_metric_label = $scope.default_metric.replace('_',' ');
@@ -385,7 +393,7 @@ angular.module('dashboards')
 				if (record_temp.group !== 'admin') {
 					record.id = 'data-table' + [i+1];
 					record.name = record_temp.variable;
-					record.group = ['vulnerability','coping_capacity'].indexOf(record_temp.group) > -1 ? 'cra_features' : record_temp.group;
+					record.group = ['vulnerability','coping_capacity','general'].indexOf(record_temp.group) > -1 ? 'cra_features' : record_temp.group;
 					record.propertyPath = record_temp.agg_method === 'sum' ? 'value' : 'value.finalVal';
 					record.dimension = undefined;
 					record.weight_var = record_temp.weight_var;
@@ -520,7 +528,7 @@ angular.module('dashboards')
                 record = d.Disaster_meta[i];
                 if (record.disaster_type == $scope.disaster_type
                     && ( ($scope.view_code_PI == 'DDB' && record.actuals == 'yes') ||
-                         ($scope.view_code_PI == 'PI'  && record.actuals == 'no') )
+                         ($scope.view_code_PI == 'PI'  && record.predictions == 'yes') )
                     ){
                     if (record.actuals == 'yes' && record.predictions == 'no') {
                         var act_pred = 'act';
@@ -535,7 +543,8 @@ angular.module('dashboards')
                     var a = document.createElement('a');
                     a.setAttribute('ng-click','change_disaster(\''+record.name+'\')');
                     a.setAttribute('class','event-drop');
-                    a.innerHTML = record.name;
+                    var len = record.startdate.length;
+                    a.innerHTML = record.name + ' (' + record.startdate.substr(len - 4,len) + ')';
                     li.appendChild(a);
                     $compile(a)($scope);
                 }
@@ -712,6 +721,8 @@ angular.module('dashboards')
                 var colorDomain;
                 if ($scope.genLookup_meta(d,'group')[$scope.metric] == 'pred_error') {
                     colorDomain = $scope.quantileColorDomain_PI_error;
+                } else if ($scope.genLookup_meta(d,'view_code')[$scope.metric] == 'CRA,PI') {
+                    colorDomain = $scope.quantileColorDomain_CRA_std;
                 } else {
                     colorDomain = $scope.quantileColorDomain_PI_std;
                 };
@@ -736,7 +747,15 @@ angular.module('dashboards')
 				.geojson(d.Districts)	
 				.colors(mapchartColors)
 				.colorCalculator(function(d){
-						return !d.count ? '#cccccc' : mapChart.colors()(d.sum);
+                    if ($scope.metric.indexOf('damage_class') > -1) {
+                        var colors = $scope.quantileColorDomain_PI_std;
+                        if (d.sum==1){return colors[0];} else if (d.sum==2){return colors[1];} else if (d.sum==3){return colors[2];} else if (d.sum==4){return colors[3];} else if (d.sum==5){return colors[4];};
+                    } else if ($scope.metric == 'pred_error_damage') {
+                        var colors = $scope.quantileColorDomain_PI_error;
+                        if (!d.count){return '#cccccc';} else if (d.sum<=-3){return colors[0];} else if (d.sum==-2){return colors[1];} else if (Math.abs(d.sum)<=1){return colors[2];} else if (d.sum==2){return colors[3];} else if (d.sum>=3){return colors[4];};
+                    } else {
+                        return !d.count ? '#cccccc' : mapChart.colors()(d.sum);
+                    }
 				})
 				.featureKeyAccessor(function(feature){
 					return feature.properties.pcode;
@@ -850,7 +869,15 @@ angular.module('dashboards')
                 .valueAccessor(function(d){ return isNaN(d.value.sum) ? 0 : d.value.sum; })
                 .colors(mapchartColors)
 				.colorCalculator(function(d){
-					return !d.value.count ? '#cccccc' : mapChart.colors()(d.value.sum);
+                    if ($scope.metric.indexOf('damage_class') > -1) {
+                        var colors = $scope.quantileColorDomain_PI_std;
+                        if (d.value.sum==1){return colors[0];} else if (d.value.sum==2){return colors[1];} else if (d.value.sum==3){return colors[2];} else if (d.value.sum==4){return colors[3];} else if (d.value.sum==5){return colors[4];};
+                    } else if ($scope.metric == 'pred_error_damage') {
+                        var colors = $scope.quantileColorDomain_PI_error;
+                        if (!d.value.count){return '#cccccc';} else if (d.value.sum<=-3){return colors[0];} else if (d.value.sum==-2){return colors[1];} else if (Math.abs(d.value.sum)<=1){return colors[2];} else if (d.value.sum==2){return colors[3];} else if (d.value.sum>=3){return colors[4];};
+                    } else {
+                        return !d.value.count ? '#cccccc' : mapChart.colors()(d.value.sum);
+                    }
 				})
                 .label(function(d){
 					if (!meta_scorevar[$scope.metric]){
@@ -954,8 +981,8 @@ angular.module('dashboards')
 			
 			
 			$scope.map_coloring = function(id) {
-				
-				var section_id = document.getElementById('section-'+$scope.metric);
+                
+                var section_id = document.getElementById('section-'+$scope.metric);
 				if (section_id) {section_id.classList.remove('section-active');}; 
 				$scope.metric = id;	
 				$scope.metric_label = meta_label[id];
@@ -977,7 +1004,16 @@ angular.module('dashboards')
 					.group(whereGroupSum_scores)
 					.colors(mapchartColors)
 					.colorCalculator(function(d){
-						return !d.count ? '#cccccc' : mapChart.colors()(d.sum);
+						//return !d.count ? '#cccccc' : mapChart.colors()(d.sum);
+                        if ($scope.metric.indexOf('damage_class') > -1) {
+                            var colors = $scope.quantileColorDomain_PI_std;
+                            if (d.sum==1){return colors[0];} else if (d.sum==2){return colors[1];} else if (d.sum==3){return colors[2];} else if (d.sum==4){return colors[3];} else if (d.sum==5){return colors[4];};
+                        } else if ($scope.metric == 'pred_error_damage') {
+                            var colors = $scope.quantileColorDomain_PI_error;
+                            if (!d.count){return '#cccccc';} else if (d.sum<=-3){return colors[0];} else if (d.sum==-2){return colors[1];} else if (Math.abs(d.sum)<=1){return colors[2];} else if (d.sum==2){return colors[3];} else if (d.sum>=3){return colors[4];};
+                        } else {
+                            return !d.count ? '#cccccc' : mapChart.colors()(d.sum);
+                        };
 					})
 					.popup(function(d){
 						return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value.sum), ' ',$scope.replace_null(meta_unit[$scope.metric]));
@@ -991,7 +1027,15 @@ angular.module('dashboards')
                     .valueAccessor(function(d){ return isNaN(d.value.sum) ? 0 : d.value.sum; })
 					.colors(mapchartColors)
 					.colorCalculator(function(d){
-							return !d.value.count ? '#cccccc' : mapChart.colors()(d.value.sum);
+                        if ($scope.metric.indexOf('damage_class') > -1) {
+                            var colors = $scope.quantileColorDomain_PI_std;
+                            if (d.value.sum==1){return colors[0];} else if (d.value.sum==2){return colors[1];} else if (d.value.sum==3){return colors[2];} else if (d.value.sum==4){return colors[3];} else if (d.value.sum==5){return colors[4];};
+                        } else if ($scope.metric == 'pred_error_damage') {
+                            var colors = $scope.quantileColorDomain_PI_error;
+                            if (!d.value.count){return '#cccccc';} else if (d.value.sum<=-3){return colors[0];} else if (d.value.sum==-2){return colors[1];} else if (Math.abs(d.value.sum)<=1){return colors[2];} else if (d.value.sum==2){return colors[3];} else if (d.value.sum>=3){return colors[4];};
+                        } else {
+                            return !d.value.count ? '#cccccc' : mapChart.colors()(d.value.sum);
+                        }    
 					})
                     .label(function(d){
                         if (!meta_scorevar[$scope.metric]){
@@ -1243,6 +1287,7 @@ angular.module('dashboards')
 			
 			//Render all dc-charts and -tables
 			dc.renderAll(); 
+            $scope.reload = 1;
 			
 			map = mapChart.map();
 			function zoomToGeom(geom){
@@ -1334,7 +1379,7 @@ angular.module('dashboards')
                                     
                 if (d.Disaster_meta_full[i].country_code !== null && countries.indexOf(d.Disaster_meta_full[i].country_code) <= -1
                     && (($scope.view_code_PI == 'DDB' && d.Disaster_meta_full[i].actuals == 'yes') ||
-                        ($scope.view_code_PI == 'PI' && d.Disaster_meta_full[i].actuals == 'no'))
+                        ($scope.view_code_PI == 'PI' && d.Disaster_meta_full[i].predictions == 'yes'))
                     ) {
                     countries.push(d.Disaster_meta_full[i].country_code);
                     

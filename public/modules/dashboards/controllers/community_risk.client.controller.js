@@ -109,7 +109,7 @@ angular.module('dashboards')
 			var url = location.href;
 			if (url.indexOf('?') > -1) {
 				url = url.split('?')[1];
-                $scope.country_code = url.split('&')[0].split('=')[1];
+                $scope.country_code = url.split('&')[0].split('=')[1].toUpperCase();
                 if (url.split('&')[1]){
                     $scope.directURLload = true;
                     $scope.admlevel = url.split('&')[1].split('=')[1];
@@ -281,7 +281,7 @@ angular.module('dashboards')
                     }
                 }
             }
-            d.Metadata = $.grep(d.Metadata_full, function(e){ return e.view_code == 'CRA' && $scope.replace_null(e.country_code).indexOf($scope.country_code) > -1 && e.admin_level >= $scope.admlevel && e.admin_level_min <= $scope.admlevel;})
+            d.Metadata = $.grep(d.Metadata_full, function(e){ return (e.view_code == 'CRA' || e.view_code == 'CRA,PI') && $scope.replace_null(e.country_code).indexOf($scope.country_code) > -1 && e.admin_level >= $scope.admlevel && e.admin_level_min <= $scope.admlevel;})
 		  
             //console.log(d);
             
@@ -488,7 +488,7 @@ angular.module('dashboards')
 					record.dimension = undefined;
 					record.weight_var = record_temp.weight_var;
 					record.scorevar_name = record_temp.scorevar_name;
-					record.view = record_temp.view_code;
+					record.view = 'CRA'; //record_temp.view_code;
 					$scope.tables[j] = record;
 					j=j+1;					
 				}
@@ -1067,7 +1067,8 @@ angular.module('dashboards')
 					if (!meta_scorevar[$scope.metric]){
 						return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value.sum), ' ',meta_unit[$scope.metric]);
 					} else {
-						return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value.sum));
+                        return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat($scope.genLookup_value()[d.key])); 
+						//return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value.sum));
 					}
 				})
 				.renderPopup(true)
@@ -1398,7 +1399,8 @@ angular.module('dashboards')
 						if (!meta_scorevar[$scope.metric]){
 							return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat(d.value.sum), ' ',meta_unit[$scope.metric]);
 						} else {
-							return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value.sum));
+                            return lookup[d.key].concat(' - ',meta_label[$scope.metric],': ',currentFormat($scope.genLookup_value()[d.key])); 
+							//return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value.sum));
 						}
 					})
 					;

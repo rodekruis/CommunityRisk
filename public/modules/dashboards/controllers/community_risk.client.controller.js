@@ -1020,8 +1020,12 @@ angular.module('dashboards')
                     quantile_range = d.quantile_range_scores;
                 } else {
                     for (i=0;i<d.Rapportage.length;i++) {
-                        quantile_range[i] = !meta_scorevar[$scope.metric] ? d.Rapportage[i][$scope.metric] : d.Rapportage[i][meta_scorevar[$scope.metric]];
-                        quantile_range.sort(function sortNumber(a,b) { return a - b; });
+                        if (d.Rapportage[i][$scope.metric]) {
+                            console.log(d.Rapportage[i][$scope.metric]);
+                            quantile_range.push(d.Rapportage[i][$scope.metric]);
+                            //quantile_range[i] = !meta_scorevar[$scope.metric] ? d.Rapportage[i][$scope.metric] : d.Rapportage[i][meta_scorevar[$scope.metric]];
+                            quantile_range.sort(function sortNumber(a,b) { return a - b; });
+                        }
                     };
                     $scope.quantile_max = quantile_range[quantile_range.length - 1];
                 };

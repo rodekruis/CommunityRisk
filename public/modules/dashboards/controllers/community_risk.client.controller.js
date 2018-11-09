@@ -355,7 +355,21 @@ angular.module('dashboards')
 			var country_zoom_min = $scope.genLookup_country_meta(d,'zoomlevel_min');
 			var country_zoom_max = $scope.genLookup_country_meta(d,'zoomlevel_max');
 			var country_default_metric = $scope.genLookup_country_meta(d,'default_metric');
-
+            var country_status = $scope.genLookup_country_meta(d,'format')[$scope.country_code];
+            if (country_status == 'template') {
+                document.getElementById('status').style.visibility = 'visible';
+                $scope.status_title = 'Template only';
+                $scope.status_text = 'This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data';
+            } else if (country_status == 'basic') {
+                document.getElementById('status').style.visibility = 'visible';
+                $scope.status_title = 'Draft version';
+                $scope.status_text = 'This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.';
+            } else if (country_status == 'all') {
+                document.getElementById('status').style.visibility = 'hidden';
+                $scope.status_title = '';
+                $scope.status_text = '';
+            }
+            
 			$scope.country_selection = country_name[$scope.country_code];
 			var zoom_min = Number(country_zoom_min[$scope.country_code]); 
 			var zoom_max = Number(country_zoom_max[$scope.country_code]); 
@@ -1021,7 +1035,7 @@ angular.module('dashboards')
                 } else {
                     for (i=0;i<d.Rapportage.length;i++) {
                         if (d.Rapportage[i][$scope.metric]) {
-                            console.log(d.Rapportage[i][$scope.metric]);
+                            //console.log(d.Rapportage[i][$scope.metric]);
                             quantile_range.push(d.Rapportage[i][$scope.metric]);
                             //quantile_range[i] = !meta_scorevar[$scope.metric] ? d.Rapportage[i][$scope.metric] : d.Rapportage[i][meta_scorevar[$scope.metric]];
                             quantile_range.sort(function sortNumber(a,b) { return a - b; });
@@ -1495,6 +1509,16 @@ angular.module('dashboards')
 				}
 			}
 			
+            
+            
+            
+            //////////////////////////////
+			// HEADER FUNCTIONS //////////
+			//////////////////////////////
+            
+            $scope.open_status = function() {
+                $('#statusModal').modal('show')
+            }
             
             //////////////////////////////
 			// HEADER: EXPORT FUNCTIONS //

@@ -1178,7 +1178,7 @@ body {
     display: none;
   }
 }                                         
-.navbar-top-links li{
+.navbar-top-links,.navbar-top-links2 li{
   background: #ffffff;
   cursor: pointer;
 }
@@ -1186,7 +1186,16 @@ body {
   background-color: #4C8293;
   color: #ffffff;
   cursor: pointer;
-}                   
+}
+.navbar-top-links2 > li > a{
+  padding: 4px 8px;
+  border: 2px solid transparent;
+}    
+.navbar-top-links2 > li:hover > a{
+  border: 2px solid red;
+  color: #ffffff;
+  cursor: pointer;
+}                
 @media only screen and (max-width: 767px){
   .dropdown-menu > li > a{
     padding: 3px 7px;

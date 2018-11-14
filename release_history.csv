@@ -1,11 +1,14 @@
 date;release;section;change_category;change description
-apr-18;;Data;New country;Mozambique
-apr-18;;Data;New country;Kenya
-apr-18;;Data;New country;Uganda
-apr-18;;Data;New country;Ethiopia
-apr-18;;Data;New country;Vietnam
-apr-18;;Data;Country expansion;Ecuador
+Apr-18;;Data;New country;Mozambique
+Apr-18;;Data;New country;Kenya
+Apr-18;;Data;New country;Uganda
+Apr-18;;Data;New country;Ethiopia
+Apr-18;;Data;New country;Vietnam
+Apr-18;;Data;Country expansion;Ecuador
 mei-18;;Functionality;Mobile responsiveness;
 mei-18;;Functionality;Tabular View;
 mei-18;;Functionality;Copy URL for share-button;
 mei-18;;Data;New global variable;Conflict data (ACLED)
+Jul-18;;Functionality;Language functionality;Spanish versions Peru/Ecuador + language-switch
+Nov-18;;Functionality;Warning stickers;Warnings for basic/template versions and Low-DPI versions
+Nov-18;;Data;New country;Burundi

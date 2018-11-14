@@ -288,7 +288,7 @@
                         </div>
                     </div>
                     <div class="card"></div>
-                    <div class="card">
+                    <div class="card" id="dpi-card">
                         <div class="card-header last level1" role="tab" id="headingZero">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">
                                 <span class="panel-header-icon">
@@ -302,7 +302,6 @@
                                 </span>
                             </a>
                         </div>
-
                         <div id="collapseZero" class="collapse level1" role="tabpanel" aria-labelledby="headingZero">
                             <div class="card-block" id="dpi"></div>
                         </div>
@@ -418,6 +417,7 @@
                 </div>
                 <div class="modal-body" style="word-break:break-all">
 					<p>{{status_text}}</p>
+                    <button ng-click="open_DPI()">Inspect Data Preparedness Index</button>
                 </div>
             </div>
         </div>

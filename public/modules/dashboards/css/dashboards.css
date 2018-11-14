@@ -379,6 +379,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
  .card-header.last{
   background: #dddddd;
 }
+.dpi-card-highlight{
+  border: 2px solid red;
+}
 /*.indicators-panels .card-header:hover, .card-header.last:hover{
   background: #4C8293;
 } */

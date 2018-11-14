@@ -365,10 +365,19 @@ angular.module('dashboards')
                 $scope.status_title = 'Draft version';
                 $scope.status_text = 'This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.';
             } else if (country_status == 'all') {
-                document.getElementById('status').style.visibility = 'hidden';
-                $scope.status_title = '';
-                $scope.status_text = '';
+                var dpi = d.dpi[0].dpi_score;
+                if (dpi > 0.1) {
+                    document.getElementById('status').style.visibility = 'hidden';
+                    $scope.status_title = '';
+                    $scope.status_text = '';
+                } else {
+                    document.getElementById('status').style.visibility = 'visible';
+                    $scope.status_title = 'Needs data';
+                    $scope.status_text = 'The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. ' 
+                        +'It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.';
+                }
             }
+            
             
 			$scope.country_selection = country_name[$scope.country_code];
 			var zoom_min = Number(country_zoom_min[$scope.country_code]); 
@@ -1517,7 +1526,26 @@ angular.module('dashboards')
 			//////////////////////////////
             
             $scope.open_status = function() {
-                $('#statusModal').modal('show')
+                $('#statusModal').modal('show');
+            }
+            
+            function wait(ms){
+                var start = new Date().getTime();
+                var end = start;
+                while(end < start + ms) {
+                    end = new Date().getTime();
+                }
+            }        
+            $scope.open_DPI = function() {
+                $('#statusModal').modal('hide');
+                $('.collapse.level1.in').removeClass('in');
+                $('#collapseZero').addClass('in');
+                setTimeout(function(){
+                    $('#dpi-card').addClass('dpi-card-highlight');
+                },100);
+                setTimeout(function(){
+                    $(' #dpi-card').removeClass('dpi-card-highlight');
+                },1000);
             }
             
             //////////////////////////////
@@ -1599,6 +1627,7 @@ angular.module('dashboards')
                 document.execCommand("copy");
                 $temp.remove();
             }
+            
             
             ///////////////////////////////
 			// HEADER: TUTORIAL FUNCTION //

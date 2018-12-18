@@ -584,6 +584,7 @@ angular.module('dashboards')
 			// Create customized reduce-functions to be able to calculated percentages over all or multiple districts (i.e. the % of male volunteers))
 			var reduceAddAvg = function(metricA,metricB) {
 				return function(p,v) {
+                    p.count = v[metricA] !== null ? p.count + 1 : p.count; 
 					p.sumOfSub += v[metricA]*v[metricB];
 					p.sumOfTotal += v[metricB];
 					p.finalVal = p.sumOfSub / p.sumOfTotal;
@@ -592,6 +593,7 @@ angular.module('dashboards')
 			};
 			var reduceRemoveAvg = function(metricA,metricB) {
 				return function(p,v) {
+                    p.count = v[metricA] !== null ? p.count - 1 : p.count; 
 					p.sumOfSub -= v[metricA]*v[metricB];
 					p.sumOfTotal -= v[metricB];
 					p.finalVal = p.sumOfSub / p.sumOfTotal;
@@ -599,7 +601,7 @@ angular.module('dashboards')
 				};
 			};
 			var reduceInitialAvg = function() {
-				return {sumOfSub:0, sumOfTotal:0, finalVal:0 };
+				return {count:0, sumOfSub:0, sumOfTotal:0, finalVal:0 };
 			}; 
 			
 		
@@ -723,7 +725,15 @@ angular.module('dashboards')
 					} else if ($scope.admlevel == zoom_max && $scope.filters.length == 0 && !isNaN(d_prev[ind_score])) {
 						var width = d_prev[ind_score];
 					} else {
-						var width = dimensions_scores[ind].top(1)[0].value.finalVal;
+                        console.log(ind);
+                        console.log(dimensions_scores[ind].top(1)[0].value.finalVal);
+                        console.log(dimensions_scores[ind].top(1)[0].value.count);
+                        if (dimensions_scores[ind].top(1)[0].value.count == 0) {
+                            var width = 'na';
+                        } else {
+                            var width = dimensions_scores[ind].top(1)[0].value.finalVal;
+                        }
+                        console.log(isNaN(width));
 					}
 					if (ind == 'dpi_score') {
 						//This reflects that DPI < 0.1 is considered too low
@@ -760,7 +770,7 @@ angular.module('dashboards')
 				var hazard_score = document.getElementById('hazard_score_main');
 				if (hazard_score) {
 					hazard_score.textContent = keyvalue.hazard_score;
-					hazard_score.setAttribute('class','component-score ' + high_med_low('hazard_score','hazard_score'));				
+					hazard_score.setAttribute('class','component-score ' + high_med_low('hazard_score','hazard_score'));			
 				}
 				var coping_score = document.getElementById('coping_capacity_score_main');
 				if (coping_score) {

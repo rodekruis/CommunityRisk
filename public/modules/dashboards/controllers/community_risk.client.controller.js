@@ -602,8 +602,7 @@ angular.module('dashboards')
 			};
 			var reduceInitialAvg = function() {
 				return {count:0, sumOfSub:0, sumOfTotal:0, finalVal:0 };
-			}; 
-			
+			}; 			
 		
 			//All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
 			var totaalDim = cf.dimension(function(i) { return 'Total'; });
@@ -725,15 +724,11 @@ angular.module('dashboards')
 					} else if ($scope.admlevel == zoom_max && $scope.filters.length == 0 && !isNaN(d_prev[ind_score])) {
 						var width = d_prev[ind_score];
 					} else {
-                        console.log(ind);
-                        console.log(dimensions_scores[ind].top(1)[0].value.finalVal);
-                        console.log(dimensions_scores[ind].top(1)[0].value.count);
                         if (dimensions_scores[ind].top(1)[0].value.count == 0) {
                             var width = 'na';
                         } else {
                             var width = dimensions_scores[ind].top(1)[0].value.finalVal;
                         }
-                        console.log(isNaN(width));
 					}
 					if (ind == 'dpi_score') {
 						//This reflects that DPI < 0.1 is considered too low

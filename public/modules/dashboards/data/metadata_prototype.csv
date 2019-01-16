@@ -289,3 +289,7 @@ order;view_code;disaster_type;country_code;variable;label;label_espanol;unit;for
 ;CRA;;ZMB;perc_maize;% area maize;;;percentage;;other;weighted_avg;population;;;;;;;;To add;;;;0;3;;
 ;CRA;;ZMB;perc_rice;% area rice;;;percentage;;other;weighted_avg;population;;;;;;;;To add;;;;0;3;;
 ;CRA;;ZMB;perc_settled;% area settled;;;percentage;population.png;other;weighted_avg;population;;;;;;;;To add;;;;0;3;;
+;CRA;;PHL;population_u5;% population U5;;;percentage;infant.png;vulnerability;weighted_avg;population;population_u5_score;0;0;Children U5;2.2.3;2015;;Percentage of population with age 5 or lower. Source: Census 2015.;;;;0;4;;
+;CRA;;PHL;population_over65;% population 65+;;;percentage;;vulnerability;weighted_avg;population;population_over65_score;0;0;Other vulnerable groups;2.2.6;2015;;Percentage of population with age 65 or higher. Source: Census 2015.;;;;0;4;;
+;CRA;;MLI;health_density;# health facilities per 10,000 people;;;decimal2;;coping_capacity;weighted_avg;population;health_density_score;1;0;Access to health care;3.2.3;2014;https://data.humdata.org/dataset/mali-healthsites;The number of Health sites divided by the population.;;;;0;1;;
+;CRA;;MLI;education_density;# education facilities per 10,000 people;;;decimal2;;coping_capacity;weighted_avg;population;education_density_score;1;0;Communication;3.2.1;2014;https://data.humdata.org/dataset/statistiques-scolaires-de-l-enseignement-fondamental;The number of fundamental schools divided by population.;;;;0;1;;

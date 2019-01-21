@@ -114,10 +114,10 @@ var static_es = {
 
 angular.module('dashboards').config(function ($translateProvider) {
 	
-	//d3.dsv(';','text/plain; charset=ISO-8859-1')('modules/dashboards/data/metadata_prototype.csv', function(metadata) {
-    d3.json("https://dashboard.510.global/data/2,'PHL','%7B%7D','CRA','Typhoon','Haima'",function(data) { 
+	d3.dsv(';','text/plain; charset=ISO-8859-1')('modules/dashboards/data/metadata_prototype.csv', function(metadata) {
+    //d3.json("https://dashboard.510.global/data/2,'PHL','%7B%7D','CRA','Typhoon','Haima'",function(data) { 
         
-        var metadata = data.usp_data.meta_indicators;
+        //var metadata = data.usp_data.meta_indicators;
 	
 		var labels_en = {};
 		var descriptions_en = {};

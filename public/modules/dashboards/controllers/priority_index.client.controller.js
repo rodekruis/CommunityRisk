@@ -543,8 +543,12 @@ angular.module('dashboards')
                     var a = document.createElement('a');
                     a.setAttribute('ng-click','change_disaster(\''+record.name+'\')');
                     a.setAttribute('class','event-drop');
-                    var len = record.startdate.length;
-                    a.innerHTML = record.name + ' (' + record.startdate.substr(len - 4,len) + ')';
+                    if (record.startdate) {
+                        var len = record.startdate.length;
+                        a.innerHTML = record.name + ' (' + record.startdate.substr(len - 4,len) + ')';
+                    } else {
+                        a.innerHTML = record.name;
+                    }
                     li.appendChild(a);
                     $compile(a)($scope);
                 }

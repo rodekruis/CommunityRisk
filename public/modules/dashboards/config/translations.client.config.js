@@ -110,6 +110,55 @@ var static_es = {
     
 };
 
+var static_fr = {
+		  
+	//Static HTML
+	COMMUNITY_RISK: 'Communité Riské',
+	IMPACT_DATABASE: 'Impact database',
+	PRIORITY_INDEX: 'Priority Index',
+	HOW_IT_WORKS: 'How it works',
+	EXPORT: 'Export',
+    share_country_url: 'Share current country (URL)',
+	share_url: 'Share full current settings (URL)', 
+	export_csv: 'Export (CSV)',
+	export_geojson: 'Export (GEOJSON)',
+    about_CRA: 'About CRA',
+	COUNTRY: 'Country',
+	Map: 'Map',
+	Tab: 'Tab',
+	selected: ' selected',
+    hit: ' hit',
+	Select_all: 'Select all',
+	risk_score_tag: 'Overall composite risk score',
+	hazard_score_tag: 'Click for hazard components',
+	vulnerability_score_tag: 'Click for vulnerability components',
+	coping_score_tag: 'Click for coping capacity components',
+	other_variables: 'Other variables',
+	other_variables_tag: 'Not part of risk framework, but still relevant.',
+	sort_by: 'Sort by ...',
+	indicator_score: 'Indicator Score',
+	area_name: 'Area name',
+	scroll_top: 'Scroll to Top',
+	year_source: 'Year source',
+	link_source: 'Source link',
+	desc_source: 'Description',
+	share_url_title: 'Share current settings directly through URL',
+	share_url_copy: 'Copy URL',
+	warning: 'Warning',
+	ie_warning: 'This beta-version is currently best viewed in Google Chrome, and second-best in Firefox or Safari. Internet Explorer works, but has substantial interaction downsides.',
+	go_to_dashboard: 'Go to country dashboard',
+	cra_intro1: 'Community Risk Assessment - ',
+	cra_intro2: ' communities in ',
+	cra_intro3: ' countries included',
+	cra_description: 'Relieving the suffering of individuals affected by disasters is at the heart of humanitarian action. However, given limited funding, humanitarian actors cannot reach all people in need. They have to identify the geographic areas that are most affected by a humanitarian disaster or crisis and, within those areas, the individuals that are most in need. Currently, this prioritization process takes time and can be subjective. The Community Risk Assessment dashboard forms a data-driven alternative solution.',
+    language: 'Language',
+    about: 'About',
+    all_yes: 'All ',
+    all_no: '',
+    data_preparedness_index: 'Data Preparedness Index',
+    dpi_tag: 'Completeness, recency and quality of sources',
+};
+
 
 
 angular.module('dashboards').config(function ($translateProvider) {
@@ -123,6 +172,8 @@ angular.module('dashboards').config(function ($translateProvider) {
 		var descriptions_en = {};
 		var labels_es = {};
 		var descriptions_es = {};
+		var labels_fr = {};
+		var descriptions_fr = {};
 		for (var i=0;i<metadata.length;i++){
 			labels_en[metadata[i].variable] = metadata[i].label;
 			descriptions_en['desc_' + metadata[i].variable] = metadata[i].description;
@@ -130,10 +181,15 @@ angular.module('dashboards').config(function ($translateProvider) {
                 labels_es[metadata[i].variable] = metadata[i].label_espanol;
                 descriptions_es['desc_' + metadata[i].variable] = metadata[i].description_espanol;
             }
+            if (metadata[i].label_french) {
+                labels_fr[metadata[i].variable] = metadata[i].label_french;
+                descriptions_fr['desc_' + metadata[i].variable] = metadata[i].description_french;
+            }
 		}
 		
 		$translateProvider.translations('en', $.extend({},angular_vars,static_en,labels_en,descriptions_en));
 		$translateProvider.translations('es', $.extend({},angular_vars,static_es,labels_es,descriptions_es));
+		$translateProvider.translations('fr', $.extend({},angular_vars,static_fr,labels_fr,descriptions_fr));
         
 	});
 	

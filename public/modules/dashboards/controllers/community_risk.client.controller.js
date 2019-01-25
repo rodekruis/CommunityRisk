@@ -1977,12 +1977,24 @@ angular.module('dashboards')
                 for (var i=0;i<$('#menu-buttons.in').length;i++){ $('#menu-buttons.in')[i].classList.remove('in'); };
 			};
             
-            if ($scope.country_code == 'PER' || $scope.country_code == 'ECU') {
+            var languages_es = ['PER','ECU'];
+            var languages_fr = []; //['MLI'];
+            var languages_all = [].concat(languages_es,languages_fr);
+            
+            if (languages_all.indexOf($scope.country_code) > -1) {
                 document.getElementById('language-selector').style.display = 'block';
                 if ($scope.reload == 1 && $scope.language == 'en') {
                     $scope.changeLanguage('en');
                 } else {
-                    $scope.changeLanguage('es');
+                    if (languages_fr.indexOf($scope.country_code) > -1) {
+                        $scope.changeLanguage('fr');
+                        document.getElementById('language-selector-es').style.display = 'none';
+                        document.getElementById('language-selector-fr').style.display = 'block';
+                    } else if (languages_es.indexOf($scope.country_code) > -1) {
+                        $scope.changeLanguage('es');
+                        document.getElementById('language-selector-es').style.display = 'block';
+                        document.getElementById('language-selector-fr').style.display = 'none';
+                    }
                 }
             } else {
                 document.getElementById('language-selector').style.display = 'none';

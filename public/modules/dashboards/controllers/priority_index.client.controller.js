@@ -393,7 +393,7 @@ angular.module('dashboards')
 				if (record_temp.group !== 'admin') {
 					record.id = 'data-table' + [i+1];
 					record.name = record_temp.variable;
-					record.group = ['vulnerability','coping_capacity','general'].indexOf(record_temp.group) > -1 ? 'cra_features' : record_temp.group;
+					record.group = ['vulnerability','coping_capacity','general','other'].indexOf(record_temp.group) > -1 ? 'cra_features' : record_temp.group;
 					record.propertyPath = record_temp.agg_method === 'sum' ? 'value' : 'value.finalVal';
 					record.dimension = undefined;
 					record.weight_var = record_temp.weight_var;

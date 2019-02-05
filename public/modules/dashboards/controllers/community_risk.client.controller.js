@@ -497,8 +497,8 @@ angular.module('dashboards')
 			// SETUP INDICATORS //
 			//////////////////////
             
-            d.Metadata.sort(function (a, b) {  return a.index - b.index;  });
-			$scope.tables = [];
+            d.Metadata.sort(function (a, b) {  return a.order - b.order;  });
+            $scope.tables = [];
 			var j=0;
 			for (var i=0; i < d.Metadata.length; i++) {
 				var record = {};

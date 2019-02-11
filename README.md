@@ -34,9 +34,9 @@ The application uses `v6.14.3` of Node. More recent versions are not tested and 
 
 
 ### MongoDB & Robomongo
-* NOTE: MongoDB might not be needed any more: check first if everything works, without setting this up.
+* NOTE: MongoDB is currently not actively used anymore, but is still needed to avoid errors. It should be removed properly.
 * [Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
-* Make sure you get Mongo running as a service: https://docs.mongodb.com/tutorials/install-mongodb-on-windows/ >> Section 'Configure a Windows service for MongoDB Community Edition'
+* Make sure you get Mongo running as a service: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/ >> Section 'Configure a Windows service for MongoDB Community Edition'
 * if mongodb cannot run inside the virtualbox the problem might be related to disk space. Add smallfiles = true to /etc/mongodb.conf
 * Install [Robomongo](http://app.robomongo.org/download.html) on windows for a GUI to access the objects stored in mongodb.
 * Create a new connection with:
@@ -74,15 +74,15 @@ $ psql -h localhost -U cradatabase cradatabase
 You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
 
 ```
-$ sudo npm install -g bower
-$ sudo npm install -g bower-installer
+$ npm install -g bower
+$ npm install -g bower-installer
 ```
 
 ### Grunt
 You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process, in order to install it make sure you've installed Node.js and npm, then install grunt globally using npm:
 
 ```
-$ sudo npm install -g grunt-cli
+$ npm install -g grunt-cli
 ```
 
 ### Git
@@ -117,7 +117,10 @@ To run this application locally, you also need to get an exact copy of the Postg
 * SQL-backup file for entire database is available.
 * 510-users can find these in the Teams-folder '/CRA - Operational Data/7. Push to production-db/cradatabase.dump' of the '[RD] Community Risk Assessment' channel.
 * Other users can send an e-mail to support@510.global to request access.
-* Run the script 'restore_local_db.bat' (possibly adapt password and/or adapt to other OS than Windows)
+* Run the following code to restore the database (possibly adapt for other OS than Windows)
+```
+pg_restore -U cradatabase -d cradatabase -h localhost cradatabase.dump
+```
 * NOTE that you should have already created a postgres database 'cradatabase' with a user 'cradatabase' and the required password at this point (see Prerequisites > Postgres above)
 
 ## 1.3: Getting Started With the Dashboard

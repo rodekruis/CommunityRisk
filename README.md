@@ -32,6 +32,7 @@ Make sure you have installed all these prerequisites on your development machine
 Note that for this application v4.4.5 of Node was used. Current latest version v8.9.4 results in problems. In between versions may or may not be working.
 
 ### MongoDB & Robomongo
+* NOTE: MongoDB might not be needed any more: check first if everything works, without setting this up.
 * [Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
 * Make sure you get Mongo running as a service: https://docs.mongodb.com/tutorials/install-mongodb-on-windows/ >> Section 'Configure a Windows service for MongoDB Community Edition'
 * if mongodb cannot run inside the virtualbox the problem might be related to disk space. Add smallfiles = true to /etc/mongodb.conf
@@ -100,7 +101,7 @@ $ npm install
 * PS: Run command preferably from 'Git CMD'-terminal, as otherwise bower may run into a problem.
 
 ### 1.1C: Set password and certificates
-Open the file config/secrets.json.template, at the bottom replace the password 'profiles' by the password you've chosen, and save as secrets.json.
+* Open the file config/secrets.json.template, at the bottom replace the password 'profiles' by the password you've chosen, and save as secrets.json.
 
 You need the following files in the folder config/cert/ (ASK US)
 * localhost-cert.pem
@@ -110,28 +111,17 @@ You need the following files in the folder config/cert/ (ASK US)
 
 ## 1.2: Get the database 
 To run this application locally, you also need to get an exact copy of the PostgreSQL database.
-
-### 1.2A: Loading Source Data
-* SQL-backup files of all source-data-schema's are available.
-* 510-users can find these on the 510.global-server in /root/Profiles_db_backup/
+* SQL-backup file for entire database is available.
+* 510-users can find these in the Teams-folder '/CRA - Operational Data/7. Push to production-db/cradatabase.dump' of the '[RD] Community Risk Assessment' channel.
 * Other users can send an e-mail to support@510.global to request access.
-* Run all SQL-scripts from a terminal by:
-```
-$ psql -h localhost -d profiles -U profiles -f meta_copy_sourcedata.sql -v ON_ERROR_STOP=1
-```
-* NOTE that you should have already created a postgres database 'profiles' with a user 'profiles' and the required password at this point (see Prerequisites > Postgres above)
-
-### 1.2B: Create Datamodel from Source Data
-* Subsequently, the files (in this repository) in /postres_scripts/ need to be run.
-* At least those files starting with '0_', and the '1_'-files for the countries of interest.
-* Do so easiest, by opening them in pgAdmin III one at a time, and running the complete script (by pressing F5)
+* Run the script 'restore_local_db.bat' (possibly adapt password and/or adapt to other OS than Windows)
+* NOTE that you should have already created a postgres database 'cradatabase' with a user 'cradatabase' and the required password at this point (see Prerequisites > Postgres above)
 
 ## 1.3: Getting Started With the Dashboard
 
 Run in terminal from root folder:
 ```
 $ node server.js
-OR $grunt
 ```
 This will fire up the application on https://localhost:444
 
@@ -158,7 +148,8 @@ Access to the remote server where the live dashboard is hosted, is assumed
 - Do a Git Push to this github-repository
 - Access the remote server through Putty and go to right folder
 ```
-$ cd var/www/vhosts/510.global/profiles.510.global
+$ sudo -i
+$ cd var/www/vhosts/510.global/dashboard.510.global
 ```
 - Do a git pull
 

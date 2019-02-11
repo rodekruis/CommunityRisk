@@ -2,11 +2,10 @@
   "name": "PrivateDashboards",
   "description": "Dashboard",
   "version": "0.0.2",
-  "author": "Rode Kruis",
-  "engines": {
-    "node": "10.x.x",
-    "npm": "6.x.x"
-  },
+  "author": "510 - Rode Kruis <support@510.global> (https://www.510.global/)",
+  "license": "LGPL-3.0",
+  "repository": "github:rodekruis/CommunityRisk",
+  "homepage": "https://dashboard.510.global/",
   "scripts": {
     "start": "grunt",
     "test": "grunt test",

@@ -1,43 +1,29 @@
 <section class="row" data-ng-controller="AuthenticationController">
-	<h3 class="col-md-12 text-center">Toegang krijgen met je @rodekruis.nl account</h3>
-	<div class="col-md-12 text-center">
-		<a href="/auth/azure" class="undecorated-link">
-			<img src="/modules/users/img/buttons/rodekruis.png">
-		</a>
-	</div>
-	
-	<h3 class="col-md-12 text-center" translate>Create an account</h3>
-	<div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
-		<form data-ng-submit="signup()" class="signin form-horizontal" novalidate autocomplete="off">
-			<fieldset>
-				<div class="form-group">
-					<label for="firstName" translate>First Name</label>
-					<input type="text" required id="firstName" name="firstName" class="form-control" data-ng-model="credentials.firstName" placeholder="First Name">
-				</div>
-				<div class="form-group">
-					<label for="lastName" translate>Last Name</label>
-					<input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="credentials.lastName" placeholder="Last Name">
-				</div>
-				<div class="form-group">
-					<label for="email" translate>Email</label>
-					<input type="text" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email">
-				</div>
-				<div class="form-group">
-					<label for="username" translate>Username</label>
-					<input type="text" id="username" name="username" class="form-control" data-ng-model="credentials.username" placeholder="Username">
-				</div>
-				<div class="form-group">
-					<label for="password" translate>Password</label>
-					<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
-				</div>
-				<div class="text-center form-group">
-					<button type="submit" class="btn btn-large btn-primary" translate>Signup</button>&nbsp; or&nbsp;
-					<a href="/#!/signin" class="show-signup" translate>Signin</a>
-				</div>
-				<div data-ng-show="error" class="text-center text-danger">
-					<strong>{{error}}</strong>
-				</div>
-			</fieldset>
-		</form>
-	</div>
+
+    <h3 class="col-md-12 text-center" translate>Create an account</h3>
+    <div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
+        <form data-ng-submit="signup()" class="signin form-horizontal" novalidate autocomplete="off">
+            <fieldset>
+                <div class="form-group">
+                    <label for="username" translate>Username</label>
+                    <input type="text" id="username" name="username" class="form-control" data-ng-model="credentials.username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="password" translate>Password</label>
+                    <input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="password2" translate>Password again</label>
+                    <input type="password" id="password2" name="password2" class="form-control" data-ng-model="credentials.password2" placeholder="Password">
+                </div>
+                <div class="text-center form-group">
+                    <button type="submit" class="btn btn-large btn-primary" translate>Signup</button>&nbsp; or&nbsp;
+                    <a href="/#!/signin" class="show-signup" translate>Signin</a>
+                </div>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong>{{error}}</strong>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </section>

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "async": "1.5.x",
+    "bcrypt": "3.0.4",
     "body-parser": "1.15.x",
     "cartodb": "0.3.x",
     "compression": "^1.6.1",
@@ -42,12 +43,14 @@
     "passport-azure-oauth": "0.0.x",
     "passport-facebook": "2.1.x",
     "passport-google-oauth": "1.0.x",
+    "passport-jwt": "^4.0.0",
     "passport-linkedin": "1.0.x",
     "passport-local": "1.0.x",
     "passport-twitter": "1.0.x",
     "path": "0.12.x",
     "pg": "6.1.x",
     "request": "2.88.0",
+    "sequelize": "^4.42.0",
     "swig": "1.4.x",
     "url": "0.11.x"
   },

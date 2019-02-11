@@ -3,7 +3,6 @@
 var secrets = require('../secrets');
 
 module.exports = {
-	db: 'mongodb://localhost/dashboards_new', //im-dev',
 	postgres: {
 		db: 'cradatabase',
 		user: 'cradatabase',

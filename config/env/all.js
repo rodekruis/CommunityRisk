@@ -13,7 +13,6 @@ module.exports = {
 	cert_file: './config/cert/localhost-cert.pem',
 	templateEngine: 'swig',
 	sessionSecret: 'MEAN',
-	sessionCollection: 'sessions',
 	assets: {
 		lib: {
 			css: [

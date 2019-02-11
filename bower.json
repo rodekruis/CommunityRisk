@@ -41,7 +41,6 @@
 	"slick": "*",	
 	"topojson": "1.6.26",
 	"WOW": "*",
-	"jspdf": "*",
 	"dc-addons": "*"
   },
   "resolutions": {

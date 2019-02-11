@@ -29,7 +29,9 @@ Make sure you have installed all these prerequisites on your development machine
 
 ### Node.js
 [Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, if you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
-Note that for this application v4.4.5 of Node was used. Current latest version v8.9.4 results in problems. In between versions may or may not be working.
+It is recommended to use [nvm](https://github.com/creationix/nvm) to manage different versions of Node.js on your machine.
+The application uses `v6.14.3` of Node. More recent versions are not tested and may not be working.
+
 
 ### MongoDB & Robomongo
 * NOTE: MongoDB might not be needed any more: check first if everything works, without setting this up.
@@ -46,21 +48,22 @@ Port: 27017
 * Paste the content (from this repository) in /robomongo_input/dashboard_community_risk.json in this newly created document and save.
 * Do the same for any other json-files in /robomongo_input/
 
-### Postgres
+### PostgreSQL
 * Download and install the database software PostgresQL (v9.5 is used here) through https://www.postgresql.org/download/.
 * After installation make sure to install the PostGIS extension as well (through Stackbuilder > Spatial Extensions)
-* Add C:/Program Files/PostgreSQL/9.5/bin and C:/Program Files/PostgreSQL/9.5/lib to your environment PATH variable
+* On Windows:  
+  Add `C:/Program Files/PostgreSQL/9.5/bin` and `C:/Program Files/PostgreSQL/9.5/lib` to your environment PATH variable.
 * From a terminal create a new user and database
 ```
 $ createuser -U postgres -P cradatabase (>> It will ask you to create a password, remember this, as you will need it later in secrets.json!)
 $ createDB -U postgres cradatabase
 ```
-* Open pgAdmin III, navigate to the new cradatabase database, open an empty SQL editor and run:
-```
-$ GRANT ALL PRIVILEGES ON DATABASE cradatabase TO cradatabase;
-$ GRANT postgres TO cradatabase;
-$ CREATE EXTENSION postgis;
-$ ALTER ROLE cradatabase SUPERUSER CREATEDB;
+* Open pgAdmin III, navigate to the new `cradatabase` database, open an empty SQL editor and run:
+```sql
+GRANT ALL PRIVILEGES ON DATABASE cradatabase TO cradatabase;
+GRANT postgres TO cradatabase;
+CREATE EXTENSION postgis;
+ALTER ROLE cradatabase SUPERUSER CREATEDB;
 ```
 * Test connection (from terminal again) with:
 ```

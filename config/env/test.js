@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://localhost/im-test',
 	port: 3001,
 	app: {
 		title: 'IM - Test Environment'

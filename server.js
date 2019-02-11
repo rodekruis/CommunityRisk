@@ -4,7 +4,6 @@
  */
 var init = require('./config/init')(),
 	config = require('./config/config'),
-	mongoose = require('mongoose'),
 	https = require('https'),
         http  = require('http'),
 	fs = require('fs'),
@@ -13,18 +12,14 @@ var init = require('./config/init')(),
         constants = require('constants'),
         tls = require('tls'),
 		compression = require('compression');
-        
 
 /**
  * Main application entry file.
  * Please note that the order of loading is important.
  */
 
-// Bootstrap db connection
-var db = mongoose.connect(config.db);
-
 // Init the express application
-var app = require('./config/express')(db);
+var app = require('./config/express')();
 
 function shouldCompress(req, res) {
   if (req.headers['x-no-compression']) {

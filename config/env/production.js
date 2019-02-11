@@ -3,7 +3,6 @@
 var secrets = require('../secrets');
 
 module.exports = {
-	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/dashboards_new',
 	postgres: {
 		db: 'cradatabase',
 		user: 'cradatabase@510cradatabase',

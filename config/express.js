@@ -12,16 +12,13 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	passport = require('passport'),
-	MongoStore = require('connect-mongo')({
-		session: session
-	}),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path'),
 	cors = require('cors');
 	
-module.exports = function(db) {
+module.exports = function() {
 	// Initialize express app
 	var app = express();
 
@@ -89,13 +86,9 @@ module.exports = function(db) {
 	// CookieParser should be above session
 	app.use(cookieParser());
 
-	// Express MongoDB session storage
+	// Express session storage
 	app.use(session({
 		secret: config.sessionSecret,
-		// store: new MongoStore({
-			// db: db.connection.db,
-			// collection: config.sessionCollection
-		// }),
 		resave: true,
         saveUninitialized: true
 	}));

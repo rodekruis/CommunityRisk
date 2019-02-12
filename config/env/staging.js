@@ -24,7 +24,7 @@ module.exports = {
 	port: process.env.PORT || 3001,
 	sslport: process.env.SSLPORT || 445,
 	app: {
-		title: 'Rode Kruis Dashboards - development'
+		title: 'Rode Kruis Dashboards - staging'
 	},
 	assets: {
 		lib: {

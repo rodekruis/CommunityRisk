@@ -1878,9 +1878,9 @@ angular.module('dashboards')
 						}
 					).addTo(map2);
 					var url = 'modules/dashboards/data/ZMB_births_pp_v2_2015.tif';
-					fetch(url).then(r => r.arrayBuffer()).then(function(buffer) {
+					fetch(url).then(function(r) {return r.arrayBuffer();}).then(function(buffer) {
 						var s = L.ScalarField.fromGeoTIFF(buffer);
-						let layer = L.canvasLayer.scalarField(s, {
+						var layer = L.canvasLayer.scalarField(s, {
 							color: chroma.scale('RdPu').domain([s.range[0],s.range[1]/100]),
 							opacity: 0.65
 						}).addTo(map2);

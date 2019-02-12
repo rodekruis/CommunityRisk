@@ -13,7 +13,6 @@ module.exports = function(grunt) {
             },
             serverJS: {
                 files: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js'],
-                tasks: ['jshint'],
                 options: {
                     livereload: true,
                 }
@@ -26,33 +25,15 @@ module.exports = function(grunt) {
             },
             clientJS: {
                 files: ['public/js/**/*.js', 'public/modules/**/*.js'],
-                tasks: ['jshint'],
                 options: {
                     livereload: true,
                 }
             },
             clientCSS: {
                 files: ['public/**/css/*.css'],
-                tasks: ['csslint'],
                 options: {
                     livereload: true,
                 }
-            }
-        },
-        jshint: {
-            all: {
-                src: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js', 'public/js/**/*.js', 'public/modules/**/*.js'],
-                options: {
-                    jshintrc: true
-                }
-            }
-        },
-        csslint: {
-            options: {
-                csslintrc: '.csslintrc',
-            },
-            all: {
-                src: ['public/modules/**/css/*.css']
             }
         },
         uglify: {
@@ -134,7 +115,7 @@ module.exports = function(grunt) {
 	}
     });
 
-    // Load NPM tasks 
+    // Load NPM tasks
     require('load-grunt-tasks')(grunt);
 
     // Making grunt default to force in order not to break the project.
@@ -150,20 +131,21 @@ module.exports = function(grunt) {
     });
 
     // Default task(s).
-    grunt.registerTask('default', ['jshint', 'csslint', 'concurrent']);
-
-    // Lint task(s).
-    grunt.registerTask('lint', ['jshint', 'csslint']);
+    grunt.registerTask('default', ['concurrent']);
 
     // Build task(s).
-    grunt.registerTask('build', ['jshint', 'csslint', 'loadConfig' ,'uglify', 'cssmin']);
+    grunt.registerTask('build', [
+        'loadConfig',
+        'uglify',
+        'cssmin'
+    ]);
 
     // Test task.
     grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
-    
+
     // Load debugger
     grunt.loadNpmTasks('grunt-node-inspector');
-    
+
     // Load Gettext
     grunt.loadNpmTasks('grunt-angular-gettext');
 };

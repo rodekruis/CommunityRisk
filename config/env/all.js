@@ -26,15 +26,13 @@ module.exports = {
 				'public/build/bower/mdi/css/materialdesignicons.min.css', // in bower.json
 				'public/build/bower/dcjs/css/dc.css', // in bower.json
 				//'public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css', // NOT in bower.json
-				//'public/build/bower/materialize/css/materialize.css', // in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.css', // in bower.json
 				'public/build/custom/font-awesome/css/font-awesome.min.css', // NOT in bower.json
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css', // NOT in bower.json
 				'public/build/custom/leaflet-search/css/leaflet-search.src.css' // NOT in bower.json
-				
+
 			],
 			js: [
-
 				'public/build/bower/jquery/js/jquery.min.js', // in bower.json
 				'public/build/custom/slick/js/slick.min.js', 
 				'public/build/bower/crossfilter/js/crossfilter.min.js',
@@ -66,7 +64,6 @@ module.exports = {
 				'public/build/bower/dcjs/js/dc.js', //in bower.json
 				'public/build/custom/dc-leaflet/js/dc-leaflet-dev.js', // NOT in bower.json
 				//'public/build/custom/leaflet-map/js/dc-leaflet.js', // NOT in bower.json
-				//'public/build/bower/materialize/js/materialize.js',
 				'public/build/custom/leaflet-stamen/tile.stamen.js', // NOT in bower.json
 				'public/build/custom/angular-dc/js/angular-dc.js', //in bower.json
 				'public/build/custom/forms-angular/js/forms-angular.js', //in bower.json
@@ -86,14 +83,6 @@ module.exports = {
 				'public/lib/jquery-csv/src/jquery.csv.js', // in bower.json
 				'public/build/bower/wow/js/wow.js', // in bower.json
 				'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js',
-				'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js',
-				// 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js',
-				// 'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js',
-				// 'http://cdn.uriit.ru/jsPDF/libs/adler32cs.js/adler32cs.js',
-				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.addimage.js',
-				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.standard_fonts_metrics.js',
-				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.split_text_to_size.js',
-				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.from_html.js',
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js', // in bower.json
 				'public/build/bower/topojson/js/topojson.js' // in bower.json
 			]

@@ -128,11 +128,11 @@ module.exports = {
 		redirectURL: 'http://localhost:3000/auth/azure/callback',
 		redirectURLSSL: 'http://localhost:3000/auth/azure/callback'
 	},
-	onedrive : {
-		oneDriveBusinessBaseUrl : 'https://rodekruis-my.sharepoint.com/_api/v2.0'
+	onedrive: {
+		oneDriveBusinessBaseUrl: 'https://rodekruis-my.sharepoint.com/_api/v2.0'
 	},
-	sharepoint : {
-		sharePointSiteBaseUrl : 'https://rodekruis.sharepoint.com/clusterhulpverlening/hulpvoorvluchtelingen/_api/v2.0'
+	sharepoint: {
+		sharePointSiteBaseUrl: 'https://rodekruis.sharepoint.com/clusterhulpverlening/hulpvoorvluchtelingen/_api/v2.0'
 	},
 	mailer: {
 		from: process.env.MAILER_FROM || 'MAILER_FROM',

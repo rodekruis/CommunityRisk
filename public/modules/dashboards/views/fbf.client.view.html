@@ -7,9 +7,9 @@
                 <img src="modules/core/img/510logo-new.png" style="height:45px; float:left">
             </a>
             <ul id="status" class="nav navbar-top-links2 navbar-left" style="max-width:130px">
-                <li class="dropdown">
+                <!-- <li class="dropdown">
                     <a class="submenu-item caps" style="color:red" ng-click="open_status()">{{status_title}}</a>
-                </li>
+                </li> -->
             </ul>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -120,7 +120,7 @@
 				</li>
 			</ul>
 
-			<ul class="nav navbar-top-links navbar-right">
+			<!-- <ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
 							{{ 'COUNTRY' | translate }}
@@ -128,7 +128,7 @@
 					</a>
 					<ul class="dropdown-menu submenu-items" id="country-items"></ul>
 				</li>
-			</ul>           
+			</ul>            -->
             
             
         <!-- </nav> -->
@@ -303,15 +303,43 @@
                                     <img src="modules/dashboards/img/dpi.png">
                                 </span>
                                 <span class="panel-header-content">
-                                    <span class="panel-header-title">{{ 'data_preparedness_index' | translate }} - <span class="component-score" id="dpi_score_main"></span>
-                                        <span class="score-helptext"></span>
-                                    </span>
+                                    <span class="panel-header-title">{{ 'data_preparedness_index' | translate }}</span>
                                     <span class="panel-header-description">{{ 'dpi_tag' | translate }}</span>
                                 </span>
                             </a>
                         </div>
                         <div id="collapseZero" class="collapse level1" role="tabpanel" aria-labelledby="headingZero">
                             <div class="card-block" id="dpi"></div>
+                        </div>
+                    </div>
+                    <div class="card" id="raster-card">
+                        <div class="card-header last level1" role="tab" id="headingSix">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+                                <span class="panel-header-icon">
+                                    <img src="modules/dashboards/img/dpi.png">
+                                </span>
+                                <span class="panel-header-content">
+                                    <span class="panel-header-title">Raster layers</span>
+                                    <span class="panel-header-description">{{ 'dpi_tag' | translate }}</span>
+                                </span>
+                            </a>
+                        </div>
+                        <div id="collapseSix" class="collapse level1" role="tabpanel" aria-labelledby="headingSix">
+                            <div class="card-block" id="raster">
+                                <div class="component-section" id="section-raster">
+                                    <div class="col-md-2 col-sm-2 col-xs-2">
+                                        <img style="height:20px" src="modules/dashboards/img/density.png">
+                                    </div>
+                                    <div class="col-md-9 col-sm-9 col-xs-9 component-label ng-binding ng-scope" ng-click="change_raster('pop_density')">
+                                        Population density raster
+                                    </div>
+                                    <div class="col-md-1 col-sm-1 col-xs-1 no-padding">
+                                        <button type="button" class="btn-modal ng-scope" data-toggle="modal" ng-click="info('pop_density')">
+                                            <img src="modules/dashboards/img/icon-popup.svg" style="height:17px">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -324,6 +352,7 @@
 		<!-- start: map -->
 		<div class="map-wrapper">
             <div id="map-chart" style="position:absolute; width:100%; height:100%;z-index:0"></div>
+            <div id="map-chart2" style="position:absolute; width:100%; height:100%;z-index:0"></div>
             <div id="row-chart-container">
                 <div class="zoom-level-nav sort-nav"> 
                     <div class="btn-group zoom-level" role="group">

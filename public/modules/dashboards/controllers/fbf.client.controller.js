@@ -4,8 +4,6 @@ angular.module('dashboards')
 	.controller('FbfController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
 	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
 		
-		
-		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
 		$css.remove(['modules/dashboards/css/core.css']);
@@ -34,7 +32,7 @@ angular.module('dashboards')
         $scope.reload = 0;
 		$scope.authentication = Authentication;
 		$scope.geom = null;
-		$scope.country_code = 'PHL';
+		$scope.country_code = 'ZMB';
 		$scope.view_code = 'CRA';
 		$scope.metric = '';
 		if ($rootScope.country_code) { $scope.country_code = $rootScope.country_code;}
@@ -63,7 +61,7 @@ angular.module('dashboards')
 		$scope.quantileColorDomain_CRA_scores = ['#1a9641','#a6d96a','#f1d121','#fd6161','#d7191c'];
 		var mapfilters_length = 0;
 		var d_prev = '';
-		var map;
+		var map, map2;
 		$scope.config =  {
             whereFieldName:'pcode',
             joinAttribute:'pcode',
@@ -340,6 +338,7 @@ angular.module('dashboards')
 			// Clear the charts
 			dc.chartRegistry.clear();
 			if (map !== undefined) { map.remove(); }
+			if (map2 !== undefined) { map2.remove(); }
 			
 			//define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
 			var mapChart = dc.leafletChoroplethChart('#map-chart');
@@ -1172,7 +1171,11 @@ angular.module('dashboards')
                 }
             }
             var mapElem = document.getElementById('map-chart');
-            mapElem.addEventListener("click", $scope.FF_mouse_coordinates, false);
+			mapElem.addEventListener("click", $scope.FF_mouse_coordinates, false);
+			
+
+
+
             
             
             /////////////////////
@@ -1471,11 +1474,15 @@ angular.module('dashboards')
                     .x(d3.scale.linear().range([0,(rowChart.width())]).domain([0, xAxis]))
 					;
 				//dc.filterAll();
+				$('#map-chart2').hide();
+				$('#map-chart').show();
 				dc.redrawAll();
                 
 				document.getElementById('mapPopup').style.visibility = 'hidden';
 				document.getElementById('zoomin_icon').style.visibility = 'hidden';
 				document.getElementById('section-'+id).classList.add('section-active');
+
+				
 			};
 			
 			
@@ -1843,13 +1850,60 @@ angular.module('dashboards')
 			
 			//Render all dc-charts and -tables
 			dc.renderAll(); 
-			
+			$('#dpi-card').hide();
+
 			map = mapChart.map();
 			function zoomToGeom(geom){
 				var bounds = d3.geo.bounds(geom);
 				map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
 			}
 			zoomToGeom($scope.geom);
+
+			var prev_indicator = '';
+			$scope.change_raster = function(indicator){
+
+				if (indicator == prev_indicator) {
+					$('#map-chart').hide();
+					$('#map-chart2').show();
+				} else {
+					
+					$scope.start();
+					if (map2 !== undefined) { map2.remove(); }
+					
+					map2 = L.map("map-chart2");
+					L.tileLayer(
+						'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+						{
+							attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+						}
+					).addTo(map2);
+					var url = 'modules/dashboards/data/ZMB_births_pp_v2_2015.tif';
+					fetch(url).then(r => r.arrayBuffer()).then(function(buffer) {
+						var s = L.ScalarField.fromGeoTIFF(buffer);
+						let layer = L.canvasLayer.scalarField(s, {
+							color: chroma.scale('RdPu').domain([s.range[0],s.range[1]/100]),
+							opacity: 0.65
+						}).addTo(map2);
+						map2.fitBounds(layer.getBounds());
+					});
+
+					$scope.complete();
+					$('#map-chart').hide();
+
+					prev_indicator = indicator;
+
+				}; 
+
+				
+			};
+			
+			
+            
+
+
+
+
+
             
 			// if ($scope.directURLload) {
 				// if ($scope.filters_url.length > 0) {
@@ -1876,95 +1930,95 @@ angular.module('dashboards')
 			
 			//Automatically fill country-dropdown menu
             //First sort country-items in right order
-            var sort_by;
-            (function() {
-                // utility functions
-                var default_cmp = function(a, b) {
-                        if (a == b) return 0;
-                        return a < b ? -1 : 1;
-                    },
-                    getCmpFunc = function(primer, reverse) {
-                        var dfc = default_cmp, // closer in scope
-                            cmp = default_cmp;
-                        if (primer) {
-                            cmp = function(a, b) {
-                                return dfc(primer(a), primer(b));
-                            };
-                        }
-                        if (reverse) {
-                            return function(a, b) {
-                                return -1 * cmp(a, b);
-                            };
-                        }
-                        return cmp;
-                    };
-                // actual implementation
-                sort_by = function() {
-                    var fields = [],
-                        n_fields = arguments.length,
-                        field, name, reverse, cmp;
+            // var sort_by;
+            // (function() {
+            //     // utility functions
+            //     var default_cmp = function(a, b) {
+            //             if (a == b) return 0;
+            //             return a < b ? -1 : 1;
+            //         },
+            //         getCmpFunc = function(primer, reverse) {
+            //             var dfc = default_cmp, // closer in scope
+            //                 cmp = default_cmp;
+            //             if (primer) {
+            //                 cmp = function(a, b) {
+            //                     return dfc(primer(a), primer(b));
+            //                 };
+            //             }
+            //             if (reverse) {
+            //                 return function(a, b) {
+            //                     return -1 * cmp(a, b);
+            //                 };
+            //             }
+            //             return cmp;
+            //         };
+            //     // actual implementation
+            //     sort_by = function() {
+            //         var fields = [],
+            //             n_fields = arguments.length,
+            //             field, name, reverse, cmp;
 
-                    // preprocess sorting options
-                    for (var i = 0; i < n_fields; i++) {
-                        field = arguments[i];
-                        if (typeof field === 'string') {
-                            name = field;
-                            cmp = default_cmp;
-                        }
-                        else {
-                            name = field.name;
-                            cmp = getCmpFunc(field.primer, field.reverse);
-                        }
-                        fields.push({
-                            name: name,
-                            cmp: cmp
-                        });
-                    }
-                    // final comparison function
-                    return function(A, B) {
-                        var a, b, name, result;
-                        for (var i = 0; i < n_fields; i++) {
-                            result = 0;
-                            field = fields[i];
-                            name = field.name;
+            //         // preprocess sorting options
+            //         for (var i = 0; i < n_fields; i++) {
+            //             field = arguments[i];
+            //             if (typeof field === 'string') {
+            //                 name = field;
+            //                 cmp = default_cmp;
+            //             }
+            //             else {
+            //                 name = field.name;
+            //                 cmp = getCmpFunc(field.primer, field.reverse);
+            //             }
+            //             fields.push({
+            //                 name: name,
+            //                 cmp: cmp
+            //             });
+            //         }
+            //         // final comparison function
+            //         return function(A, B) {
+            //             var a, b, name, result;
+            //             for (var i = 0; i < n_fields; i++) {
+            //                 result = 0;
+            //                 field = fields[i];
+            //                 name = field.name;
 
-                            result = field.cmp(A[name], B[name]);
-                            if (result !== 0) break;
-                        }
-                        return result;
-                    }
-                }
-            }());
-            d.Country_meta_full.sort(sort_by('format', {name:'country_code', reverse: false}));
+            //                 result = field.cmp(A[name], B[name]);
+            //                 if (result !== 0) break;
+            //             }
+            //             return result;
+            //         }
+            //     }
+            // }());
+            // d.Country_meta_full.sort(sort_by('format', {name:'country_code', reverse: false}));
                 
-            //Create HTML
-            if ($scope.view_code == 'CRA') {
-                var ul = document.getElementById('country-items');
-                while (ul.childElementCount > 0) { ul.removeChild(ul.lastChild);};
-                var formats = [];
-                for (var i=0;i<d.Country_meta_full.length;i++) {
+            // //Create HTML
+            // if ($scope.view_code == 'CRA') {
+            //     var ul = document.getElementById('country-items');
+            //     while (ul.childElementCount > 0) { ul.removeChild(ul.lastChild);};
+            //     var formats = [];
+            //     for (var i=0;i<d.Country_meta_full.length;i++) {
                     
-                    var record = d.Country_meta_full[i];
+            //         var record = d.Country_meta_full[i];
                     
-                    if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
-                        var li2 = document.createElement('li');
-                        li2.setAttribute('class','divider');
-                        ul.appendChild(li2);
-                    }
-                    var li = document.createElement('li');
-                    ul.appendChild(li);
-                    var a = document.createElement('a');
-                    a.setAttribute('class','submenu-item');
-                    a.setAttribute('ng-click','change_country(\'' + record.country_code + '\')');
-                    a.setAttribute('role','button');
-                    a.innerHTML = record.format == 'all' ? record.country_name : record.country_name + ' (' + record.format + ')';
-                    $compile(a)($scope);
-                    li.appendChild(a);
+            //         if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
+            //             var li2 = document.createElement('li');
+            //             li2.setAttribute('class','divider');
+            //             ul.appendChild(li2);
+            //         }
+            //         var li = document.createElement('li');
+            //         ul.appendChild(li);
+            //         var a = document.createElement('a');
+            //         a.setAttribute('class','submenu-item');
+            //         a.setAttribute('ng-click','change_country(\'' + record.country_code + '\')');
+            //         a.setAttribute('role','button');
+            //         a.innerHTML = record.format == 'all' ? record.country_name : record.country_name + ' (' + record.format + ')';
+            //         $compile(a)($scope);
+            //         li.appendChild(a);
                     
-                    formats.push(record.format);
+            //         formats.push(record.format);
                 
-                };
-            }
+            //     };
+            // }
             
 			//////////////////////////////////////
 			/// TRANSLATION TO OTHER LANGUAGES ///

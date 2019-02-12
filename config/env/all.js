@@ -95,7 +95,10 @@ module.exports = {
 				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.split_text_to_size.js',
 				// 'http://cdn.immex1.com/js/jspdf/plugins/jspdf.plugin.from_html.js',
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js', // in bower.json
-				'public/build/bower/topojson/js/topojson.js' // in bower.json
+				'public/build/bower/topojson/js/topojson.js', // in bower.json
+				'public/build/custom/leaflet-geotiff-custom/geotiff.js',
+				'public/build/custom/leaflet-geotiff-custom/leaflet.canvaslayer.field.js',
+				'//cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js',
 			]
 		},
 		css: [

@@ -26,15 +26,13 @@ module.exports = {
 				'public/build/bower/mdi/css/materialdesignicons.min.css', // in bower.json
 				'public/build/bower/dcjs/css/dc.css', // in bower.json
 				//'public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css', // NOT in bower.json
-				//'public/build/bower/materialize/css/materialize.css', // in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.css', // in bower.json
 				'public/build/custom/font-awesome/css/font-awesome.min.css', // NOT in bower.json
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css', // NOT in bower.json
 				'public/build/custom/leaflet-search/css/leaflet-search.src.css' // NOT in bower.json
-				
+
 			],
 			js: [
-
 				'public/build/bower/jquery/js/jquery.min.js', // in bower.json
 				'public/build/custom/slick/js/slick.min.js', 
 				'public/build/bower/crossfilter/js/crossfilter.min.js',
@@ -66,7 +64,6 @@ module.exports = {
 				'public/build/bower/dcjs/js/dc.js', //in bower.json
 				'public/build/custom/dc-leaflet/js/dc-leaflet-dev.js', // NOT in bower.json
 				//'public/build/custom/leaflet-map/js/dc-leaflet.js', // NOT in bower.json
-				//'public/build/bower/materialize/js/materialize.js',
 				'public/build/custom/leaflet-stamen/tile.stamen.js', // NOT in bower.json
 				'public/build/custom/angular-dc/js/angular-dc.js', //in bower.json
 				'public/build/custom/forms-angular/js/forms-angular.js', //in bower.json

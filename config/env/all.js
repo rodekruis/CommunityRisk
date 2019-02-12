@@ -84,7 +84,10 @@ module.exports = {
 				'public/build/bower/wow/js/wow.js', // in bower.json
 				'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js',
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js', // in bower.json
-				'public/build/bower/topojson/js/topojson.js' // in bower.json
+				'public/build/bower/topojson/js/topojson.js', // in bower.json
+				'public/build/custom/leaflet-geotiff-custom/geotiff.js',
+				'public/build/custom/leaflet-geotiff-custom/leaflet.canvaslayer.field.js',
+				'//cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js',
 			]
 		},
 		css: [

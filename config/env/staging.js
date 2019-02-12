@@ -21,6 +21,8 @@ module.exports = {
 	},
 	usehttp: true, // should a non encrypted server be launced?
 	usessl: true, // should an encrypted server be launced?
+	port: process.env.PORT || 3001,
+	sslport: process.env.SSLPORT || 445,
 	app: {
 		title: 'Rode Kruis Dashboards - development'
 	},

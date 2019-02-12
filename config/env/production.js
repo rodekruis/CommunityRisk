@@ -93,7 +93,10 @@ module.exports = {
 				'public/lib/jquery-csv/src/jquery.csv.min.js', // in bower.json
 				'public/build/bower/wow/js/wow.js', // in bower.json
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js', // in bower.json
-				'public/build/bower/topojson/js/topojson.js' // in bower.json
+				'public/build/bower/topojson/js/topojson.js', // in bower.json
+				'public/build/custom/leaflet-geotiff-custom/geotiff.js',
+				'public/build/custom/leaflet-geotiff-custom/leaflet.canvaslayer.field.js',
+				'//cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js',
 				
 			]
 		},

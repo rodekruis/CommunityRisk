@@ -2,7 +2,9 @@
 
 module.exports = {
 	app: {
-		title: 'Community Profiles Dashboard'
+		title: 'Community Profiles Dashboard',
+		socialImage: '/modules/core/img/510-logo_512x512.png',
+		favicon: '/modules/core/img/510-logo_32x32.png'
 	},
 	port: process.env.PORT || 3000,
 	sslport: process.env.SSLPORT || 444,

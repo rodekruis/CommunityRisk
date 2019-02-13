@@ -22,7 +22,8 @@ module.exports = {
 	usehttp: true, // should a non encrypted server be launced?
 	usessl: true, // should an encrypted server be launced?
 	app: {
-		title: 'Rode Kruis Dashboards - development'
+		title: 'Rode Kruis Dashboards - development',
+		favicon: '/modules/core/img/510-logo_inverted_32x32.png'
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',

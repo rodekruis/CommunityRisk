@@ -24,7 +24,8 @@ module.exports = {
 	port: process.env.PORT || 3001,
 	sslport: process.env.SSLPORT || 445,
 	app: {
-		title: 'Rode Kruis Dashboards - staging'
+        title: 'Rode Kruis Dashboards - staging',
+        favicon: '/modules/core/img/510-logo_red_32x32.png'
 	},
 	assets: {
 		lib: {

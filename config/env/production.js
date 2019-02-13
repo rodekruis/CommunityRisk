@@ -82,7 +82,6 @@ module.exports = {
 				'public/build/bower/underscore/js/underscore.js', //in bower.json
 				'public/build/bower/angular-loading-bar/js/loading-bar.min.js',
 				'public/build/bower/leaflet-gps/js/leaflet-gps.min.js', // in bower.json
-				'https://maps.googleapis.com/maps/api/js?v=3&sensor=true',
 				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js', // in bower,json
 				'public/build/bower/jquery-countTo/js/jquery.countTo.js', // in bower.json
 				'public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js', // in bower.json

@@ -22,7 +22,8 @@ module.exports = {
 	usehttp: true, // should a non encrypted server be launced?
 	usessl: true, // should an encrypted server be launced?
 	app: {
-		title: 'Rode Kruis Dashboards - development'
+		title: 'Rode Kruis Dashboards - development',
+		favicon: '/modules/core/img/510-logo_inverted_32x32.png'
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
@@ -52,11 +53,11 @@ module.exports = {
 		redirectURL: 'http://localhost:3000/auth/azure/callback',
 		redirectURLSSL: 'http://localhost:3000/auth/azure/callback'
 	},
-	onedrive : {
-		oneDriveBusinessBaseUrl : 'https://rodekruis-my.sharepoint.com/_api/v2.0'
+	onedrive: {
+		oneDriveBusinessBaseUrl: 'https://rodekruis-my.sharepoint.com/_api/v2.0'
 	},
-	sharepoint : {
-		sharePointSiteBaseUrl : 'https://rodekruis.sharepoint.com/clusterhulpverlening/hulpvoorvluchtelingen/_api/v2.0'
+	sharepoint: {
+		sharePointSiteBaseUrl: 'https://rodekruis.sharepoint.com/clusterhulpverlening/hulpvoorvluchtelingen/_api/v2.0'
 	},
 	mailer: {
 		from: process.env.MAILER_FROM || 'MAILER_FROM',

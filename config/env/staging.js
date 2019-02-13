@@ -24,7 +24,8 @@ module.exports = {
 	port: process.env.PORT || 3001,
 	sslport: process.env.SSLPORT || 445,
 	app: {
-		title: 'Rode Kruis Dashboards - development'
+        title: 'Rode Kruis Dashboards - staging',
+        favicon: '/modules/core/img/510-logo_red_32x32.png'
 	},
 	assets: {
 		lib: {
@@ -128,11 +129,11 @@ module.exports = {
 		redirectURL: 'http://localhost:3000/auth/azure/callback',
 		redirectURLSSL: 'http://localhost:3000/auth/azure/callback'
 	},
-	onedrive : {
-		oneDriveBusinessBaseUrl : 'https://rodekruis-my.sharepoint.com/_api/v2.0'
+	onedrive: {
+		oneDriveBusinessBaseUrl: 'https://rodekruis-my.sharepoint.com/_api/v2.0'
 	},
-	sharepoint : {
-		sharePointSiteBaseUrl : 'https://rodekruis.sharepoint.com/clusterhulpverlening/hulpvoorvluchtelingen/_api/v2.0'
+	sharepoint: {
+		sharePointSiteBaseUrl: 'https://rodekruis.sharepoint.com/clusterhulpverlening/hulpvoorvluchtelingen/_api/v2.0'
 	},
 	mailer: {
 		from: process.env.MAILER_FROM || 'MAILER_FROM',

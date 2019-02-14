@@ -1,7 +1,7 @@
 {
-  "name": "Private dashboards",
+  "name": "community-risk",
   "version": "0.0.1",
-  "description": "Dashboard ",
+  "description": "",
   "dependencies": {
     "bootstrap": "3.3.6",
     "jquery": "~2.2.3",

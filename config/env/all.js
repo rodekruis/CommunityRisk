@@ -72,7 +72,6 @@ module.exports = {
 				'public/build/bower/leaflet-gps/js/leaflet-gps.min.js', // in bower.json
 				'https://maps.googleapis.com/maps/api/js?v=3&sensor=true',
 				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js', // in bower.json
-				'public/build/custom/jquery-tabslideout/js/tabSlideOut.js', // NOT in bower.json
 				'public/build/bower/jquery-countTo/js/jquery.countTo.js', // in bower.json
 				'public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js', // in bower.json
 				'public/build/bower/jquery-easing/js/jquery.easing.min.js', // in bower.json

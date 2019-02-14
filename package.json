@@ -50,8 +50,6 @@
     "url": "0.11.x"
   },
   "devDependencies": {
-    "supertest": "*",
-    "should": "*",
     "grunt-env": "*",
     "grunt-contrib-watch": "1.0.*",
     "grunt-contrib-uglify": "1.0.*",

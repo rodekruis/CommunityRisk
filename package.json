@@ -1,5 +1,5 @@
 {
-  "name": "PrivateDashboards",
+  "name": "community-risk",
   "description": "Dashboard",
   "version": "0.0.2",
   "author": "510 - Rode Kruis <support@510.global> (https://www.510.global/)",
@@ -12,21 +12,16 @@
     "postinstall": "bower-installer"
   },
   "dependencies": {
-    "apicache": "0.0.x",
     "async": "1.5.x",
     "body-parser": "1.15.x",
     "cartodb": "0.3.x",
     "compression": "^1.6.1",
     "connect-flash": "0.1.x",
-    "connect-mongo": "0.4.x",
     "consolidate": "0.14.x",
     "cookie-parser": "1.4.x",
     "cors": "2.7.x",
-    "csvtojson": "0.5.x",
-    "dropbox": "0.10.x",
     "express": "4.1.x",
     "express-session": "1.13.x",
-    "forms-angular": "^0.6.0",
     "geotiff": "^1.0.0-beta.6",
     "glob": "3.2.x",
     "google-spreadsheet": "2.0.x",
@@ -35,8 +30,6 @@
     "grunt-cli": "1.1.x",
     "helmet": "0.2.x",
     "jasmine-core": "2.4.x",
-    "jquery-count-to": "1.2.x",
-    "js-cookie": "^2.2.0",
     "lodash": "2.4.x",
     "method-override": "2.3.x",
     "mocha": "2.4.x",
@@ -54,12 +47,9 @@
     "pg": "6.1.x",
     "request": "2.38.x",
     "swig": "1.4.x",
-    "url": "0.11.x",
-    "x-frame-options": "*"
+    "url": "0.11.x"
   },
   "devDependencies": {
-    "supertest": "*",
-    "should": "*",
     "grunt-env": "*",
     "grunt-contrib-watch": "1.0.*",
     "grunt-contrib-uglify": "1.0.*",

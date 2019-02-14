@@ -24,17 +24,16 @@ module.exports = {
 	port: process.env.PORT || 3001,
 	sslport: process.env.SSLPORT || 445,
 	app: {
-        title: 'Rode Kruis Dashboards - staging',
-        favicon: '/modules/core/img/510-logo_red_32x32.png'
+		title: 'Rode Kruis Dashboards - staging',
+		favicon: '/modules/core/img/510-logo_red_32x32.png'
 	},
 	assets: {
 		lib: {
 			css: [
-				'public/build/bower/forms-angular/css/forms-angular-with-bs3.css', // in bower.json
 				'public/build/bower/bootstrap/css/bootstrap.min.css', // in bower.json
 				'public/build/custom/bootstrap/css/bootstrap-theme.min.css', // in bower.json
 				//'public/build/custom/leaflet/css/leaflet.css', // in bower.json
-                'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css', 
+				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css',
 				'public/build/bower/cartodb.js/css/cartodb.css', // in bower.json
 				'public/build/bower/angular/css/angular-csp.css', // in bower.json
 				'public/build/bower/mdi/css/materialdesignicons.min.css', // in bower.json
@@ -43,27 +42,27 @@ module.exports = {
 				'public/build/bower/angular-loading-bar/css/loading-bar.min.css', // in bower.json
 				'public/build/custom/font-awesome/css/font-awesome.min.css', // NOT in bower.json
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css', // NOT in bower.json
-				'public/build/custom/leaflet-search/css/leaflet-search.min.css' // in bower.json				
+				'public/build/custom/leaflet-search/css/leaflet-search.min.css' // in bower.json
 			],
 			js: [
 				'public/build/bower/jquery/js/jquery.min.js', // in bower.json
-				'public/build/custom/slick/js/slick.min.js', 
+				'public/build/custom/slick/js/slick.min.js',
 				'public/build/bower/crossfilter/js/crossfilter.min.js',
 				'public/build/bower/lodash/js/lodash.underscore.min.js', //in bower.json
 				'public/build/bower/angular/js/angular.min.js', //in bower.json
 				'public/build/bower/angular-lodash/js/angular-lodash.js', //in bower.json
 				'public/build/bower/angular-route/js/angular-route.min.js', //in bower.json
 				'public/build/bower/angular-resource/js/angular-resource.min.js', //in bower.json
-				'public/build/bower/angular-cookies/js/angular-cookies.min.js', //in bower.json 
-				'public/build/bower/angular-touch/js/angular-touch.min.js', 
-				'public/build/bower/angular-sanitize/js/angular-sanitize.min.js', 
+				'public/build/bower/angular-cookies/js/angular-cookies.min.js', //in bower.json
+				'public/build/bower/angular-touch/js/angular-touch.min.js',
+				'public/build/bower/angular-sanitize/js/angular-sanitize.min.js',
 				'public/build/bower/angular-ui-router/js/angular-ui-router.min.js',
 				'public/build/bower/angular-css/js/angular-css.js',
-				'public/lib/angular-translate/angular-translate.min.js',	//in bower.json
+				'public/lib/angular-translate/angular-translate.min.js', //in bower.json
 				'public/build/bower/bootstrap/js/bootstrap.min.js',
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
 				//'public/build/bower/leaflet/js/leaflet.js',//in bower.json
-                'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js',
+				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js',
 				'public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.min.js', // in bower.json
 				'public/build/custom/leaflet-search/js/leaflet-search.min.js',
 				'public/build/bower/leaflet-ajax/js/leaflet.ajax.js',
@@ -75,16 +74,14 @@ module.exports = {
 				'public/build/custom/dc-leaflet/js/dc-leaflet-dev.js', // NOT in bower.json
 				'public/build/custom/leaflet-stamen/tile.stamen.js', // NOT in bower.json
 				'public/build/custom/angular-dc/js/angular-dc.js', //in bower.json
-				'public/build/custom/forms-angular/js/forms-angular.js', //in bower.json
 				'public/build/bower/angular-messages/js/angular-messages.min.js', //in bower.json
-				'public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.min.js',//in bower.json
+				'public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.min.js', //in bower.json
 				'public/build/bower/angular-elastic/js/elastic.js', //in bower.json
-				'public/build/bower/underscore/js/underscore.js',//in bower.json
+				'public/build/bower/underscore/js/underscore.js', //in bower.json
 				'public/build/bower/angular-loading-bar/js/loading-bar.min.js',
 				'public/build/bower/leaflet-gps/js/leaflet-gps.min.js', // in bower.json
 				'https://maps.googleapis.com/maps/api/js?v=3&sensor=true',
 				'public/build/bower/cartodb.js/js/cartodb_noleaflet.js', // in bower,json
-				'public/build/custom/jquery-tabslideout/js/tabSlideOut.js', // NOT in bower.json
 				'public/build/bower/jquery-countTo/js/jquery.countTo.js', // in bower.json
 				'public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js', // in bower.json
 				'public/build/bower/jquery-easing/js/jquery.easing.min.js', // in bower.json
@@ -94,8 +91,7 @@ module.exports = {
 				'public/build/bower/topojson/js/topojson.js', // in bower.json
 				'public/build/custom/leaflet-geotiff-custom/geotiff.js',
 				'public/build/custom/leaflet-geotiff-custom/leaflet.canvaslayer.field.js',
-				'//cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js',
-				
+				'//cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js'
 			]
 		},
 		css: 'public/dist/application.min.css',

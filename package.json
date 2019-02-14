@@ -7,9 +7,11 @@
   "repository": "github:rodekruis/CommunityRisk",
   "homepage": "https://dashboard.510.global/",
   "scripts": {
+    "postinstall": "bower-installer",
+    "predeploy": "npm install",
+    "deploy": "grunt build && echo 'Deployed!'",
     "start": "grunt",
-    "test": "grunt test",
-    "postinstall": "bower-installer"
+    "test": "grunt test"
   },
   "dependencies": {
     "async": "1.5.x",

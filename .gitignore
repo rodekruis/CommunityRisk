@@ -17,5 +17,6 @@ config/cert/*.ca
 node_modules
 public/lib/
 public/build/bower/
+public/dist/
 data/private/
 postgres_scripts/old/

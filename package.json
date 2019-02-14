@@ -12,7 +12,6 @@
     "postinstall": "bower-installer"
   },
   "dependencies": {
-    "apicache": "0.0.x",
     "async": "1.5.x",
     "body-parser": "1.15.x",
     "cartodb": "0.3.x",

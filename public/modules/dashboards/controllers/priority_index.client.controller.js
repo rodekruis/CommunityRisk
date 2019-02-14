@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('PriorityIndexController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('PriorityIndexController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Data', '$window', '$stateParams', 'cfpLoadingBar',
+	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Data, $window, $stateParams, cfpLoadingBar) {
 		
 		//This is the only working method I found to load page-specific CSS.
 		//DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..

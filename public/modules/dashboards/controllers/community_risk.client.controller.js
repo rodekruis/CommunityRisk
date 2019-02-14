@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('dashboards')
-	.controller('CommunityRiskController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Dashboards', 'Data', 'Sources', '$window', '$stateParams', 'cfpLoadingBar', '_',
-	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Dashboards, Data, Sources, $window, $stateParams, cfpLoadingBar, _) {
+	.controller('CommunityRiskController', ['$translate','$scope','$css','$rootScope','$compile', '$q', 'Authentication', 'Data', '$window', '$stateParams', 'cfpLoadingBar',
+	function($translate,$scope,$css,$rootScope, $compile, $q, Authentication, Data, $window, $stateParams, cfpLoadingBar){ 
 		
 		
 		

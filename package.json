@@ -20,7 +20,6 @@
     "consolidate": "0.14.x",
     "cookie-parser": "1.4.x",
     "cors": "2.7.x",
-    "dropbox": "0.10.x",
     "express": "4.1.x",
     "express-session": "1.13.x",
     "geotiff": "^1.0.0-beta.6",

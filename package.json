@@ -30,7 +30,6 @@
     "grunt-cli": "1.1.x",
     "helmet": "0.2.x",
     "jasmine-core": "2.4.x",
-    "js-cookie": "^2.2.0",
     "lodash": "2.4.x",
     "method-override": "2.3.x",
     "mocha": "2.4.x",

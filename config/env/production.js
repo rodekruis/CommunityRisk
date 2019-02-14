@@ -32,7 +32,6 @@ module.exports = {
 	assets: {
 		lib: {
 			css: [
-				'public/build/bower/forms-angular/css/forms-angular-with-bs3.css', // in bower.json
 				'public/build/bower/bootstrap/css/bootstrap.min.css', // in bower.json
 				'public/build/custom/bootstrap/css/bootstrap-theme.min.css', // in bower.json
 				//'public/build/custom/leaflet/css/leaflet.css', // in bower.json
@@ -77,7 +76,6 @@ module.exports = {
 				'public/build/custom/dc-leaflet/js/dc-leaflet-dev.js', // NOT in bower.json
 				'public/build/custom/leaflet-stamen/tile.stamen.js', // NOT in bower.json
 				'public/build/custom/angular-dc/js/angular-dc.js', //in bower.json
-				'public/build/custom/forms-angular/js/forms-angular.js', //in bower.json
 				'public/build/bower/angular-messages/js/angular-messages.min.js', //in bower.json
 				'public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.min.js',//in bower.json
 				'public/build/bower/angular-elastic/js/elastic.js', //in bower.json

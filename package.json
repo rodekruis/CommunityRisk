@@ -26,7 +26,6 @@
     "dropbox": "0.10.x",
     "express": "4.1.x",
     "express-session": "1.13.x",
-    "forms-angular": "^0.6.0",
     "geotiff": "^1.0.0-beta.6",
     "glob": "3.2.x",
     "google-spreadsheet": "2.0.x",

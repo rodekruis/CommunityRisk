@@ -34,7 +34,7 @@ module.exports = function() {
     })
 
     passport.deserializeUser(function(id, done) {
-        Model.User.findOne({
+        User.User.findOne({
             where: {
                 'id': id
             }

@@ -1,5 +1,5 @@
 'use strict';
-User = require('./models/user.server.model')
+var User = require('./models/user.server.model')
 
 module.exports = function(callback) {
     console.log("Attempting to create an initial user")

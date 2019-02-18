@@ -28,10 +28,15 @@ This application works amongst others with MongoDB, Express, Angular and Node. B
 Make sure you have installed all these prerequisites on your development machine.
 
 ### Node.js
-[Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, if you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
-It is recommended to use [nvm](https://github.com/creationix/nvm) to manage different versions of Node.js on your machine.
-The application uses `v6.14.3` of Node. More recent versions are not tested and may not be working.
-
+The application uses the most recent LTS version of Node.js **v10**.
+It is recommended to use [nvm](https://github.com/creationix/nvm) to manage different versions of Node.js on your machine. After installing `nvm` run:
+```
+$ nvm install
+```
+This installs the currently required version. When returning to this project after working with other versions of Node, use this command from the root of this project:
+```
+$ nvm use
+```
 
 ### MongoDB & Robomongo
 * NOTE: MongoDB is currently not actively used anymore, but is still needed to avoid errors. It should be removed properly.
@@ -127,7 +132,8 @@ pg_restore -U cradatabase -d cradatabase -h localhost cradatabase.dump
 
 Run in terminal from root folder:
 ```
-$ node server.js
+$ NODE_ENV=development grunt build
+$ NODE_ENV=development node server.js
 ```
 This will fire up the application on https://localhost:444
 
@@ -135,14 +141,8 @@ Note that the application is mainly developed and thus best tested in Google Chr
 
 To run in production environment, do:
 ```
-$ grunt build (to create minified code)
-$ set NODE_ENV=production
-$ node server.js
-```
-And to return to development environment
-```
-$ set NODE_ENV=
-$ node server.js
+$ NODE_ENV=production grunt build
+$ NODE_ENV=production node server.js
 ```
 
 ## 1.4 Copying to live dashboard

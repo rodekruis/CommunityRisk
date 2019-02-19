@@ -11,9 +11,9 @@
     "predeploy": "npm install",
     "deploy": "grunt build && echo 'Deployed!'",
     "start": "grunt",
-    "fix": "prettier --write '**/**.{json,yaml,yml,css,html}'",
+    "fix": "prettier --write '**/**.{json,yaml,yml,css,html,js}'",
     "build": "grunt build",
-    "test:syntax": "prettier --check --debug-check '**/**.{json,yaml,yml,css,html}'",
+    "test:syntax": "prettier --check --debug-check '**/**.{json,yaml,yml,css,html,js}'",
     "test": "npm run test:syntax"
   },
   "dependencies": {

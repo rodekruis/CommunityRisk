@@ -58,6 +58,7 @@
     "grunt-contrib-uglify": "1.0.*",
     "grunt-contrib-watch": "1.0.*",
     "grunt-nodemon": "*",
-    "load-grunt-tasks": "3.5.*"
+    "load-grunt-tasks": "3.5.*",
+    "prettier": "1.16.4"
   }
 }

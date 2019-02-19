@@ -28,7 +28,6 @@
     "angular-translate": "*",
     "leaflet-ajax": "~2.0.0",
     "angular-gettext": "2.2.1",
-    "Snap.svg": "*",
     "d3": "4.13.0",
     "crossfilter": "*",
     "angular-messages": "1.5.*",

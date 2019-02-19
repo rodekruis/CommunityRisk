@@ -62,13 +62,7 @@
     "sources": {
       "bootstrap": [
         "public/lib/bootstrap/dist/js/bootstrap.min.js",
-        "public/lib/bootstrap/dist/css/bootstrap.min.css",
-        "public/lib/bootstrap/dist/css/bootstrap.min.css.map",
-        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.eot",
-        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.svg",
-        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf",
-        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff",
-        "public/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2"
+        "public/lib/bootstrap/dist/css/bootstrap.min.css"
       ],
       "jquery": [
         "public/lib/jquery/dist/jquery.min.js"

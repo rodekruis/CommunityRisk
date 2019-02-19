@@ -12,7 +12,6 @@
     "leaflet": "1.3.1",
     "cartodb.js": "3.15.9",
     "angular": "1.5.5",
-    "mdi": "~1.5.54",
     "dcjs": "2.0.0-beta.3",
     "lodash": "2.4.2",
     "angular-lodash": "*",
@@ -142,15 +141,6 @@
       ],
       "leaflet.markercluster": [
         "public/lib/leaflet.markercluster/dist/leaflet.markercluster.js"
-      ],
-      "mdi": [
-        "public/lib/mdi/css/materialdesignicons.min.css",
-        "public/lib/mdi/css/materialdesignicons.min.css.map",
-        "public/lib/mdi/fonts/materialdesignicons-webfont.eot",
-        "public/lib/mdi/fonts/materialdesignicons-webfont.svg",
-        "public/lib/mdi/fonts/materialdesignicons-webfont.ttf",
-        "public/lib/mdi/fonts/materialdesignicons-webfont.woff",
-        "public/lib/mdi/fonts/materialdesignicons-webfont.woff2"
       ],
       "angular-messages": [
         "public/lib/angular-messages/angular-messages.js",

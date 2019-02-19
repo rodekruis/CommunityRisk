@@ -38,7 +38,6 @@ module.exports = {
 				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css',
 				'public/build/bower/cartodb.js/css/cartodb.css', // in bower.json
 				'public/build/bower/angular/css/angular-csp.css', // in bower.json
-				'public/build/bower/mdi/css/materialdesignicons.min.css', // in bower.json
 				'public/build/bower/dcjs/css/dc.css', // in bower.json
 				'public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css', // NOT in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.min.css', // in bower.json

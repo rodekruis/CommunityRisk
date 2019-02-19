@@ -1,17 +1,10 @@
 body {
-  background: #f3eee3; /*#B0DED3;#0f4882; */
+  background: #f3eee3;
   padding: 0px;
   margin: 0px;
   overflow-x: hidden;
 }
-/* .content {
-  margin-top: 50px;
-}
-@media (max-width: 979px) {
-  .content {
-    margin-top: 50px;
-  }
-} */
+
 .content {
   top: 0;
   left: 0;
@@ -55,15 +48,6 @@ body {
   z-index: 0;
 }
 
-/* .logo {
-    z-index: 100;    
-}
-
-.logo img {
-    padding: 50px;
-    position:relative;
-}
- */
 .angular-leaflet-map {
   position: absolute;
   width: 100%;
@@ -80,7 +64,7 @@ body {
 }
 #ribbon2 {
   bottom: 15px;
-  background: #4c8293; /*#3498db;*/
+  background: #4c8293;
   color: white;
   padding: 5px 5px 5px 5px;
   border-radius: 5px;
@@ -89,7 +73,7 @@ body {
 }
 #ribbon3 {
   bottom: 15px;
-  background: B0DED3; /*#ccc;*/
+  background: B0DED3;
   padding: 5px 5px 5px 5px;
   border-radius: 5px;
   width: 140px;
@@ -108,7 +92,6 @@ body {
 }
 
 /* Base candidates
-
 -------------------------------------------------- */
 
 a:focus {
@@ -201,7 +184,6 @@ label.inline {
 }
 
 /* Prevents animation on initial page load. See lib.app.js */
-
 body:not(.animate) .animate {
   -webkit-transition: none;
   -moz-transition: none;
@@ -213,20 +195,12 @@ body:not(.animate) .animate {
   color: #3bb2d0;
 }
 
-/* Deprecated, replaced with input.clean in base */
-
-input.minimal {
-  border: none;
-}
-
 input[type="text"].transparent,
 input[type="text"].transparent:active,
 input[type="text"].transparent:focus,
 input[type="text"].transparent:hover {
   background: transparent;
 }
-
-/* From home.css */
 
 .limiter {
   max-width: 1140px;
@@ -395,8 +369,8 @@ h2.fancy {
   -webkit-animation-name: bounceInDown;
   animation-name: bounceInDown;
 }
-/* About
 
+/* About
 -------------------------------------------------- */
 .about {
   font-family: "Raleway", sans-serif;
@@ -484,13 +458,11 @@ h2.fancy {
 .slick-prev {
   left: 2%;
   background: url(../img/prev.png) no-repeat;
-  /* background: url(../modules/core/img/prev.png) no-repeat; */
 }
 
 .slick-next {
   right: 2%;
   background: url(../img/next.png) no-repeat;
-  /* background: url(../modules/core/img/next.png) no-repeat; */
 }
 
 .slick-dots {
@@ -598,14 +570,6 @@ section.container {
   margin-bottom: 50px;
 }
 
-/*OVERIDE SOME JQUERY STYLE*/
-.ui-state-focus,
-.ui-state-hover {
-  background-color: #f44a52 !important;
-  border-color: #f44a52 !important;
-  color: #f44a52 !important;
-}
-
 /* Slider */
 .slick-slider {
   position: relative;
@@ -698,7 +662,7 @@ section.container {
 
 /*homepage styles*/
 .homepage {
-  background: #f3eee3; /*#B0DED3; #4C8293; #0f4882;*/
+  background: #f3eee3;
 }
 .home-bg {
   left: 0;
@@ -710,12 +674,12 @@ section.container {
   z-index: -1;
 }
 .home-content {
-  color: black; /*#ffffff;*/
+  color: black;
   padding-bottom: 50px;
   padding-top: 0px;
 }
 .home-content h2 {
-  color: #4c8293; /*#cfe7fb;*/
+  color: #4c8293;
   font-weight: bold;
   margin-top: 10px;
   text-align: center;
@@ -743,7 +707,7 @@ section.container {
 }
 .link-button,
 .link-button:visited {
-  background: #4c8293; /*#397ab2;*/
+  background: #4c8293;
   border-radius: 4px;
   color: #ffffff;
   display: block;
@@ -763,7 +727,6 @@ section.container {
 }
 
 .hdx-3w-info {
-  /* position: relative; */
   float: left;
   padding: 5px;
   background-color: white;

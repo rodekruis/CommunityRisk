@@ -1,10 +1,10 @@
 /* header styles*/
 .navbar-inverse {
-  background: white; /*#4C8293; /*white; */
-  border-color: white; /*#4C8293; /*white; */
+  background: white;
+  border-color: white;
 }
 .navbar-inverse .navbar-brand {
-  color: #4c8293; /*#ffffff; /*;*/
+  color: #4c8293;
   font-family: "Open Sans", sans-serif;
   font-size: 15px;
   font-weight: bold;
@@ -24,7 +24,6 @@
   background: white;
   margin-right: 10px;
   margin-top: 8px;
-  /* padding-top: 5px; */
 }
 .navbar-right > li > a {
   height: 41px;
@@ -51,9 +50,6 @@
     margin-right: 0;
   }
 }
-.dropdown-toggle {
-  /* color: #4d799d; */
-}
 .nav > li > a {
   padding: 6px 10px;
 }
@@ -65,7 +61,7 @@
 }
 .dropdown-submenu .dropdown-menu {
   top: 0;
-  left: auto; /*100%;*/
+  left: auto;
   margin-top: -1px;
   right: 100%;
 }
@@ -120,18 +116,17 @@
 .navbar-toggler {
   background-color: #ffffff;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PScwIDAgMzAgMzAnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHBhdGggc3Ryb2tlPSdyZ2JhKDAsIDAsIDAsIDAuNSknIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbWl0ZXJsaW1pdD0nMTAnIGQ9J000IDdoMjJNNCAxNWgyMk00IDIzaDIyJy8+PC9zdmc+");
-  /* background-size: 55% 55%; */
   background-size: 65% 65%;
   background-repeat: no-repeat;
   background-position: center center;
   border: 2px solid #eeeeee;
-  height: 38px; /*45px;*/
+  height: 38px;
   margin-bottom: 3px;
   outline: none;
   position: absolute;
-  top: 5px; /*3px;*/
-  right: 5px; /*3px;*/
-  width: 38px; /*45px;*/
+  top: 5px;
+  right: 5px;
+  width: 38px;
 }
 
 @media only screen and (min-width: 1100px) {
@@ -146,10 +141,6 @@
   }
 }
 @media only screen and (max-width: 1100px) {
-  .button-nav .collapse {
-    /* display:none; */
-  }
-
   .button-nav {
     display: none;
   }
@@ -194,7 +185,6 @@
   }
 }
 #header .navbar-top-links .dropdown-toggle:hover {
-  /*#header .navbar-top-links .dropdown-toggle:active{ */
   background: #4c8293;
   color: #ffffff;
 }
@@ -210,8 +200,6 @@
 }
 
 @media screen and (min-width: 1100px) and (max-width: 1300px) {
-  .navbar-inverse {
-  }
   .navbar-right {
     margin-right: 0;
     margin-top: 8px;

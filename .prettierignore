@@ -1,0 +1,10 @@
+# Out of scope: (for now)
+tools/
+app/
+
+
+# External/third-party/vendor code
+public/dist/
+public/lib/
+public/build/
+data/

@@ -12,7 +12,8 @@
     "deploy": "grunt build && echo 'Deployed!'",
     "start": "grunt",
     "build": "grunt build",
-    "test": "echo 'There is no test, only do or do not.' && exit 1"
+    "test:syntax": "prettier --check '**/**.{json,yaml,yml}'",
+    "test": "npm run test:syntax"
   },
   "dependencies": {
     "async": "1.5.x",

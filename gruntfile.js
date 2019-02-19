@@ -55,10 +55,7 @@ module.exports = function(grunt) {
         },
         nodemon: {
             dev: {
-                script: 'server.js',
-                options: {
-                    nodeArgs: ['--debug']
-                }
+                script: 'server.js'
             }
         },
         concurrent: {
@@ -67,21 +64,6 @@ module.exports = function(grunt) {
                 logConcurrentOutput: true
             }
         },
-	'node-inspector': {
-	    custom: {
-	      options: {
-		'web-port': 8080,
-		'web-host': '127.0.0.1',
-		'debug-port': 5858,
-		//'ssl-key': './config/cert/localhost-win.key',
-        //'ssl-cert': './config/cert/localhost-win.cert',
-		'save-live-edit': true,
-		'no-preload': true,
-		'stack-trace-limit': 4,
-		'hidden': ['node_modules']
-	      }
-	    }
-	},
 	nggettext_extract: {
 	    pot: {
 		files: {
@@ -122,9 +104,6 @@ module.exports = function(grunt) {
         'uglify',
         'cssmin'
     ]);
-
-    // Load debugger
-    grunt.loadNpmTasks('grunt-node-inspector');
 
     // Load Gettext
     grunt.loadNpmTasks('grunt-angular-gettext');

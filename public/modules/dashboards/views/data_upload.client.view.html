@@ -2,12 +2,6 @@
 	
 	<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 		
-        <!-- <button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
-			<span class="sr-only" translate>Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button> -->
 		
 		<div class="navbar-header">
             <a class="navbar-brand" style="padding-left:10px; padding-top:3px" href="/#!/">
@@ -19,7 +13,6 @@
 		</div> 
         <div id="menu-buttons" aria-expanded="false" class="button-nav">
 				
-		<!-- <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation"> -->
 			
             <ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown" style="background:#4C8293">
@@ -37,12 +30,6 @@
                 </li>
             </ul>
             
-			<!-- <ul class="nav navbar-top-links navbar-right">
-				<div>
-					<button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>
-					<button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>
-				</div>
-			</ul> -->
 			<ul class="nav navbar-top-links navbar-right">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
@@ -75,10 +62,6 @@
 							<a id="download" ng-click="export_csv()">{{ 'export_csv' | translate }}</a>
 						</li>
 						<li class="divider"></li>
-						<!-- <li>
-							<a ng-href ="./data/{{data_input}}"  target="_blank">Export (JSON)</a>
-						</li>
-						<li class="divider"></li> -->
 						<li>
 							<a ng-click="export_geojson()">{{ 'export_geojson' | translate }}</a>
 						</li>
@@ -95,7 +78,6 @@
 					<ul class="dropdown-menu submenu-items" id="country-items"></ul>
 				</li>
 			</ul>
-        <!-- </nav> -->
 		</div>
 	</nav>
 	
@@ -137,7 +119,6 @@
                 <!-- start: community profiles -->
                 <div class="community-profiles-wrapper">
                     <div id="count-info" class="general-info">
-                        <!-- <div><span class="community-title">{{name_selection}}</span></div> -->
                         <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}}{{ 'selected' | translate:translateData }}</span>
                         <a class="reset-button" ng-click="reset_function()">{{ 'Select_all' | translate }}</a>
                         <button type="button" class="btn-modal" data-toggle="modal" ng-click="info('admin')">

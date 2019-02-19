@@ -17,7 +17,6 @@
 		</div> 
         <div id="menu-buttons" aria-expanded="false" class="button-nav">
 				
-		<!-- <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation"> -->
 			
             <ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown" style="background:#4C8293">
@@ -40,23 +39,20 @@
             <ul class="nav navbar-top-links navbar-right" style="display:none" id="language-selector">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
-						<!-- {{ 'language' | translate }} -->
                         <img src="modules/core/img/LanguageIcon.svg" style="width:20px">
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu export-items">
 						<li>
                             <a class="dropdown-toggle export-button" ng-click="changeLanguage('en')" target="_blank">English</a>
-							<!-- <button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>English -->
 						</li>
 						<li class="divider"></li>
 						<li>
                             <a id="language-selector-es" class="dropdown-toggle export-button" ng-click="changeLanguage('es')" target="_blank">Español</a>
-							<!-- <button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>Español -->
 						</li>
-						<!-- <li>
+						<li hidden>
                             <a id="language-selector-fr" class="dropdown-toggle export-button" ng-click="changeLanguage('fr')" target="_blank">François</a>
-						</li> -->
+						</li>
 					</ul>
 				</li>
 			</ul>
@@ -78,10 +74,9 @@
 						<li>
 							<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/CommunityRisk" target="_blank">Github</a>
 						</li>
-						<!-- <li class="divider"></li>
-						<li>
+						<li hidden>
 							<a class="dropdown-toggle export-button" ng-click="data_upload()">Upload new data</a>
-						</li> -->
+						</li>
 					</ul>
 				</li>
 			</ul>
@@ -104,10 +99,6 @@
 							<a id="download" ng-click="export_csv()">{{ 'export_csv' | translate }}</a>
 						</li>
 						<li class="divider"></li>
-						<!-- <li>
-							<a ng-href ="./data/{{data_input}}"  target="_blank">Export (JSON)</a>
-						</li>
-						<li class="divider"></li> -->
 						<li>
 							<a ng-click="export_geojson()">{{ 'export_geojson' | translate }}</a>
 						</li>
@@ -126,7 +117,6 @@
 			</ul>           
             
             
-        <!-- </nav> -->
 		</div>
 	</nav>
 	
@@ -168,7 +158,6 @@
                 <!-- start: community profiles -->
                 <div class="community-profiles-wrapper">
                     <div id="count-info" class="general-info">
-                        <!-- <div><span class="community-title">{{name_selection}}</span></div> -->
                         <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}}{{ 'selected' | translate:translateData }}</span>
                         <a class="reset-button" ng-click="reset_function()">{{ 'Select_all' | translate }}</a>
                         <button type="button" class="btn-modal" data-toggle="modal" ng-click="info('admin')">

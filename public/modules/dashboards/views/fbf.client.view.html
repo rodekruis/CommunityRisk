@@ -7,9 +7,6 @@
                 <img src="modules/core/img/510logo-new.png" style="height:45px; float:left">
             </a>
             <ul id="status" class="nav navbar-top-links2 navbar-left" style="max-width:130px">
-                <!-- <li class="dropdown">
-                    <a class="submenu-item caps" style="color:red" ng-click="open_status()">{{status_title}}</a>
-                </li> -->
             </ul>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -17,7 +14,6 @@
 		</div> 
         <div id="menu-buttons" aria-expanded="false" class="button-nav">
 				
-		<!-- <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation"> -->
 			
             <ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown">
@@ -45,23 +41,20 @@
             <ul class="nav navbar-top-links navbar-right" style="display:none" id="language-selector">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
-						<!-- {{ 'language' | translate }} -->
                         <img src="modules/core/img/LanguageIcon.svg" style="width:20px">
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu export-items">
 						<li>
                             <a class="dropdown-toggle export-button" ng-click="changeLanguage('en')" target="_blank">English</a>
-							<!-- <button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>English -->
 						</li>
 						<li class="divider"></li>
 						<li>
                             <a id="language-selector-es" class="dropdown-toggle export-button" ng-click="changeLanguage('es')" target="_blank">Español</a>
-							<!-- <button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>Español -->
 						</li>
-						<!-- <li>
+						<li hidden>
                             <a id="language-selector-fr" class="dropdown-toggle export-button" ng-click="changeLanguage('fr')" target="_blank">François</a>
-						</li> -->
+						</li>
 					</ul>
 				</li>
 			</ul>
@@ -83,10 +76,6 @@
 						<li>
 							<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/CommunityRisk" target="_blank">Github</a>
 						</li>
-						<!-- <li class="divider"></li>
-						<li>
-							<a class="dropdown-toggle export-button" ng-click="data_upload()">Upload new data</a>
-						</li> -->
 					</ul>
 				</li>
 			</ul>
@@ -109,10 +98,6 @@
 							<a id="download" ng-click="export_csv()">{{ 'export_csv' | translate }}</a>
 						</li>
 						<li class="divider"></li>
-						<!-- <li>
-							<a ng-href ="./data/{{data_input}}"  target="_blank">Export (JSON)</a>
-						</li>
-						<li class="divider"></li> -->
 						<li>
 							<a ng-click="export_geojson()">{{ 'export_geojson' | translate }}</a>
 						</li>
@@ -120,18 +105,6 @@
 				</li>
 			</ul>
 
-			<!-- <ul class="nav navbar-top-links navbar-right">
-				<li class="dropdown">
-					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
-							{{ 'COUNTRY' | translate }}
-						<i class="fa fa-angle-down export-btn-arrow"></i>
-					</a>
-					<ul class="dropdown-menu submenu-items" id="country-items"></ul>
-				</li>
-			</ul>            -->
-            
-            
-        <!-- </nav> -->
 		</div>
 	</nav>
 	
@@ -173,7 +146,6 @@
                 <!-- start: community profiles -->
                 <div class="community-profiles-wrapper">
                     <div id="count-info" class="general-info">
-                        <!-- <div><span class="community-title">{{name_selection}}</span></div> -->
                         <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px">{{subtype_selection}}{{ 'selected' | translate:translateData }}</span>
                         <a class="reset-button" ng-click="reset_function()">{{ 'Select_all' | translate }}</a>
                         <button type="button" class="btn-modal" data-toggle="modal" ng-click="info('admin')">

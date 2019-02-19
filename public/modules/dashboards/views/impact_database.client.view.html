@@ -2,12 +2,6 @@
 	
 	<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 		
-		<!-- <button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
-			<span class="sr-only" translate>Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button> -->
 		
 		<div class="navbar-header">
             <a class="navbar-brand" style="padding-left:10px; padding-top:3px" href="/#!/">
@@ -19,7 +13,6 @@
 		</div> 
         <div id="menu-buttons" aria-expanded="false" class="button-nav">
 		
-		<!-- <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation"> -->
 			
 			<ul class="nav navbar-top-links navbar-left">
 				<li class="dropdown">
@@ -37,28 +30,20 @@
 				</li>
 			</ul>  
             
-			<!-- <ul class="nav navbar-top-links navbar-right"> -->
-				<!-- <li class="dropdown"> -->
-					<!-- <a href="http://510.global" target="_blank">510 HOME</a> -->
-				<!-- </li> -->
-			<!-- </ul> -->
             
             <ul class="nav navbar-top-links navbar-right" style="display:none" id="language-selector">
 				<li class="dropdown">
 					<a class="dropdown-toggle export-button caps" data-toggle="dropdown" href="#">
-						<!-- {{ 'language' | translate }} -->
                         <img src="modules/core/img/LanguageIcon.svg" style="width:20px">
 						<i class="fa fa-angle-down export-btn-arrow"></i>
 					</a>
 					<ul class="dropdown-menu export-items">
 						<li>
                             <a class="dropdown-toggle export-button" ng-click="changeLanguage('en')" target="_blank">English</a>
-							<!-- <button><img src="modules/core/img/british.svg" style="width: 20px" ng-click="changeLanguage('en')"></button>English -->
 						</li>
 						<li class="divider"></li>
 						<li>
                             <a class="dropdown-toggle export-button" ng-click="changeLanguage('es')" target="_blank">Español</a>
-							<!-- <button><img src="modules/core/img/spanish.svg" style="width: 20px" ng-click="changeLanguage('es')"></button>Español -->
 						</li>
 					</ul>
 				</li>
@@ -125,7 +110,6 @@
 			</ul>
             
 			
-		</nav>
 		
 
 		
@@ -152,13 +136,12 @@
                         <i class="fa fa-tachometer" aria-hidden="true"></i>
                         <span class="button-label"><strong>{{ 'metric_label' | translate:translateData() }}</strong></span>
                     </button>
-                    <!-- <div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo"></div> -->
                 </div>
                 <!-- typhoon selector -->
                 <div class="btn-group zoom-level" role="group">
                     <ul class="btn btn-secondary btn-active PIbuttons" style="margin-right:2%">
                         <div class="dropdown PIdropdown" style="background-color: #4C8293">
-                            <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#">  <!-- style="color:#fff; font-size:12px"> -->
+                            <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#">
                                 <strong>{{disaster_type}}</strong>
                                 <i class="fa fa-angle-down PI-btn-arrow"></i>
                             </a>
@@ -166,7 +149,6 @@
                                 <li>
                                     <a class="submenu-item" ng-click="change_disaster_type('Typhoon')">Typhoons</a>
                                 </li>
-                                <!-- <li class="divider"></li> -->
                                 <li>
                                     <a class="submenu-item" ng-click="change_disaster_type('Earthquake')">Earthquakes</a>
                                 </li>
@@ -175,14 +157,11 @@
                     </ul>
                     <ul class="btn btn-secondary btn-active PIbuttons" style="margin-right:0%">
                         <div class="dropdown PIdropdown" style="background-color: #4C8293">
-                            <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#">  <!-- style="color:#fff; font-size:12px"> -->
+                            <a class="dropdown-toggle PI-button" data-toggle="dropdown" href="#">
                                 <strong>{{disaster_name}}</strong>
                                 <i class="fa fa-angle-down PI-btn-arrow"></i>
                             </a>
                             <ul class="dropdown-menu submenu-items" id="events" style="z-index:2000">
-                                <!-- <li class="event-keep" id="act"><strong>Actuals only:</strong></li>
-                                <li class="event-keep" id="act_pred"><strong>Prediction+Actuals:</strong></li>
-                                <li class="event-keep" id="pred"><strong>Prediction only:</strong></li> -->
                             </ul>
                         </div>
                     </ul>
@@ -202,12 +181,10 @@
                 <!-- start: community profiles -->
                 <div class="community-profiles-wrapper">
                     <div id="count-info" class="general-info">
-                        <!-- {{type_text}}<hr style="margin-top: 10px; margin-bottom: 10px"> -->
                         <strong>Date: </strong>{{start_date}} {{end_date}}<hr style="margin-top: 10px; margin-bottom: 10px">
                         <strong>Overall damage: </strong><span class="total-count-pi">{{total_damage}}</span> <span>{{default_metric_label}}</span> out of 
                         <span class="total-count-pi">{{total_potential}}</span> total in disaster area, or  
                         <span class="total-count-pi">{{total_intensity}}</span>
-                        <!-- <hr style="margin-top: 10px; margin-bottom: 10px"> -->
                     </div>
                     <div class="row"></div>
                     <div class='tablearea' id='general'></div>
@@ -233,38 +210,6 @@
                             <div class="card-block" id="damage"></div>
                         </div>
                     </div>
-                    <!-- <div class="card">
-                        <div class="card-header level1" role="tab" id="headingFour">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                                <span class="panel-header-icon">
-                                    <img src="modules/dashboards/img/prediction.svg">
-                                </span>
-                                <span class="panel-header-content">
-                                    <span class="panel-header-title">Predicted Impact</span>
-                                    <span class="panel-header-description">Predicted damaged houses per municipality</span>
-                                </span>
-                            </a>
-                        </div>
-                        <div id="collapseFour" class="collapse level1" role="tabpanel" aria-labelledby="headingFour">
-                            <div class="card-block" id="predictions"></div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header level1" role="tab" id="headingFive">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-                                <span class="panel-header-icon">
-                                    <img src="modules/dashboards/img/error.png">
-                                </span>
-                                <span class="panel-header-content">
-                                    <span class="panel-header-title">Prediction Errors</span>
-                                    <span class="panel-header-description">Measures of Actual vs. Prediction</span>
-                                </span>
-                            </a>
-                        </div>
-                        <div id="collapseFive" class="collapse level1" role="tabpanel" aria-labelledby="headingFive">
-                            <div class="card-block" id="pred_error"></div>
-                        </div>
-                    </div> -->
                     <div class="card">
                         <div class="card-header level1" role="tab" id="headingTwo">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -419,11 +364,6 @@
 			<a href="/#!/" class="btn link-button" role="button">Dashboard Homepage</a>
 		</p>
 	</div>
-	<!-- <div class="mobile-message">
-		<p>For best experience please use a tablet device, laptop or desktop computer.
-			<a class="btn link-button" role="button" onclick="mobile_anyway()">Continue anyway</a>
-		</p>
-	</div> -->
 	<!-- end: phone device message -->
 
 	<!-- start: IE message -->

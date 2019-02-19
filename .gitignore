@@ -1,10 +1,13 @@
+# Temporary files:
 .DS_Store
 .nodemonignore
 .sass-cache/
 npm-debug.log
-app/tests/coverage/
 .bower-*/
 .idea/
+*.komodoproject
+
+# Private/secret files:
 config/secrets.json
 config/cert/*.pem
 config/cert/.rnd
@@ -13,10 +16,15 @@ config/cert/*.cert
 config/cert/*.key
 config/cert/*.pfx
 config/cert/*.ca
-*.komodoproject
+data/private/
+
+# External/third-party/vendor code:
 node_modules
 public/lib/
 public/build/bower/
+
+# Generated code:
 public/dist/
-data/private/
+
+# Local development:
 postgres_scripts/old/

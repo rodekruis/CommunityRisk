@@ -11,7 +11,7 @@
     "predeploy": "npm install",
     "deploy": "grunt build && echo 'Deployed!'",
     "start": "grunt",
-    "test": "grunt test"
+    "test": "echo 'There is no test, only do or do not.' && exit 1"
   },
   "dependencies": {
     "async": "1.5.x",
@@ -32,10 +32,8 @@
     "grunt-angular-gettext": "2.1.x",
     "grunt-cli": "1.1.x",
     "helmet": "0.2.x",
-    "jasmine-core": "2.4.x",
     "lodash": "2.4.x",
     "method-override": "2.3.x",
-    "mocha": "2.4.x",
     "mongoose": "3.8.x",
     "morgan": "1.7.x",
     "nodemailer": "2.3.x",
@@ -55,19 +53,11 @@
     "url": "0.11.x"
   },
   "devDependencies": {
-    "grunt-env": "*",
-    "grunt-contrib-watch": "1.0.*",
-    "grunt-contrib-uglify": "1.0.*",
-    "grunt-contrib-cssmin": "1.0.*",
-    "grunt-nodemon": "*",
     "grunt-concurrent": "2.3.*",
-    "grunt-mocha-test": "0.12.*",
-    "grunt-karma": "*",
-    "load-grunt-tasks": "3.5.*",
-    "karma": "*",
-    "karma-jasmine": "*",
-    "karma-coverage": "*",
-    "karma-chrome-launcher": "*",
-    "karma-firefox-launcher": "*"
+    "grunt-contrib-cssmin": "1.0.*",
+    "grunt-contrib-uglify": "1.0.*",
+    "grunt-contrib-watch": "1.0.*",
+    "grunt-nodemon": "*",
+    "load-grunt-tasks": "3.5.*"
   }
 }

@@ -55,10 +55,7 @@ module.exports = function(grunt) {
         },
         nodemon: {
             dev: {
-                script: 'server.js',
-                options: {
-                    nodeArgs: ['--debug']
-                }
+                script: 'server.js'
             }
         },
         concurrent: {
@@ -67,38 +64,6 @@ module.exports = function(grunt) {
                 logConcurrentOutput: true
             }
         },
-        env: {
-            test: {
-                NODE_ENV: 'test'
-            }
-        },
-        mochaTest: {
-            src: ['app/tests/**/*.js'],
-            options: {
-                reporter: 'spec',
-                require: 'server.js'
-            }
-        },
-        karma: {
-            unit: {
-                configFile: 'karma.conf.js'
-            }
-        },
-	'node-inspector': {
-	    custom: {
-	      options: {
-		'web-port': 8080,
-		'web-host': '127.0.0.1',
-		'debug-port': 5858,
-		//'ssl-key': './config/cert/localhost-win.key',
-        //'ssl-cert': './config/cert/localhost-win.cert',
-		'save-live-edit': true,
-		'no-preload': true,
-		'stack-trace-limit': 4,
-		'hidden': ['node_modules']
-	      }
-	    }
-	},
 	nggettext_extract: {
 	    pot: {
 		files: {
@@ -139,12 +104,6 @@ module.exports = function(grunt) {
         'uglify',
         'cssmin'
     ]);
-
-    // Test task.
-    grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
-
-    // Load debugger
-    grunt.loadNpmTasks('grunt-node-inspector');
 
     // Load Gettext
     grunt.loadNpmTasks('grunt-angular-gettext');

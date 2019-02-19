@@ -130,8 +130,8 @@
         "public/lib/lodash/dist/lodash.underscore.min.js"
       ],
       "leaflet": [
-        "public/lib/leaflet/dist/leaflet.js",
-        "public/lib/leaflet/dist/leaflet-src.js"
+        "public/lib/leaflet/dist/leaflet.css",
+        "public/lib/leaflet/dist/leaflet.js"
       ],
       "leaflet-search": [
         "public/lib/leaflet-search/dist/leaflet-search.min.js",

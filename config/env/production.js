@@ -34,8 +34,7 @@ module.exports = {
 			css: [
 				'public/build/bower/bootstrap/css/bootstrap.min.css', // in bower.json
 				'public/build/custom/bootstrap/css/bootstrap-theme.min.css', // in bower.json
-				//'public/build/custom/leaflet/css/leaflet.css', // in bower.json
-				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css',
+				'public/build/bower/leaflet/css/leaflet.css', // in bower.json
 				'public/build/bower/cartodb.js/css/cartodb.css', // in bower.json
 				'public/build/bower/angular/css/angular-csp.css', // in bower.json
 				'public/build/bower/dcjs/css/dc.css', // in bower.json
@@ -62,8 +61,7 @@ module.exports = {
 				'public/lib/angular-translate/angular-translate.min.js',	//in bower.json
 				'public/build/bower/bootstrap/js/bootstrap.min.js',
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
-				//'public/build/bower/leaflet/js/leaflet.js',//in bower.json
-				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js',
+				'public/build/bower/leaflet/js/leaflet.js', //in bower.json
 				'public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.min.js', // in bower.json
 				'public/build/custom/leaflet-search/js/leaflet-search.min.js',
 				'public/build/bower/leaflet-ajax/js/leaflet.ajax.js',

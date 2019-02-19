@@ -55,7 +55,7 @@ h6,
   overflow: auto;
   padding: 20px;
   position: absolute;
-  top: 200px;
+  top: 150px;
   width: 380px;
   z-index: 2;
   background-color: #f3eee3;
@@ -79,29 +79,9 @@ h6,
 .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-.sidebar {
-  border: 3px solid #f3eee3;
-  height: 95%;
-  left: 0;
-  overflow: auto;
-  padding: 20px;
-  position: absolute;
-  top: 117px;
-  width: 380px;
-  z-index: 2;
-  background-color: #f3eee3;
-}
-@media only screen and (max-width: 1024px) {
-  .sidebar-wrapper {
-    height: 80%;
-    height: calc(100% - 180px);
-    top: 200px;
-    z-index: 5;
-  }
-}
+
 @media only screen and (max-width: 767px) {
   .sidebar-wrapper {
-    top: 185px;
     width: 100%;
   }
   .sidebar-wrapper.collapse.in.mobile {
@@ -1143,15 +1123,6 @@ body {
   bottom: 10px;
 }
 
-.info.legend.leaflet-control {
-  margin-top: 20px;
-}
-
-@media only screen and (max-width: 1024px) {
-  .info.legend.leaflet-control {
-    margin-top: 60px;
-  }
-}
 @media only screen and (max-width: 767px) {
   .leaflet-control-container {
     position: absolute;
@@ -1181,9 +1152,6 @@ body {
   }
 }
 
-.leaflet-top .hdx-3w-info {
-  margin-top: 60px;
-}
 div.dc-chart {
   width: 100%;
 }

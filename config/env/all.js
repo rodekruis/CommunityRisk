@@ -17,13 +17,11 @@ module.exports = {
 			css: [
 				'public/build/bower/bootstrap/css/bootstrap.min.css', // in bower.json
 				'public/build/custom/bootstrap/css/bootstrap-theme.min.css', // in bower.json
-				//'public/build/custom/leaflet/css/leaflet.css', // in bower.json
-				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css',
+				'public/build/bower/leaflet/css/leaflet.css', // in bower.json
 				'public/build/bower/cartodb.js/css/cartodb.css', // in bower.json
 				'public/build/bower/angular/css/angular-csp.css', // in bower.json
-				'public/build/bower/mdi/css/materialdesignicons.min.css', // in bower.json
 				'public/build/bower/dcjs/css/dc.css', // in bower.json
-				//'public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css', // NOT in bower.json
+				'public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css', // NOT in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.css', // in bower.json
 				'public/build/custom/font-awesome/css/font-awesome.min.css', // NOT in bower.json
 				'public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css', // NOT in bower.json
@@ -33,7 +31,6 @@ module.exports = {
 				'public/build/bower/jquery/js/jquery.min.js', // in bower.json
 				'public/build/custom/slick/js/slick.min.js',
 				'public/build/bower/crossfilter/js/crossfilter.min.js',
-				//'public/lib/jquery-ui/ui/jquery-ui.js',
 				'public/build/bower/lodash/js/lodash.underscore.min.js', //in bower.json
 				'public/build/bower/angular/js/angular.js', //in bower.json
 				'public/build/bower/angular-lodash/js/angular-lodash.js', //in bower.json
@@ -48,19 +45,15 @@ module.exports = {
 				'public/build/bower/angular-route-styles/js/route-styles.js',
 				'public/build/bower/bootstrap/js/bootstrap.min.js',
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
-				//'public/build/bower/leaflet/js/leaflet-src.js',//in bower.json
-				//'public/build/bower/leaflet/js/leaflet.js',//in bower.json
-				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js',
+				'public/build/bower/leaflet/js/leaflet.js',//in bower.json
 				'public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.js', // in bower.json
 				'public/build/custom/leaflet-search/js/leaflet-search.src.js', //NOT in bower.json
 				'public/build/bower/leaflet-ajax/js/leaflet.ajax.js',
 				'public/build/bower/angular-gettext/js/angular-gettext.js',
 				'public/dist/translations.js',
-				'public/build/bower/Snap.svg/js/snap.svg-min.js',
 				'public/build/bower/d3/js/d3.js',
 				'public/build/bower/dcjs/js/dc.js', //in bower.json
 				'public/build/custom/dc-leaflet/js/dc-leaflet-dev.js', // NOT in bower.json
-				//'public/build/custom/leaflet-map/js/dc-leaflet.js', // NOT in bower.json
 				'public/build/custom/leaflet-stamen/tile.stamen.js', // NOT in bower.json
 				'public/build/custom/angular-dc/js/angular-dc.js', //in bower.json
 				'public/build/custom/d3-tip/js/d3-tip.js', //NOT in bower.json

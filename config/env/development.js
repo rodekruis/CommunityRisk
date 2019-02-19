@@ -9,7 +9,6 @@ module.exports = {
 		password: secrets.postgres.password_dev,
 		host: 'localhost'
 	},
-	//email_address: secrets.email.email_address,
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'combined',
@@ -19,8 +18,8 @@ module.exports = {
 			stream: 'access.log'
 		}
 	},
-	usehttp: true, // should a non encrypted server be launced?
-	usessl: true, // should an encrypted server be launced?
+	usehttp: true,
+	usessl: true,
 	app: {
 		title: 'Rode Kruis Dashboards - development',
 		favicon: '/modules/core/img/510-logo_inverted_32x32.png'

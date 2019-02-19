@@ -18,8 +18,8 @@ module.exports = {
 			stream: 'access.log'
 		}
 	},
-	usehttp: true, // should a non encrypted server be launched?
-	usessl: true, // should an encrypted server be launced?
+	usehttp: true,
+	usessl: true,
 	port: process.env.PORT || 3000,
 	sslport: process.env.SSLPORT || 444,
 	key_file: './config/cert/localhost-key.pem',
@@ -34,11 +34,9 @@ module.exports = {
 			css: [
 				'public/build/bower/bootstrap/css/bootstrap.min.css', // in bower.json
 				'public/build/custom/bootstrap/css/bootstrap-theme.min.css', // in bower.json
-				//'public/build/custom/leaflet/css/leaflet.css', // in bower.json
-				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css',
+				'public/build/bower/leaflet/css/leaflet.css', // in bower.json
 				'public/build/bower/cartodb.js/css/cartodb.css', // in bower.json
 				'public/build/bower/angular/css/angular-csp.css', // in bower.json
-				'public/build/bower/mdi/css/materialdesignicons.min.css', // in bower.json
 				'public/build/bower/dcjs/css/dc.css', // in bower.json
 				'public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css', // NOT in bower.json
 				'public/build/bower/angular-loading-bar/css/loading-bar.min.css', // in bower.json
@@ -60,17 +58,15 @@ module.exports = {
 				'public/build/bower/angular-sanitize/js/angular-sanitize.min.js',
 				'public/build/bower/angular-ui-router/js/angular-ui-router.min.js',
 				'public/build/bower/angular-css/js/angular-css.js',
-				'public/lib/angular-translate/angular-translate.min.js',	//in bower.json
+				'public/lib/angular-translate/angular-translate.min.js', //in bower.json
 				'public/build/bower/bootstrap/js/bootstrap.min.js',
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
-				//'public/build/bower/leaflet/js/leaflet.js',//in bower.json
-				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js',
+				'public/build/bower/leaflet/js/leaflet.js', //in bower.json
 				'public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.min.js', // in bower.json
 				'public/build/custom/leaflet-search/js/leaflet-search.min.js',
 				'public/build/bower/leaflet-ajax/js/leaflet.ajax.js',
 				'public/build/bower/angular-gettext/js/angular-gettext.js',
 				'public/dist/translations.js',
-				'public/build/bower/Snap.svg/js/snap.svg-min.js',
 				'public/build/bower/d3/js/d3.min.js',
 				'public/build/bower/dcjs/js/dc.min.js', //in bower.json
 				'public/build/custom/dc-leaflet/js/dc-leaflet-dev.js', // NOT in bower.json

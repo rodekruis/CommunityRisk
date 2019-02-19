@@ -2,7 +2,7 @@
 View live dashboard at https://dashboard.510.global
 
 ## License
-Code is created by 510 and is available under the [GPL license](https://github.com/rodekruis/communityprofiles/LICENSE.md)
+Code is created by 510 and is available under the [LGPL v3 license](./LICENSE.md)
 
 # Table of Contents
 
@@ -84,11 +84,7 @@ $ npm install -g bower-installer
 ```
 
 ### Grunt
-You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process, in order to install it make sure you've installed Node.js and npm, then install grunt globally using npm:
-
-```
-$ npm install -g grunt-cli
-```
+You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process. It will be installed together with other development dependencies.
 
 ### Git
 Install Git from https://git-scm.com/download/win.
@@ -132,7 +128,7 @@ pg_restore -U cradatabase -d cradatabase -h localhost cradatabase.dump
 
 Run in terminal from root folder:
 ```
-$ NODE_ENV=development grunt build
+$ NODE_ENV=development npm run build
 $ NODE_ENV=development node server.js
 ```
 This will fire up the application on https://localhost:444
@@ -141,7 +137,7 @@ Note that the application is mainly developed and thus best tested in Google Chr
 
 To run in production environment, do:
 ```
-$ NODE_ENV=production grunt build
+$ NODE_ENV=production npm run build
 $ NODE_ENV=production node server.js
 ```
 
@@ -211,12 +207,11 @@ To connect to these ports on the VM, use your HostIP and the HostPort
 Connect to frontend-server (credentials in Lastpass) via PuTTY.
 
 ### Node.js
-[Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, with below commands. If you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
+Install `nvm` as described on: <https://github.com/creationix/nvm>. After installing `nvm` run:
 ```
-$ sudo apt-get install nodejs
-$ sudo apt-get install nodejs-legacy
-$ sudo apt-get install npm
+$ nvm install
 ```
+
 ### MongoDB
 To install and set up MongoDB: follow Step 1 and 2 completely of the instructions on https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04 
 
@@ -232,19 +227,14 @@ Port: 27020
 Create new database, collection and documents same as in Chapter 1 of this Readme.
 
 ## Bower
-You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
-
+Install the [Bower Package Manager](http://bower.io/):
 ```
-$ sudo npm install -g bower
-$ sudo npm install -g bower-installer
+$ npm install -g bower
+$ npm install -g bower-installer
 ```
 
 ## Grunt
-You're going to use the [Grunt Task Runner](http://gruntjs.com/) to automate your development process, in order to install it make sure you've installed Node.js and npm, then install grunt globally using npm:
-
-```
-$ sudo npm install -g grunt-cli
-```
+The [Grunt Task Runner](http://gruntjs.com/) will be installed together with other development dependencies.
 
 ## 2.2: Postgres database setup
 
@@ -282,7 +272,7 @@ $ psql –U [pg-user] –h [pg-server-address] cradatabase –f 0_function_calc_
 Now get the code for this application
 ```
 $ cd /var/www/vhosts/510.global/dashboard.510.global
-$ git clone https://github.com/rodekruis/communityprofiles.git .
+$ git clone https://github.com/rodekruis/CommunityRisk.git .
 ```
 
 Install NPM modules -  Now you have to include all the required packages for this application. These packages are not included by default in this repository.
@@ -292,9 +282,8 @@ After that it will run bower-installer, which uses bower.json to include all cli
 
 ```
 $ cd /var/www/vhosts/510.global/dashboard.510.global
-$ sudo npm install
-$ sudo bower-installer (shouldn't be necessary, but to make sure)
-$ grunt build (to make sure all production-code is compiled)
+$ npm install
+$ npm run build
 ```
 
 Copy config/secrets.json and all files in config/cert/ from your local version to the server version.

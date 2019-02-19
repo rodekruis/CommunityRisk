@@ -63,7 +63,6 @@ module.exports = {
 				'public/build/custom/leaflet-search/js/leaflet-search.min.js',
 				'public/build/bower/leaflet-ajax/js/leaflet.ajax.js',
 				'public/build/bower/angular-gettext/js/angular-gettext.js',
-				'public/dist/translations.js',
 				'public/build/bower/d3/js/d3.min.js',
 				'public/build/bower/dcjs/js/dc.min.js', //in bower.json
 				'public/build/custom/dc-leaflet/js/dc-leaflet-dev.js', // NOT in bower.json

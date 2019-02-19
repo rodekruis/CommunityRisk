@@ -4,12 +4,11 @@ var secrets = require('../secrets');
 
 module.exports = {
 	postgres: {
-		db: 'cradatabase_staging', //'cradatabase',
-		user: 'cradatabase@510cradatabase', //'cradatabase',
-		password: secrets.postgres.password_prod, //secrets.postgres.password_dev,
-		host: '510cradatabase.postgres.database.azure.com' //'localhost'
+		db: 'cradatabase_staging',
+		user: 'cradatabase@510cradatabase',
+		password: secrets.postgres.password_prod,
+		host: '510cradatabase.postgres.database.azure.com'
 	},
-	//email_address: secrets.email.email_address,
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'combined',
@@ -19,8 +18,8 @@ module.exports = {
 			stream: 'access.log'
 		}
 	},
-	usehttp: true, // should a non encrypted server be launced?
-	usessl: true, // should an encrypted server be launced?
+	usehttp: true,
+	usessl: true,
 	port: process.env.PORT || 3001,
 	sslport: process.env.SSLPORT || 445,
 	app: {

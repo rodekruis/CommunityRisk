@@ -18,8 +18,8 @@ module.exports = {
 			stream: 'access.log'
 		}
 	},
-	usehttp: true, // should a non encrypted server be launched?
-	usessl: true, // should an encrypted server be launced?
+	usehttp: true,
+	usessl: true,
 	port: process.env.PORT || 3000,
 	sslport: process.env.SSLPORT || 444,
 	key_file: './config/cert/localhost-key.pem',
@@ -58,7 +58,7 @@ module.exports = {
 				'public/build/bower/angular-sanitize/js/angular-sanitize.min.js',
 				'public/build/bower/angular-ui-router/js/angular-ui-router.min.js',
 				'public/build/bower/angular-css/js/angular-css.js',
-				'public/lib/angular-translate/angular-translate.min.js',	//in bower.json
+				'public/lib/angular-translate/angular-translate.min.js', //in bower.json
 				'public/build/bower/bootstrap/js/bootstrap.min.js',
 				'public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js',
 				'public/build/bower/leaflet/js/leaflet.js', //in bower.json

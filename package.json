@@ -11,6 +11,7 @@
     "predeploy": "npm install",
     "deploy": "grunt build && echo 'Deployed!'",
     "start": "grunt",
+    "build": "grunt build",
     "test": "echo 'There is no test, only do or do not.' && exit 1"
   },
   "dependencies": {
@@ -28,8 +29,6 @@
     "geotiff": "1.0.0-beta.6",
     "glob": "3.2.x",
     "google-spreadsheet": "2.0.x",
-    "grunt": "0.4.x",
-    "grunt-cli": "1.1.x",
     "helmet": "0.2.x",
     "lodash": "2.4.x",
     "method-override": "2.3.x",
@@ -52,6 +51,8 @@
     "url": "0.11.x"
   },
   "devDependencies": {
+    "grunt": "1.0.3",
+    "grunt-cli": "1.3.2",
     "grunt-concurrent": "2.3.*",
     "grunt-contrib-cssmin": "1.0.*",
     "grunt-contrib-uglify": "1.0.*",

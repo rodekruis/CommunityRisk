@@ -50,7 +50,6 @@ module.exports = {
 				'public/build/custom/leaflet-search/js/leaflet-search.src.js', //NOT in bower.json
 				'public/build/bower/leaflet-ajax/js/leaflet.ajax.js',
 				'public/build/bower/angular-gettext/js/angular-gettext.js',
-				'public/dist/translations.js',
 				'public/build/bower/d3/js/d3.js',
 				'public/build/bower/dcjs/js/dc.js', //in bower.json
 				'public/build/custom/dc-leaflet/js/dc-leaflet-dev.js', // NOT in bower.json

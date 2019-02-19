@@ -63,21 +63,7 @@ module.exports = function(grunt) {
             options: {
                 logConcurrentOutput: true
             }
-        },
-	nggettext_extract: {
-	    pot: {
-		files: {
-		    'po/template.pot': ['public/modules/*/*/*.js', 'public/modules/*/views/*.html', 'public/modules/*/views/settings/*.html']
-		}
-	    }
-	},
-	nggettext_compile: {
-	    all: {
-		files: {
-		    'public/dist/translations.js': ['po/*.po']
-		}
-	    }
-	}
+        }
     });
 
     // Load NPM tasks
@@ -104,7 +90,4 @@ module.exports = function(grunt) {
         'uglify',
         'cssmin'
     ]);
-
-    // Load Gettext
-    grunt.loadNpmTasks('grunt-angular-gettext');
 };

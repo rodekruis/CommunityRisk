@@ -29,7 +29,6 @@
     "glob": "3.2.x",
     "google-spreadsheet": "2.0.x",
     "grunt": "0.4.x",
-    "grunt-angular-gettext": "2.1.x",
     "grunt-cli": "1.1.x",
     "helmet": "0.2.x",
     "lodash": "2.4.x",

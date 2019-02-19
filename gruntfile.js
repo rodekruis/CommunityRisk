@@ -67,23 +67,6 @@ module.exports = function(grunt) {
                 logConcurrentOutput: true
             }
         },
-        env: {
-            test: {
-                NODE_ENV: 'test'
-            }
-        },
-        mochaTest: {
-            src: ['app/tests/**/*.js'],
-            options: {
-                reporter: 'spec',
-                require: 'server.js'
-            }
-        },
-        karma: {
-            unit: {
-                configFile: 'karma.conf.js'
-            }
-        },
 	'node-inspector': {
 	    custom: {
 	      options: {
@@ -139,9 +122,6 @@ module.exports = function(grunt) {
         'uglify',
         'cssmin'
     ]);
-
-    // Test task.
-    grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
 
     // Load debugger
     grunt.loadNpmTasks('grunt-node-inspector');

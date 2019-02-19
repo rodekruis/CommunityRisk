@@ -1,15 +1,9 @@
 
-html, body {
-    min-height:100%;
-    height: 100%;
-}
-
 body {
 	background: #F3EEE3; /*#B0DED3;#0f4882; */
 	padding: 0px;
 	margin: 0px;
 	overflow-x: hidden;
-    font-family: 'Open Sans', sans-serif;
 }
 /* .content {
   margin-top: 50px;

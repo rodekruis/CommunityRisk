@@ -18,7 +18,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged --verbose"
+      "pre-commit": "pretty-quick --staged --verbose",
+      "pre-push": "npm test"
     }
   },
   "dependencies": {

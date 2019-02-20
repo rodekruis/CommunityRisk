@@ -64,9 +64,7 @@
         "public/lib/bootstrap/dist/js/bootstrap.min.js",
         "public/lib/bootstrap/dist/css/bootstrap.min.css"
       ],
-      "jquery": [
-        "public/lib/jquery/dist/jquery.min.js"
-      ],
+      "jquery": ["public/lib/jquery/dist/jquery.min.js"],
       "jquery-csv": [
         "public/lib/jquery-csv/src/jquery.csv.min.js",
         "public/lib/jquery-csv/src/jquery.csv.js"
@@ -117,12 +115,8 @@
       "angular-ui-router": [
         "public/lib/angular-ui-router/release/angular-ui-router.min.js"
       ],
-      "crossfilter": [
-        "public/lib/crossfilter/crossfilter.min.js"
-      ],
-      "lodash": [
-        "public/lib/lodash/dist/lodash.underscore.min.js"
-      ],
+      "crossfilter": ["public/lib/crossfilter/crossfilter.min.js"],
+      "lodash": ["public/lib/lodash/dist/lodash.underscore.min.js"],
       "leaflet": [
         "public/lib/leaflet/dist/leaflet.css",
         "public/lib/leaflet/dist/leaflet.js"
@@ -144,10 +138,7 @@
         "public/lib/ngInfiniteScroll/build/ng-infinite-scroll.js",
         "public/lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"
       ],
-      "d3": [
-        "public/lib/d3/d3.min.js",
-        "public/lib/d3/d3.js"
-      ],
+      "d3": ["public/lib/d3/d3.min.js", "public/lib/d3/d3.js"],
       "dcjs": [
         "public/lib/dcjs/dc.min.js",
         "public/lib/dcjs/dc.js",

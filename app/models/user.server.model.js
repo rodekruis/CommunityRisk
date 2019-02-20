@@ -1,43 +1,42 @@
-'use strict';
+"use strict";
 
-var Sequelize = require('sequelize'),
-    connection = require('../sequelize.js');
+var Sequelize = require("sequelize"),
+  connection = require("../sequelize.js");
 
 var attributes = {
-    username: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-            is: /^[a-z0-9\_\-]+$/i,
-        }
+  username: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      is: /^[a-z0-9\_\-]+$/i,
     },
-    email: {
-        type: Sequelize.STRING,
-        validate: {
-            isEmail: true
-        }
+  },
+  email: {
+    type: Sequelize.STRING,
+    validate: {
+      isEmail: true,
     },
-    firstName: {
-        type: Sequelize.STRING,
-    },
-    lastName: {
-        type: Sequelize.STRING,
-    },
-    password: {
-        type: Sequelize.STRING,
-    },
-    salt: {
-        type: Sequelize.STRING
-    }
-}
+  },
+  firstName: {
+    type: Sequelize.STRING,
+  },
+  lastName: {
+    type: Sequelize.STRING,
+  },
+  password: {
+    type: Sequelize.STRING,
+  },
+  salt: {
+    type: Sequelize.STRING,
+  },
+};
 
 var options = {
-    freezeTableName: true
-}
+  freezeTableName: true,
+};
 
-var User = connection.define('users', attributes, options)
-    // you can define relationships here
+var User = connection.define("users", attributes, options);
+// you can define relationships here
 
-module.exports.User = User
-
+module.exports.User = User;

@@ -1,9 +1,5 @@
 # Out of scope: (for now)
 tools/
-app/
-config/
-server.js
-setup.js
 
 # External/third-party/vendor code
 public/dist/

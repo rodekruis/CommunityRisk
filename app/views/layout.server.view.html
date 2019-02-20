@@ -1,130 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<!-- Matomo -->
-<script type="text/javascript">
-  var _paq = _paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://tracking.510.global/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '2']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Matomo Code -->
-<head>
-	
+  <!-- Matomo -->
+  <script type="text/javascript">
+    var _paq = _paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+    (function() {
+      var u = "https://tracking.510.global/";
+      _paq.push(["setTrackerUrl", u + "piwik.php"]);
+      _paq.push(["setSiteId", "2"]);
+      var d = document,
+        g = d.createElement("script"),
+        s = d.getElementsByTagName("script")[0];
+      g.type = "text/javascript";
+      g.async = true;
+      g.defer = true;
+      g.src = u + "piwik.js";
+      s.parentNode.insertBefore(g, s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+  <head>
     <title>{{title}}</title>
 
-	<!-- General META -->
-	<meta charset="utf-8">
-	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- General META -->
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-	<!-- Semantic META -->
-	<meta name="keywords" content="{{keywords}}">
-	<meta name="description" content="{{description}}">
+    <!-- Semantic META -->
+    <meta name="keywords" content="{{keywords}}" />
+    <meta name="description" content="{{description}}" />
 
-	<!-- Facebook META -->
-	<meta property="fb:app_id" content="{{facebookAppId}}">
-	<meta property="og:site_name" content="{{title}}">
-	<meta property="og:title" content="{{title}}">
-	<meta property="og:description" content="{{description}}">
-	<meta property="og:url" content="{{url}}">
-	<meta property="og:image" content="{{socialImage}}">
-	<meta property="og:type" content="website">
+    <!-- Facebook META -->
+    <meta property="fb:app_id" content="{{facebookAppId}}" />
+    <meta property="og:site_name" content="{{title}}" />
+    <meta property="og:title" content="{{title}}" />
+    <meta property="og:description" content="{{description}}" />
+    <meta property="og:url" content="{{url}}" />
+    <meta property="og:image" content="{{socialImage}}" />
+    <meta property="og:type" content="website" />
 
-	<!-- Twitter META -->
-	<meta name="twitter:title" content="{{title}}">
-	<meta name="twitter:description" content="{{description}}">
-	<meta name="twitter:url" content="{{url}}">
-	<meta name="twitter:image" content="{{socialImage}}">
+    <!-- Twitter META -->
+    <meta name="twitter:title" content="{{title}}" />
+    <meta name="twitter:description" content="{{description}}" />
+    <meta name="twitter:url" content="{{url}}" />
+    <meta name="twitter:image" content="{{socialImage}}" />
 
-	<!-- Fav Icon -->
-	<link href="{{favicon}}" rel="shortcut icon" type="image/png">
+    <!-- Fav Icon -->
+    <link href="{{favicon}}" rel="shortcut icon" type="image/png" />
 
-	<!--Application CSS Files-->
-	{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">
-	{% endfor %}
+    <!--Application CSS Files-->
+    {% for cssFile in cssFiles %}
+    <link rel="stylesheet" href="{{cssFile}}" />
+    {% endfor %}
 
-	<!-- Cookie Consent -->
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <!-- Cookie Consent -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css"
+    />
     <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
     <script>
-    window.addEventListener("load", function(){
-    window.cookieconsent.initialise({
-      "palette": {
-        "popup": {
-          "background": "#000"
-        },
-        "button": {
-          "background": "#f1d600"
-        }
-      }
-    })});
+      window.addEventListener("load", function() {
+        window.cookieconsent.initialise({
+          palette: {
+            popup: {
+              background: "#000",
+            },
+            button: {
+              background: "#f1d600",
+            },
+          },
+        });
+      });
     </script>
-    
-</head>
+  </head>
 
-<body class="ng-cloak">
-	<section class="content">
-		<section class="container-fluid">
-			{% block content %}{% endblock %}
-		</section>
-	</section>
-	
-	
-	
+  <body class="ng-cloak">
+    <section class="content">
+      <section class="container-fluid">
+        {% block content %}{% endblock %}
+      </section>
+    </section>
 
+    <!--Embedding The User Object-->
+    <script type="text/javascript">
+      var user = {{ user | json | safe }};
+    </script>
 
-	<!--Embedding The User Object-->
-	<script type="text/javascript">
-		var user = {{ user | json | safe }};
-	</script>
-    
-    
-	
-    
-	<script>
-		var ie = (function(){
-			var undef,rv = -1; // Return value assumes failure.
-			var ua = window.navigator.userAgent;
-			var msie = ua.indexOf('MSIE ');
-			var trident = ua.indexOf('Trident/');
+    <script>
+      var ie = (function() {
+        var undef,
+          rv = -1; // Return value assumes failure.
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+        var trident = ua.indexOf("Trident/");
 
-			if (msie > 0) {
-				// IE 10 or older => return version number
-				rv = parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-			} else if (trident > 0) {
-				// IE 11 (or newer) => return version number
-				var rvNum = ua.indexOf('rv:');
-				rv = parseInt(ua.substring(rvNum + 3, ua.indexOf('.', rvNum)), 10);
-			}
+        if (msie > 0) {
+          // IE 10 or older => return version number
+          rv = parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)), 10);
+        } else if (trident > 0) {
+          // IE 11 (or newer) => return version number
+          var rvNum = ua.indexOf("rv:");
+          rv = parseInt(ua.substring(rvNum + 3, ua.indexOf(".", rvNum)), 10);
+        }
 
-			return ((rv > -1) ? rv : undef);
-		}());
-		if (ie) {
-			L_PREFER_CANVAS = true;
-		}
-	</script>
+        return rv > -1 ? rv : undef;
+      })();
+      if (ie) {
+        L_PREFER_CANVAS = true;
+      }
+    </script>
 
-	<!--Application JavaScript Files-->
-	{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>
-	{% endfor %} 
-
-	{% if process.env.NODE_ENV === 'development' %}
-	<!--Livereload script rendered -->
-	<script type="text/javascript" src="https://localhost:35729/livereload.js"></script>
-	{% endif %}
-	
-	
-
-  
-</body>
-
+    <!--Application JavaScript Files-->
+    {% for jsFile in jsFiles %}<script
+      type="text/javascript"
+      src="{{jsFile}}"
+    ></script>
+    {% endfor %} {% if process.env.NODE_ENV === 'development' %}
+    <!--Livereload script rendered -->
+    <script
+      type="text/javascript"
+      src="https://localhost:35729/livereload.js"
+    ></script>
+    {% endif %}
+  </body>
 </html>

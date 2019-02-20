@@ -12,6 +12,5 @@ module.exports = function(app) {
 	    .get(data.read);
 		
 	// Finish by binding the middleware
-	//app.param(['adminLevel','parentPcode'], data.getData);
 	app.param('adminLevel', data.getData);
 };

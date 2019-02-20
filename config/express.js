@@ -103,7 +103,7 @@ module.exports = function() {
 	app.use(flash());
 
 	// Use helmet to secure Express headers
-	app.use(helmet.xframe('SAMEORIGIN')); //'ALLOW-FROM', 'https://www.510.global/'));
+	app.use(helmet.xframe('SAMEORIGIN'));
 	app.use(helmet.iexss());
 	app.use(helmet.contentTypeOptions());
 	app.use(helmet.ienoopen());

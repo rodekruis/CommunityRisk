@@ -16,6 +16,11 @@
     "test:syntax": "prettier --check --debug-check '**/**.{json,yaml,yml,css,html,js}'",
     "test": "npm run test:syntax"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged --verbose"
+    }
+  },
   "dependencies": {
     "async": "1.5.x",
     "bcrypt": "3.0.4",

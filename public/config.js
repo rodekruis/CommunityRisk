@@ -12,7 +12,6 @@ var ApplicationConfiguration = (function() {
     "ngTouch",
     "ngSanitize",
     "ui.router",
-    "ui.bootstrap",
     "leaflet-directive",
     "angular-lodash",
     "gettext",

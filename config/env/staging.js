@@ -57,7 +57,6 @@ module.exports = {
         "public/build/bower/angular-css/js/angular-css.js",
         "public/lib/angular-translate/angular-translate.min.js", //in bower.json
         "public/build/bower/bootstrap/js/bootstrap.min.js",
-        "public/build/bower/angular-bootstrap/js/ui-bootstrap-tpls.js",
         "public/build/bower/leaflet/js/leaflet.js", //in bower.json
         "public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.min.js", // in bower.json
         "public/build/custom/leaflet-search/js/leaflet-search.min.js",

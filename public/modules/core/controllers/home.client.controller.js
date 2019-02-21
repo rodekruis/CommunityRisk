@@ -221,28 +221,21 @@ angular.module("core").controller("HomeController", [
     $(document).ready(function() {
       $(".timer").countTo();
 
+      var slickOptions = {
+        dots: true,
+        infinite: false,
+        speed: 300,
+        slidesToShow: 1,
+        fade: true,
+        centerMode: true,
+      };
+
       if ($("#slider").length !== 0) {
-        $("#slider").slick({
-          dots: true,
-          infinite: false,
-          speed: 300,
-          slidesToShow: 1,
-          adaptiveHeight: true,
-          fade: true,
-          centerMode: true,
-        });
+        $("#slider").slick(slickOptions);
       }
 
       if ($("#slider_PI").length !== 0) {
-        $("#slider_PI").slick({
-          dots: true,
-          infinite: false,
-          speed: 300,
-          slidesToShow: 1,
-          adaptiveHeight: true,
-          fade: true,
-          centerMode: true,
-        });
+        $("#slider_PI").slick(slickOptions);
       }
     });
 

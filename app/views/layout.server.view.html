@@ -1,26 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- Matomo -->
-  <script type="text/javascript">
-    var _paq = _paq || [];
-    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-    _paq.push(["trackPageView"]);
-    _paq.push(["enableLinkTracking"]);
-    (function() {
-      var u = "https://tracking.510.global/";
-      _paq.push(["setTrackerUrl", u + "piwik.php"]);
-      _paq.push(["setSiteId", "2"]);
-      var d = document,
-        g = d.createElement("script"),
-        s = d.getElementsByTagName("script")[0];
-      g.type = "text/javascript";
-      g.async = true;
-      g.defer = true;
-      g.src = u + "piwik.js";
-      s.parentNode.insertBefore(g, s);
-    })();
-  </script>
-  <!-- End Matomo Code -->
   <head>
     <title>{{ title }}</title>
 
@@ -51,6 +30,18 @@
 
     <!-- Fav Icon -->
     <link href="{{ favicon }}" rel="shortcut icon" type="image/png" />
+
+    {# Matomo #}
+    <script>
+      var _paq = _paq || [];
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      _paq.push(["setTrackerUrl", "https://tracking.510.global/piwik.php"]);
+      _paq.push(["setSiteId", "2"]);
+    </script>
+    {% if process.env.NODE_ENV === 'production' %}
+    <script async defer src="https://tracking.510.global/piwik.js"></script>
+    {% endif %} {# end: Matomo #}
 
     <!--Application CSS Files-->
     {% for cssFile in cssFiles %}

@@ -8,11 +8,14 @@
   "homepage": "https://dashboard.510.global/",
   "scripts": {
     "postinstall": "bower-installer",
-    "predeploy": "npm install",
-    "deploy": "grunt build && echo 'Deployed!'",
+    "clean:dist": "rimraf public/dist/*",
+    "prestart": "npm run clean:dist",
     "start": "grunt",
-    "fix": "prettier --write '**/**.{json,yaml,yml,css,html,js}'",
+    "prebuild": "npm run clean:dist",
     "build": "grunt build",
+    "predeploy": "npm install",
+    "deploy": "npm run build && echo 'Deployed!'",
+    "fix": "prettier --write '**/**.{json,yaml,yml,css,html,js}'",
     "test:syntax": "prettier --check '**/**.{json,yaml,yml,css,html,js}'",
     "test": "npm run test:syntax"
   },

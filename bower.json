@@ -78,10 +78,6 @@
         "public/lib/angular/angular.js",
         "public/lib/angular/angular-csp.css"
       ],
-      "angular-ui-bootstrap-bower": [
-        "public/lib/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js",
-        "public/lib/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"
-      ],
       "angular-route": [
         "public/lib/angular-route/angular-route.min.js",
         "public/lib/angular-route/angular-route.js"

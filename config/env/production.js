@@ -42,7 +42,6 @@ module.exports = {
         "public/build/bower/angular-loading-bar/css/loading-bar.min.css", // in bower.json
         "public/build/custom/font-awesome/css/font-awesome.min.css", // NOT in bower.json
         "public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css", // NOT in bower.json
-        "public/build/custom/leaflet-search/css/leaflet-search.min.css", // in bower.json
       ],
       js: [
         "public/build/bower/jquery/js/jquery.min.js", // in bower.json
@@ -62,13 +61,11 @@ module.exports = {
         "public/build/bower/bootstrap/js/bootstrap.min.js",
         "public/build/bower/leaflet/js/leaflet.js", //in bower.json
         "public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.min.js", // in bower.json
-        "public/build/custom/leaflet-search/js/leaflet-search.min.js",
         "public/build/bower/leaflet-ajax/js/leaflet.ajax.js",
         "public/build/bower/angular-gettext/js/angular-gettext.js",
         "public/build/bower/d3/js/d3.min.js",
         "public/build/bower/dcjs/js/dc.min.js", //in bower.json
         "public/build/custom/dc-leaflet/js/dc-leaflet-dev.js", // NOT in bower.json
-        "public/build/custom/leaflet-stamen/tile.stamen.js", // NOT in bower.json
         "public/build/custom/angular-dc/js/angular-dc.js", //in bower.json
         "public/build/bower/angular-messages/js/angular-messages.min.js", //in bower.json
         "public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.min.js", //in bower.json

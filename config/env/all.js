@@ -25,7 +25,6 @@ module.exports = {
         "public/build/bower/angular-loading-bar/css/loading-bar.css", // in bower.json
         "public/build/custom/font-awesome/css/font-awesome.min.css", // NOT in bower.json
         "public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css", // NOT in bower.json
-        "public/build/custom/leaflet-search/css/leaflet-search.src.css", // NOT in bower.json
       ],
       js: [
         "public/build/bower/jquery/js/jquery.min.js", // in bower.json
@@ -46,13 +45,11 @@ module.exports = {
         "public/build/bower/bootstrap/js/bootstrap.min.js",
         "public/build/bower/leaflet/js/leaflet.js", //in bower.json
         "public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.js", // in bower.json
-        "public/build/custom/leaflet-search/js/leaflet-search.src.js", //NOT in bower.json
         "public/build/bower/leaflet-ajax/js/leaflet.ajax.js",
         "public/build/bower/angular-gettext/js/angular-gettext.js",
         "public/build/bower/d3/js/d3.js",
         "public/build/bower/dcjs/js/dc.js", //in bower.json
         "public/build/custom/dc-leaflet/js/dc-leaflet-dev.js", // NOT in bower.json
-        "public/build/custom/leaflet-stamen/tile.stamen.js", // NOT in bower.json
         "public/build/custom/angular-dc/js/angular-dc.js", //in bower.json
         "public/build/custom/d3-tip/js/d3-tip.js", //NOT in bower.json
         "public/build/bower/angular-messages/js/angular-messages.js", //in bower.json
@@ -67,7 +64,6 @@ module.exports = {
         "public/build/bower/jquery-easing/js/jquery.easing.min.js", // in bower.json
         "public/lib/jquery-csv/src/jquery.csv.js", // in bower.json
         "public/build/bower/wow/js/wow.js", // in bower.json
-        "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js",
         "public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js", // in bower.json
         "public/build/bower/topojson/js/topojson.js", // in bower.json
         "public/build/custom/leaflet-geotiff-custom/geotiff.js",

@@ -681,9 +681,6 @@ section.container {
 .home-content p {
   font-size: 12px;
 }
-.timer {
-  color: #a2d0d0;
-}
 .laptop {
   margin-top: 18px;
   max-width: 100%;
@@ -732,4 +729,8 @@ section.container {
 
 .caps {
   text-transform: uppercase;
+}
+
+.text-highlight {
+  color: #a2d0d0;
 }

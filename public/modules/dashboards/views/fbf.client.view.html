@@ -44,7 +44,7 @@
             class="submenu-item caps"
             ng-click="change_view('CRA')"
             ng-href="#!/community_risk"
-            >{{ 'COMMUNITY_RISK' | translate }}</a
+            >{{ "COMMUNITY_RISK" | translate }}</a
           >
         </li>
       </ul>
@@ -54,7 +54,7 @@
             class="submenu-item caps"
             ng-click="change_view('PI')"
             ng-href="#!/impact_database"
-            >{{ 'IMPACT_DATABASE' | translate }}</a
+            >{{ "IMPACT_DATABASE" | translate }}</a
           >
         </li>
       </ul>
@@ -64,7 +64,7 @@
             class="submenu-item caps"
             ng-click="change_view('PI')"
             ng-href="#!/priority_index"
-            >{{ 'PRIORITY_INDEX' | translate }}</a
+            >{{ "PRIORITY_INDEX" | translate }}</a
           >
         </li>
       </ul>
@@ -128,7 +128,7 @@
             data-toggle="dropdown"
             href="#"
           >
-            {{ 'HOW_IT_WORKS' | translate }}
+            {{ "HOW_IT_WORKS" | translate }}
             <i class="fa fa-angle-down export-btn-arrow"></i>
           </a>
           <ul class="dropdown-menu export-items">
@@ -137,14 +137,14 @@
                 class="dropdown-toggle export-button"
                 ng-href="#!/#about"
                 target="_blank"
-                >{{ 'about_CRA' | translate }}</a
+                >{{ "about_CRA" | translate }}</a
               >
             </li>
             <li class="divider"></li>
             <li>
               <a
                 class="dropdown-toggle export-button"
-                ng-href="#!/#walkthrough_{{view_code}}"
+                ng-href="#!/#walkthrough_{{ view_code }}"
                 target="_blank"
                 >Tutorial</a
               >
@@ -168,30 +168,30 @@
             data-toggle="dropdown"
             href="#"
           >
-            {{ 'EXPORT' | translate }}
+            {{ "EXPORT" | translate }}
             <i class="fa fa-angle-down export-btn-arrow"></i>
           </a>
           <ul class="dropdown-menu export-items">
             <li>
-              <a ng-click="share_country_URL()"
-                >{{ 'share_country_url' | translate }}</a
-              >
+              <a ng-click="share_country_URL()">{{
+                "share_country_url" | translate
+              }}</a>
             </li>
             <li class="divider"></li>
             <li>
-              <a ng-click="share_URL()">{{ 'share_url' | translate }}</a>
+              <a ng-click="share_URL()">{{ "share_url" | translate }}</a>
             </li>
             <li class="divider"></li>
             <li>
-              <a id="download" ng-click="export_csv()"
-                >{{ 'export_csv' | translate }}</a
-              >
+              <a id="download" ng-click="export_csv()">{{
+                "export_csv" | translate
+              }}</a>
             </li>
             <li class="divider"></li>
             <li>
-              <a ng-click="export_geojson()"
-                >{{ 'export_geojson' | translate }}</a
-              >
+              <a ng-click="export_geojson()">{{
+                "export_geojson" | translate
+              }}</a>
             </li>
           </ul>
         </li>
@@ -209,7 +209,7 @@
             style="width:42%"
             ng-click="mapShow()"
           >
-            <span class="button-label">{{ 'Map' | translate }}</span>
+            <span class="button-label">{{ "Map" | translate }}</span>
           </button>
           <button
             type="button"
@@ -217,7 +217,7 @@
             style="width:42%"
             ng-click="tabularShow()"
           >
-            <span class="button-label">{{ 'Tab' | translate }}</span>
+            <span class="button-label">{{ "Tab" | translate }}</span>
           </button>
           <div
             class="collapse-button"
@@ -231,9 +231,9 @@
           <button type="button" class="btn btn-secondary btn-score">
             <i class="fa fa-tachometer" aria-hidden="true"></i>
             <span class="button-label"
-              ><strong
-                >{{ 'metric_label' | translate:translateData() }}</strong
-              ></span
+              ><strong>{{
+                "metric_label" | translate: translateData()
+              }}</strong></span
             >
           </button>
         </div>
@@ -244,7 +244,7 @@
             class="btn btn-secondary btn-zoomin btn-active "
             ng-click="zoom_out(1)"
           >
-            <span class="button-label">{{country_selection}}</span>
+            <span class="button-label">{{ country_selection }}</span>
           </button>
           <button
             id="level2"
@@ -253,8 +253,8 @@
             ng-click="zoom_out(2)"
           >
             <span class="button-label"
-              >{{'levelB_selection_pre' | translate:translateData()
-              }}{{levelB_selection}}</span
+              >{{ "levelB_selection_pre" | translate: translateData()
+              }}{{ levelB_selection }}</span
             >
           </button>
           <button
@@ -265,8 +265,8 @@
             style="margin-right:0px"
           >
             <span class="button-label"
-              >{{'levelC_selection_pre' | translate:translateData()
-              }}{{levelC_selection}}</span
+              >{{ "levelC_selection_pre" | translate: translateData()
+              }}{{ levelC_selection }}</span
             >
           </button>
         </div>
@@ -278,12 +278,12 @@
             <span class="filter-count "></span> /
             <span class="total-count "></span>
             <span style="font-size: 12px"
-              >{{subtype_selection}}{{ 'selected' | translate:translateData
-              }}</span
+              >{{ subtype_selection
+              }}{{ "selected" | translate: translateData }}</span
             >
-            <a class="reset-button" ng-click="reset_function()"
-              >{{ 'Select_all' | translate }}</a
-            >
+            <a class="reset-button" ng-click="reset_function()">{{
+              "Select_all" | translate
+            }}</a>
             <button
               type="button"
               class="btn-modal"
@@ -336,13 +336,13 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >{{ 'risk_score' | translate }} -
+                    >{{ "risk_score" | translate }} -
                     <span class="component-score" id="risk_score_main"></span>
                     <span class="score-helptext">/10</span>
                   </span>
-                  <span class="panel-header-description"
-                    >{{ 'risk_score_tag' | translate }}</span
-                  >
+                  <span class="panel-header-description">{{
+                    "risk_score_tag" | translate
+                  }}</span>
                 </span>
               </a>
             </div>
@@ -370,13 +370,13 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >{{ 'hazard_score' | translate }} -
+                    >{{ "hazard_score" | translate }} -
                     <span class="component-score" id="hazard_score_main"></span>
                     <span class="score-helptext">/10</span>
                   </span>
-                  <span class="panel-header-description"
-                    >{{ 'hazard_score_tag' | translate }}</span
-                  >
+                  <span class="panel-header-description">{{
+                    "hazard_score_tag" | translate
+                  }}</span>
                 </span>
               </a>
             </div>
@@ -405,16 +405,16 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >{{ 'vulnerability_score' | translate }} -
+                    >{{ "vulnerability_score" | translate }} -
                     <span
                       class="component-score"
                       id="vulnerability_score_main"
                     ></span>
                     <span class="score-helptext">/10</span>
                   </span>
-                  <span class="panel-header-description"
-                    >{{ 'vulnerability_score_tag' | translate }}</span
-                  >
+                  <span class="panel-header-description">{{
+                    "vulnerability_score_tag" | translate
+                  }}</span>
                 </span>
               </a>
             </div>
@@ -443,16 +443,16 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >{{ 'coping_capacity_score' | translate }} -
+                    >{{ "coping_capacity_score" | translate }} -
                     <span
                       class="component-score"
                       id="coping_capacity_score_main"
                     ></span>
                     <span class="score-helptext">/10</span>
                   </span>
-                  <span class="panel-header-description"
-                    >{{ 'coping_score_tag' | translate }}</span
-                  >
+                  <span class="panel-header-description">{{
+                    "coping_score_tag" | translate
+                  }}</span>
                 </span>
               </a>
             </div>
@@ -480,12 +480,12 @@
                   <img src="modules/dashboards/img/other_variables.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >{{ 'other_variables' | translate }}</span
-                  >
-                  <span class="panel-header-description"
-                    >{{ 'other_variables_tag' | translate }}</span
-                  >
+                  <span class="panel-header-title">{{
+                    "other_variables" | translate
+                  }}</span>
+                  <span class="panel-header-description">{{
+                    "other_variables_tag" | translate
+                  }}</span>
                 </span>
               </a>
             </div>
@@ -512,12 +512,12 @@
                   <img src="modules/dashboards/img/dpi.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >{{ 'data_preparedness_index' | translate }}</span
-                  >
-                  <span class="panel-header-description"
-                    >{{ 'dpi_tag' | translate }}</span
-                  >
+                  <span class="panel-header-title">{{
+                    "data_preparedness_index" | translate
+                  }}</span>
+                  <span class="panel-header-description">{{
+                    "dpi_tag" | translate
+                  }}</span>
                 </span>
               </a>
             </div>
@@ -614,7 +614,7 @@
                   data-toggle="dropdown"
                   href="#"
                 >
-                  {{ 'sort_by' | translate }}
+                  {{ "sort_by" | translate }}
                   <i class="fa fa-angle-down export-btn-arrow"></i>
                 </a>
                 <ul class="dropdown-menu submenu-items">
@@ -623,7 +623,7 @@
                       class="	submenu-item"
                       ng-click="sort('value')"
                       role="button"
-                      >{{ 'indicator_score' | translate }}</a
+                      >{{ "indicator_score" | translate }}</a
                     >
                   </li>
                   <li>
@@ -631,7 +631,7 @@
                       class="submenu-item"
                       ng-click="sort('name')"
                       role="button"
-                      >{{ 'area_name' | translate }}</a
+                      >{{ "area_name" | translate }}</a
                     >
                   </li>
                 </ul>
@@ -642,7 +642,7 @@
               style="color:#4d799d"
               ng-click="scrollRowChart()"
             >
-              {{ 'scroll_top' | translate }}
+              {{ "scroll_top" | translate }}
             </div>
           </div>
         </div>
@@ -654,7 +654,7 @@
       <!-- the above div and inline styles are only for placement -->
       <div id="mapPopup" class="map-popup" style="position:absolute;">
         <div class="popup-header">
-          {{name_popup}}
+          {{ name_popup }}
           <button
             id="zoomin_icon"
             type="button"
@@ -667,9 +667,9 @@
         </div>
         <div class="popup-score">
           <div class="score-label">
-            {{ 'metric_label' | translate:translateData}}
+            {{ "metric_label" | translate: translateData }}
           </div>
-          {{value_popup}}
+          {{ value_popup }}
         </div>
       </div>
     </div>
@@ -686,24 +686,28 @@
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
           <span class="panel-header-icon">
-            <img src="{{metric_icon}}" />
+            <img src="{{ metric_icon }}" />
           </span>
           <h4 class="modal-title">
-            {{ 'metric_label_popup' | translate:translateData}}
+            {{ "metric_label_popup" | translate: translateData }}
             <!-- {{metric_label_popup}} -->
           </h4>
         </div>
         <div class="modal-body">
-          <h6><b>{{ 'year_source' | translate }}:</b> {{metric_year}}</h6>
-          <br />
           <h6>
-            <b>{{ 'link_source' | translate }}:</b>
-            <a href="{{metric_source}}" target="_blank">{{metric_source}}</a>
+            <b>{{ "year_source" | translate }}:</b> {{ metric_year }}
           </h6>
           <br />
           <h6>
-            <b>{{ 'desc_source' | translate }}:</b> {{ 'metric_desc' |
-            translate:translateData}}
+            <b>{{ "link_source" | translate }}:</b>
+            <a href="{{ metric_source }}" target="_blank">{{
+              metric_source
+            }}</a>
+          </h6>
+          <br />
+          <h6>
+            <b>{{ "desc_source" | translate }}:</b>
+            {{ "metric_desc" | translate: translateData }}
           </h6>
           <br />
         </div>
@@ -719,13 +723,13 @@
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h4 class="modal-title">{{ 'share_url_title' | translate }}</h4>
+          <h4 class="modal-title">{{ "share_url_title" | translate }}</h4>
         </div>
         <div class="modal-body" style="word-break:break-all">
-          <h6 id="copy_url">{{shareable_URL}}</h6>
+          <h6 id="copy_url">{{ shareable_URL }}</h6>
           <br />
           <button ng-click="copyToClipboard('#copy_url')">
-            {{ 'share_url_copy' | translate }}
+            {{ "share_url_copy" | translate }}
           </button>
         </div>
       </div>
@@ -739,10 +743,10 @@
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h4 class="modal-title">{{ 'warning' | translate }}</h4>
+          <h4 class="modal-title">{{ "warning" | translate }}</h4>
         </div>
         <div class="modal-body" style="word-break:break-all">
-          <p>{{status_text}}</p>
+          <p>{{ status_text }}</p>
           <button ng-click="open_DPI()">Inspect Data Preparedness Index</button>
         </div>
       </div>
@@ -770,10 +774,10 @@
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h3 class="modal-title">{{ 'warning' | translate }}</h3>
+          <h3 class="modal-title">{{ "warning" | translate }}</h3>
         </div>
         <div class="modal-body">
-          <p>{{ 'ie_warning' | translate }}</p>
+          <p>{{ "ie_warning" | translate }}</p>
         </div>
       </div>
     </div>
@@ -830,11 +834,11 @@
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h4 class="modal-title">{{ 'warning' | translate }}</h4>
+          <h4 class="modal-title">{{ "warning" | translate }}</h4>
         </div>
         <div class="modal-body">
           <h6 id="data_upload_warning">
-            <b>Message: </b>{{data_upload_warning}}
+            <b>Message: </b>{{ data_upload_warning }}
           </h6>
           <br />
         </div>

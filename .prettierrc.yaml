@@ -1,2 +1,6 @@
 trailingComma: es5
 arrowParens: always
+overrides:
+  - files: "*.html"
+    options:
+      parser: "angular"

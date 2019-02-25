@@ -52,7 +52,6 @@ module.exports = {
         "public/build/bower/d3/js/d3.js",
         "public/build/bower/dcjs/js/dc.js", //in bower.json
         "public/build/custom/dc-leaflet/js/dc-leaflet-dev.js", // NOT in bower.json
-        "public/build/custom/leaflet-stamen/tile.stamen.js", // NOT in bower.json
         "public/build/custom/angular-dc/js/angular-dc.js", //in bower.json
         "public/build/custom/d3-tip/js/d3-tip.js", //NOT in bower.json
         "public/build/bower/angular-messages/js/angular-messages.js", //in bower.json

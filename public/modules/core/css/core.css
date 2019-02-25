@@ -32,93 +32,8 @@ body {
   padding-top: 0px;
 }
 
-.undecorated-link:hover {
-  text-decoration: none;
-}
-[ng\:cloak],
-[ng-cloak],
-[data-ng-cloak],
-[x-ng-cloak],
-.ng-cloak,
-.x-ng-cloak {
-  display: none !important;
-}
-
-#homeMap {
-  z-index: 0;
-}
-
-.angular-leaflet-map {
-  position: absolute;
-  width: 100%;
-}
-
-#ribbon1,
-#ribbon2,
-#ribbon3,
-#ribbon4,
-#ribbon5 {
-  position: fixed;
-  right: 0;
-  bottom: 45px;
-}
-#ribbon2 {
-  bottom: 15px;
-  background: #4c8293;
-  color: white;
-  padding: 5px 5px 5px 5px;
-  border-radius: 5px;
-  width: 140px;
-  text-align: center;
-}
-#ribbon3 {
-  bottom: 15px;
-  background: B0DED3;
-  padding: 5px 5px 5px 5px;
-  border-radius: 5px;
-  width: 140px;
-  text-align: center;
-}
-#ribbon4 {
-  top: 60px;
-  width: 140px;
-  text-align: center;
-}
-#ribbon5 {
-  top: 60px;
-  right: 120px;
-  width: 140px;
-  text-align: center;
-}
-
 /* Base candidates
 -------------------------------------------------- */
-
-a:focus {
-  outline: none;
-}
-
-.dark .stroke {
-  border: 2px solid rgba(255, 255, 255, 0.25);
-}
-
-label.inline {
-  margin: 0 10px;
-  line-height: 40px;
-}
-
-.center-v {
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-.load-container {
-  position: relative;
-  min-height: 400px;
-}
-
 .pad0x {
   padding-left: 0;
   padding-right: 0;
@@ -129,70 +44,11 @@ label.inline {
   padding-right: 20px;
 }
 
-.center {
-  text-align: center;
-}
-
-.button {
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  background: #3498db;
-  text-align: center;
-}
-
-.button:hover,
-.button:focus {
-  text-decoration: none;
-  color: #fff;
-  opacity: 0.8;
-}
-
-.button.white {
-  color: #3498db;
-  background: #fff;
-}
-
-.button.blue {
-  color: #3c4c57;
-  background: none;
-}
-
-.button.stroke {
-  border: 3px solid #fff;
-}
-
-.button.stroke.blue {
-  border: 3px solid #3c4c57;
-  line-height: 38px;
-  color: #3c4c57;
-}
-
 .scroll {
   clear: both;
   display: block;
   height: 53px;
   margin-top: -53px;
-}
-
-.search-toggle {
-  display: none;
-}
-
-.ui-autocomplete {
-  z-index: 1200;
-}
-
-/* Prevents animation on initial page load. See lib.app.js */
-body:not(.animate) .animate {
-  -webkit-transition: none;
-  -moz-transition: none;
-  -ms-transition: none;
-  transition: none;
-}
-
-.text-aqua {
-  color: #3bb2d0;
 }
 
 input[type="text"].transparent,
@@ -202,38 +58,6 @@ input[type="text"].transparent:hover {
   background: transparent;
 }
 
-.limiter {
-  max-width: 1140px;
-  width: 83.3333%;
-}
-@media only screen and (max-width: 940px) {
-  .limiter {
-    width: 90%;
-  }
-}
-.pin-top,
-.pin-right,
-.pin-bottom,
-.pin-left,
-.pin-topleft,
-.pin-topright,
-.pin-bottomleft,
-.pin-bottomright {
-  position: absolute;
-}
-.pin-top {
-  left: 0;
-  right: 0;
-  top: 0;
-}
-.pin-bottom {
-  bottom: 0;
-}
-.slideshow-container {
-  margin: auto;
-  height: 480px;
-  padding: 80px 0;
-}
 #tophome {
   padding-bottom: 72px;
   color: #fff;
@@ -244,130 +68,6 @@ input[type="text"].transparent:hover {
   #tophome {
     padding-top: 53px;
   }
-}
-.slideshow-container {
-  margin: auto;
-}
-h2.fancy {
-  font-size: 48px;
-  font-weight: 600;
-  line-height: 58px;
-}
-.link-left {
-  margin-right: 20px;
-}
-.isopad {
-  position: relative;
-  right: 0%;
-  top: 0%;
-}
-@media only screen and (max-width: 991px) {
-  .isopad {
-    margin-top: 50px;
-  }
-  .slideshow-container {
-    padding: 20px 0;
-  }
-}
-.isopad img {
-  max-width: 100%;
-  height: auto;
-}
-.pin {
-  position: absolute;
-  width: 54px;
-  height: 65px;
-  background-image: url(../img/pin.png);
-  background-repeat: no-repeat;
-  z-index: 8;
-  opacity: 0;
-  animation-name: bounceInDown;
-  -moz-animation-name: bounceInDown;
-  animation-duration: 0.8s;
-  -moz-animation-duration: 0.8s;
-  animation-timing-function: linear;
-  -moz-animation-timing-function: linear;
-  animation-direction: alternate;
-  -moz-animation-direction: alternate;
-  animation-fill-mode: forwards;
-  -moz-animation-fill-mode: forwards;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-}
-.pin-1 {
-  top: 40%;
-  left: 35%;
-  animation-delay: 0.2s;
-}
-.pin-2 {
-  top: 40%;
-  left: 50%;
-  animation-delay: 0.4s;
-}
-.pin-3 {
-  top: 50%;
-  left: 48%;
-  animation-delay: 0.5s;
-}
-.pin-4 {
-  top: 25%;
-  left: 65%;
-  animation-delay: 0.55s;
-}
-@media only screen and (max-width: 640px) {
-  h2.fancy {
-    font-size: 38px;
-    line-height: 46px;
-  }
-  .pin {
-    width: 30px;
-    height: 38px;
-    background-size: 30px 38px;
-  }
-}
-@keyframes bounceInDown {
-  from,
-  60%,
-  75%,
-  90%,
-  to {
-    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-    -moz-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-  }
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -3000px, 0);
-    -moz-transform: translate3d(0, -3000px, 0);
-    transform: translate3d(0, -3000px, 0);
-  }
-  60% {
-    opacity: 1;
-    -webkit-transform: translate3d(0, 25px, 0);
-    -moz-transform: translate3d(0, 25px, 0);
-    transform: translate3d(0, 25px, 0);
-    opacity: 1;
-  }
-  75% {
-    -webkit-transform: translate3d(0, -10px, 0);
-    -moz-transform: translate3d(0, -10px, 0);
-    transform: translate3d(0, -10px, 0);
-  }
-  90% {
-    -webkit-transform: translate3d(0, 5px, 0);
-    -moz-transform: translate3d(0, 5px, 0);
-    transform: translate3d(0, 5px, 0);
-  }
-  to {
-    -webkit-transform: none;
-    -moz-transform: none;
-    transform: none;
-    opacity: 1;
-  }
-}
-.bounceInDown {
-  -webkit-animation-name: bounceInDown;
-  animation-name: bounceInDown;
 }
 
 /* About
@@ -554,11 +254,6 @@ h2.fancy {
   }
 }
 
-section.container {
-  padding-top: 100px;
-  margin-bottom: 50px;
-}
-
 /* Slider */
 .slick-slider {
   position: relative;
@@ -651,18 +346,6 @@ section.container {
 }
 
 /*homepage styles*/
-.homepage {
-  background: #f3eee3;
-}
-.home-bg {
-  left: 0;
-  min-width: 100%; /* to preserve aspect ratio */
-  min-height: 100%; /* to preserve aspect ratio */
-  opacity: 0.2;
-  position: fixed;
-  top: 0;
-  z-index: -1;
-}
 .home-content {
   color: black;
   padding-bottom: 50px;
@@ -681,10 +364,7 @@ section.container {
 .home-content p {
   font-size: 12px;
 }
-.laptop {
-  margin-top: 18px;
-  max-width: 100%;
-}
+
 .title-icon {
   margin-right: 5px;
 }
@@ -692,6 +372,7 @@ section.container {
   margin-top: -7px;
   width: 20px;
 }
+
 .link-button,
 .link-button:visited {
   background: #4c8293;

@@ -114,7 +114,7 @@
             <li>
               <a
                 class="dropdown-toggle export-button"
-                ng-href="#!/#walkthrough_{{view_code}}"
+                ng-href="#!/#walkthrough_{{ view_code }}"
                 target="_blank"
                 >Tutorial</a
               >
@@ -152,9 +152,9 @@
           </a>
           <ul class="dropdown-menu export-items">
             <li>
-              <a ng-click="share_country_URL()"
-                >{{ 'share_country_url' | translate }}</a
-              >
+              <a ng-click="share_country_URL()">{{
+                "share_country_url" | translate
+              }}</a>
             </li>
             <li class="divider"></li>
             <li>
@@ -168,7 +168,7 @@
             </li>
             <li class="divider"></li>
             <li>
-              <a ng-href="./data/{{data_input}}" target="_blank"
+              <a ng-href="./data/{{ data_input }}" target="_blank"
                 >Export (JSON)</a
               >
             </li>
@@ -244,7 +244,9 @@
             class="btn btn-secondary"
           >
             <i class="fa fa-tachometer" aria-hidden="true"></i>
-            <span class="button-label"><strong>{{metric_label}}</strong></span>
+            <span class="button-label"
+              ><strong>{{ metric_label }}</strong></span
+            >
           </button>
         </div>
         <!-- typhoon selector -->
@@ -259,7 +261,7 @@
                 data-toggle="dropdown"
                 href="#"
               >
-                <strong>{{disaster_type}}</strong>
+                <strong>{{ disaster_type }}</strong>
                 <i class="fa fa-angle-down PI-btn-arrow"></i>
               </a>
               <ul class="dropdown-menu submenu-items" id="disaster-type-items">
@@ -290,7 +292,7 @@
                 data-toggle="dropdown"
                 href="#"
               >
-                <strong>{{disaster_name}}</strong>
+                <strong>{{ disaster_name }}</strong>
                 <i class="fa fa-angle-down PI-btn-arrow"></i>
               </a>
               <ul
@@ -304,7 +306,7 @@
         <div class="community-profiles-wrapper">
           <div id="count-info" class="general-info">
             <span class="total-count total-count-pi"></span>
-            {{subtype_selection}} predicted (<span
+            {{ subtype_selection }} predicted (<span
               class="filter-count filter-count-pi"
             ></span>
             selected)
@@ -512,7 +514,7 @@
       <!-- the above div and inline styles are only for placement -->
       <div id="mapPopup" class="map-popup" style="position:absolute;">
         <div class="popup-header">
-          {{name_popup}}
+          {{ name_popup }}
           <button
             id="zoomin_icon"
             type="button"
@@ -524,8 +526,9 @@
           </button>
         </div>
         <div class="popup-score">
-          <div class="score-label">{{metric_label}}</div>
-          {{value_popup}}<span class="score-unit">{{value_popup_unit}}</span>
+          <div class="score-label">{{ metric_label }}</div>
+          {{ value_popup
+          }}<span class="score-unit">{{ value_popup_unit }}</span>
         </div>
       </div>
     </div>
@@ -542,16 +545,18 @@
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
           <span class="panel-header-icon">
-            <img src="{{metric_icon}}" />
+            <img src="{{ metric_icon }}" />
           </span>
-          <h4 class="modal-title">{{metric_label}}</h4>
+          <h4 class="modal-title">{{ metric_label }}</h4>
         </div>
         <div class="modal-body">
-          <h6><b>Description:</b> {{metric_desc}}</h6>
+          <h6><b>Description:</b> {{ metric_desc }}</h6>
           <br />
           <h6>
             <b>Link to source/info:</b>
-            <a href="{{metric_source}}" target="_blank">{{metric_source}}</a>
+            <a href="{{ metric_source }}" target="_blank">{{
+              metric_source
+            }}</a>
           </h6>
           <br />
         </div>
@@ -572,7 +577,7 @@
           </h4>
         </div>
         <div class="modal-body" style="word-break:break-all">
-          <h6 id="copy_url">{{shareable_URL}}</h6>
+          <h6 id="copy_url">{{ shareable_URL }}</h6>
           <br />
           <button ng-click="copyToClipboard('#copy_url')">Copy URL</button>
         </div>

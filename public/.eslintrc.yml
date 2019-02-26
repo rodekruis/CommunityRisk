@@ -1,0 +1,6 @@
+env:
+  node: false
+  browser: true
+  jquery: true
+rules:
+  no-console: warn

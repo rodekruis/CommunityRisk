@@ -8,6 +8,7 @@ angular.module("core").controller("HomeController", [
   "$compile",
   "Authentication",
   "leafletData",
+  "DEBUG",
   function(
     $translate,
     $scope,
@@ -15,8 +16,11 @@ angular.module("core").controller("HomeController", [
     $rootScope,
     $compile,
     Authentication,
-    leafletData
+    leafletData,
+    DEBUG
   ) {
+    $scope.DEBUG = DEBUG;
+
     $css.remove("modules/dashboards/css/storyboard.css");
     $css.remove("modules/dashboards/css/dashboards.css");
     $css.add("modules/dashboards/css/header.css");

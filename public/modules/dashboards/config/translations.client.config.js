@@ -17,6 +17,8 @@ var static_en = {
   IMPACT_DATABASE: "Impact database",
   PRIORITY_INDEX: "Priority Index",
   HOW_IT_WORKS: "How it works",
+  SIGN_IN: "Sign In",
+  SIGN_OUT: "Sign Out",
   EXPORT: "Export",
   share_country_url: "Share current country (URL)",
   share_url: "Share full current settings (URL)",
@@ -67,6 +69,8 @@ var static_es = {
   IMPACT_DATABASE: "BASE DE DATOS DE IMPACTO",
   PRIORITY_INDEX: "Índice de prioridad",
   HOW_IT_WORKS: "Cómo funciona",
+  SIGN_IN: "Iniciar sesión",
+  SIGN_OUT: "Cerrar sesión",
   EXPORT: "Exportar",
   share_country_url: "Compartir el país actual (URL)",
   share_url: "Compartir la configuración actual (URL)",
@@ -120,6 +124,8 @@ var static_fr = {
   IMPACT_DATABASE: "Base de Données d'Impact",
   PRIORITY_INDEX: "Indice de priorité",
   HOW_IT_WORKS: "Comment ça marche",
+  SIGN_IN: "Se connecter",
+  SIGN_OUT: "Se déconnecter",
   EXPORT: "Exporter",
   share_url: "Partager la configuration actuelle (URL)",
   export_csv: "Exporter (CSV)",
@@ -169,10 +175,6 @@ angular.module("dashboards").config(function($translateProvider) {
     ";",
     "text/plain; charset=ISO-8859-1"
   )("modules/dashboards/data/metadata_prototype.csv", function(metadata) {
-    //d3.json("https://dashboard.510.global/data/2,'PHL','%7B%7D','CRA','Typhoon','Haima'",function(data) {
-
-    //var metadata = data.usp_data.meta_indicators;
-
     var labels_en = {};
     var descriptions_en = {};
     var labels_es = {};

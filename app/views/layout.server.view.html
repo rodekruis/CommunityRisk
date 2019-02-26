@@ -78,8 +78,10 @@
       </section>
     </section>
 
-    <!--Embedding The User Object-->
-    <script type="text/javascript">
+    <script>
+      {% if (process.env.NODE_ENV !== 'production') %}window.DEBUG = true;{% endif %}
+
+      {# Embedding The User Object #}
       var user = {{ user | json | safe }};
     </script>
 

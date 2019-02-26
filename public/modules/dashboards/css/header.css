@@ -25,17 +25,11 @@
   margin-right: 10px;
   margin-top: 8px;
 }
-.navbar-right > li > a {
-  height: 41px;
-}
 @media only screen and (max-width: 1100px) {
   .navbar-right {
     border-bottom: 1px solid #eeeeee;
     margin-right: 0;
     margin-top: 0;
-  }
-  .navbar-right > li > a {
-    height: 30px;
   }
 }
 .navbar-left {
@@ -122,7 +116,6 @@
   border: 2px solid #eeeeee;
   height: 38px;
   margin-bottom: 3px;
-  outline: none;
   position: absolute;
   top: 5px;
   right: 5px;
@@ -132,12 +125,6 @@
 @media only screen and (min-width: 1100px) {
   .navbar-toggler {
     display: none;
-  }
-}
-
-@media only screen and (max-width: 1100px) {
-  #menu-buttons {
-    margin-top: 0px;
   }
 }
 @media only screen and (max-width: 1100px) {

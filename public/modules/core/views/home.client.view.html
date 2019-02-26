@@ -24,7 +24,7 @@
               type="button"
               data-toggle="collapse"
               data-target="#menu-buttons"
-              aria-controls="dataaccess"
+              aria-controls="menu-buttons"
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
@@ -33,31 +33,31 @@
           </div>
           <div id="menu-buttons" aria-expanded="false" class="button-nav">
             <ul class="nav navbar-top-links navbar-left">
-              <li class="dropdown">
+              <li>
                 <a
-                  class="submenu-item caps"
-                  ng-click="choose_view('CRA')"
                   ng-href="#!/community_risk"
+                  ng-click="choose_view('CRA')"
+                  class="caps"
                   >{{ "COMMUNITY_RISK" | translate }}</a
                 >
               </li>
             </ul>
             <ul class="nav navbar-top-links navbar-left">
-              <li class="dropdown">
+              <li>
                 <a
-                  class="submenu-item caps"
-                  ng-click="choose_view('PI')"
                   ng-href="#!/impact_database"
+                  ng-click="choose_view('PI')"
+                  class="caps"
                   >{{ "IMPACT_DATABASE" | translate }}</a
                 >
               </li>
             </ul>
             <ul class="nav navbar-top-links navbar-left">
-              <li class="dropdown">
+              <li>
                 <a
-                  class="submenu-item caps"
-                  ng-click="choose_view('PI')"
                   ng-href="#!/priority_index"
+                  ng-click="choose_view('PI')"
+                  class="caps"
                   >{{ "PRIORITY_INDEX" | translate }}</a
                 >
               </li>
@@ -96,7 +96,7 @@
         <div>
           <div class="container">
             <div class="home-content">
-              <p style="text-align:center">
+              <p class="text-center">
                 <img
                   src="modules/core/img/510logo-part2.png"
                   style="width:30%"

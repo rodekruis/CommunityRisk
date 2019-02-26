@@ -62,6 +62,16 @@
                 >
               </li>
             </ul>
+            <ul
+              class="nav navbar-top-links navbar-left"
+              ng-if="!!authentication.user"
+            >
+              <li>
+                <a ng-href="#!/fbf" class="caps">
+                  {{ "FBF" | translate }}
+                </a>
+              </li>
+            </ul>
             <ul class="nav navbar-top-links navbar-right" ng-if="DEBUG">
               <li>
                 <a

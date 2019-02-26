@@ -90,7 +90,5 @@ angular.module("users").controller("SettingsController", [
       { id: "nl_NL", name: "Nederlands" },
       { id: "en_EN", name: "English" },
     ];
-
-    //$scope.selectedLanguage = user.language;
   },
 ]);

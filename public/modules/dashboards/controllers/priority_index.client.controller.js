@@ -65,7 +65,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     };
     $scope.change_disaster_type = function(disaster_type) {
       $scope.disaster_type = disaster_type;
-      //$scope.disaster_name = $scope.disaster_type == 'Typhoon' ? 'Haima' : 'Batangas 2017';
       if ($scope.country_code == "PHL") {
         $scope.disaster_name =
           $scope.disaster_type == "Typhoon" ? "Haima" : "Batangas 2017";
@@ -73,14 +72,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
         $scope.disaster_name = "Ghorka 2015";
       } else if ($scope.country_code == "ECU" || $scope.country_code == "PER") {
         $scope.disaster_name = "Total";
-      } //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
+      }
       $scope.initiate("PI");
     };
 
     //Change event: reinitiate the dashboard
     $scope.change_disaster = function(disaster_name) {
       $scope.disaster_name = disaster_name;
-      console.log($scope.disaster_name);
       $scope.initiate("PI");
     };
 
@@ -111,7 +109,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.disaster_name = "Ghorka 2015";
     } else if ($scope.country_code == "ECU" || $scope.country_code == "PER") {
       $scope.disaster_name = "Total";
-    } //$scope.disaster_type == 'Flood' ? '2012-2' : '2012-8';}
+    }
     $scope.metric = "";
     if ($rootScope.disaster_type) {
       $scope.disaster_type = $rootScope.disaster_type;
@@ -220,13 +218,11 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $scope.admlevel = url.split("&")[1].split("=")[1];
           $scope.metric = url.split("&")[2].split("=")[1];
           $scope.chart_show = url.split("&")[5].split("=")[1];
-          //if ($scope.view_code == 'PI') {
           $scope.disaster_type = url.split("&")[3].split("=")[1];
           $scope.disaster_name = url
             .split("&")[4]
             .split("=")[1]
             .replace("%20", " ");
-          //}
         } else {
           $scope.directURLload = false;
           $scope.set_defaults_country($scope.country_code);
@@ -271,7 +267,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
         "','" +
         $scope.disaster_name +
         "'";
-      console.log($scope.data_input);
 
       Data.get({ adminLevel: $scope.data_input }, function(pgData) {
         $scope.load_data(pgData);
@@ -300,7 +295,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.geom = d.Districts;
 
       // 4. Variable-metadata
-      d.Metadata_full = pgData.usp_data.meta_indicators; //dashboard.sources.Metadata.data;
+      d.Metadata_full = pgData.usp_data.meta_indicators;
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
           (((e.view_code == "PI" || e.view_code == "CRA,PI") &&
@@ -313,22 +308,19 @@ angular.module("dashboards").controller("PriorityIndexController", [
       });
 
       // 5. Country-metadata
-      d.Country_meta_full = pgData.usp_data.meta_country; // dashboard.sources.Country_meta.data;
+      d.Country_meta_full = pgData.usp_data.meta_country;
       d.Country_meta = $.grep(d.Country_meta_full, function(e) {
         return e.country_code == $scope.country_code;
       });
 
       // 6. Disaster-metadata
-      d.Disaster_meta_full = pgData.usp_data.meta_disaster; //dashboard.sources.Metadata_disaster_events.data;
+      d.Disaster_meta_full = pgData.usp_data.meta_disaster;
       d.Disaster_meta = $.grep(d.Disaster_meta_full, function(e) {
         return (
           e.disaster_type == $scope.disaster_type &&
           e.country_code == $scope.country_code
         );
       });
-
-      // Log to check when needed
-      console.log(d);
 
       //Necessary style-change in case sidebar is collapsed when changing countries
       document.getElementById("mapPopup").style.visibility = "hidden";
@@ -537,13 +529,12 @@ angular.module("dashboards").controller("PriorityIndexController", [
             record_temp.agg_method === "sum" ? "value" : "value.finalVal";
           record.dimension = undefined;
           record.weight_var = record_temp.weight_var;
-          record.scorevar_name = ""; //record_temp.scorevar_name;
-          record.view = "PI"; //record_temp.view_code;
+          record.scorevar_name = "";
+          record.view = "PI";
           $scope.tables[j] = record;
           j = j + 1;
         }
       }
-      //console.log($scope.tables);
 
       ///////////////////////
       // CROSSFILTER SETUP //
@@ -668,10 +659,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
       //Create total statistics per disaster
       $scope.actuals = $scope.genLookup_disaster_meta(d, "actuals")[
         $scope.disaster_name
-      ]; //d.Disaster_meta.actuals;
+      ];
       $scope.predictions = $scope.genLookup_disaster_meta(d, "predictions")[
         $scope.disaster_name
-      ]; //d.Disaster_meta.predictions;
+      ];
       $scope.metric_label = meta_label[$scope.metric];
       if ($scope.actuals == "yes" && $scope.predictions == "no") {
         $scope.type_text =
@@ -717,13 +708,12 @@ angular.module("dashboards").controller("PriorityIndexController", [
       } else {
         var total_damage_temp = 0;
         $scope.total_damage = dec0Format(total_damage_temp);
-        $scope.total_potential = 1; //dec0Format(dimensions[$scope.default_metric.concat('_potential')].top(1)[0].value);
-        var total_intensity = total_damage_temp / 1; //dimensions[$scope.default_metric.concat('_potential')].top(1)[0].value;
+        $scope.total_potential = 1;
+        var total_intensity = total_damage_temp / 1;
         isNaN(total_intensity)
           ? ($scope.total_intensity = percFormat(0))
           : ($scope.total_intensity = percFormat(total_intensity));
       }
-      //: (dimensions[$scope.default_metric.concat('_pred')] ? dimensions[$scope.default_metric.concat('_pred')].top(1)[0].value //: 0);
 
       //Fill the event-dropdown in the sidebar
       var events = document.getElementById("events");
@@ -739,7 +729,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
             ($scope.view_code_PI == "PI" && record.predictions == "yes"))
         ) {
           var li = document.createElement("li");
-          //events.insertBefore(li,document.getElementById(act_pred).nextSibling);
           events.appendChild(li);
           var a = document.createElement("a");
           a.setAttribute("ng-click", "change_disaster('" + record.name + "')");
@@ -1130,31 +1119,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
             }
           }
           mapfilters_length = $scope.filters.length;
-          //Recalculate all community-profile figures
-          // var keyvalue = fill_keyvalues();
-          // $scope.updateHTML(keyvalue);
           document
             .getElementById("section-" + $scope.metric)
-            .classList.add("section-active"); //style = 'background:#4C8293;color:#ffffff';
-          //let reset-button (dis)appear
-          // var resetbutton = document.getElementsByClassName('reset-button')[0];
-          // if ($scope.filters.length > 0) {
-          // resetbutton.style.visibility = 'visible';
-          // } else {
-          // resetbutton.style.visibility = 'hidden';
-          // }
+            .classList.add("section-active");
         });
-
-      /* $('.leaflet-interactive').on('click', function(e) {
-                if (typeof event === 'undefined') {
-                    e = e.originalEvent; 
-                    var popup = document.getElementById('mapPopup');
-                    popup.style.left = Math.min($(window).width()-210,e.pageX) + 'px';	
-                    popup.style.top = Math.min($(window).height()-210,e.pageY) + 'px';
-                    popup.style.visibility = 'visible';
-                    if ($scope.admlevel < zoom_max && $scope.view_code !== 'PI') { document.getElementById('zoomin_icon').style.visibility = 'visible'; }
-                }
-            }); */
 
       /////////////////////
       // ROW CHART SETUP //
@@ -1168,7 +1136,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       }
       var barheight = 20; //Height of one bar in Tabular View
       var xAxis = meta_scorevar[$scope.metric] ? 11 : $scope.quantile_max * 1.1;
-      //$scope.row_filters_old = [];
 
       //Row-chart definition
       rowChart
@@ -1272,19 +1239,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
             var resetbutton = document.getElementsByClassName(
               "reset-button"
             )[0];
-            if (
-              $scope.filters.length > 0 /*|| $scope.row_filters_old.length > 0*/
-            ) {
+            if ($scope.filters.length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
               resetbutton.style.visibility = "hidden";
             }
           }
         })
-        //Make sure the row-text function (determines black/white color of text in bar-chart) also works after filtering the row-chart
-        // .on('renderlet',function(chart,filters){
-        // $scope.row_text(color_range);
-        // })
         .elasticX(false)
         .x(
           d3.scale
@@ -1363,7 +1324,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
           });
         }
         rowChart.redraw();
-        //$scope.row_text(color_range);
       };
 
       //Function to immediately scroll back to the top (especially handy in mobile setting)
@@ -1420,7 +1380,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
           .group(whereGroupSum_scores)
           .colors(mapchartColors)
           .colorCalculator(function(d) {
-            //return !d.count ? '#cccccc' : mapChart.colors()(d.sum);
             if ($scope.metric.indexOf("damage_class") > -1) {
               var colors = $scope.quantileColorDomain_PI_std;
               if (d.sum == 1) {
@@ -1548,7 +1507,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
               .range([0, rowChart.width()])
               .domain([0, xAxis])
           );
-        //dc.filterAll();
         dc.redrawAll();
         document.getElementById("mapPopup").style.visibility = "hidden";
         document.getElementById("zoomin_icon").style.visibility = "hidden";
@@ -1588,8 +1546,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //Function to open the modal with information on indicator
       $scope.info = function(id) {
-        //var metric_old = $scope.metric;
-        //$scope.metric = id;
         if (id !== "admin") {
           $scope.metric_label = meta_label[id];
         }
@@ -1603,7 +1559,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $scope.metric_icon = "modules/dashboards/img/" + meta_icon[id];
         }
         $("#infoModal").modal("show");
-        //$scope.metric = metric_old;
       };
 
       //Export to GEOJSON
@@ -1661,7 +1616,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
           "data:text/csv;charset=utf-8," + encodeURIComponent(finalVal)
         );
         download.setAttribute("download", "export.csv");
-        //download.click();
+        download.click();
       };
 
       //Create parameter-specific URL and show it in popup to copy
@@ -1725,8 +1680,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //Switch between MAP and TABULAR view
       $scope.mapShow = function() {
-        //$scope.row_filters_old = $.extend( [], $scope.row_filters );
-
         if ($scope.filters.length == 0) {
           zoomToGeom($scope.geom);
         } else {
@@ -1764,7 +1717,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
         });
       };
 
-      //$scope.map_filters_old = [];
       $scope.tabularShow = function() {
         $scope.chart_show = "row";
         $("#map-chart").hide();
@@ -1780,8 +1732,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
         $scope.coming_from_map = false;
 
         if ($(window).width() < 768) {
-          //&& $('#demo').hasClass('in')) {
-          //$('.collapse-button').toggle();
           $("#demo.in").removeClass("in");
         }
         $(document).ready(function() {
@@ -1806,11 +1756,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
         dc.redrawAll();
         var keyvalue = fill_keyvalues();
         $scope.updateHTML(keyvalue);
-        //resetbutton.style.visibility = 'hidden';
         if ($scope.chart_show == "map") {
           zoomToGeom($scope.geom);
         }
-        //if (chart_show == 'row') {row_text(color_range);};
       };
 
       /////////////////////////
@@ -2019,21 +1967,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
       };
     };
 
-    // Function for handling sub-dropdown-menus in Navigation bar
-    // $(document).ready(function(){
-    // $('.dropdown-submenu a.menu-item').on("click", function(e){
-    // $('.submenu-items.open').toggle().removeClass('open');
-    // $(this).next('ul').toggle().addClass('open');
-    // e.stopPropagation();
-    // e.preventDefault();
-    // });
-    // });
-
     //Final CSS
     $(".sidebar-wrapper").addClass("in");
     $(document).ready(function() {
       if ($(window).width() < 768) {
-        //$(".sidebar-wrapper").addClass("mobile");
         $(".sidebar-wrapper").removeClass("in");
       }
     });

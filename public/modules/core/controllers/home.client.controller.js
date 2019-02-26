@@ -101,7 +101,6 @@ angular.module("core").controller("HomeController", [
             }
           })
           .valueAccessor(function(d) {
-            console.log(d);
             return d.value;
           })
           .featureKeyAccessor(function(feature) {

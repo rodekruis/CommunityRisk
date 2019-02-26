@@ -34,13 +34,13 @@ exports.getData = function(req, res, next, parameters) {
   pg.connect(connString, function(err, client, release) {
     if (err) return next(err);
 
-    var sql = `
-            SELECT jsonb_build_object(
-                'type', 'Feature',
-                'id', id,
-                'geometry', ST_AsGeoJSON(geom)::jsonb,
-                'properties', to_jsonb(row) - 'id' - 'geom'
-            ) FROM(SELECT * FROM auth_zmb_source.glofas_stations) row;`;
+    var sql =
+      "SELECT jsonb_build_object(                                " +
+      "    'type', 'Feature',                                    " +
+      "    'id', id,                                             " +
+      "    'geometry', ST_AsGeoJSON(geom)::jsonb,                " +
+      "    'properties', to_jsonb(row) - 'id' - 'geom'           " +
+      ") FROM(SELECT * FROM auth_zmb_source.glofas_stations) row;";
 
     client.query(sql, function(err, result) {
       if (err) return next(err);

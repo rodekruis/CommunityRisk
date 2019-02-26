@@ -62,6 +62,22 @@
                 >
               </li>
             </ul>
+            <ul class="nav navbar-top-links navbar-right" ng-if="DEBUG">
+              <li>
+                <a
+                  ng-href="#!/signin"
+                  ng-if="!authentication.user"
+                  class="btn btn-default"
+                  >{{ "SIGN_IN" | translate }}</a
+                >
+                <a
+                  ng-href="/auth/signout"
+                  ng-if="!!authentication.user"
+                  class="btn btn-warning"
+                  >{{ "SIGN_OUT" | translate }}</a
+                >
+              </li>
+            </ul>
           </div>
         </nav>
         <!-- end: navbar-header -->

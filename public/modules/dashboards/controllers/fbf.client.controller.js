@@ -7,6 +7,7 @@ angular.module("dashboards").controller("FbfController", [
   "$rootScope",
   "$compile",
   "$q",
+  "$location",
   "Authentication",
   "Data",
   "$window",
@@ -19,12 +20,18 @@ angular.module("dashboards").controller("FbfController", [
     $rootScope,
     $compile,
     $q,
+    $location,
     Authentication,
     Data,
     $window,
     $stateParams,
     cfpLoadingBar
   ) {
+    $scope.user = Authentication.user;
+
+    // This is a 'private' view, so a valid user is required:
+    if (!$scope.user) $location.path("signin");
+
     //This is the only working method I found to load page-specific CSS.
     //DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
     $css.remove(["modules/dashboards/css/core.css"]);

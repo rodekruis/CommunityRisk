@@ -6,11 +6,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
   "$css",
   "$rootScope",
   "$compile",
-  "$q",
   "Authentication",
   "Data",
-  "$window",
-  "$stateParams",
   "cfpLoadingBar",
   function(
     $translate,
@@ -18,11 +15,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
     $css,
     $rootScope,
     $compile,
-    $q,
     Authentication,
     Data,
-    $window,
-    $stateParams,
     cfpLoadingBar
   ) {
     //This is the only working method I found to load page-specific CSS.

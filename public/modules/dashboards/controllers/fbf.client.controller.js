@@ -6,12 +6,9 @@ angular.module("dashboards").controller("FbfController", [
   "$css",
   "$rootScope",
   "$compile",
-  "$q",
   "$location",
   "Authentication",
   "Data",
-  "$window",
-  "$stateParams",
   "cfpLoadingBar",
   function(
     $translate,
@@ -19,12 +16,9 @@ angular.module("dashboards").controller("FbfController", [
     $css,
     $rootScope,
     $compile,
-    $q,
     $location,
     Authentication,
     Data,
-    $window,
-    $stateParams,
     cfpLoadingBar
   ) {
     $scope.user = Authentication.user;

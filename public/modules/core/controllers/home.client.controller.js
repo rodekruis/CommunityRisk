@@ -7,7 +7,6 @@ angular.module("core").controller("HomeController", [
   "$rootScope",
   "$compile",
   "Authentication",
-  "leafletData",
   "DEBUG",
   function(
     $translate,
@@ -16,7 +15,6 @@ angular.module("core").controller("HomeController", [
     $rootScope,
     $compile,
     Authentication,
-    leafletData,
     DEBUG
   ) {
     $scope.DEBUG = DEBUG;

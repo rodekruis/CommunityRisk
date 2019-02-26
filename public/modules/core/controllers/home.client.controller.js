@@ -219,7 +219,7 @@ angular.module("core").controller("HomeController", [
     });
 
     $(document).ready(function() {
-      $(".timer").countTo();
+      $(".js-count-to").countTo();
 
       var slickOptions = {
         dots: true,

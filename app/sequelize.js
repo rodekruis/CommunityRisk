@@ -1,5 +1,5 @@
 var Sequelize = require("sequelize");
-config = require("../config/config");
+var config = require("../config/config");
 
 var connString =
   "postgres://" +
@@ -10,6 +10,6 @@ var connString =
   config.postgres.host +
   ":5432/" +
   config.postgres.db;
-sequelize = new Sequelize(connString);
+var sequelize = new Sequelize(connString);
 
 module.exports = sequelize;

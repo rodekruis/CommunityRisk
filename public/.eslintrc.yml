@@ -1,3 +1,4 @@
+root: true # Exclude this folder from parents' rules
 env:
   node: false
   browser: true

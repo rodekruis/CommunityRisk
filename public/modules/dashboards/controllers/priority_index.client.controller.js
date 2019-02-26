@@ -189,7 +189,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     // INITIATE DASHBOARD //
     ////////////////////////
 
-    $scope.initiate = function(view_code) {
+    $scope.initiate = function() {
       //Start loading bar
       $scope.start();
 
@@ -300,9 +300,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.geom = d.Districts;
 
       // 4. Variable-metadata
-      var replace_null = function(value) {
-        return value == null ? "" : value;
-      };
       d.Metadata_full = pgData.usp_data.meta_indicators; //dashboard.sources.Metadata.data;
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
@@ -443,16 +440,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //set up country metadata
       var country_name = $scope.genLookup_country_meta(d, "country_name");
-      var country_level = $scope.genLookup_country_meta(
-        d,
-        "level" + $scope.admlevel + "_name"
-      );
+      $scope.genLookup_country_meta(d, "level" + $scope.admlevel + "_name");
       var country_zoom_min = $scope.genLookup_country_meta(d, "zoomlevel_min");
       var country_zoom_max = $scope.genLookup_country_meta(d, "zoomlevel_max");
-      var country_default_metric = $scope.genLookup_country_meta(
-        d,
-        "default_metric"
-      );
+      $scope.genLookup_country_meta(d, "default_metric");
 
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
@@ -510,9 +501,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       /////////////////////
 
       //Define number formats for absolute numbers and for percentage metrics
-      var intFormat = d3.format(",");
       var dec0Format = d3.format(",.0f");
-      var dec1Format = d3.format(",.1f");
       var dec2Format = d3.format(".2f");
       var percFormat = d3.format(",.2%");
 
@@ -572,10 +561,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
       });
 
       // Create the groups for these two dimensions (i.e. sum the metric)
-      var whereGroupSum = whereDimension.group().reduceSum(function(d) {
+      whereDimension.group().reduceSum(function(d) {
         return d[$scope.metric];
       });
-      var whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) {
+      whereDimension_tab.group().reduceSum(function(d) {
         return d[$scope.metric];
       });
 
@@ -641,7 +630,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       };
 
       //All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
-      var totaalDim = cf.dimension(function(i) {
+      var totaalDim = cf.dimension(function() {
         return "Total";
       });
 
@@ -749,13 +738,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
           (($scope.view_code_PI == "DDB" && record.actuals == "yes") ||
             ($scope.view_code_PI == "PI" && record.predictions == "yes"))
         ) {
-          if (record.actuals == "yes" && record.predictions == "no") {
-            var act_pred = "act";
-          } else if (record.actuals == "yes" && record.predictions == "yes") {
-            var act_pred = "act_pred";
-          } else if (record.actuals == "no" && record.predictions == "yes") {
-            var act_pred = "pred";
-          }
           var li = document.createElement("li");
           //events.insertBefore(li,document.getElementById(act_pred).nextSibling);
           events.appendChild(li);
@@ -887,8 +869,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
             record.group !== "hide" &&
             document.getElementById(record.group)
           ) {
-            var width = dimensions[record.name].top(1)[0].value.finalVal * 10;
-
             if (
               (!($scope.predictions == "no" && record.group == "predictions") &&
                 !($scope.actuals == "no" && record.group == "damage") &&
@@ -968,8 +948,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
             record.group !== "hide" &&
             document.getElementById(record.group)
           ) {
-            var width = dimensions[record.name].top(1)[0].value.finalVal * 10;
-
             if (
               (!($scope.predictions == "no" && record.group == "predictions") &&
                 !($scope.actuals == "no" && record.group == "damage") &&
@@ -1083,7 +1061,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         .turnOnControls(true)
         .legend(dc.leafletLegend().position("topright"))
         //Set up what happens when clicking on the map (popup appearing mainly)
-        .on("filtered", function(chart, filters) {
+        .on("filtered", function(chart) {
           $scope.filters = chart.filters();
 
           //When coming from Tabular View: update all information accordingly.
@@ -1272,7 +1250,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
             );
           }
         })
-        .on("filtered", function(chart, filters) {
+        .on("filtered", function(chart) {
           $scope.filters = chart.filters();
           //If coming from map: update all sidebar-information accordingly
           if ($scope.chart_show == "row" && $scope.coming_from_map) {
@@ -1590,7 +1568,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //Make sure that when opening another accordion-panel, the current one collapses
       var acc = document.getElementsByClassName("card-header level1");
-      var panel = document.getElementsByClassName("collapse level1");
       var active = document.getElementsByClassName("collapse level1 in")[0];
 
       for (var i = 0; i < acc.length; i++) {
@@ -1895,7 +1872,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
             n_fields = arguments.length,
             field,
             name,
-            reverse,
             cmp;
 
           // preprocess sorting options
@@ -1915,7 +1891,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
           }
           // final comparison function
           return function(A, B) {
-            var a, b, name, result;
+            var name, result;
             for (var i = 0; i < n_fields; i++) {
               result = 0;
               field = fields[i];

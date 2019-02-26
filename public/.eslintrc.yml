@@ -4,4 +4,3 @@ env:
   jquery: true
 rules:
   no-console: warn
-  no-unused-vars: 0

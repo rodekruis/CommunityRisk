@@ -128,7 +128,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
     // INITIATE DASHBOARD //
     ////////////////////////
 
-    $scope.initiate = function(view_code) {
+    $scope.initiate = function() {
       //Start loading bar
       $scope.start();
 
@@ -451,10 +451,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
 
       //set up country metadata
       var country_name = $scope.genLookup_country_meta(d, "country_name");
-      var country_level = $scope.genLookup_country_meta(
-        d,
-        "level" + $scope.admlevel + "_name"
-      );
+      $scope.genLookup_country_meta(d, "level" + $scope.admlevel + "_name");
       var country_zoom_min = $scope.genLookup_country_meta(d, "zoomlevel_min");
       var country_zoom_max = $scope.genLookup_country_meta(d, "zoomlevel_max");
       var country_default_metric = $scope.genLookup_country_meta(
@@ -645,9 +642,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       /////////////////////
 
       //Define number formats for absolute numbers and for percentage metrics
-      var intFormat = d3.format(",");
       var dec0Format = d3.format(",.0f");
-      var dec1Format = d3.format(",.1f");
       var dec2Format = d3.format(".2f");
       var percFormat = d3.format(",.2%");
 
@@ -721,7 +716,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       var whereGroupSum = whereDimension.group().reduceSum(function(d) {
         return d[$scope.metric];
       });
-      var whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) {
+      whereDimension_tab.group().reduceSum(function(d) {
         return d[$scope.metric];
       });
 
@@ -815,7 +810,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       };
 
       //All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
-      var totaalDim = cf.dimension(function(i) {
+      var totaalDim = cf.dimension(function() {
         return "Total";
       });
 
@@ -930,7 +925,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
         var quantile_range_scores = [];
         var j = 0;
         for (i = 0; i < d.Rapportage.length; i++) {
-          Object.keys(d.Rapportage[i]).forEach(function(key, index) {
+          Object.keys(d.Rapportage[i]).forEach(function(key) {
             if (
               meta_scorevar[key] &&
               (d.Rapportage[i][meta_scorevar[key]] ||
@@ -1521,7 +1516,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
         .turnOnControls(true)
         .legend(dc.leafletLegend().position("topright"))
         //Set up what happens when clicking on the map
-        .on("filtered", function(chart, filters, e) {
+        .on("filtered", function(chart) {
           $scope.filters = chart.filters();
 
           //When coming from Tabular View: update all information accordingly.
@@ -1687,7 +1682,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
             );
           }
         })
-        .on("filtered", function(chart, filters) {
+        .on("filtered", function(chart) {
           $scope.filters = chart.filters();
           //$scope.row_filters = $.extend( [], chart.filters() );
 
@@ -2122,7 +2117,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
 
       //Make sure that when opening another accordion-panel, the current one collapses
       var acc = document.getElementsByClassName("card-header level1");
-      var panel = document.getElementsByClassName("collapse level1");
       var active = document.getElementsByClassName("collapse level1 in")[0];
       for (var i = 0; i < acc.length; i++) {
         acc[i].onclick = function() {
@@ -2144,13 +2138,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
         $("#statusModal").modal("show");
       };
 
-      function wait(ms) {
-        var start = new Date().getTime();
-        var end = start;
-        while (end < start + ms) {
-          end = new Date().getTime();
-        }
-      }
       $scope.open_DPI = function() {
         $("#statusModal").modal("hide");
         $(".collapse.level1.in").removeClass("in");
@@ -2548,7 +2535,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
             n_fields = arguments.length,
             field,
             name,
-            reverse,
             cmp;
 
           // preprocess sorting options
@@ -2568,7 +2554,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
           }
           // final comparison function
           return function(A, B) {
-            var a, b, name, result;
+            var name, result;
             for (var i = 0; i < n_fields; i++) {
               result = 0;
               field = fields[i];

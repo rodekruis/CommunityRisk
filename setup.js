@@ -1,6 +1,5 @@
-var init = require("./config/init")(),
-  config = require("./config/config");
-
+var init = require("./config/init");
+init();
 var cleanup = require("./app/cleanup.js");
 
 console.log("Cleanup starting");

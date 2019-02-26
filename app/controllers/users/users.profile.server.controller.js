@@ -4,10 +4,7 @@
  * Module dependencies.
  */
 var _ = require("lodash"),
-  errorHandler = require("../errors.server.controller.js"),
-  mongoose = require("mongoose"),
-  passport = require("passport"),
-  User = require("../../models/user.server.model");
+  errorHandler = require("../errors.server.controller.js");
 
 /**
  * Update user details

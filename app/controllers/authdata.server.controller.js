@@ -4,8 +4,7 @@
  * Module dependencies.
  */
 
-var _ = require("lodash"),
-  config = require("../../config/config"),
+var config = require("../../config/config"),
   pg = require("pg");
 
 /**
@@ -50,6 +49,4 @@ exports.getData = function(req, res, next, parameters) {
       next();
     });
   });
-  // console.log("req.pgDatareq.pgDatareq.pgDatareq.pgDatareq.pgData", req.pgData)
-  // res.jsonp(req.pgData)
 };

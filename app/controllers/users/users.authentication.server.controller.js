@@ -3,8 +3,7 @@
 /**
  * Module dependencies.
  */
-var _ = require("lodash"),
-  errorHandler = require("../errors.server.controller"),
+var errorHandler = require("../errors.server.controller"),
   passport = require("passport"),
   User = require("../../models/user.server.model"),
   bcrypt = require("bcrypt");
@@ -205,7 +204,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 /**
  * Remove OAuth provider
  */
-exports.removeOAuthProvider = function(req, res, next) {
+exports.removeOAuthProvider = function(req, res) {
   var user = req.user;
   var provider = req.param("provider");
 

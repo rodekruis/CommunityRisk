@@ -3,3 +3,5 @@ env:
   node: true
 extends:
   - "prettier"
+rules:
+  no-unused-vars: error

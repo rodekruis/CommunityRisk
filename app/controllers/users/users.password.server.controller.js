@@ -3,8 +3,7 @@
 /**
  * Module dependencies.
  */
-var _ = require("lodash"),
-  errorHandler = require("../errors.server.controller"),
+var errorHandler = require("../errors.server.controller"),
   User = require("../../models/user.server.model"),
   config = require("../../../config/config"),
   nodemailer = require("nodemailer"),

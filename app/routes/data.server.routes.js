@@ -3,8 +3,7 @@
 /**
  * Module dependencies.
  */
-var users = require("../../app/controllers/users"),
-  data = require("../../app/controllers/data");
+var data = require("../../app/controllers/data");
 
 module.exports = function(app) {
   app.route("/data/:adminLevel").get(data.read);

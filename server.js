@@ -2,18 +2,17 @@
 /**
  * Module dependencies.
  */
-var init = require("./config/init")(),
-  config = require("./config/config"),
+var init = require("./config/init");
+init();
+var config = require("./config/config"),
   https = require("https"),
   http = require("http"),
   fs = require("fs"),
   secrets = require("./config/secrets"),
   path = require("path"),
   constants = require("constants"),
-  tls = require("tls"),
   compression = require("compression"),
   passport = require("passport"),
-  session = require("express-session"),
   bodyParser = require("body-parser");
 
 /**

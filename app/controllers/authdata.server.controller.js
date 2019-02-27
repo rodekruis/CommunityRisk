@@ -4,8 +4,7 @@
  * Module dependencies.
  */
 
-var _ = require("lodash"),
-  config = require("../../config/config"),
+var config = require("../../config/config"),
   pg = require("pg");
 
 /**
@@ -34,13 +33,13 @@ exports.getData = function(req, res, next, parameters) {
   pg.connect(connString, function(err, client, release) {
     if (err) return next(err);
 
-    var sql = `
-            SELECT jsonb_build_object(
-                'type', 'Feature',
-                'id', id,
-                'geometry', ST_AsGeoJSON(geom)::jsonb,
-                'properties', to_jsonb(row) - 'id' - 'geom'
-            ) FROM(SELECT * FROM auth_zmb_source.glofas_stations) row;`;
+    var sql =
+      "SELECT jsonb_build_object(                                " +
+      "    'type', 'Feature',                                    " +
+      "    'id', id,                                             " +
+      "    'geometry', ST_AsGeoJSON(geom)::jsonb,                " +
+      "    'properties', to_jsonb(row) - 'id' - 'geom'           " +
+      ") FROM(SELECT * FROM auth_zmb_source.glofas_stations) row;";
 
     client.query(sql, function(err, result) {
       if (err) return next(err);
@@ -50,6 +49,4 @@ exports.getData = function(req, res, next, parameters) {
       next();
     });
   });
-  // console.log("req.pgDatareq.pgDatareq.pgDatareq.pgDatareq.pgData", req.pgData)
-  // res.jsonp(req.pgData)
 };

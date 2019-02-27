@@ -14,7 +14,7 @@ angular.module("users").controller("SettingsController", [
     if (!$scope.user) $location.path("/");
 
     // Check if there are additional accounts
-    $scope.hasConnectedAdditionalSocialAccounts = function(provider) {
+    $scope.hasConnectedAdditionalSocialAccounts = function() {
       for (var i in $scope.user.additionalProvidersData) {
         return true;
       }
@@ -76,7 +76,7 @@ angular.module("users").controller("SettingsController", [
 
       $http
         .post("/users/password", $scope.passwordDetails)
-        .success(function(response) {
+        .success(function() {
           // If successful show success message and clear form
           $scope.success = true;
           $scope.passwordDetails = null;
@@ -90,7 +90,5 @@ angular.module("users").controller("SettingsController", [
       { id: "nl_NL", name: "Nederlands" },
       { id: "en_EN", name: "English" },
     ];
-
-    //$scope.selectedLanguage = user.language;
   },
 ]);

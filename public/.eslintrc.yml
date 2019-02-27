@@ -1,0 +1,7 @@
+root: true # Exclude this folder from parents' rules
+env:
+  node: false
+  browser: true
+  jquery: true
+rules:
+  no-console: warn

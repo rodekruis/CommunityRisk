@@ -6,12 +6,9 @@ angular.module("dashboards").controller("FbfController", [
   "$css",
   "$rootScope",
   "$compile",
-  "$q",
   "$location",
   "Authentication",
   "Data",
-  "$window",
-  "$stateParams",
   "cfpLoadingBar",
   function(
     $translate,
@@ -19,12 +16,9 @@ angular.module("dashboards").controller("FbfController", [
     $css,
     $rootScope,
     $compile,
-    $q,
     $location,
     Authentication,
     Data,
-    $window,
-    $stateParams,
     cfpLoadingBar
   ) {
     $scope.user = Authentication.user;
@@ -72,7 +66,6 @@ angular.module("dashboards").controller("FbfController", [
     if ($rootScope.view_code) {
       $scope.view_code = $rootScope.view_code;
     }
-    //$scope.view_code == 'CRA' ? $scope.admlevel = 2 : $scope.admlevel = 3;
     $scope.metric_label = "";
     $scope.metric_year = "";
     $scope.metric_source = "";
@@ -135,7 +128,7 @@ angular.module("dashboards").controller("FbfController", [
     // INITIATE DASHBOARD //
     ////////////////////////
 
-    $scope.initiate = function(view_code) {
+    $scope.initiate = function() {
       //Start loading bar
       $scope.start();
 
@@ -156,11 +149,7 @@ angular.module("dashboards").controller("FbfController", [
           $scope.directURLload = true;
           $scope.admlevel = url.split("&")[1].split("=")[1];
           $scope.metric = url.split("&")[2].split("=")[1];
-          // var filters_temp = url.split('&')[4].split('=')[1].split(',');
-          // $scope.filters_url = filters_temp[0] == "" ? [] : filters_temp;
-          //$scope.chart_show = url.split('&')[5].split('=')[1];
           $scope.chart_show = url.split("&")[4].split("=")[1];
-          //if ($scope.view_code == 'CRA') {
           $scope.parent_codes =
             url.split("&")[3].split("=")[1] == ""
               ? []
@@ -202,16 +191,10 @@ angular.module("dashboards").controller("FbfController", [
         "','" +
         $scope.disaster_name +
         "'";
-      //$scope.sql = 'select usp_data(' + $scope.data_input + ');';
-      //console.log($scope.data_input);
 
-      Data.get(
-        { adminLevel: $scope.data_input },
-        //Data.get({adminLevel: $scope.sql},
-        function(pgData) {
-          $scope.load_data(pgData);
-        }
-      );
+      Data.get({ adminLevel: $scope.data_input }, function(pgData) {
+        $scope.load_data(pgData);
+      });
     };
 
     ///////////////
@@ -222,17 +205,14 @@ angular.module("dashboards").controller("FbfController", [
       var d = {};
 
       // 1. Geo-data
-      //var pcode_list = [];
-      //for (var i=0;i<d.Rapportage.length;i++){ pcode_list[i]=d.Rapportage[i].pcode; }
       d.Districts = pgData.usp_data.geo;
-      //d.Districts.features = $.grep(d.Districts.features, function(e){ return pcode_list.indexOf(e.properties.pcode) > -1; });
       d.Districts.features = $.grep(d.Districts.features, function(e) {
         return e.properties.pcode !== null;
       });
       $scope.geom = d.Districts;
 
       // 2. Feature data
-      d.Rapportage = []; //pgData.usp_data.ind;
+      d.Rapportage = [];
       for (var i = 0; i < d.Districts.features.length; i++) {
         d.Rapportage[i] = d.Districts.features[i].properties;
       }
@@ -249,7 +229,7 @@ angular.module("dashboards").controller("FbfController", [
       }
 
       // 4. Variable-metadata
-      d.Metadata_full = pgData.usp_data.meta_indicators; //dashboard.sources.Metadata.data;
+      d.Metadata_full = pgData.usp_data.meta_indicators;
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
           (e.view_code == "CRA" || e.view_code == "CRA,PI") &&
@@ -261,13 +241,10 @@ angular.module("dashboards").controller("FbfController", [
       });
 
       // 5. Country-metadata
-      d.Country_meta_full = pgData.usp_data.meta_country; //dashboard.sources.Country_meta.data;
+      d.Country_meta_full = pgData.usp_data.meta_country;
       d.Country_meta = $.grep(d.Country_meta_full, function(e) {
         return e.country_code == $scope.country_code;
       });
-
-      // Log to check when needed
-      console.log(d);
 
       //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)
       document
@@ -345,16 +322,10 @@ angular.module("dashboards").controller("FbfController", [
         "','" +
         $scope.disaster_name +
         "'";
-      //$scope.sql = 'select usp_data(' + $scope.data_input + ');';
-      //console.log($scope.data_input);
 
-      Data.get(
-        { adminLevel: $scope.data_input },
-        //Data.get({adminLevel: $scope.sql},
-        function(pgData) {
-          $scope.reload_data(d, pgData);
-        }
-      );
+      Data.get({ adminLevel: $scope.data_input }, function(pgData) {
+        $scope.reload_data(d, pgData);
+      });
     };
 
     /////////////////
@@ -367,7 +338,6 @@ angular.module("dashboards").controller("FbfController", [
       // load data (metadata does not have to be reloaded)
       d.Districts = pgData.usp_data.geo;
       $scope.geom = pgData.usp_data.geo;
-      //d.Rapportage = pgData.usp_data.ind;
       d.Rapportage = [];
       for (var i = 0; i < d.Districts.features.length; i++) {
         d.Rapportage[i] = d.Districts.features[i].properties;
@@ -389,8 +359,6 @@ angular.module("dashboards").controller("FbfController", [
           e.admin_level_min <= $scope.admlevel
         );
       });
-
-      //console.log(d);
 
       //Final CSS
       $(".view-buttons button.active").removeClass("active");
@@ -461,10 +429,7 @@ angular.module("dashboards").controller("FbfController", [
 
       //set up country metadata
       var country_name = $scope.genLookup_country_meta(d, "country_name");
-      var country_level = $scope.genLookup_country_meta(
-        d,
-        "level" + $scope.admlevel + "_name"
-      );
+      $scope.genLookup_country_meta(d, "level" + $scope.admlevel + "_name");
       var country_zoom_min = $scope.genLookup_country_meta(d, "zoomlevel_min");
       var country_zoom_max = $scope.genLookup_country_meta(d, "zoomlevel_max");
       var country_default_metric = $scope.genLookup_country_meta(
@@ -570,7 +535,6 @@ angular.module("dashboards").controller("FbfController", [
           $scope.parent_codes.length > 0
         ) {
           $scope.levelB_selection = $scope.name_selection;
-          //$scope.levelB_code = $scope.parent_code;
           $scope.levelB_codes = $scope.parent_codes;
         } else if (
           $scope.admlevel < zoom_max &&
@@ -634,14 +598,12 @@ angular.module("dashboards").controller("FbfController", [
 
         if ($scope.admlevel == zoom_min) {
           $scope.levelB_selection = undefined;
-          //$scope.levelB_code = '';
           $scope.levelB_codes = [];
         } else if (
           $scope.admlevel <= zoom_max &&
           $scope.levelB_selection == undefined
         ) {
           $scope.levelB_selection = $scope.name_selection;
-          //$scope.levelB_code = $scope.parent_code;
           $scope.levelB_codes = $scope.parent_codes;
         }
         $scope.levelC_selection =
@@ -655,9 +617,7 @@ angular.module("dashboards").controller("FbfController", [
       /////////////////////
 
       //Define number formats for absolute numbers and for percentage metrics
-      var intFormat = d3.format(",");
       var dec0Format = d3.format(",.0f");
-      var dec1Format = d3.format(",.1f");
       var dec2Format = d3.format(".2f");
       var percFormat = d3.format(",.2%");
 
@@ -692,31 +652,16 @@ angular.module("dashboards").controller("FbfController", [
           record.dimension = undefined;
           record.weight_var = record_temp.weight_var;
           record.scorevar_name = record_temp.scorevar_name;
-          record.view = "CRA"; //record_temp.view_code;
+          record.view = "CRA";
           $scope.tables[j] = record;
           j = j + 1;
         }
       }
 
-      // $scope.tables.sort(function sortString(a,b) {
-      // if (a.group !== 'scores' && b.group !== 'scores') {
-      // if (a.name < b.name)
-      // return -1
-      // if (a.name > b.name)
-      // return 1
-      // return 0;
-      // } else {
-      // return 0;
-      // }
-      // });
-
-      //console.log($scope.tables);
-
       ///////////////////////
       // CROSSFILTER SETUP //
       ///////////////////////
 
-      //var cf = crossfilter(d3.range(0, data.Districts.features.length));
       var cf = crossfilter(d.Rapportage);
 
       // The wheredimension returns the unique identifier of the geo area
@@ -731,7 +676,7 @@ angular.module("dashboards").controller("FbfController", [
       var whereGroupSum = whereDimension.group().reduceSum(function(d) {
         return d[$scope.metric];
       });
-      var whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) {
+      whereDimension_tab.group().reduceSum(function(d) {
         return d[$scope.metric];
       });
 
@@ -825,7 +770,7 @@ angular.module("dashboards").controller("FbfController", [
       };
 
       //All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
-      var totaalDim = cf.dimension(function(i) {
+      var totaalDim = cf.dimension(function() {
         return "Total";
       });
 
@@ -940,7 +885,7 @@ angular.module("dashboards").controller("FbfController", [
         var quantile_range_scores = [];
         var j = 0;
         for (i = 0; i < d.Rapportage.length; i++) {
-          Object.keys(d.Rapportage[i]).forEach(function(key, index) {
+          Object.keys(d.Rapportage[i]).forEach(function(key) {
             if (
               meta_scorevar[key] &&
               (d.Rapportage[i][meta_scorevar[key]] ||
@@ -1146,8 +1091,7 @@ angular.module("dashboards").controller("FbfController", [
               "ng-click",
               "change_indicator('" + record.name + "')"
             );
-            //div1.innerHTML = meta_label[record.name];
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}"; //meta_label[record.name];
+            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
             div.appendChild(div1);
             $compile(div1)($scope);
             var div2 = document.createElement("div");
@@ -1209,8 +1153,7 @@ angular.module("dashboards").controller("FbfController", [
                 "ng-click",
                 "change_indicator('" + record.name + "')"
               );
-              //div1.innerHTML = meta_label[record.name];
-              div1.innerHTML = "{{ '" + record.name + "' | translate }}"; //meta_label[record.name];
+              div1.innerHTML = "{{ '" + record.name + "' | translate }}";
               $compile(div1)($scope);
               div.appendChild(div1);
               var div1a = document.createElement("div");
@@ -1277,8 +1220,7 @@ angular.module("dashboards").controller("FbfController", [
                 "change_indicator('" + record.name + "')"
               );
             }
-            //div1.innerHTML = meta_label[record.name];
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}"; //meta_label[record.name];
+            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
             $compile(div1)($scope);
             div.appendChild(div1);
             var div1a = document.createElement("div");
@@ -1460,9 +1402,7 @@ angular.module("dashboards").controller("FbfController", [
         } else {
           for (i = 0; i < d.Rapportage.length; i++) {
             if (d.Rapportage[i][$scope.metric]) {
-              //console.log(d.Rapportage[i][$scope.metric]);
               quantile_range.push(d.Rapportage[i][$scope.metric]);
-              //quantile_range[i] = !meta_scorevar[$scope.metric] ? d.Rapportage[i][$scope.metric] : d.Rapportage[i][meta_scorevar[$scope.metric]];
               quantile_range.sort(function sortNumber(a, b) {
                 return a - b;
               });
@@ -1524,14 +1464,13 @@ angular.module("dashboards").controller("FbfController", [
               ": ",
               currentFormat($scope.genLookup_value()[d.key])
             );
-            //return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value.sum));
           }
         })
         .renderPopup(true)
         .turnOnControls(true)
         .legend(dc.leafletLegend().position("topright"))
         //Set up what happens when clicking on the map
-        .on("filtered", function(chart, filters, e) {
+        .on("filtered", function(chart) {
           $scope.filters = chart.filters();
 
           //When coming from Tabular View: update all information accordingly.
@@ -1564,10 +1503,7 @@ angular.module("dashboards").controller("FbfController", [
           var popup = document.getElementById("mapPopup");
           popup.style.visibility = "hidden";
           document.getElementById("zoomin_icon").style.visibility = "hidden";
-          if (
-            /* !$scope.directURLload && */ $scope.filters.length >
-            mapfilters_length
-          ) {
+          if ($scope.filters.length > mapfilters_length) {
             $scope.$apply(function() {
               $scope.name_popup =
                 lookup[$scope.filters[$scope.filters.length - 1]];
@@ -1597,8 +1533,6 @@ angular.module("dashboards").controller("FbfController", [
             } else {
               popup.style.left = $scope.posx + "px";
               popup.style.top = $scope.posy + "px";
-              //popup.style.left = '390px';
-              //popup.style.top = '110px';
             }
             popup.style.visibility = "visible";
             if ($scope.admlevel < zoom_max && $scope.view_code !== "PI") {
@@ -1635,7 +1569,6 @@ angular.module("dashboards").controller("FbfController", [
       }
       var barheight = 20; //Height of one bar in Tabular View
       var xAxis = meta_scorevar[$scope.metric] ? 11 : $scope.quantile_max * 1.1;
-      //$scope.row_filters_old = [];
 
       //Row-chart definition
       rowChart
@@ -1665,7 +1598,6 @@ angular.module("dashboards").controller("FbfController", [
               lookup[d.key]
             );
           } else {
-            //return dec2Format(d.value.sum).concat(' / 10 - ',lookup[d.key]);
             if ($scope.genLookup_value()[d.key] == "No data") {
               return "No data - ".concat(lookup[d.key]);
             } else {
@@ -1697,9 +1629,8 @@ angular.module("dashboards").controller("FbfController", [
             );
           }
         })
-        .on("filtered", function(chart, filters) {
+        .on("filtered", function(chart) {
           $scope.filters = chart.filters();
-          //$scope.row_filters = $.extend( [], chart.filters() );
 
           //If coming from map: update all sidebar-information accordingly
           if ($scope.chart_show == "row" && $scope.coming_from_map) {
@@ -1721,19 +1652,13 @@ angular.module("dashboards").controller("FbfController", [
             var resetbutton = document.getElementsByClassName(
               "reset-button"
             )[0];
-            if (
-              $scope.filters.length > 0 /*|| $scope.row_filters_old.length > 0*/
-            ) {
+            if ($scope.filters.length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
               resetbutton.style.visibility = "hidden";
             }
           }
         })
-        //Make sure the row-text function (determines black/white color of text in bar-chart) also works after filtering the row-chart
-        // .on('renderlet',function(chart,filters){
-        // $scope.row_text(color_range);
-        // })
         .elasticX(false)
         .x(
           d3.scale
@@ -1812,7 +1737,6 @@ angular.module("dashboards").controller("FbfController", [
           });
         }
         rowChart.redraw();
-        //$scope.row_text(color_range);
       };
 
       //Function to immediately scroll back to the top (especially handy in mobile setting)
@@ -1837,7 +1761,7 @@ angular.module("dashboards").controller("FbfController", [
                   d,
                   "level" + ($scope.admlevel - 1) + "_name"
                 )[$scope.country_code]
-              : lookup[$scope.parent_codes[0]]; //$scope.parent_code];
+              : lookup[$scope.parent_codes[0]];
           if ($scope.admlevel == zoom_max) {
             for (var i = 0; i < d.Rapportage.length; i++) {
               var record = d.Rapportage[i];
@@ -2022,7 +1946,6 @@ angular.module("dashboards").controller("FbfController", [
                 ": ",
                 currentFormat($scope.genLookup_value()[d.key])
               );
-              //return lookup[d.key].concat(' - ',meta_label[$scope.metric],' (0-10): ',dec2Format(d.value.sum));
             }
           });
 
@@ -2032,7 +1955,6 @@ angular.module("dashboards").controller("FbfController", [
         rowChart
           .group(whereGroupSum_scores_tab)
           .ordering(function(d) {
-            //return isNaN(d.value.sum) ? 0 : -d.value.sum;
             return isNaN($scope.genLookup_value()[d.key])
               ? 999999999
               : -d.value.sum;
@@ -2053,7 +1975,6 @@ angular.module("dashboards").controller("FbfController", [
                 lookup[d.key]
               );
             } else {
-              //return currentFormat($scope.genLookup_value()[d.key]).concat(' ',meta_unit[$scope.metric],' - ',lookup[d.key]);
               if ($scope.genLookup_value()[d.key] == "No data") {
                 return "No data - ".concat(lookup[d.key]);
               } else {
@@ -2091,7 +2012,6 @@ angular.module("dashboards").controller("FbfController", [
               .range([0, rowChart.width()])
               .domain([0, xAxis])
           );
-        //dc.filterAll();
         $("#map-chart2").hide();
         $("#map-chart").show();
         dc.redrawAll();
@@ -2109,8 +2029,6 @@ angular.module("dashboards").controller("FbfController", [
 
       //Function to open the modal with information on indicator
       $scope.info = function(id) {
-        //var metric_old = $scope.metric;
-        //$scope.metric = id;
         $scope.metric_info = id;
         if (id !== "admin") {
           $scope.metric_label = meta_label[id];
@@ -2124,7 +2042,6 @@ angular.module("dashboards").controller("FbfController", [
         } else {
           $scope.metric_icon = "modules/dashboards/img/" + meta_icon[id];
         }
-        //$scope.info_modal();
         $("#infoModal").modal("show");
       };
 
@@ -2134,7 +2051,6 @@ angular.module("dashboards").controller("FbfController", [
 
       //Make sure that when opening another accordion-panel, the current one collapses
       var acc = document.getElementsByClassName("card-header level1");
-      var panel = document.getElementsByClassName("collapse level1");
       var active = document.getElementsByClassName("collapse level1 in")[0];
       for (var i = 0; i < acc.length; i++) {
         acc[i].onclick = function() {
@@ -2156,13 +2072,6 @@ angular.module("dashboards").controller("FbfController", [
         $("#statusModal").modal("show");
       };
 
-      function wait(ms) {
-        var start = new Date().getTime();
-        var end = start;
-        while (end < start + ms) {
-          end = new Date().getTime();
-        }
-      }
       $scope.open_DPI = function() {
         $("#statusModal").modal("hide");
         $(".collapse.level1.in").removeClass("in");
@@ -2234,7 +2143,7 @@ angular.module("dashboards").controller("FbfController", [
           "data:text/csv;charset=utf-8," + encodeURIComponent(finalVal)
         );
         download.setAttribute("download", "export.csv");
-        //download.click();
+        download.click();
       };
 
       //Create parameter-specific URL and show it in popup to copy
@@ -2243,7 +2152,7 @@ angular.module("dashboards").controller("FbfController", [
         country,
         admlevel,
         metric,
-        parent_codes /* ,filters, */,
+        parent_codes,
         chart_show
       ) {
         var _url = location.href;
@@ -2257,7 +2166,7 @@ angular.module("dashboards").controller("FbfController", [
           "&metric=" +
           metric +
           "&parent_code=" +
-          parent_codes /* +'&selection_code='+filters */ +
+          parent_codes +
           "&view=" +
           chart_show;
         return _url;
@@ -2268,7 +2177,7 @@ angular.module("dashboards").controller("FbfController", [
           $scope.country_code,
           $scope.admlevel,
           $scope.metric,
-          $scope.parent_codes /* ,$scope.filters */,
+          $scope.parent_codes,
           $scope.chart_show
         );
         $("#URLModal").modal("show");
@@ -2331,19 +2240,11 @@ angular.module("dashboards").controller("FbfController", [
           if (!browserSupportFileUpload()) {
             alert("The File APIs are not fully supported in this browser!");
           } else {
-            //var data = null;
             var file = evt.target.files[0];
             var reader = new FileReader();
             reader.readAsText(file);
             reader.onload = function(event) {
               $scope.csvData = event.target.result;
-              /* data = $.csv.toArrays(csvData,{separator: ";"});
-                            console.log(data);
-                            if (data && data.length > 0) {
-                              alert('Imported -' + data.length + '- rows successfully!');
-                            } else {
-                                alert('No data to import!');
-                            } */
             };
             reader.onerror = function() {
               alert("Unable to read " + file.fileName);
@@ -2390,13 +2291,6 @@ angular.module("dashboards").controller("FbfController", [
             $("#uploadWarningModal").modal("show");
           }
         }
-
-        /* $scope.sql = 'CREATE TABLE public.test123(id int not null,name text not null,rollnumber int not null);';
-                
-                Data.get({adminLevel: $scope.sql}, 
-                    function(){
-                        console.log('upload succesfull');
-                });	 */
       };
 
       ///////////////////////////////////
@@ -2405,8 +2299,6 @@ angular.module("dashboards").controller("FbfController", [
 
       //Switch between MAP and TABULAR view
       $scope.mapShow = function() {
-        //$scope.row_filters_old = $.extend( [], $scope.row_filters );
-
         if ($scope.filters.length == 0) {
           zoomToGeom($scope.geom);
         } else {
@@ -2445,7 +2337,6 @@ angular.module("dashboards").controller("FbfController", [
         });
       };
 
-      //$scope.map_filters_old = [];
       $scope.tabularShow = function() {
         $scope.chart_show = "row";
         $("#map-chart").hide();
@@ -2489,7 +2380,6 @@ angular.module("dashboards").controller("FbfController", [
         if ($scope.chart_show == "map") {
           zoomToGeom($scope.geom);
         }
-        //if (chart_show == 'row') {row_text(color_range);};
       };
 
       /////////////////////////
@@ -2551,16 +2441,6 @@ angular.module("dashboards").controller("FbfController", [
         }
       };
 
-      // if ($scope.directURLload) {
-      // if ($scope.filters_url.length > 0) {
-      // mapChart.filter([$scope.filters_url]);
-      // mapChart.redraw();
-      // rowChart.filter([$scope.filters_url]);
-      // rowChart.redraw();
-      // $scope.directURLload = false;
-      // }
-      // }
-
       //Show map
       if ($scope.chart_show == "map") {
         $("#row-chart-container").hide();
@@ -2571,98 +2451,6 @@ angular.module("dashboards").controller("FbfController", [
       var zoom_child = $(".leaflet-control-zoom")[0];
       var zoom_parent = $(".leaflet-bottom.leaflet-right")[0];
       zoom_parent.insertBefore(zoom_child, zoom_parent.childNodes[0]);
-
-      //Automatically fill country-dropdown menu
-      //First sort country-items in right order
-      // var sort_by;
-      // (function() {
-      //     // utility functions
-      //     var default_cmp = function(a, b) {
-      //             if (a == b) return 0;
-      //             return a < b ? -1 : 1;
-      //         },
-      //         getCmpFunc = function(primer, reverse) {
-      //             var dfc = default_cmp, // closer in scope
-      //                 cmp = default_cmp;
-      //             if (primer) {
-      //                 cmp = function(a, b) {
-      //                     return dfc(primer(a), primer(b));
-      //                 };
-      //             }
-      //             if (reverse) {
-      //                 return function(a, b) {
-      //                     return -1 * cmp(a, b);
-      //                 };
-      //             }
-      //             return cmp;
-      //         };
-      //     // actual implementation
-      //     sort_by = function() {
-      //         var fields = [],
-      //             n_fields = arguments.length,
-      //             field, name, reverse, cmp;
-
-      //         // preprocess sorting options
-      //         for (var i = 0; i < n_fields; i++) {
-      //             field = arguments[i];
-      //             if (typeof field === 'string') {
-      //                 name = field;
-      //                 cmp = default_cmp;
-      //             }
-      //             else {
-      //                 name = field.name;
-      //                 cmp = getCmpFunc(field.primer, field.reverse);
-      //             }
-      //             fields.push({
-      //                 name: name,
-      //                 cmp: cmp
-      //             });
-      //         }
-      //         // final comparison function
-      //         return function(A, B) {
-      //             var a, b, name, result;
-      //             for (var i = 0; i < n_fields; i++) {
-      //                 result = 0;
-      //                 field = fields[i];
-      //                 name = field.name;
-
-      //                 result = field.cmp(A[name], B[name]);
-      //                 if (result !== 0) break;
-      //             }
-      //             return result;
-      //         }
-      //     }
-      // }());
-      // d.Country_meta_full.sort(sort_by('format', {name:'country_code', reverse: false}));
-
-      // //Create HTML
-      // if ($scope.view_code == 'CRA') {
-      //     var ul = document.getElementById('country-items');
-      //     while (ul.childElementCount > 0) { ul.removeChild(ul.lastChild);};
-      //     var formats = [];
-      //     for (var i=0;i<d.Country_meta_full.length;i++) {
-
-      //         var record = d.Country_meta_full[i];
-
-      //         if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
-      //             var li2 = document.createElement('li');
-      //             li2.setAttribute('class','divider');
-      //             ul.appendChild(li2);
-      //         }
-      //         var li = document.createElement('li');
-      //         ul.appendChild(li);
-      //         var a = document.createElement('a');
-      //         a.setAttribute('class','submenu-item');
-      //         a.setAttribute('ng-click','change_country(\'' + record.country_code + '\')');
-      //         a.setAttribute('role','button');
-      //         a.innerHTML = record.format == 'all' ? record.country_name : record.country_name + ' (' + record.format + ')';
-      //         $compile(a)($scope);
-      //         li.appendChild(a);
-
-      //         formats.push(record.format);
-
-      //     };
-      // }
 
       //////////////////////////////////////
       /// TRANSLATION TO OTHER LANGUAGES ///

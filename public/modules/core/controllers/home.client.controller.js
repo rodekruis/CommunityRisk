@@ -7,7 +7,6 @@ angular.module("core").controller("HomeController", [
   "$rootScope",
   "$compile",
   "Authentication",
-  "leafletData",
   "DEBUG",
   function(
     $translate,
@@ -16,7 +15,6 @@ angular.module("core").controller("HomeController", [
     $rootScope,
     $compile,
     Authentication,
-    leafletData,
     DEBUG
   ) {
     $scope.DEBUG = DEBUG;
@@ -101,7 +99,6 @@ angular.module("core").controller("HomeController", [
             }
           })
           .valueAccessor(function(d) {
-            console.log(d);
             return d.value;
           })
           .featureKeyAccessor(function(feature) {
@@ -110,7 +107,7 @@ angular.module("core").controller("HomeController", [
           .popup(function(d) {
             return lookup[d.key];
           })
-          .on("filtered", function(chart, filters) {
+          .on("filtered", function(chart) {
             $(window).scrollTop(0);
             $scope.choose_country(chart.filters()[0]);
             window.location.replace("#!/community_risk");
@@ -150,7 +147,6 @@ angular.module("core").controller("HomeController", [
             n_fields = arguments.length,
             field,
             name,
-            reverse,
             cmp;
 
           // preprocess sorting options
@@ -170,7 +166,7 @@ angular.module("core").controller("HomeController", [
           }
           // final comparison function
           return function(A, B) {
-            var a, b, name, result;
+            var name, result;
             for (var i = 0; i < n_fields; i++) {
               result = 0;
               field = fields[i];

@@ -19,7 +19,6 @@ angular.module("core").controller("HomeController", [
   ) {
     $scope.DEBUG = DEBUG;
 
-    $css.remove("modules/dashboards/css/storyboard.css");
     $css.remove("modules/dashboards/css/dashboards.css");
     $css.add("modules/dashboards/css/header.css");
 

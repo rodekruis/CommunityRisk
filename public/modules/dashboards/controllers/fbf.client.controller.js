@@ -41,12 +41,6 @@ angular.module("dashboards").controller("FbfController", [
     $scope.change_view = function(view) {
       $rootScope.view_code = view;
     };
-    $scope.change_country = function(country) {
-      $scope.country_code = country;
-      $scope.parent_codes = [];
-      $scope.metric = "";
-      $scope.initiate($rootScope.view_code);
-    };
 
     //////////////////////
     // DEFINE VARIABLES //
@@ -71,7 +65,6 @@ angular.module("dashboards").controller("FbfController", [
     $scope.metric_source = "";
     $scope.metric_desc = "";
     $scope.metric_icon = "";
-    $scope.admlevel_text = "";
     $scope.data_upload_warning = "";
     $scope.name_selection = "";
     $scope.name_selection_prev = "";
@@ -82,8 +75,6 @@ angular.module("dashboards").controller("FbfController", [
     $scope.data_input = "";
     $scope.filters = [];
     $scope.tables = [];
-    $scope.x = 500;
-    $scope.y = 200;
     $scope.quantileColorDomain_CRA_std = [
       "#f1eef6",
       "#bdc9e1",
@@ -107,8 +98,6 @@ angular.module("dashboards").controller("FbfController", [
       nameAttribute: "name",
       color: "#0080ff",
     };
-    $scope.map_filters = [];
-    $scope.row_filters = [];
 
     ///////////////////////
     // INITIAL FUNCTIONS //
@@ -1674,53 +1663,6 @@ angular.module("dashboards").controller("FbfController", [
       // ROW CHART FUNCTIONS //
       /////////////////////////
 
-      //Function to determine black/white color of text (to be best visible compared to background-color, etc.)
-      $scope.row_text = function(color_range) {
-        var color_level;
-        for (var i = 0; i < $(".dc-chart g.row").length; i++) {
-          row = $(".dc-chart g.row")[i];
-          fill = row.getElementsByTagName("rect")[0].getAttribute("fill");
-          selection = row.getElementsByTagName("rect")[0].getAttribute("class");
-          if (fill) {
-            for (j = 0; j < color_range.length; j++) {
-              if (
-                fill.toString().toLowerCase() ==
-                color_range[j].HEX.toLowerCase()
-              ) {
-                color_level = j;
-                break;
-              }
-            }
-          }
-          title = row.getElementsByTagName("title")[0].innerHTML;
-          if (!title) {
-            string = new XMLSerializer().serializeToString(
-              row.getElementsByTagName("title")[0]
-            );
-            pos = string.indexOf(">");
-            title = string.substring(pos + 1, pos + 4);
-          }
-          text = row.getElementsByTagName("text")[0];
-          //Four  conditions for black (instead of white text):
-          // 1. if color_level is 0/1/2 (out of 0-4) which indicates light background-colors.
-          // 2. if deselected (grey background)
-          // 3. If no fill-color is found
-          // 4. If the 0-10 value is < 3 (for quantile-based threshold indicators, it can happen that the above are not enough. This is a hard cut to make sure that for low-indicators we can see the text.)
-          if (selection == "deselected" && title.substring(0, 7) == "No Data") {
-            text.style.fill = "white";
-          } else if (
-            color_level <= 2 ||
-            selection == "deselected" ||
-            !fill ||
-            parseInt(title.substring(0, 3)) < 3
-          ) {
-            text.style.fill = "black";
-          } else {
-            text.style.fill = "white";
-          }
-        }
-      };
-
       //Function to sort either by Indicator Score (descending) or by Area Name (ascending)
       $scope.sort = function(type) {
         if (type === "value") {
@@ -2068,10 +2010,6 @@ angular.module("dashboards").controller("FbfController", [
       // HEADER FUNCTIONS //////////
       //////////////////////////////
 
-      $scope.open_status = function() {
-        $("#statusModal").modal("show");
-      };
-
       $scope.open_DPI = function() {
         $("#statusModal").modal("hide");
         $(".collapse.level1.in").removeClass("in");
@@ -2199,15 +2137,6 @@ angular.module("dashboards").controller("FbfController", [
       ///////////////////////////////
       // HEADER: TUTORIAL FUNCTION //
       ///////////////////////////////
-
-      //Go to tutorial
-      $scope.tutorial = function() {
-        if (($scope.view_code = "PI")) {
-          window.open("#!/#walkthrough_PI", "_blank");
-        } else {
-          window.open("#!/#walkthrough", "_blank");
-        }
-      };
 
       //Function to open the data upload modal
       $scope.data_upload = function() {

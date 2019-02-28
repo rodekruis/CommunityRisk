@@ -2,14 +2,14 @@
 
 //Start by defining the main module and adding the module dependencies
 var ngApp = angular.module(
-  ApplicationConfiguration.applicationModuleName,
-  ApplicationConfiguration.applicationModuleVendorDependencies
+  window.ApplicationConfiguration.applicationModuleName,
+  window.ApplicationConfiguration.applicationModuleVendorDependencies
 );
 
 ngApp.constant("DEBUG", !!window.DEBUG);
 
 // Setting HTML5 Location Mode
-angular.module(ApplicationConfiguration.applicationModuleName).config([
+angular.module(window.ApplicationConfiguration.applicationModuleName).config([
   "$locationProvider",
   "$compileProvider",
   "DEBUG",
@@ -25,5 +25,7 @@ angular.element(document).ready(function() {
   if (window.location.hash === "#_=_") window.location.hash = "#!";
 
   // Then init the app
-  angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
+  angular.bootstrap(document, [
+    window.ApplicationConfiguration.applicationModuleName,
+  ]);
 });

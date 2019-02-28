@@ -1,7 +1,14 @@
-root: true # Exclude this folder from parents' rules
 env:
   node: false
   browser: true
   jquery: true
+globals:
+  angular: true
+  chroma: true
+  crossfilter: true
+  d3: true
+  dc: true # Dimensional charting using d3.js
+  L: true # Leaflet
+  topojson: true
 rules:
   no-console: warn

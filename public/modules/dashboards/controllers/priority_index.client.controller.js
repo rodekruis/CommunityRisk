@@ -120,9 +120,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.metric_source = "";
     $scope.metric_desc = "";
     $scope.metric_icon = "";
-    $scope.admlevel_text = "";
     $scope.name_selection = "";
-    $scope.name_selection_prev = "";
     $scope.name_popup = "";
     $scope.value_popup = 0;
     $scope.country_selection = "";
@@ -130,8 +128,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.data_input = "";
     $scope.filters = [];
     $scope.tables = [];
-    $scope.x = 500;
-    $scope.y = 200;
     $scope.quantileColorDomain_PI_std = [
       "#ffffb2",
       "#fecc5c",
@@ -273,13 +269,14 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
     $scope.load_data = function(pgData) {
       var d = {};
+      var i;
 
       // 1. Feature data
       d.Rapportage = pgData.usp_data.ind;
 
       // 2. Geo-data
       var pcode_list = [];
-      for (var i = 0; i < d.Rapportage.length; i++) {
+      for (i = 0; i < d.Rapportage.length; i++) {
         pcode_list[i] = d.Rapportage[i].pcode;
       }
       d.Districts = pgData.usp_data.geo;
@@ -339,7 +336,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $(".sidebar-wrapper").removeClass("in");
         }
       });
-      for (var i = 0; i < $("#menu-buttons.in").length; i++) {
+      for (i = 0; i < $("#menu-buttons.in").length; i++) {
         $("#menu-buttons.in")[i].classList.remove("in");
       }
       $(".view-buttons button.active").removeClass("active");
@@ -569,7 +566,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
           return { count: 0, sum: 0 };
         }
       );
-      var cf_scores_metric = $scope.metric;
       var whereGroupSum_scores_tab = whereDimension_tab.group().reduce(
         function(p, v) {
           p.count = v[cf_scores_metric] !== null ? p.count + 1 : p.count;
@@ -640,7 +636,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       });
 
       //Now attach the dimension to the tables-array
-      var i;
       for (i = 0; i < $scope.tables.length; i++) {
         var name = $scope.tables[i].name;
         $scope.tables[i].dimension = dimensions[name];
@@ -683,8 +678,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
             $scope.genLookup_disaster_meta(d, "enddate")[$scope.disaster_name]
           : "";
 
+      var total_damage_temp;
+      var total_intensity;
       if ($scope.view_code_PI == "DDB") {
-        var total_damage_temp =
+        total_damage_temp =
           dimensions[$scope.default_metric].top(1)[0].value > 0
             ? dimensions[$scope.default_metric].top(1)[0].value
             : 0;
@@ -692,7 +689,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         $scope.total_potential = dec0Format(
           dimensions[$scope.default_metric.concat("_potential")].top(1)[0].value
         );
-        var total_intensity =
+        total_intensity =
           total_damage_temp /
           dimensions[$scope.default_metric.concat("_potential")].top(1)[0]
             .value;
@@ -700,10 +697,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
           ? ($scope.total_intensity = percFormat(0))
           : ($scope.total_intensity = percFormat(total_intensity));
       } else {
-        var total_damage_temp = 0;
+        total_damage_temp = 0;
         $scope.total_damage = dec0Format(total_damage_temp);
         $scope.total_potential = 1;
-        var total_intensity = total_damage_temp / 1;
+        total_intensity = total_damage_temp / 1;
         isNaN(total_intensity)
           ? ($scope.total_intensity = percFormat(0))
           : ($scope.total_intensity = percFormat(total_intensity));
@@ -835,17 +832,19 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
         for (var i = 0; i < $scope.tables.length; i++) {
           var record = $scope.tables[i];
+          var icon;
+          var unit;
 
           if (!meta_icon[record.name]) {
-            var icon = "modules/dashboards/img/undefined.png";
+            icon = "modules/dashboards/img/undefined.png";
           } else {
-            var icon = "modules/dashboards/img/" + meta_icon[record.name];
+            icon = "modules/dashboards/img/" + meta_icon[record.name];
           }
 
           if (meta_unit[record.name] === "null") {
-            var unit = "";
+            unit = "";
           } else {
-            var unit = meta_unit[record.name];
+            unit = meta_unit[record.name];
           }
 
           if (
@@ -920,11 +919,12 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.updateHTML = function(keyvalue) {
         for (var i = 0; i < $scope.tables.length; i++) {
           var record = $scope.tables[i];
+          var unit;
 
           if (meta_unit[record.name] === "null") {
-            var unit = "";
+            unit = "";
           } else {
-            var unit = meta_unit[record.name];
+            unit = meta_unit[record.name];
           }
 
           if (
@@ -995,8 +995,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
         .geojson(d.Districts)
         .colors(mapchartColors)
         .colorCalculator(function(d) {
+          var colors;
           if ($scope.metric.indexOf("damage_class") > -1) {
-            var colors = $scope.quantileColorDomain_PI_std;
+            colors = $scope.quantileColorDomain_PI_std;
             if (d.sum == 1) {
               return colors[0];
             } else if (d.sum == 2) {
@@ -1009,7 +1010,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
               return colors[4];
             }
           } else if ($scope.metric == "pred_error_damage") {
-            var colors = $scope.quantileColorDomain_PI_error;
+            colors = $scope.quantileColorDomain_PI_error;
             if (!d.count) {
               return "#cccccc";
             } else if (d.sum <= -3) {
@@ -1046,14 +1047,14 @@ angular.module("dashboards").controller("PriorityIndexController", [
         //Set up what happens when clicking on the map (popup appearing mainly)
         .on("filtered", function(chart) {
           $scope.filters = chart.filters();
+          var keyvalue;
+          var resetbutton;
 
           //When coming from Tabular View: update all information accordingly.
           if ($scope.chart_show == "map" && $scope.coming_from_tab) {
-            var keyvalue = fill_keyvalues();
+            keyvalue = fill_keyvalues();
             $scope.updateHTML(keyvalue);
-            var resetbutton = document.getElementsByClassName(
-              "reset-button"
-            )[0];
+            resetbutton = document.getElementsByClassName("reset-button")[0];
             if (chart.filters().length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
@@ -1062,11 +1063,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
           }
           //When NOT coming from Tabular View
           if ($scope.chart_show == "map" && !$scope.coming_from_tab) {
-            var keyvalue = fill_keyvalues();
+            keyvalue = fill_keyvalues();
             $scope.updateHTML(keyvalue);
-            var resetbutton = document.getElementsByClassName(
-              "reset-button"
-            )[0];
+            resetbutton = document.getElementsByClassName("reset-button")[0];
             if ($scope.filters.length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
@@ -1123,10 +1122,11 @@ angular.module("dashboards").controller("PriorityIndexController", [
       /////////////////////
 
       //Extra function needed to determine width of row-chart in various settings
+      var rowChart_width;
       if ($(window).width() < 768) {
-        var rowChart_width = $("#row-chart-container").width();
+        rowChart_width = $("#row-chart-container").width();
       } else {
-        var rowChart_width = $("#row-chart-container").width() - 370;
+        rowChart_width = $("#row-chart-container").width() - 370;
       }
       var barheight = 20; //Height of one bar in Tabular View
       var xAxis = meta_scorevar[$scope.metric] ? 11 : $scope.quantile_max * 1.1;
@@ -1146,8 +1146,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
         })
         .colors(mapchartColors)
         .colorCalculator(function(d) {
+          var colors;
+
           if ($scope.metric.indexOf("damage_class") > -1) {
-            var colors = $scope.quantileColorDomain_PI_std;
+            colors = $scope.quantileColorDomain_PI_std;
             if (d.value.sum == 1) {
               return colors[0];
             } else if (d.value.sum == 2) {
@@ -1160,7 +1162,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
               return colors[4];
             }
           } else if ($scope.metric == "pred_error_damage") {
-            var colors = $scope.quantileColorDomain_PI_error;
+            colors = $scope.quantileColorDomain_PI_error;
             if (!d.value.count) {
               return "#cccccc";
             } else if (d.value.sum <= -3) {
@@ -1213,13 +1215,14 @@ angular.module("dashboards").controller("PriorityIndexController", [
         })
         .on("filtered", function(chart) {
           $scope.filters = chart.filters();
+          var keyvalue;
+          var resetbutton;
+
           //If coming from map: update all sidebar-information accordingly
           if ($scope.chart_show == "row" && $scope.coming_from_map) {
-            var keyvalue = fill_keyvalues();
+            keyvalue = fill_keyvalues();
             $scope.updateHTML(keyvalue);
-            var resetbutton = document.getElementsByClassName(
-              "reset-button"
-            )[0];
+            resetbutton = document.getElementsByClassName("reset-button")[0];
             if (chart.filters().length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
@@ -1228,11 +1231,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
           }
           //If not coming from map
           if ($scope.chart_show == "row" && !$scope.coming_from_map) {
-            var keyvalue = fill_keyvalues();
+            keyvalue = fill_keyvalues();
             $scope.updateHTML(keyvalue);
-            var resetbutton = document.getElementsByClassName(
-              "reset-button"
-            )[0];
+            resetbutton = document.getElementsByClassName("reset-button")[0];
             if ($scope.filters.length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
@@ -1254,53 +1255,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       /////////////////////////
       // ROW CHART FUNCTIONS //
       /////////////////////////
-
-      //Function to determine black/white color of text (to be best visible compared to background-color, etc.)
-      $scope.row_text = function(color_range) {
-        var color_level;
-        for (var i = 0; i < $(".dc-chart g.row").length; i++) {
-          row = $(".dc-chart g.row")[i];
-          fill = row.getElementsByTagName("rect")[0].getAttribute("fill");
-          selection = row.getElementsByTagName("rect")[0].getAttribute("class");
-          if (fill) {
-            for (j = 0; j < color_range.length; j++) {
-              if (
-                fill.toString().toLowerCase() ==
-                color_range[j].HEX.toLowerCase()
-              ) {
-                color_level = j;
-                break;
-              }
-            }
-          }
-          title = row.getElementsByTagName("title")[0].innerHTML;
-          if (!title) {
-            string = new XMLSerializer().serializeToString(
-              row.getElementsByTagName("title")[0]
-            );
-            pos = string.indexOf(">");
-            title = string.substring(pos + 1, pos + 4);
-          }
-          text = row.getElementsByTagName("text")[0];
-          //Four  conditions for black (instead of white text):
-          // 1. if color_level is 0/1/2 (out of 0-4) which indicates light background-colors.
-          // 2. if deselected (grey background)
-          // 3. If no fill-color is found
-          // 4. If the 0-10 value is < 3 (for quantile-based threshold indicators, it can happen that the above are not enough. This is a hard cut to make sure that for low-indicators we can see the text.)
-          if (selection == "deselected" && title.substring(0, 7) == "No Data") {
-            text.style.fill = "white";
-          } else if (
-            color_level <= 2 ||
-            selection == "deselected" ||
-            !fill ||
-            parseInt(title.substring(0, 3)) < 3
-          ) {
-            text.style.fill = "black";
-          } else {
-            text.style.fill = "white";
-          }
-        }
-      };
 
       //Function to sort either by Indicator Score (descending) or by Area Name (ascending)
       $scope.sort = function(type) {
@@ -1374,8 +1328,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
           .group(whereGroupSum_scores)
           .colors(mapchartColors)
           .colorCalculator(function(d) {
+            var colors;
             if ($scope.metric.indexOf("damage_class") > -1) {
-              var colors = $scope.quantileColorDomain_PI_std;
+              colors = $scope.quantileColorDomain_PI_std;
               if (d.sum == 1) {
                 return colors[0];
               } else if (d.sum == 2) {
@@ -1388,7 +1343,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 return colors[4];
               }
             } else if ($scope.metric == "pred_error_damage") {
-              var colors = $scope.quantileColorDomain_PI_error;
+              colors = $scope.quantileColorDomain_PI_error;
               if (!d.count) {
                 return "#cccccc";
               } else if (d.sum <= -3) {
@@ -1430,8 +1385,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
           })
           .colors(mapchartColors)
           .colorCalculator(function(d) {
+            var colors;
             if ($scope.metric.indexOf("damage_class") > -1) {
-              var colors = $scope.quantileColorDomain_PI_std;
+              colors = $scope.quantileColorDomain_PI_std;
               if (d.value.sum == 1) {
                 return colors[0];
               } else if (d.value.sum == 2) {
@@ -1444,7 +1400,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 return colors[4];
               }
             } else if ($scope.metric == "pred_error_damage") {
-              var colors = $scope.quantileColorDomain_PI_error;
+              colors = $scope.quantileColorDomain_PI_error;
               if (!d.value.count) {
                 return "#cccccc";
               } else if (d.value.sum <= -3) {
@@ -1509,20 +1465,11 @@ angular.module("dashboards").controller("PriorityIndexController", [
           .classList.add("section-active");
       };
 
-      //Go to tutorial
-      $scope.tutorial = function() {
-        if (($scope.view_code = "PI")) {
-          window.open("#!/#walkthrough_PI", "_blank");
-        } else {
-          window.open("#!/#walkthrough", "_blank");
-        }
-      };
-
       //Make sure that when opening another accordion-panel, the current one collapses
       var acc = document.getElementsByClassName("card-header level1");
       var active = document.getElementsByClassName("collapse level1 in")[0];
 
-      for (var i = 0; i < acc.length; i++) {
+      for (i = 0; i < acc.length; i++) {
         acc[i].onclick = function() {
           var active_new = document.getElementById(
             this.id.replace("heading", "collapse")
@@ -1850,14 +1797,17 @@ angular.module("dashboards").controller("PriorityIndexController", [
         sort_by("format", { name: "country_code", reverse: false })
       );
 
+      var ul;
+      var formats;
+
       //Create dropdown list of countries HTML
-      var ul = document.getElementById("country-items");
+      ul = document.getElementById("country-items");
       while (ul.childElementCount > 0) {
         ul.removeChild(ul.lastChild);
       }
-      var formats = [];
+      formats = [];
       var countries = [];
-      for (var i = 0; i < d.Disaster_meta_full.length; i++) {
+      for (i = 0; i < d.Disaster_meta_full.length; i++) {
         if (
           d.Disaster_meta_full[i].country_code !== null &&
           countries.indexOf(d.Disaster_meta_full[i].country_code) <= -1 &&
@@ -1868,16 +1818,16 @@ angular.module("dashboards").controller("PriorityIndexController", [
         ) {
           countries.push(d.Disaster_meta_full[i].country_code);
 
-          var record = d.Disaster_meta_full[i];
+          record = d.Disaster_meta_full[i];
 
           if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
             var li2 = document.createElement("li");
             li2.setAttribute("class", "divider");
             ul.appendChild(li2);
           }
-          var li = document.createElement("li");
+          li = document.createElement("li");
           ul.appendChild(li);
-          var a = document.createElement("a");
+          a = document.createElement("a");
           a.setAttribute("class", "submenu-item");
           a.setAttribute(
             "ng-click",
@@ -1894,29 +1844,29 @@ angular.module("dashboards").controller("PriorityIndexController", [
         }
       }
       //Create dropdown list of disaster types HTML
-      var ul = document.getElementById("disaster-type-items");
+      ul = document.getElementById("disaster-type-items");
       while (ul.childElementCount > 0) {
         ul.removeChild(ul.lastChild);
       }
-      var formats = [];
+      formats = [];
       var disaster_types = [];
-      for (var i = 0; i < d.Disaster_meta_full.length; i++) {
+      for (i = 0; i < d.Disaster_meta_full.length; i++) {
         if (
           d.Disaster_meta_full[i].country_code == $scope.country_code &&
           disaster_types.indexOf(d.Disaster_meta_full[i].disaster_type) <= -1
         ) {
           disaster_types.push(d.Disaster_meta_full[i].disaster_type);
 
-          var record = d.Disaster_meta_full[i];
+          record = d.Disaster_meta_full[i];
 
           if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
-            var li2 = document.createElement("li");
+            li2 = document.createElement("li");
             li2.setAttribute("class", "divider");
             ul.appendChild(li2);
           }
-          var li = document.createElement("li");
+          li = document.createElement("li");
           ul.appendChild(li);
-          var a = document.createElement("a");
+          a = document.createElement("a");
           a.setAttribute("class", "submenu-item");
           a.setAttribute(
             "ng-click",

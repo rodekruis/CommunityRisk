@@ -191,6 +191,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
 
     $scope.load_data = function(pgData) {
       var d = {};
+      var i;
 
       // 1. Geo-data
       d.Districts = pgData.usp_data.geo;
@@ -201,7 +202,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
 
       // 2. Feature data
       d.Rapportage = [];
-      for (var i = 0; i < d.Districts.features.length; i++) {
+      for (i = 0; i < d.Districts.features.length; i++) {
         d.Rapportage[i] = d.Districts.features[i].properties;
       }
 
@@ -209,7 +210,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       d.dpi_temp = pgData.usp_data.dpi;
       d.dpi = [];
       if (d.dpi_temp) {
-        for (var i = 0; i < d.dpi_temp.length; i++) {
+        for (i = 0; i < d.dpi_temp.length; i++) {
           if (d.dpi_temp[i].admin_level == $scope.admlevel) {
             d.dpi[0] = d.dpi_temp[i];
           }
@@ -257,7 +258,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
           $(".sidebar-wrapper").removeClass("in");
         }
       });
-      for (var i = 0; i < $("#menu-buttons.in").length; i++) {
+      for (i = 0; i < $("#menu-buttons.in").length; i++) {
         $("#menu-buttons.in")[i].classList.remove("in");
       }
       $(".view-buttons button.active").removeClass("active");
@@ -332,7 +333,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       }
       d.dpi = [];
       if (d.dpi_temp) {
-        for (var i = 0; i < d.dpi_temp.length; i++) {
+        for (i = 0; i < d.dpi_temp.length; i++) {
           if (d.dpi_temp[i].admin_level == $scope.admlevel) {
             d.dpi[0] = d.dpi_temp[i];
           }
@@ -802,7 +803,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
         }
       });
       //Now attach the dimension to the tables-array
-      var i;
       for (i = 0; i < $scope.tables.length; i++) {
         var name = $scope.tables[i].name;
         $scope.tables[i].dimension = dimensions[name];
@@ -868,7 +868,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       //Pool all values for all 0-10 score value together to determine quantile_range (so that quantile thresholds will not differ between indicators)
       if ($scope.admlevel == zoom_min || $scope.directURLload) {
         var quantile_range_scores = [];
-        var j = 0;
+        j = 0;
         for (i = 0; i < d.Rapportage.length; i++) {
           Object.keys(d.Rapportage[i]).forEach(function(key) {
             if (
@@ -1043,17 +1043,19 @@ angular.module("dashboards").controller("CommunityRiskController", [
         for (var i = 0; i < $scope.tables.length; i++) {
           var record = $scope.tables[i];
           var width;
+          var icon;
+          var unit;
 
           if (!meta_icon[record.name]) {
-            var icon = "modules/dashboards/img/undefined.png";
+            icon = "modules/dashboards/img/undefined.png";
           } else {
-            var icon = "modules/dashboards/img/" + meta_icon[record.name];
+            icon = "modules/dashboards/img/" + meta_icon[record.name];
           }
 
           if (meta_unit[record.name] === "null") {
-            var unit = "";
+            unit = "";
           } else {
-            var unit = meta_unit[record.name];
+            unit = meta_unit[record.name];
           }
 
           if (record.group === "general") {
@@ -1096,7 +1098,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
             button.setAttribute("ng-click", "info('" + record.name + "')");
             div3.appendChild(button);
             $compile(button)($scope);
-            var img = document.createElement("img");
+            img = document.createElement("img");
             img.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
             img.setAttribute("style", "height:17px");
             button.appendChild(img);
@@ -1119,19 +1121,19 @@ angular.module("dashboards").controller("CommunityRiskController", [
                 record.group == "pred_error"
               )
             ) {
-              var div = document.createElement("div");
+              div = document.createElement("div");
               div.setAttribute("class", "component-section");
               div.setAttribute("id", "section-" + record.name);
-              var parent = document.getElementById(record.group);
+              parent = document.getElementById(record.group);
               parent.appendChild(div);
-              var div0 = document.createElement("div");
+              div0 = document.createElement("div");
               div0.setAttribute("class", "col-md-2 col-sm-2 col-xs-2");
               div.appendChild(div0);
               var img1 = document.createElement("img");
               img1.setAttribute("style", "height:20px");
               img1.setAttribute("src", icon);
               div0.appendChild(img1);
-              var div1 = document.createElement("div");
+              div1 = document.createElement("div");
               div1.setAttribute(
                 "class",
                 "col-md-9 col-sm-9 col-xs-9 component-label"
@@ -1152,13 +1154,13 @@ angular.module("dashboards").controller("CommunityRiskController", [
               div1a.setAttribute("id", record.name);
               div1a.innerHTML = keyvalue[record.name] + " " + unit;
               div1.appendChild(div1a);
-              var div3 = document.createElement("div");
+              div3 = document.createElement("div");
               div3.setAttribute(
                 "class",
                 "col-md-1 col-sm-1 col-xs-1 no-padding"
               );
               div.appendChild(div3);
-              var button = document.createElement("button");
+              button = document.createElement("button");
               button.setAttribute("type", "button");
               button.setAttribute("class", "btn-modal");
               button.setAttribute("data-toggle", "modal");
@@ -1184,19 +1186,19 @@ angular.module("dashboards").controller("CommunityRiskController", [
                 dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
             }
 
-            var div = document.createElement("div");
+            div = document.createElement("div");
             div.setAttribute("class", "component-section");
             div.setAttribute("id", "section-" + record.name);
-            var parent = document.getElementById(record.group);
+            parent = document.getElementById(record.group);
             parent.appendChild(div);
-            var div0 = document.createElement("div");
+            div0 = document.createElement("div");
             div0.setAttribute("class", "col-md-2 col-sm-2 col-xs-2");
             div.appendChild(div0);
-            var img1 = document.createElement("img");
+            img1 = document.createElement("img");
             img1.setAttribute("style", "height:20px");
             img1.setAttribute("src", icon);
             div0.appendChild(img1);
-            var div1 = document.createElement("div");
+            div1 = document.createElement("div");
             div1.setAttribute(
               "class",
               "col-md-4 col-sm-4 col-xs-4 component-label"
@@ -1210,7 +1212,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
             div1.innerHTML = "{{ '" + record.name + "' | translate }}";
             $compile(div1)($scope);
             div.appendChild(div1);
-            var div1a = document.createElement("div");
+            div1a = document.createElement("div");
             div1a.setAttribute(
               "class",
               "component-score " +
@@ -1219,7 +1221,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
             div1a.setAttribute("id", record.name);
             div1a.innerHTML = keyvalue[record.name] + " " + unit;
             div1.appendChild(div1a);
-            var div2 = document.createElement("div");
+            div2 = document.createElement("div");
             div2.setAttribute("class", "col-md-5 col-sm-5 col-xs-5");
             div.appendChild(div2);
             var div2a = document.createElement("div");
@@ -1234,17 +1236,17 @@ angular.module("dashboards").controller("CommunityRiskController", [
             div2a1.setAttribute("id", "bar-" + record.name);
             div2a1.setAttribute("style", "width:" + width + "%");
             div2a.appendChild(div2a1);
-            var div3 = document.createElement("div");
+            div3 = document.createElement("div");
             div3.setAttribute("class", "col-md-1 col-sm-1 col-xs-1 no-padding");
             div.appendChild(div3);
-            var button = document.createElement("button");
+            button = document.createElement("button");
             button.setAttribute("type", "button");
             button.setAttribute("class", "btn-modal");
             button.setAttribute("data-toggle", "modal");
             button.setAttribute("ng-click", "info('" + record.name + "')");
             div3.appendChild(button);
             $compile(button)($scope);
-            var img3 = document.createElement("img");
+            img3 = document.createElement("img");
             img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
             img3.setAttribute("style", "height:17px");
             button.appendChild(img3);
@@ -1308,11 +1310,12 @@ angular.module("dashboards").controller("CommunityRiskController", [
         for (var i = 0; i < $scope.tables.length; i++) {
           var record = $scope.tables[i];
           var width;
+          var unit;
 
           if (meta_unit[record.name] === "null") {
-            var unit = "";
+            unit = "";
           } else {
-            var unit = meta_unit[record.name];
+            unit = meta_unit[record.name];
           }
 
           if (record.group === "general") {
@@ -1359,7 +1362,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
                 dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
             }
 
-            var div1a = document.getElementById(record.name);
+            div1a = document.getElementById(record.name);
             div1a.setAttribute(
               "class",
               "component-score " +
@@ -1460,14 +1463,14 @@ angular.module("dashboards").controller("CommunityRiskController", [
         //Set up what happens when clicking on the map
         .on("filtered", function(chart) {
           $scope.filters = chart.filters();
+          var keyvalue;
+          var resetbutton;
 
           //When coming from Tabular View: update all information accordingly.
           if ($scope.chart_show == "map" && $scope.coming_from_tab) {
-            var keyvalue = fill_keyvalues();
+            keyvalue = fill_keyvalues();
             $scope.updateHTML(keyvalue);
-            var resetbutton = document.getElementsByClassName(
-              "reset-button"
-            )[0];
+            resetbutton = document.getElementsByClassName("reset-button")[0];
             if (chart.filters().length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
@@ -1476,11 +1479,9 @@ angular.module("dashboards").controller("CommunityRiskController", [
           }
           //When NOT coming from Tabular View
           if ($scope.chart_show == "map" && !$scope.coming_from_tab) {
-            var keyvalue = fill_keyvalues();
+            keyvalue = fill_keyvalues();
             $scope.updateHTML(keyvalue);
-            var resetbutton = document.getElementsByClassName(
-              "reset-button"
-            )[0];
+            resetbutton = document.getElementsByClassName("reset-button")[0];
             if ($scope.filters.length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
@@ -1550,10 +1551,11 @@ angular.module("dashboards").controller("CommunityRiskController", [
       /////////////////////
 
       //Extra function needed to determine width of row-chart in various settings
+      var rowChart_width;
       if ($(window).width() < 768) {
-        var rowChart_width = $("#row-chart-container").width();
+        rowChart_width = $("#row-chart-container").width();
       } else {
-        var rowChart_width = $("#row-chart-container").width() - 370;
+        rowChart_width = $("#row-chart-container").width() - 370;
       }
       var barheight = 20; //Height of one bar in Tabular View
       var xAxis = meta_scorevar[$scope.metric] ? 11 : $scope.quantile_max * 1.1;
@@ -1619,14 +1621,14 @@ angular.module("dashboards").controller("CommunityRiskController", [
         })
         .on("filtered", function(chart) {
           $scope.filters = chart.filters();
+          var keyvalue;
+          var resetbutton;
 
           //If coming from map: update all sidebar-information accordingly
           if ($scope.chart_show == "row" && $scope.coming_from_map) {
-            var keyvalue = fill_keyvalues();
+            keyvalue = fill_keyvalues();
             $scope.updateHTML(keyvalue);
-            var resetbutton = document.getElementsByClassName(
-              "reset-button"
-            )[0];
+            resetbutton = document.getElementsByClassName("reset-button")[0];
             if (chart.filters().length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
@@ -1635,11 +1637,9 @@ angular.module("dashboards").controller("CommunityRiskController", [
           }
           //If not coming from map
           if ($scope.chart_show == "row" && !$scope.coming_from_map) {
-            var keyvalue = fill_keyvalues();
+            keyvalue = fill_keyvalues();
             $scope.updateHTML(keyvalue);
-            var resetbutton = document.getElementsByClassName(
-              "reset-button"
-            )[0];
+            resetbutton = document.getElementsByClassName("reset-button")[0];
             if ($scope.filters.length > 0) {
               resetbutton.style.visibility = "visible";
             } else {
@@ -1991,7 +1991,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       //Make sure that when opening another accordion-panel, the current one collapses
       var acc = document.getElementsByClassName("card-header level1");
       var active = document.getElementsByClassName("collapse level1 in")[0];
-      for (var i = 0; i < acc.length; i++) {
+      for (i = 0; i < acc.length; i++) {
         acc[i].onclick = function() {
           var active_new = document.getElementById(
             this.id.replace("heading", "collapse")
@@ -2413,8 +2413,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
           ul.removeChild(ul.lastChild);
         }
         var formats = [];
-        for (var i = 0; i < d.Country_meta_full.length; i++) {
-          var record = d.Country_meta_full[i];
+        for (i = 0; i < d.Country_meta_full.length; i++) {
+          record = d.Country_meta_full[i];
 
           if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
             var li2 = document.createElement("li");

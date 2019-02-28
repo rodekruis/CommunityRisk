@@ -909,20 +909,21 @@ angular.module("dashboards").controller("FbfController", [
 
       //Function for determining color of indicator-bars and -numbers in sidebar
       var high_med_low = function(ind, ind_score, group) {
+        var width;
         if (dimensions_scores[ind]) {
           if (group == "dpi") {
-            var width = 10 * (1 - d.dpi[0][ind]);
+            width = 10 * (1 - d.dpi[0][ind]);
           } else if (
             $scope.admlevel == zoom_max &&
             $scope.filters.length == 0 &&
             !isNaN(d_prev[ind_score])
           ) {
-            var width = d_prev[ind_score];
+            width = d_prev[ind_score];
           } else {
             if (dimensions_scores[ind].top(1)[0].value.count == 0) {
-              var width = "na";
+              width = "na";
             } else {
-              var width = dimensions_scores[ind].top(1)[0].value.finalVal;
+              width = dimensions_scores[ind].top(1)[0].value.finalVal;
             }
           }
           if (ind == "dpi_score") {
@@ -1045,6 +1046,7 @@ angular.module("dashboards").controller("FbfController", [
 
         for (var i = 0; i < $scope.tables.length; i++) {
           var record = $scope.tables[i];
+          var width;
 
           if (!meta_icon[record.name]) {
             var icon = "modules/dashboards/img/undefined.png";
@@ -1108,9 +1110,9 @@ angular.module("dashboards").controller("FbfController", [
               $scope.filters.length == 0 &&
               !isNaN(d_prev[record.scorevar_name])
             ) {
-              var width = d_prev[record.scorevar_name] * 10;
+              width = d_prev[record.scorevar_name] * 10;
             } else {
-              var width = dimensions[record.name].top(1)[0].value.finalVal * 10;
+              width = dimensions[record.name].top(1)[0].value.finalVal * 10;
             }
 
             if (
@@ -1174,15 +1176,15 @@ angular.module("dashboards").controller("FbfController", [
             }
           } else if (record.group !== "hide") {
             if (record.group == "dpi") {
-              var width = d.dpi[0][record.name] * 100;
+              width = d.dpi[0][record.name] * 100;
             } else if (
               $scope.admlevel == zoom_max &&
               $scope.filters.length == 0 &&
               !isNaN(d_prev[record.scorevar_name])
             ) {
-              var width = d_prev[record.scorevar_name] * 10;
+              width = d_prev[record.scorevar_name] * 10;
             } else {
-              var width =
+              width =
                 dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
             }
 
@@ -1309,6 +1311,7 @@ angular.module("dashboards").controller("FbfController", [
 
         for (var i = 0; i < $scope.tables.length; i++) {
           var record = $scope.tables[i];
+          var width;
 
           if (meta_unit[record.name] === "null") {
             var unit = "";
@@ -1325,9 +1328,9 @@ angular.module("dashboards").controller("FbfController", [
               $scope.filters.length == 0 &&
               !isNaN(d_prev[record.scorevar_name])
             ) {
-              var width = d_prev[record.scorevar_name] * 10;
+              width = d_prev[record.scorevar_name] * 10;
             } else {
-              var width = dimensions[record.name].top(1)[0].value.finalVal * 10;
+              width = dimensions[record.name].top(1)[0].value.finalVal * 10;
             }
 
             if (
@@ -1348,15 +1351,15 @@ angular.module("dashboards").controller("FbfController", [
             }
           } else if (record.group !== "hide") {
             if (record.group == "dpi") {
-              var width = d.dpi[0][record.name] * 100;
+              width = d.dpi[0][record.name] * 100;
             } else if (
               $scope.admlevel == zoom_max &&
               $scope.filters.length == 0 &&
               !isNaN(d_prev[record.scorevar_name])
             ) {
-              var width = d_prev[record.scorevar_name] * 10;
+              width = d_prev[record.scorevar_name] * 10;
             } else {
-              var width =
+              width =
                 dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
             }
 

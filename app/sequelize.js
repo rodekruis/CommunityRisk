@@ -1,15 +1,15 @@
 var Sequelize = require("sequelize");
 var config = require("../config/config");
 
-var connString =
-  "postgres://" +
-  config.postgres.user +
-  ":" +
-  config.postgres.password +
-  "@" +
-  config.postgres.host +
-  ":5432/" +
-  config.postgres.db;
-var sequelize = new Sequelize(connString);
+var sequelize = new Sequelize(
+  config.postgres.db,
+  config.postgres.user,
+  config.postgres.password,
+  {
+    dialect: "postgres",
+    host: config.postgres.host,
+    port: 5432,
+  }
+);
 
 module.exports = sequelize;

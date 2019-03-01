@@ -1,5 +1,5 @@
 country_code;country_name;zoomlevel_min;zoomlevel_max;level1_name;level2_name;level3_name;level4_name;default_metric;format
-PHL;The Philippines;2;4;;Provinces;Municipalities;Barangays;risk_score;all
+PHL;Philippines;2;4;;Provinces;Municipalities;Barangays;risk_score;all
 MWI;Malawi;2;4;;Districts;TA's;GVH's;risk_score;all
 NPL;Nepal;2;4;;Zones;Districts;VDCs;risk_score;basic
 LKA;Sri Lanka;2;4;;Districts;DSDs;GNDs;population;template

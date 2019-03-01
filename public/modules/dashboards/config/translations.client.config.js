@@ -61,6 +61,11 @@ var static_en = {
   all_no: "",
   data_preparedness_index: "Data Preparedness Index",
   dpi_tag: "Completeness, recency and quality of sources",
+  dpi_warning: "",
+  needs_data: "",
+  dpi_inspect: "",
+  draft_warning: "",
+  draft: "",
 };
 
 var static_es = {
@@ -116,6 +121,11 @@ var static_es = {
   all_no: "",
   data_preparedness_index: "Índice de preparación de datos",
   dpi_tag: "Integridad, actualidad y calidad de las fuentes",
+  dpi_warning: "",
+  needs_data: "",
+  dpi_inspect: "",
+  draft_warning: "",
+  draft: "",
 };
 
 var static_fr = {
@@ -134,6 +144,7 @@ var static_fr = {
   Map: "Carte",
   Tab: "Onglet",
   selected: " sélectionné",
+  hit: " ",
   Select_all: "Tout sélectionner",
   risk_score_tag: "Indice global de risque",
   hazard_score_tag: "Cliquez pour voir les composantes d'alea",
@@ -168,6 +179,13 @@ var static_fr = {
   all_no: "",
   data_preparedness_index: "Statut des données disponibles",
   dpi_tag: "Degré d'actualité, qualité et exhaustivité des données",
+  dpi_warning:
+    "À ce niveau d'administration il n'est pas possible d'interpréter l'indice d'analyse de données du cadre de risque. Il faut plus de données, plus récentes ou de meilleure qualité. Les indicateurs qui sont inclus (par example population ou pauvreté) peuvent quand-même être utilisés seuls.",
+  needs_data: "Besoin de plus de données",
+  dpi_inspect: "Inspecter Indice d'analyse de données",
+  draft_warning:
+    "Le tableau de bord ne contient que peu d'indicateurs qui ont besoin d'un contrôle de qualité et d'usage. Ces informations ne doivent pas encore être utilisées pour communication externe ou pour tirer des conclusions.",
+  draft: "Version temporaire",
 };
 
 angular.module("dashboards").config(function($translateProvider) {

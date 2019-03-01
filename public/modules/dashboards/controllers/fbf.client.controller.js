@@ -2311,7 +2311,7 @@ angular.module("dashboards").controller("FbfController", [
       };
 
       var languages_es = ["PER", "ECU"];
-      var languages_fr = []; //['MLI'];
+      var languages_fr = ["MLI"];
       var languages_all = [].concat(languages_es, languages_fr);
 
       if (languages_all.indexOf($scope.country_code) > -1) {

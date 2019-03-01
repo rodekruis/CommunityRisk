@@ -185,7 +185,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
       user.additionalProvidersData[providerUserProfile.provider] =
         providerUserProfile.providerData;
 
-      // Then tell mongoose that we've updated the additionalProvidersData field
+      // Then tell postgres that we've updated the additionalProvidersData field
       user.markModified("additionalProvidersData");
 
       // And save the user
@@ -213,7 +213,7 @@ exports.removeOAuthProvider = function(req, res) {
     if (user.additionalProvidersData[provider]) {
       delete user.additionalProvidersData[provider];
 
-      // Then tell mongoose that we've updated the additionalProvidersData field
+      // Then tell postgres that we've updated the additionalProvidersData field
       user.markModified("additionalProvidersData");
     }
 

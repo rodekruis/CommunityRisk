@@ -1,3 +1,0 @@
-# Run this crontab every day at 4 in the morning
-# install this crontab with: sudo crontab -e
-* 4 * * * sudo /home/maarten/mongoBackup.sh

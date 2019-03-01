@@ -573,13 +573,18 @@
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
           <h4 class="modal-title">
-            Share current settings directly through URL
+            {{ "share_url_title" | translate }}
           </h4>
         </div>
         <div class="modal-body" style="word-break:break-all">
-          <h6 id="copy_url">{{ shareable_URL }}</h6>
-          <br />
-          <button ng-click="copyToClipboard('#copy_url')">Copy URL</button>
+          <pre><a href="{{ shareable_URL }}">{{ shareable_URL }}</a></pre>
+          <button
+            type="button"
+            ng-click="copyToClipboard(shareable_URL)"
+            class="btn btn-default"
+          >
+            {{ "share_url_copy" | translate }}
+          </button>
         </div>
       </div>
     </div>

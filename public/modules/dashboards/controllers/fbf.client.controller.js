@@ -10,6 +10,7 @@ angular.module("dashboards").controller("FbfController", [
   "Authentication",
   "Data",
   "cfpLoadingBar",
+  "shareService",
   function(
     $translate,
     $scope,
@@ -19,7 +20,8 @@ angular.module("dashboards").controller("FbfController", [
     $location,
     Authentication,
     Data,
-    cfpLoadingBar
+    cfpLoadingBar,
+    shareService
   ) {
     $scope.user = Authentication.user;
 
@@ -2088,45 +2090,20 @@ angular.module("dashboards").controller("FbfController", [
         download.click();
       };
 
-      //Create parameter-specific URL and show it in popup to copy
-      function addParameterToURL(
-        view,
-        country,
-        admlevel,
-        metric,
-        parent_codes,
-        chart_show
-      ) {
-        var _url = location.href;
-        _url = _url.split("?")[0];
-        _url +=
-          (_url.split("?")[1] ? "&" : "?") +
-          "country=" +
-          country +
-          "&admlevel=" +
-          admlevel +
-          "&metric=" +
-          metric +
-          "&parent_code=" +
-          parent_codes +
-          "&view=" +
-          chart_show;
-        return _url;
-      }
       $scope.share_URL = function() {
-        $scope.shareable_URL = addParameterToURL(
-          $scope.view_code,
+        $scope.shareable_URL = shareService.createFullUrl(
           $scope.country_code,
+          $scope.chart_show,
           $scope.admlevel,
           $scope.metric,
-          $scope.parent_codes,
-          $scope.chart_show
+          $scope.parent_codes
         );
         $("#URLModal").modal("show");
       };
       $scope.share_country_URL = function() {
-        $scope.shareable_URL =
-          location.href + "?country=" + $scope.country_code;
+        $scope.shareable_URL = shareService.createCountryUrl(
+          $scope.country_code
+        );
         $("#URLModal").modal("show");
       };
 

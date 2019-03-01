@@ -33,7 +33,6 @@ module.exports = function() {
   app.locals.keywords = config.app.keywords;
   app.locals.favicon = config.app.favicon;
   app.locals.socialImage = config.app.socialImage;
-  app.locals.facebookAppId = config.facebook.clientID;
   app.locals.jsFiles = config.getJavaScriptAssets();
   app.locals.cssFiles = config.getCSSAssets();
 

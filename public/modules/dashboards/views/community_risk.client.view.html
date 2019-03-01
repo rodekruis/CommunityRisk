@@ -161,11 +161,6 @@
                 >Github</a
               >
             </li>
-            <li hidden>
-              <a class="dropdown-toggle export-button" ng-click="data_upload()"
-                >Upload new data</a
-              >
-            </li>
           </ul>
         </li>
       </ul>
@@ -746,66 +741,4 @@
     </div>
   </div>
   <!-- end: IE message -->
-
-  <!-- start: risk score modal -->
-  <div id="uploadModal" class="modal sidebar-modal" role="dialog">
-    <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">
-            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-          </button>
-          <span class="panel-header-icon">
-            <img src="/modules/dashboards/img/completeness.png" />
-          </span>
-          <h4 class="modal-title">Data Upload</h4>
-        </div>
-        <div class="modal-body">
-          <h6>
-            <b>Data format: </b>CSV (other formats not supported currently)
-          </h6>
-          <br />
-          <h6>
-            <b>Separator: </b>
-            <select id="separator">
-              <option value=";">;</option>
-              <option value=",">,</option>
-            </select>
-          </h6>
-          <br />
-          <h6>
-            <input
-              type="file"
-              name="File Upload"
-              id="txtFileUpload"
-              accept=".csv"
-            />
-          </h6>
-          <br />
-          <button ng-click="submit_data()">Upload</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- end: risk score modal -->
-
-  <div id="uploadWarningModal" class="modal sidebar-modal" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">
-            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-          </button>
-          <h4 class="modal-title">{{ "warning" | translate }}</h4>
-        </div>
-        <div class="modal-body">
-          <h6 id="data_upload_warning">
-            <b>Message: </b>{{ data_upload_warning }}
-          </h6>
-          <br />
-        </div>
-      </div>
-    </div>
-  </div>
 </section>

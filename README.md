@@ -19,8 +19,7 @@ However, it is probably preferable to set up a Virtualbox (with Ubuntu 16.04). P
 ## 1.0: Prerequisites
 
 ### Before You Begin 
-This application works amongst others with MongoDB, Express, Angular and Node. Before you begin we recommend you read about the basic building blocks that assemble this application 
-* MongoDB - Go through [MongoDB Official Website](http://mongodb.org/) and proceed to their [Official Manual](http://docs.mongodb.org/manual/), which should help you understand NoSQL and MongoDB better.
+This application works amongst others with Express, Angular and Node. Before you begin we recommend you read about the basic building blocks that assemble this application 
 * Express - The best way to understand express is through its [Official Website](http://expressjs.com/), particularly [The Express Guide](http://expressjs.com/guide.html); you can also go through this [StackOverflow Thread](http://stackoverflow.com/questions/8144214/learning-express-for-node-js) for more resources.
 * AngularJS - Angular's [Official Website](http://angularjs.org/) is a great starting point. You can also use [Thinkster Popular Guide](http://www.thinkster.io/), and the [Egghead Videos](https://egghead.io/).
 * Node.js - Start by going through [Node.js Official Website](http://nodejs.org/) and this [StackOverflow Thread](http://stackoverflow.com/questions/2353818/how-do-i-get-started-with-node-js), which should get you going with the Node.js platform in no time.
@@ -37,21 +36,6 @@ This installs the currently required version. When returning to this project aft
 ```
 $ nvm use
 ```
-
-### MongoDB & Robomongo
-* NOTE: MongoDB is currently not actively used anymore, but is still needed to avoid errors. It should be removed properly.
-* [Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
-* Make sure you get Mongo running as a service: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/ >> Section 'Configure a Windows service for MongoDB Community Edition'
-* if mongodb cannot run inside the virtualbox the problem might be related to disk space. Add smallfiles = true to /etc/mongodb.conf
-* Install [Robomongo](http://app.robomongo.org/download.html) on windows for a GUI to access the objects stored in mongodb.
-* Create a new connection with:
-```
-Address: localhost
-Port: 27017
-```
-* Open the connection and create a database called 'dashboards_new', within it create a Collection called 'dashboards' and within it create a new document. 
-* Paste the content (from this repository) in /robomongo_input/dashboard_community_risk.json in this newly created document and save.
-* Do the same for any other json-files in /robomongo_input/
 
 ### PostgreSQL
 * Download and install the database software PostgresQL (v9.5 is used here) through https://www.postgresql.org/download/.
@@ -211,20 +195,6 @@ Install `nvm` as described on: <https://github.com/creationix/nvm>. After instal
 ```
 $ nvm install
 ```
-
-### MongoDB
-To install and set up MongoDB: follow Step 1 and 2 completely of the instructions on https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04 
-
-### Robomongo
-In PuTTY go to Change Settings > Connection > SSH > Tunnels > Add new forwarded Port. Set Source Port = 27020, and Destination = localhost:27017 and click Add and Apply.
-
-Download, install and open [Robomongo](http://app.robomongo.org/download.html) in Windows (locally) for a GUI to access the objects stored in mongodb.
-Create a new connection with:
-```
-Address: localhost
-Port: 27020
-```
-Create new database, collection and documents same as in Chapter 1 of this Readme.
 
 ## Bower
 Install the [Bower Package Manager](http://bower.io/):

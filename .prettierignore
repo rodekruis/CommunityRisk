@@ -1,5 +1,6 @@
 # Out of scope: (for now)
 tools/
+*.md
 
 # External/third-party/vendor code
 public/dist/

@@ -13,8 +13,3 @@ sudo stop proxy
 These start and stop commands are configured in the upstart scripts:
 proxy: /etc/init/proxy.conf
 digidoc: /etc/init/digidoc.conf
-
-The mongodb database is backupped to a dropbox account every night at 4, by a crontab running the following script:
-/home/maarten/mongobackup.sh
-
-

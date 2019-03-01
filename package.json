@@ -7,7 +7,7 @@
   "repository": "github:rodekruis/CommunityRisk",
   "homepage": "https://dashboard.510.global/",
   "scripts": {
-    "postinstall": "bower-installer",
+    "postinstall": "bower-installer -p",
     "clean:dist": "rimraf public/dist/*",
     "prestart": "npm run clean:dist",
     "start": "grunt",

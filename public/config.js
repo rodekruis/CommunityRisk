@@ -8,7 +8,6 @@ window.ApplicationConfiguration = (function() {
     "ngResource",
     "ngRoute",
     "angularCSS",
-    "ngCookies",
     "ngTouch",
     "ngSanitize",
     "ui.router",

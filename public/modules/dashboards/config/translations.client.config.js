@@ -125,6 +125,7 @@ var static_fr = {
 	Map: 'Carte',
 	Tab: 'Onglet',
 	selected: ' sélectionné',
+	hit: ' ',
 	Select_all: 'Tout sélectionner',
 	risk_score_tag: 'Indice global de risque',
 	hazard_score_tag: 'Cliquez pour voir les composantes d\'alea',
@@ -144,7 +145,7 @@ var static_fr = {
 	warning: 'Avertissement',
 	ie_warning: 'Cette version beta est mieux accessible avec Google Chrome et ensuite avec Firefox ou Safari. Internet Explorer fonctionne aussi, mais l\'accès n\'est pas optimal.',
 	go_to_dashboard: 'Vers le tableau de bord',
-	cra_intro1: 'Evaluation des Risques Communautaires - ',
+	cra_intro1: ' Evaluation des Risques Communautaires - ',
 	cra_intro2: ' communautés dans ',
 	cra_intro3: ' pays',
 	cra_description: 'Le but de l\'action humanitaire est de soulager la souffrance des individus touchés par des catastrophes. Cependant, le financement est limité et l\'action humanitaire ne pourra pas accéder à toutes les personnes ayant besoin d\'aide. Il faut identifier les zones géographiques les plus vulnérables aux catastrophes et crises humanitaires, avant d\'identifier les personnes qui ont le plus besoin d\'aide. En ce moment, ce procès d\'identification prend beaucoup de temps et peut-être subjectif. Le tableau de bord de l\'Evaluation des Risques Communautaires propose une solution basée sur des données.',
@@ -155,6 +156,12 @@ var static_fr = {
 	all_no: '',
 	data_preparedness_index: 'Statut des données disponibles',
 	dpi_tag: 'Degré d\'actualité, qualité et exhaustivité des données',
+	dpi_warning: 'À ce niveau d\'administration il n\'est pas possible d\'interpréter l\'indice d\'analyse de données du cadre de risque. Il faut plus de données, plus récentes ou de meilleure qualité. Les indicateurs qui sont inclus (par example population ou pauvreté) peuvent quand-même être utilisés seuls.',
+	needs_data: 'Besoin de plus de données',
+	dpi_inspect: 'Inspecter Indice d\'analyse de données',
+	draft_warning: 'Le tableau de bord ne contient que peu d\'indicateurs qui ont besoin d\'un contrôle de qualité et d\'usage. Ces informations ne doivent pas encore être utilisées pour communication externe ou pour tirer des conclusions.',
+	draft: 'Version temporaire',
+
 };
 
 

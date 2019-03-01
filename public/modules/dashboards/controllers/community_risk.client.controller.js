@@ -365,7 +365,7 @@ angular.module('dashboards')
                 $scope.status_title = 'Draft version';
                 $scope.status_text = 'This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.';
             } else if (country_status == 'all') {
-                var dpi = d.dpi[0].dpi_score;
+				var dpi = d.dpi[0].dpi_score;
                 if (dpi > 0.1) {
                     document.getElementById('status').style.visibility = 'hidden';
                     $scope.status_title = '';

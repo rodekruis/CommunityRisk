@@ -9,6 +9,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "Authentication",
   "Data",
   "cfpLoadingBar",
+  "shareService",
   function(
     $translate,
     $scope,
@@ -17,7 +18,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $compile,
     Authentication,
     Data,
-    cfpLoadingBar
+    cfpLoadingBar,
+    shareService
   ) {
     //This is the only working method I found to load page-specific CSS.
     //DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
@@ -1560,60 +1562,27 @@ angular.module("dashboards").controller("PriorityIndexController", [
         download.click();
       };
 
-      //Create parameter-specific URL and show it in popup to copy
-      function addParameterToURL(
-        view,
-        country,
-        admlevel,
-        metric,
-        parent_codes,
-        disaster_type,
-        disaster_name,
-        chart_show
-      ) {
-        var _url = location.href;
-        _url = _url.split("?")[0];
-        _url +=
-          (_url.split("?")[1] ? "&" : "?") +
-          "country=" +
-          country +
-          "&admlevel=" +
-          admlevel +
-          "&metric=" +
-          metric +
-          "&disaster=" +
-          disaster_type +
-          "&event=" +
-          disaster_name +
-          "&view=" +
-          chart_show;
-        return _url;
-      }
       $scope.share_URL = function() {
-        $scope.shareable_URL = addParameterToURL(
-          $scope.view_code,
+        $scope.shareable_URL = shareService.createFullUrl(
           $scope.country_code,
+          $scope.chart_show,
           $scope.admlevel,
           $scope.metric,
           $scope.parent_codes,
           $scope.disaster_type,
-          $scope.disaster_name,
-          $scope.chart_show
+          $scope.disaster_name
         );
         $("#URLModal").modal("show");
       };
+
       $scope.share_country_URL = function() {
-        $scope.shareable_URL =
-          location.href + "?country=" + $scope.country_code;
+        $scope.shareable_URL = shareService.createCountryUrl(
+          $scope.country_code
+        );
         $("#URLModal").modal("show");
       };
-      $scope.copyToClipboard = function(element) {
-        var $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val($(element).text()).select();
-        document.execCommand("copy");
-        $temp.remove();
-      };
+
+      $scope.copyToClipboard = shareService.copyToClipboard;
 
       ///////////////////////////////////
       // SIDEBAR: MAP & TABULAR SWITCH //

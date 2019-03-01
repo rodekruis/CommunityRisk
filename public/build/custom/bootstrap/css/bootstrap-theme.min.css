@@ -418,12 +418,6 @@ address {
   font-style: normal;
   line-height: 1.428571429;
 }
-code,
-kbd,
-pre,
-samp {
-  font-family: Calibri;
-}
 code {
   padding: 2px 4px;
   font-size: 90%;

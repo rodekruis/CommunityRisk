@@ -974,25 +974,8 @@ body {
     float: right;
   }
 }
-#model-items,
-#global-model-items {
-  min-width: 220px;
-}
 
 @media only screen and (max-width: 1024px) {
-  #model-items,
-  #global-model-items {
-    border-radius: 0;
-    border: none;
-    margin-left: -3px;
-    width: 100%;
-  }
-  .csv-download {
-    display: none;
-  }
-  .divider.csv-divider {
-    display: none;
-  }
   .leaflet-control-zoom {
     display: none;
   }

@@ -64,7 +64,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     $scope.metric_source = "";
     $scope.metric_desc = "";
     $scope.metric_icon = "";
-    $scope.data_upload_warning = "";
     $scope.name_selection = "";
     $scope.name_selection_prev = "";
     $scope.name_popup = "";
@@ -2133,94 +2132,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
         $temp.val($(element).text()).select();
         document.execCommand("copy");
         $temp.remove();
-      };
-
-      ///////////////////////////////
-      // HEADER: TUTORIAL FUNCTION //
-      ///////////////////////////////
-
-      //Function to open the data upload modal
-      $scope.data_upload = function() {
-        $("#uploadModal").modal("show");
-      };
-
-      //Upload the CSV-file
-      $(document).ready(function() {
-        // The event listener for the file upload
-        document
-          .getElementById("txtFileUpload")
-          .addEventListener("change", upload, false);
-
-        // Method that checks that the browser supports the HTML5 File API
-        function browserSupportFileUpload() {
-          var isCompatible = false;
-          if (
-            window.File &&
-            window.FileReader &&
-            window.FileList &&
-            window.Blob
-          ) {
-            isCompatible = true;
-          }
-          return isCompatible;
-        }
-
-        // Method that reads and processes the selected file
-        function upload(evt) {
-          if (!browserSupportFileUpload()) {
-            alert("The File APIs are not fully supported in this browser!");
-          } else {
-            var file = evt.target.files[0];
-            var reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = function(event) {
-              $scope.csvData = event.target.result;
-            };
-            reader.onerror = function() {
-              alert("Unable to read " + file.fileName);
-            };
-          }
-        }
-      });
-
-      //Upload the file and do checks
-      $scope.submit_data = function() {
-        // Process data
-        var separator = $("#separator").val();
-        var data = $.csv.toArrays($scope.csvData, { separator: separator });
-
-        // Checks for PCODE-column
-        var pcode_check = 0;
-        var pcode_col = 0;
-        for (var i = 0; i < data[0].length; i++) {
-          if (data[0][i].toLowerCase() == "pcode") {
-            data[0][i] = data[0][i].toLowerCase();
-            pcode_col = i;
-            pcode_check = 1;
-            break;
-          }
-        }
-        if (pcode_check == 0) {
-          $scope.data_upload_warning =
-            "No column named 'pcode' is found. Please change the input-file accordingly. Note that a reason for this can also be that the field-separator is not correct.";
-          $("#uploadWarningModal").modal("show");
-        } else {
-          var counts = [];
-          var pcode_dup_check = 0;
-          for (var j = 0; j < data.length; j++) {
-            if (counts[data[j][pcode_col]] === undefined) {
-              counts[data[j][pcode_col]] = 1;
-            } else {
-              pcode_dup_check = 1;
-              break;
-            }
-          }
-          if (pcode_dup_check == 1) {
-            $scope.data_upload_warning =
-              "Duplicate values are found in pcode-column. Please change the input-file accordingly.";
-            $("#uploadWarningModal").modal("show");
-          }
-        }
       };
 
       ///////////////////////////////////

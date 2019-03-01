@@ -3,7 +3,7 @@ PHL;The Philippines;2;4;;Provinces;Municipalities;Barangays;risk_score;all
 MWI;Malawi;2;4;;Districts;TA's;GVH's;risk_score;all
 NPL;Nepal;2;4;;Zones;Districts;VDCs;risk_score;basic
 LKA;Sri Lanka;2;4;;Districts;DSDs;GNDs;population;template
-MLI;Mali;1;3;Regions;Cercles;Communes;;risk_score;basic
+MLI;Mali;1;3;Regions;Cercles;Communes;;risk_score;all
 ZMB;Zambia;1;3;Provinces;Districts;Wards;;risk_score;basic
 BEN;Benin;1;2;Departements;Communes;;;population;template
 ECU;Ecuador;1;3;Provincias;Cantones;Parroquias;;risk_score;all

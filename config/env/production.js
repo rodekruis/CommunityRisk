@@ -75,7 +75,6 @@ module.exports = {
         "public/build/bower/cartodb.js/js/cartodb_noleaflet.js", // in bower,json
         "public/build/bower/jquery-countTo/js/jquery.countTo.js", // in bower.json
         "public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js", // in bower.json
-        "public/build/bower/jquery-easing/js/jquery.easing.min.js", // in bower.json
         "public/build/bower/wow/js/wow.js", // in bower.json
         "public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js", // in bower.json
         "public/build/bower/topojson/js/topojson.js", // in bower.json

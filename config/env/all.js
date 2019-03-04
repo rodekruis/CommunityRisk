@@ -35,7 +35,6 @@ module.exports = {
         "public/build/bower/angular-lodash/js/angular-lodash.js", //in bower.json
         "public/build/bower/angular-route/js/angular-route.js", //in bower.json
         "public/build/bower/angular-resource/js/angular-resource.js", //in bower.json
-        "public/build/bower/angular-touch/js/angular-touch.js",
         "public/build/bower/angular-sanitize/js/angular-sanitize.js",
         "public/build/bower/angular-ui-router/js/angular-ui-router.min.js",
         "public/build/bower/angular-css/js/angular-css.js",

@@ -35,9 +35,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     // SET MAIN VARIABLES //
     ////////////////////////
 
-    $scope.change_view = function(view) {
-      $rootScope.view_code = view;
-    };
     $scope.change_country = function(country) {
       $scope.country_code = country;
       $scope.parent_codes = [];

@@ -34,33 +34,27 @@
     <div id="menu-buttons" aria-expanded="false" class="button-nav">
       <ul class="nav navbar-top-links navbar-left">
         <li class="dropdown">
-          <a
-            class="submenu-item"
-            ng-click="change_view('CRA')"
-            ng-href="#!/community_risk"
-            >COMMUNITY RISK</a
-          >
+          <a class="submenu-item caps" ng-href="#!/community_risk">
+            {{ "COMMUNITY_RISK" | translate }}
+          </a>
         </li>
       </ul>
       <ul class="nav navbar-top-links navbar-left">
         <li class="dropdown">
-          <a
-            class="submenu-item"
-            ng-click="change_view('PI')"
-            ng-href="#!/impact_database"
-            >IMPACT DATABASE</a
-          >
+          <a class="submenu-item caps" ng-href="#!/impact_database">
+            {{ "IMPACT_DATABASE" | translate }}
+          </a>
         </li>
       </ul>
       <ul class="nav navbar-top-links navbar-left">
         <li class="dropdown" style="background:#4C8293">
           <a
             style="color:#fff"
-            class="submenu-item"
-            ng-click="change_view('PI')"
+            class="submenu-item caps"
             ng-href="#!/priority_index"
-            >PRIORITY INDEX</a
           >
+            {{ "PRIORITY_INDEX" | translate }}
+          </a>
         </li>
       </ul>
 

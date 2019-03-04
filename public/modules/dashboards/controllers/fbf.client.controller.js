@@ -44,10 +44,6 @@ angular.module("dashboards").controller("FbfController", [
     // SET MAIN VARIABLES //
     ////////////////////////
 
-    $scope.change_view = function(view) {
-      $rootScope.view_code = view;
-    };
-
     //////////////////////
     // DEFINE VARIABLES //
     //////////////////////

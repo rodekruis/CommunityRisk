@@ -35,9 +35,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     // SET MAIN VARIABLES //
     ////////////////////////
 
-    $scope.change_view = function(view) {
-      $rootScope.view_code = view;
-    };
     $scope.set_defaults_country = function(country) {
       $scope.country_code = country;
       if (country == "PHL") {

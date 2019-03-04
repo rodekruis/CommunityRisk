@@ -10,6 +10,7 @@ angular.module("dashboards").controller("FbfController", [
   "Authentication",
   "Data",
   "cfpLoadingBar",
+  "exportService",
   "shareService",
   function(
     $translate,
@@ -21,6 +22,7 @@ angular.module("dashboards").controller("FbfController", [
     Authentication,
     Data,
     cfpLoadingBar,
+    exportService,
     shareService
   ) {
     $scope.user = Authentication.user;
@@ -2034,60 +2036,12 @@ angular.module("dashboards").controller("FbfController", [
 
       //Export to GEOJSON
       $scope.export_geojson = function() {
-        var myWindow = window.open("", "", "_blank");
-        myWindow.document.write(JSON.stringify(d.Districts));
-        myWindow.focus();
+        exportService.exportAsGeoJSON(d.Districts);
       };
 
       //Export to CSV function
       $scope.export_csv = function() {
-        var content = d.Rapportage;
-
-        var finalVal = "";
-
-        for (var i = 0; i < content.length; i++) {
-          var value = content[i];
-          var key, innerValue, result;
-          if (i === 0) {
-            for (key in value) {
-              if (value.hasOwnProperty(key)) {
-                if (meta_label[key]) {
-                  innerValue = meta_label[key];
-                } else if (meta_label[key.replace("_score", "")]) {
-                  innerValue =
-                    meta_label[key.replace("_score", "")] + " (0-10)";
-                } else {
-                  innerValue = key;
-                }
-                result = innerValue.replace(/"/g, "");
-                if (result.search(/("|,|\n)/g) >= 0) result = "" + result + "";
-                if (key !== "name") finalVal += ";";
-                finalVal += result;
-              }
-            }
-            finalVal += "\n";
-          }
-
-          for (key in value) {
-            if (value.hasOwnProperty(key)) {
-              innerValue = JSON.stringify(value[key]);
-              result = innerValue.replace(/"/g, "");
-              if (result.search(/("|,|\n)/g) >= 0) result = "" + result + "";
-              if (key !== "name") finalVal += ";";
-              finalVal += result;
-            }
-          }
-
-          finalVal += "\n";
-        }
-
-        var download = document.getElementById("download");
-        download.setAttribute(
-          "href",
-          "data:text/csv;charset=utf-8," + encodeURIComponent(finalVal)
-        );
-        download.setAttribute("download", "export.csv");
-        download.click();
+        exportService.exportAsCSV(d.Rapportage, meta_label);
       };
 
       $scope.share_URL = function() {
@@ -2100,6 +2054,7 @@ angular.module("dashboards").controller("FbfController", [
         );
         $("#URLModal").modal("show");
       };
+
       $scope.share_country_URL = function() {
         $scope.shareable_URL = shareService.createCountryUrl(
           $scope.country_code

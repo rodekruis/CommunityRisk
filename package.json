@@ -6,6 +6,10 @@
   "license": "LGPL-3.0",
   "repository": "github:rodekruis/CommunityRisk",
   "homepage": "https://dashboard.510.global/",
+  "config": {
+    "files_js": "**/*.js",
+    "files_to_check_syntax": "**/**.{json,yaml,yml,css,html,js}"
+  },
   "scripts": {
     "postinstall": "bower-installer -p",
     "clean:dist": "rimraf public/dist/*",
@@ -15,10 +19,10 @@
     "build": "grunt build",
     "predeploy": "npm install",
     "deploy": "npm run build && echo 'Deployed!'",
-    "fix:syntax": "prettier --write '**/**.{json,yaml,yml,css,html,js}'",
-    "fix:js": "eslint --fix --fix-type suggestion --ignore-path .prettierignore '**/*.js'",
-    "test:syntax": "prettier --check '**/**.{json,yaml,yml,css,html,js}'",
-    "test:js": "eslint --quiet --cache --ignore-path .prettierignore '**/*.js'",
+    "fix:syntax": "prettier --write $npm_package_config_files_to_check_syntax",
+    "fix:js": "eslint --fix --fix-type suggestion --ignore-path .prettierignore $npm_package_config_files_js",
+    "test:syntax": "prettier --check $npm_package_config_files_to_check_syntax",
+    "test:js": "eslint --quiet --cache --ignore-path .prettierignore $npm_package_config_files_js",
     "test": "npm run test:syntax && npm run test:js"
   },
   "husky": {

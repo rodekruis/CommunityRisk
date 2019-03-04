@@ -2042,8 +2042,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
 
       $scope.share_URL = function() {
         $scope.shareable_URL = shareService.createFullUrl(
-          $scope.chart_show,
           $scope.country_code,
+          $scope.chart_show,
           $scope.admlevel,
           $scope.metric,
           $scope.parent_codes

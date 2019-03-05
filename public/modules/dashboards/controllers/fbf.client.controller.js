@@ -2058,13 +2058,7 @@ angular.module("dashboards").controller("FbfController", [
         $("#URLModal").modal("show");
       };
 
-      $scope.copyToClipboard = function(element) {
-        var $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val($(element).text()).select();
-        document.execCommand("copy");
-        $temp.remove();
-      };
+      $scope.copyToClipboard = shareService.copyToClipboard;
 
       ///////////////////////////////////
       // SIDEBAR: MAP & TABULAR SWITCH //

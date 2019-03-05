@@ -3,11 +3,7 @@
   data-ng-controller="CommunityRiskController"
   data-ng-init="initiate('CRA')"
 >
-  <nav
-    id="header"
-    class="navbar navbar-default navbar-fixed-top navbar-inverse"
-    role="navigation"
-  >
+  <nav id="header" class="navbar bg-white navbar-fixed-top" role="navigation">
     <div class="navbar-header">
       <a
         class="navbar-brand"
@@ -27,7 +23,7 @@
       >
         <li class="dropdown">
           <a
-            class="submenu-item caps"
+            class="submenu-item text-uppercase"
             style="color:red"
             ng-click="open_status()"
             >{{ status_title }}</a
@@ -51,31 +47,25 @@
         <li class="dropdown" style="background:#4C8293">
           <a
             style="color:#fff"
-            class="submenu-item caps"
-            ng-click="change_view('CRA')"
+            class="submenu-item text-uppercase"
             ng-href="#!/community_risk"
-            >{{ "COMMUNITY_RISK" | translate }}</a
           >
+            {{ "COMMUNITY_RISK" | translate }}
+          </a>
         </li>
       </ul>
       <ul class="nav navbar-top-links navbar-left">
         <li class="dropdown">
-          <a
-            class="submenu-item caps"
-            ng-click="change_view('PI')"
-            ng-href="#!/impact_database"
-            >{{ "IMPACT_DATABASE" | translate }}</a
-          >
+          <a class="submenu-item text-uppercase" ng-href="#!/impact_database">
+            {{ "IMPACT_DATABASE" | translate }}
+          </a>
         </li>
       </ul>
       <ul class="nav navbar-top-links navbar-left">
         <li class="dropdown">
-          <a
-            class="submenu-item caps"
-            ng-click="change_view('PI')"
-            ng-href="#!/priority_index"
-            >{{ "PRIORITY_INDEX" | translate }}</a
-          >
+          <a class="submenu-item text-uppercase" ng-href="#!/priority_index">
+            {{ "PRIORITY_INDEX" | translate }}
+          </a>
         </li>
       </ul>
 
@@ -86,7 +76,7 @@
       >
         <li class="dropdown">
           <a
-            class="dropdown-toggle export-button caps"
+            class="dropdown-toggle export-button text-uppercase"
             data-toggle="dropdown"
             href="#"
           >
@@ -127,7 +117,7 @@
       <ul class="nav navbar-top-links navbar-right">
         <li class="dropdown">
           <a
-            class="dropdown-toggle export-button caps"
+            class="dropdown-toggle export-button text-uppercase"
             data-toggle="dropdown"
             href="#"
           >
@@ -167,7 +157,7 @@
       <ul class="nav navbar-top-links navbar-right">
         <li class="dropdown">
           <a
-            class="dropdown-toggle export-button caps"
+            class="dropdown-toggle export-button text-uppercase"
             data-toggle="dropdown"
             href="#"
           >
@@ -186,9 +176,7 @@
             </li>
             <li class="divider"></li>
             <li>
-              <a id="download" ng-click="export_csv()">{{
-                "export_csv" | translate
-              }}</a>
+              <a ng-click="export_csv()">{{ "export_csv" | translate }}</a>
             </li>
             <li class="divider"></li>
             <li>
@@ -203,7 +191,7 @@
       <ul class="nav navbar-top-links navbar-right">
         <li class="dropdown">
           <a
-            class="dropdown-toggle export-button caps"
+            class="dropdown-toggle export-button text-uppercase"
             data-toggle="dropdown"
             href="#"
           >

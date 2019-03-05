@@ -1,97 +1,11 @@
 <section class="section-expand" data-ng-controller="HomeController">
+  <!-- Navigation -->
+  <cr-header active-section=""></cr-header>
+  <!-- end: navbar-header -->
+
   <section id="tophome" class="slideshow js-fullheight fluid-container">
     <div class="homepage">
       <div class="content-wrapper">
-        <!-- Navigation -->
-        <nav
-          id="header"
-          class="navbar navbar-default navbar-fixed-top navbar-inverse"
-          role="navigation"
-        >
-          <div class="navbar-header">
-            <a
-              class="navbar-brand"
-              style="padding-left:10px; padding-top:3px"
-              href="/#!/"
-            >
-              <img
-                src="modules/core/img/510logo-new.png"
-                style="height:45px; float:left"
-              />
-            </a>
-            <button
-              class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#menu-buttons"
-              aria-controls="menu-buttons"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          </div>
-          <div id="menu-buttons" aria-expanded="false" class="button-nav">
-            <ul class="nav navbar-top-links navbar-left">
-              <li>
-                <a
-                  ng-href="#!/community_risk"
-                  ng-click="choose_view('CRA')"
-                  class="caps"
-                  >{{ "COMMUNITY_RISK" | translate }}</a
-                >
-              </li>
-            </ul>
-            <ul class="nav navbar-top-links navbar-left">
-              <li>
-                <a
-                  ng-href="#!/impact_database"
-                  ng-click="choose_view('PI')"
-                  class="caps"
-                  >{{ "IMPACT_DATABASE" | translate }}</a
-                >
-              </li>
-            </ul>
-            <ul class="nav navbar-top-links navbar-left">
-              <li>
-                <a
-                  ng-href="#!/priority_index"
-                  ng-click="choose_view('PI')"
-                  class="caps"
-                  >{{ "PRIORITY_INDEX" | translate }}</a
-                >
-              </li>
-            </ul>
-            <ul
-              class="nav navbar-top-links navbar-left"
-              ng-if="!!authentication.user"
-            >
-              <li>
-                <a ng-href="#!/fbf" class="caps">
-                  {{ "FBF" | translate }}
-                </a>
-              </li>
-            </ul>
-            <ul class="nav navbar-top-links navbar-right" ng-if="DEBUG">
-              <li>
-                <a
-                  ng-href="#!/signin"
-                  ng-if="!authentication.user"
-                  class="btn btn-default"
-                  >{{ "SIGN_IN" | translate }}</a
-                >
-                <a
-                  ng-href="/auth/signout"
-                  ng-if="!!authentication.user"
-                  class="btn btn-warning"
-                  >{{ "SIGN_OUT" | translate }}</a
-                >
-              </li>
-            </ul>
-          </div>
-        </nav>
-        <!-- end: navbar-header -->
-
         <!-- start: content -->
         <div>
           <div class="container">

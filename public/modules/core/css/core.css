@@ -396,10 +396,6 @@ input[type="text"].transparent:hover {
   stroke: black;
 }
 
-.caps {
-  text-transform: uppercase;
-}
-
 .text-highlight {
   color: #a2d0d0;
 }

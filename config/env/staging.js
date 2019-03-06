@@ -65,7 +65,6 @@ module.exports = {
         "public/build/bower/angular-elastic/js/elastic.js", //in bower.json
         "public/build/bower/underscore/js/underscore.js", //in bower.json
         "public/build/bower/angular-loading-bar/js/loading-bar.min.js",
-        "public/build/bower/leaflet-gps/js/leaflet-gps.min.js", // in bower.json
         "public/build/bower/jquery-countTo/js/jquery.countTo.js", // in bower.json
         "public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js", // in bower.json
         "public/build/bower/wow/js/wow.js", // in bower.json

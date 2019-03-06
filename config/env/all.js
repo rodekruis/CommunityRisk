@@ -41,7 +41,6 @@ module.exports = {
         "public/build/bower/angular-route-styles/js/route-styles.js",
         "public/build/bower/bootstrap/js/bootstrap.min.js",
         "public/build/bower/leaflet/js/leaflet.js", //in bower.json
-        "public/build/bower/leaflet-ajax/js/leaflet.ajax.js",
         "public/build/bower/angular-gettext/js/angular-gettext.js",
         "public/build/bower/d3/js/d3.js",
         "public/build/bower/dcjs/js/dc.js", //in bower.json

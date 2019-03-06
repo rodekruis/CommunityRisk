@@ -19,7 +19,6 @@
     "angular-css": "*",
     "angular-ui-router": "*",
     "angular-translate": "*",
-    "leaflet-ajax": "~2.0.0",
     "angular-gettext": "2.2.1",
     "d3": "4.13.0",
     "crossfilter": "*",

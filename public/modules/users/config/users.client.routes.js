@@ -11,10 +11,6 @@ angular.module("users").config([
         templateUrl:
           "modules/users/views/settings/change-password.client.view.html",
       })
-      .state("signup", {
-        url: "/signup",
-        templateUrl: "modules/users/views/signup.client.view.html",
-      })
       .state("signin", {
         url: "/signin",
         templateUrl: "modules/users/views/signin.client.view.html",

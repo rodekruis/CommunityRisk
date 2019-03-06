@@ -13,15 +13,11 @@ angular.module("users").controller("AuthenticationController", [
         .post(requestEndpoint, $scope.credentials)
         .success(function(response) {
           $scope.authentication.user = response;
-          $location.path("/");
+          $location.path("/fbf");
         })
         .error(function(response) {
           $scope.error = response.message;
         });
-    };
-
-    $scope.signup = function() {
-      authRequest("/auth/signup");
     };
 
     $scope.signin = function() {

@@ -3,8 +3,8 @@
 /**
  * Module dependencies.
  */
-var users = require("../../app/controllers/users");
-var authdata = require("../../app/controllers/authdata");
+var users = require("../controllers/users");
+var authdata = require("../controllers/authdata");
 
 module.exports = function(app) {
   app.route("/authdata/poi").get(users.requiresLogin, authdata.getPoi);

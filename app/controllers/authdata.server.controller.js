@@ -40,3 +40,24 @@ exports.getData = function(req, res, next) {
     });
   });
 };
+
+exports.getPoi = function(req, res, next) {
+  console.log("Getting POIs:", req.query);
+
+  pool.connect(function(err, client, release) {
+    if (err) return next(err);
+
+    client.query(
+      {
+        text: "SELECT usp_fbf_zambia($1::text, $2::text);",
+        values: [req.query.country, req.query.type],
+      },
+      function(err, result) {
+        if (err) return next(err);
+
+        res.jsonp(result.rows[0].usp_fbf_zambia.features);
+        release();
+      }
+    );
+  });
+};

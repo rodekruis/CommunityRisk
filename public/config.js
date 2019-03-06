@@ -10,7 +10,6 @@ window.ApplicationConfiguration = (function() {
     "angularCSS",
     "ngSanitize",
     "ui.router",
-    "leaflet-directive",
     "angular-lodash",
     "gettext",
     "AngularDc",

@@ -32,7 +32,6 @@ module.exports = {
         "public/build/bower/bootstrap/css/bootstrap.min.css", // in bower.json
         "public/build/custom/bootstrap/css/bootstrap-theme.min.css", // in bower.json
         "public/build/bower/leaflet/css/leaflet.css", // in bower.json
-        "public/build/bower/cartodb.js/css/cartodb.css", // in bower.json
         "public/build/bower/angular/css/angular-csp.css", // in bower.json
         "public/build/bower/dcjs/css/dc.css", // in bower.json
         "public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css", // NOT in bower.json
@@ -68,7 +67,6 @@ module.exports = {
         "public/build/bower/underscore/js/underscore.js", //in bower.json
         "public/build/bower/angular-loading-bar/js/loading-bar.min.js",
         "public/build/bower/leaflet-gps/js/leaflet-gps.min.js", // in bower.json
-        "public/build/bower/cartodb.js/js/cartodb_noleaflet.js", // in bower,json
         "public/build/bower/jquery-countTo/js/jquery.countTo.js", // in bower.json
         "public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js", // in bower.json
         "public/build/bower/wow/js/wow.js", // in bower.json

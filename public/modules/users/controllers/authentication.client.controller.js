@@ -20,10 +20,6 @@ angular.module("users").controller("AuthenticationController", [
         });
     };
 
-    $scope.signup = function() {
-      authRequest("/auth/signup");
-    };
-
     $scope.signin = function() {
       authRequest("/auth/signin");
     };

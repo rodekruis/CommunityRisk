@@ -9,6 +9,7 @@ angular.module("dashboards").controller("FbfController", [
   "$location",
   "Authentication",
   "Data",
+  "AuthData",
   "cfpLoadingBar",
   "exportService",
   "shareService",
@@ -21,6 +22,7 @@ angular.module("dashboards").controller("FbfController", [
     $location,
     Authentication,
     Data,
+    AuthData,
     cfpLoadingBar,
     exportService,
     shareService
@@ -99,6 +101,7 @@ angular.module("dashboards").controller("FbfController", [
       nameAttribute: "name",
       color: "#0080ff",
     };
+    $scope.stations = [];
 
     ///////////////////////
     // INITIAL FUNCTIONS //
@@ -185,6 +188,8 @@ angular.module("dashboards").controller("FbfController", [
       Data.get({ adminLevel: $scope.data_input }, function(pgData) {
         $scope.load_data(pgData);
       });
+
+      prepareStationsData();
     };
 
     ///////////////
@@ -2270,6 +2275,50 @@ angular.module("dashboards").controller("FbfController", [
           levelC_selection_pre: $scope.levelC_selection_pre,
         };
       };
+    };
+
+    function prepareStationsData() {
+      $scope.stations = AuthData.getPoi(
+        $scope.country_code,
+        "glofas_stations_v2"
+      );
+
+      return $scope.stations;
+    }
+
+    $scope.show_glofas_stations = function() {
+      $scope.stations.forEach(function(item) {
+        if (!item.properties) return;
+
+        var station = item.properties;
+        var stationTitle =
+          station.station_name + " (" + station.station_code + ")";
+        var stationInfoPopup =
+          "<strong>" +
+          stationTitle +
+          "</strong><br>" +
+          "2 yr: " +
+          station["2yr_threshold"] +
+          "<br>" +
+          "5 yr: " +
+          station["5yr_threshold"] +
+          "";
+
+        var stationMarker = L.marker([station.lat, station.lon], {
+          keyboard: true,
+          riseOnHover: true,
+          title: stationTitle,
+          icon: L.divIcon({
+            iconSize: [20, 20],
+            iconAnchor: [10, 0],
+            popupAnchor: [0, 0],
+            className: "marker-icon--station",
+          }),
+        });
+
+        stationMarker.addTo(map);
+        stationMarker.bindPopup(stationInfoPopup);
+      });
     };
   },
 ]);

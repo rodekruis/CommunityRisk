@@ -17,3 +17,10 @@ body {
 .bg-white {
   background-color: #fff;
 }
+
+.debug {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: lightgoldenrodyellow;
+  outline: 2px dashed hotpink;
+}

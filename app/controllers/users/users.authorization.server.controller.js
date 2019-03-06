@@ -22,6 +22,10 @@ exports.userByID = function(req, res, next, id) {
  * Require login routing middleware
  */
 exports.requiresLogin = function(req, res, next) {
+  if (process.env.NODE_ENV === "development") {
+    return next();
+  }
+
   if (!req.isAuthenticated()) {
     return res.status(401).send({
       message: "User is not logged in",

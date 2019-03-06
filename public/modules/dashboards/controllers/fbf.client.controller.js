@@ -13,6 +13,7 @@ angular.module("dashboards").controller("FbfController", [
   "cfpLoadingBar",
   "exportService",
   "shareService",
+  "DEBUG",
   function(
     $translate,
     $scope,
@@ -25,12 +26,13 @@ angular.module("dashboards").controller("FbfController", [
     AuthData,
     cfpLoadingBar,
     exportService,
-    shareService
+    shareService,
+    DEBUG
   ) {
     $scope.user = Authentication.user;
 
     // This is a 'private' view, so a valid user is required:
-    if (!$scope.user) {
+    if (!$scope.user && !DEBUG) {
       return $location.path("signin");
     }
 

@@ -933,8 +933,7 @@ body {
 #row-chart-container {
   position: absolute;
   width: 100%;
-  height: 95%;
-  top: 50px;
+  height: 100%;
   background-color: #fff;
   visibility: hidden;
 }

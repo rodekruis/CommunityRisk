@@ -35,7 +35,6 @@
     "async": "1.5.x",
     "bcrypt": "3.0.4",
     "body-parser": "1.15.x",
-    "cartodb": "0.3.x",
     "compression": "1.6.1",
     "connect-flash": "0.1.x",
     "consolidate": "0.14.x",

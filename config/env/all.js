@@ -18,7 +18,6 @@ module.exports = {
         "public/build/bower/bootstrap/css/bootstrap.min.css", // in bower.json
         "public/build/custom/bootstrap/css/bootstrap-theme.min.css", // in bower.json
         "public/build/bower/leaflet/css/leaflet.css", // in bower.json
-        "public/build/bower/cartodb.js/css/cartodb.css", // in bower.json
         "public/build/bower/angular/css/angular-csp.css", // in bower.json
         "public/build/bower/dcjs/css/dc.css", // in bower.json
         "public/build/custom/dc-leaflet/css/dc-leaflet-legend.min.css", // NOT in bower.json
@@ -42,8 +41,6 @@ module.exports = {
         "public/build/bower/angular-route-styles/js/route-styles.js",
         "public/build/bower/bootstrap/js/bootstrap.min.js",
         "public/build/bower/leaflet/js/leaflet.js", //in bower.json
-        "public/build/bower/angular-leaflet-directive/js/angular-leaflet-directive.js", // in bower.json
-        "public/build/bower/leaflet-ajax/js/leaflet.ajax.js",
         "public/build/bower/angular-gettext/js/angular-gettext.js",
         "public/build/bower/d3/js/d3.js",
         "public/build/bower/dcjs/js/dc.js", //in bower.json
@@ -55,8 +52,6 @@ module.exports = {
         "public/build/bower/angular-elastic/js/elastic.js", //in bower.json
         "public/build/bower/underscore/js/underscore.js", //in bower.json
         "public/build/bower/angular-loading-bar/js/loading-bar.js",
-        "public/build/bower/leaflet-gps/js/leaflet-gps.min.js", // in bower.json
-        "public/build/bower/cartodb.js/js/cartodb_noleaflet.js", // in bower.json
         "public/build/bower/jquery-countTo/js/jquery.countTo.js", // in bower.json
         "public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js", // in bower.json
         "public/build/bower/wow/js/wow.js", // in bower.json

@@ -3,34 +3,24 @@
 /**
  * Module dependencies.
  */
+var config = require("../../config/config");
+var pg = require("pg");
 
-var config = require("../../config/config"),
-  pg = require("pg");
+var pool = new pg.Pool({
+  host: config.postgres.host,
+  user: config.postgres.user,
+  password: config.postgres.password,
+  database: config.postgres.db,
+});
 
-/**
- * Show the current map
- */
 exports.read = function(req, res) {
   res.jsonp(req.pgData);
 };
 
-/**
- * AMap middleware
- */
-exports.getData = function(req, res, next, parameters) {
+exports.getData = function(req, res, next) {
   console.log("Getting all sort of data!!");
-  console.log("parameters", parameters);
-  var connString =
-    "postgres://" +
-    config.postgres.user +
-    ":" +
-    config.postgres.password +
-    "@" +
-    config.postgres.host +
-    "/" +
-    config.postgres.db;
-  console.log(connString);
-  pg.connect(connString, function(err, client, release) {
+
+  pool.connect(function(err, client, release) {
     if (err) return next(err);
 
     var sql =
@@ -43,7 +33,7 @@ exports.getData = function(req, res, next, parameters) {
 
     client.query(sql, function(err, result) {
       if (err) return next(err);
-      console.log(result.rows);
+
       req.pgData = result.rows;
       release();
       next();

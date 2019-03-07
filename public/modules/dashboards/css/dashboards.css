@@ -1132,31 +1132,6 @@ div.dc-chart {
   cursor: pointer;
 }
 
-.dropdown-toggle {
-  background: #4c8293;
-  color: #ffffff;
-  font-size: 12px;
-  display: block;
-  line-height: 290%;
-  text-decoration: none;
-}
-.dropdown-toggle:hover {
-  background: #eeeeee;
-  color: #4c8293;
-}
-.dropdown-toggle:hover,
-.dropdown-toggle:visited,
-.dropdown-toggle:active {
-  text-decoration: none;
-}
-
-.nav .open > a,
-.nav .open > a:hover,
-.nav .open > a:focus {
-  background: #4c8293;
-  color: #ffffff;
-}
-
 /* start: new styles */
 .btn.btn-secondary.btn-zoomin {
   background-color: #eeeeee;
@@ -1197,23 +1172,6 @@ div.dc-chart {
 }
 .view-button .btn.btn-secondary:hover,
 .view-button .btn.btn-secondary:focus {
-  box-shadow: none;
-}
-
-.open > .dropdown-menu {
-  padding: 0;
-  border: 2px solid #eeeeee;
-  width: 100%;
-}
-.btn-group.open {
-  outline: none;
-}
-.btn-group.open .dropdown-toggle,
-.btn-group > .btn:last-child:not(:first-child),
-.btn-group > .dropdown-toggle:not(:first-child),
-.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
-  outline: none;
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 

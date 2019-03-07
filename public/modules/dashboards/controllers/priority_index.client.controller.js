@@ -1814,10 +1814,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
       };
 
       if ($scope.country_code == "PER" || $scope.country_code == "ECU") {
-        document.getElementById("language-selector").style.display = "block";
+        $("#language-selector").show();
         $scope.changeLanguage("es");
       } else {
-        document.getElementById("language-selector").style.display = "none";
+        $("#language-selector").hide();
         $scope.changeLanguage("en");
       }
 

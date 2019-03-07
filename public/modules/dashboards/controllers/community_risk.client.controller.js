@@ -422,27 +422,37 @@ angular.module("dashboards").controller("CommunityRiskController", [
         d,
         "default_metric"
       );
+
       var country_status = $scope.genLookup_country_meta(d, "format")[
         $scope.country_code
       ];
+
+      function setViewStatus(isVisible) {
+        var viewStatus = document.getElementById("status");
+
+        if (viewStatus) {
+          viewStatus.style.visibility = isVisible ? "visible" : "hidden";
+        }
+      }
+
       if (country_status == "template") {
-        document.getElementById("status").style.visibility = "visible";
+        setViewStatus(true);
         $scope.status_title = "Template only";
         $scope.status_text =
           "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
       } else if (country_status == "basic") {
-        document.getElementById("status").style.visibility = "visible";
+        setViewStatus(true);
         $scope.status_title = "Draft version";
         $scope.status_text =
           "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
       } else if (country_status == "all") {
         var dpi = d.dpi[0].dpi_score;
         if (dpi > 0.1) {
-          document.getElementById("status").style.visibility = "hidden";
+          setViewStatus(false);
           $scope.status_title = "";
           $scope.status_text = "";
         } else {
-          document.getElementById("status").style.visibility = "visible";
+          setViewStatus(true);
           $scope.status_title = "Needs data";
           $scope.status_text =
             "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
@@ -2293,7 +2303,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       var languages_all = [].concat(languages_es, languages_fr);
 
       if (languages_all.indexOf($scope.country_code) > -1) {
-        document.getElementById("language-selector").style.display = "block";
+        $("#language-selector").show();
         if ($scope.reload == 1 && $scope.language == "en") {
           $scope.changeLanguage("en");
         } else {
@@ -2312,7 +2322,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
           }
         }
       } else {
-        document.getElementById("language-selector").style.display = "none";
+        $("#language-selector").hide();
         $scope.changeLanguage("en");
       }
 

@@ -4,16 +4,28 @@ angular.module("core").directive("crHeader", [
       restrict: "E", // Use element: `<cr-header>`
       replace: true,
       templateUrl: "modules/core/views/header.client.view.html",
+      scope: {
+        activeSection: "@",
+        showViewStatus: "=",
+        viewStatusTitle: "=",
+        fnOpenViewStatus: "<?",
+        showShareExport: "<?",
+        fnShareUrl: "<?",
+        fnShareCountryUrl: "<?",
+        fnExportCsv: "<?",
+        fnExportGeojson: "<?",
+        showHelp: "<?",
+        viewType: "<?",
+      },
       controller: [
         "$scope",
-        "$attrs",
         "DEBUG",
         "Authentication",
-        function($scope, $attrs, DEBUG, Authentication) {
+        function($scope, DEBUG, Authentication) {
           $scope.isLoggedIn = !!Authentication.user;
 
-          $scope.activeSection = $attrs.activeSection;
           $scope.enableFbf = DEBUG && $scope.isLoggedIn;
+
           $scope.showLogin = DEBUG;
         },
       ],

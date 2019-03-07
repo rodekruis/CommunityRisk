@@ -12,9 +12,22 @@
   width: 25px;
 }
 
-.navbar--item-left {
-  margin-right: 15px;
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger {
+  color: red;
+  background-color: transparent;
+  border-color: transparent;
 }
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+  border-color: currentColor;
+}
+
+.navbar--item {
+  margin: 0 7px;
+}
+
 .navbar .active > a:hover,
 .navbar .active > a:focus,
 .navbar .active > a {
@@ -176,12 +189,6 @@
 #header .dropdown-menu.export-items a {
   color: #000000;
   font-size: 13px;
-}
-
-@media only screen and (max-width: 1100px) {
-  #header .dropdown-menu {
-    width: 100%;
-  }
 }
 
 @media screen and (min-width: 1100px) and (max-width: 1300px) {

@@ -2293,7 +2293,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       var languages_all = [].concat(languages_es, languages_fr);
 
       if (languages_all.indexOf($scope.country_code) > -1) {
-        document.getElementById("language-selector").style.display = "block";
+        $("#language-selector").show();
         if ($scope.reload == 1 && $scope.language == "en") {
           $scope.changeLanguage("en");
         } else {
@@ -2312,7 +2312,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
           }
         }
       } else {
-        document.getElementById("language-selector").style.display = "none";
+        $("#language-selector").hide();
         $scope.changeLanguage("en");
       }
 

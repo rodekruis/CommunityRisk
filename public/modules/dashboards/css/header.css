@@ -12,9 +12,11 @@
   width: 25px;
 }
 
-.navbar--item-left {
-  margin-right: 15px;
+
+.navbar--item {
+  margin: 0 7px;
 }
+
 .navbar .active > a:hover,
 .navbar .active > a:focus,
 .navbar .active > a {
@@ -176,12 +178,6 @@
 #header .dropdown-menu.export-items a {
   color: #000000;
   font-size: 13px;
-}
-
-@media only screen and (max-width: 1100px) {
-  #header .dropdown-menu {
-    width: 100%;
-  }
 }
 
 @media screen and (min-width: 1100px) and (max-width: 1300px) {

@@ -12,6 +12,17 @@
   width: 25px;
 }
 
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger {
+  color: red;
+  background-color: transparent;
+  border-color: transparent;
+}
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+  border-color: currentColor;
+}
 
 .navbar--item {
   margin: 0 7px;

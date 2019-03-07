@@ -7,6 +7,16 @@
           class="navbar-brand--logo-img"
         />
       </a>
+
+      <button
+        type="button"
+        class="navbar-btn btn btn-outline-danger text-uppercase text-danger"
+        ng-click="fnOpenViewStatus()"
+        ng-show="showViewStatus && viewStatusTitle && fnOpenViewStatus"
+      >
+        {{ viewStatusTitle }}
+      </button>
+
       <button
         class="navbar-toggler"
         type="button"

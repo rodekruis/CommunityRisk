@@ -6,6 +6,9 @@ angular.module("core").directive("crHeader", [
       templateUrl: "modules/core/views/header.client.view.html",
       scope: {
         activeSection: "@",
+        showViewStatus: "=",
+        viewStatusTitle: "=",
+        fnOpenViewStatus: "<?",
         showShareExport: "<?",
         fnShareUrl: "<?",
         fnShareCountryUrl: "<?",

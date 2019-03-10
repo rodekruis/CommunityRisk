@@ -2298,7 +2298,8 @@ angular.module("dashboards").controller("FbfController", [
       return $scope.stations;
     }
 
-    $scope.show_glofas_stations = function() {
+    $scope.prepare_glofas_stations = function() {
+      $scope.stationsLayer = L.layerGroup();
       $scope.stations.forEach(function(item) {
         if (!item.properties) return;
 
@@ -2328,9 +2329,17 @@ angular.module("dashboards").controller("FbfController", [
           }),
         });
 
-        stationMarker.addTo(map);
+        stationMarker.addTo($scope.stationsLayer);
         stationMarker.bindPopup(stationInfoPopup);
       });
+    };
+
+    $scope.show_glofas_stations = function() {
+      map.addLayer($scope.stationsLayer);
+    };
+
+    $scope.hide_glofas_stations = function() {
+      map.removeLayer($scope.stationsLayer);
     };
   },
 ]);

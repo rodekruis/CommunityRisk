@@ -96,7 +96,7 @@ angular.module("dashboards").controller("FbfController", [
     ];
     var mapfilters_length = 0;
     var d_prev = "";
-    var map, map2;
+    var map;
     $scope.config = {
       whereFieldName: "pcode",
       joinAttribute: "pcode",
@@ -412,9 +412,6 @@ angular.module("dashboards").controller("FbfController", [
       dc.chartRegistry.clear();
       if (map !== undefined) {
         map.remove();
-      }
-      if (map2 !== undefined) {
-        map2.remove();
       }
 
       //define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
@@ -1975,7 +1972,6 @@ angular.module("dashboards").controller("FbfController", [
               .range([0, rowChart.width()])
               .domain([0, xAxis])
           );
-        $("#map-chart2").hide();
         $("#map-chart").show();
         dc.redrawAll();
 
@@ -2185,21 +2181,17 @@ angular.module("dashboards").controller("FbfController", [
       zoomToGeom($scope.geom);
 
       var prev_indicator = "";
+      var rasterLayer;
       $scope.change_raster = function(indicator) {
         if (indicator == prev_indicator) {
-          $("#map-chart").hide();
-          $("#map-chart2").show();
+          map.removeLayer(rasterLayer);
+          prev_indicator = "";
+        } else if (rasterLayer) {
+          rasterLayer.addTo(map);
+          map.fitBounds(rasterLayer.getBounds());
+          prev_indicator = indicator;
         } else {
           $scope.start();
-          if (map2 !== undefined) {
-            map2.remove();
-          }
-
-          map2 = L.map("map-chart2");
-          L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-            attribution:
-              '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-          }).addTo(map2);
           var url = "modules/dashboards/data/ZMB_births_pp_v2_2015.tif";
           fetch(url)
             .then(function(r) {
@@ -2207,20 +2199,17 @@ angular.module("dashboards").controller("FbfController", [
             })
             .then(function(buffer) {
               var s = L.ScalarField.fromGeoTIFF(buffer);
-              var layer = L.canvasLayer
+              rasterLayer = L.canvasLayer
                 .scalarField(s, {
                   color: chroma
                     .scale("RdPu")
                     .domain([s.range[0], s.range[1] / 100]),
-                  opacity: 0.65,
+                  opacity: 0.88,
                 })
-                .addTo(map2);
-              map2.fitBounds(layer.getBounds());
+                .addTo(map);
+              map.fitBounds(rasterLayer.getBounds());
             });
-
           $scope.complete();
-          $("#map-chart").hide();
-
           prev_indicator = indicator;
         }
       };

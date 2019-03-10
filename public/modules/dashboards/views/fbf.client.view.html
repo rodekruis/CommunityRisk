@@ -126,9 +126,25 @@
         <button
           type="button"
           class="btn btn-default btn-block"
+          ng-click="prepare_glofas_stations()"
+        >
+          {{ "Prepare Glofas Stations" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-default btn-block"
           ng-click="show_glofas_stations()"
+          ng-show="stationsLayer"
         >
           {{ "Show Glofas Stations" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-default btn-block"
+          ng-click="hide_glofas_stations()"
+          ng-show="stationsLayer"
+        >
+          {{ "Hide Glofas Stations" | translate }}
         </button>
       </div>
 

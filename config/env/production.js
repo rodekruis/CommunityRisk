@@ -33,7 +33,7 @@ module.exports = {
     lib: {
       css: [
         "public/build/bower/bootstrap/css/bootstrap.min.css", // in bower.json
-        "public/build/custom/bootstrap/css/bootstrap-theme.min.css", // in bower.json
+        "public/build/custom/bootstrap/css/bootstrap-theme.css", // in bower.json
         "public/build/bower/leaflet/css/leaflet.css", // in bower.json
         "public/build/bower/angular/css/angular-csp.css", // in bower.json
         "public/build/bower/dcjs/css/dc.css", // in bower.json

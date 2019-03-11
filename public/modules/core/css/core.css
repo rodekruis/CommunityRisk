@@ -185,7 +185,7 @@ input[type="text"].transparent:hover {
 
 .slick-dots li {
   float: left;
-  display: inline;
+  display: block;
   margin: -19px 15px 0;
 }
 

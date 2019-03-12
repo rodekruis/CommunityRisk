@@ -46,8 +46,27 @@ input[type="text"].transparent:hover {
 #tophome {
   padding-top: 53px;
   padding-bottom: 72px;
-  color: #fff;
   min-height: 600px;
+}
+
+/* Homepage
+-------------------------------------------------- */
+
+.homepage h1,
+.homepage h2 {
+  font-family: Calibri, serif;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.home-content {
+  padding-bottom: 50px;
+  padding-top: 0;
+}
+
+.home-content h2 {
+  color: #4c8293;
 }
 
 /* About
@@ -56,11 +75,6 @@ input[type="text"].transparent:hover {
   padding: 85px 0;
   font-size: 16px;
   line-height: 24px;
-}
-.about h2 {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 1em;
 }
 .about .icon {
   text-align: right;
@@ -89,16 +103,6 @@ input[type="text"].transparent:hover {
 -------------------------------------------------- */
 .walkthrough {
   padding: 0 0 100px;
-  text-align: center;
-}
-.walkthrough h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: black;
-  font-weight: 700;
-}
-.rhino-item img {
-  max-width: 100%;
 }
 
 .slider {
@@ -324,30 +328,6 @@ input[type="text"].transparent:hover {
   display: none;
 }
 
-/*homepage styles*/
-.home-content {
-  color: black;
-  padding-bottom: 50px;
-  padding-top: 0;
-}
-
-.homepage h1,
-.homepage h2,
-.homepage h3 {
-  font-family: Calibri, serif;
-}
-
-.home-content h2 {
-  color: #4c8293;
-  font-weight: bold;
-  margin-top: 10px;
-  text-align: center;
-}
-.home-content h3 {
-  font-size: 15px;
-  font-weight: bold;
-}
-
 .title-icon {
   margin-right: 5px;
 }
@@ -378,7 +358,6 @@ input[type="text"].transparent:hover {
 }
 
 .hdx-3w-info {
-  float: left;
   padding: 5px;
   background-color: white;
   background: rgba(255, 255, 255, 0.8);

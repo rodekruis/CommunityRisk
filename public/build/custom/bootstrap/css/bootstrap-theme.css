@@ -548,12 +548,18 @@ a.list-group-item.active:focus .list-group-item-text {
 .modal {
   overflow-y: scroll;
 }
-.modal-body {
-  padding: 20px;
+.modal-header {
+  color: #ffffff;
+  background: #4c8293;
 }
-.modal-footer {
-  margin-top: 15px;
-  padding: 19px 20px 20px;
+.modal-header .close {
+  opacity: 1;
+  color: #ffffff;
+  text-shadow: none;
+}
+.modal-header .close:hover,
+.modal-header .close:focus {
+  color: #cccccc;
 }
 
 .controlsBlock {

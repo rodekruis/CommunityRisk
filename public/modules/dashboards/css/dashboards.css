@@ -568,47 +568,6 @@ h6,
 .btn-modal:hover {
   opacity: 0.75;
 }
-.modal-dialog {
-  font-family: "Open Sans", sans-serif;
-  font-size: 12px;
-  width: 500px;
-  z-index: 2;
-}
-.modal-body h6 {
-  font-size: 15px;
-}
-@media only screen and (max-width: 1024px) {
-  .modal.in .modal-dialog {
-    width: 95%;
-  }
-}
-.modal-backdrop {
-  z-index: 2;
-}
-.sidebar-modal {
-  font-family: "Open Sans", sans-serif;
-}
-.sidebar-modal .modal-header {
-  background: #4c8293;
-  color: #ffffff;
-}
-.sidebar-modal .close {
-  opacity: 1;
-  color: #ffffff;
-  text-shadow: none;
-}
-.sidebar-modal .close:hover,
-.sidebar-modal .close:focus {
-  color: #cccccc;
-}
-.sidebar-modal h4 {
-  font-size: 14px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-.sidebar-modal p {
-  margin-bottom: 15px;
-}
 
 .map-popup {
   background: #4c8293;

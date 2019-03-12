@@ -524,7 +524,7 @@
   </div>
 
   <!-- start: risk score modal -->
-  <div id="infoModal" tabindex="-1" class="modal sidebar-modal" role="dialog">
+  <div id="infoModal" tabindex="-1" class="modal" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
@@ -535,34 +535,41 @@
           <span class="panel-header-icon">
             <img src="{{ metric_icon }}" />
           </span>
-          <h4 class="modal-title">{{ metric_label }}</h4>
+          <h2 class="h5 modal-title">{{ metric_label }}</h2>
         </div>
         <div class="modal-body">
-          <h6><b>Description:</b> {{ metric_desc }}</h6>
+          <p>
+            <strong>Description:</strong>
+            {{ metric_desc }}
+          </p>
           <br />
-          <h6>
-            <b>Link to source/info:</b>
-            <a href="{{ metric_source }}" target="_blank">{{
-              metric_source
-            }}</a>
-          </h6>
-          <br />
+          <p>
+            <strong>Link to source/info:</strong>
+            <a
+              href="{{ metric_source }}"
+              target="_blank"
+              ng-show="metric_source"
+            >
+              {{ metric_source }}
+            </a>
+            <span class="text-muted" ng-show="!metric_source">-</span>
+          </p>
         </div>
       </div>
     </div>
   </div>
   <!-- end: risk score modal -->
 
-  <div id="URLModal" tabindex="-1" class="modal sidebar-modal" role="dialog">
+  <div id="URLModal" tabindex="-1" class="modal" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h4 class="modal-title">
+          <h2 class="h5 modal-title">
             {{ "share_url_title" | translate }}
-          </h4>
+          </h2>
         </div>
         <div class="modal-body" style="word-break:break-all">
           <pre><a href="{{ shareable_URL }}">{{ shareable_URL }}</a></pre>
@@ -579,7 +586,7 @@
   </div>
 
   <!-- start: IE message -->
-  <div id="IEmodal" class="modal sidebar-modal" role="dialog">
+  <div id="IEmodal" tabindex="-1" class="modal" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
@@ -587,7 +594,7 @@
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h3 class="modal-title">Warning</h3>
+          <h2 class="h5 modal-title">{{ "warning" | translate }}</h2>
         </div>
         <div class="modal-body">
           <p>

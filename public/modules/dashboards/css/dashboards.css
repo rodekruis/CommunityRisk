@@ -354,7 +354,6 @@ a {
 .component-section:hover {
   background: #4c8293;
   color: #ffffff;
-  border-radius: 5px;
 }
 .component-label {
   font-size: 11px;
@@ -510,7 +509,6 @@ a {
   font-size: 11px;
 }
 .profile-item {
-  border-radius: 3px;
   color: #354052;
   font-size: 12px;
   font-weight: bold;
@@ -653,9 +651,7 @@ a {
   background: #4c8293;
   color: #ffffff;
   font-weight: bold;
-  border-radius: 5px;
 }
-/* new */
 .section-active img,
 .component-section:hover img {
   filter: brightness(900%);

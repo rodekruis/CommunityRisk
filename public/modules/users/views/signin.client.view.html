@@ -1,10 +1,6 @@
-<section class="row" data-ng-controller="AuthenticationController">
-  <div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
-    <form
-      data-ng-submit="signin()"
-      class="signin form-horizontal"
-      autocomplete="off"
-    >
+<section data-ng-controller="AuthenticationController">
+  <div class="center-block" style="max-width: 30em; padding: 20% 15px 0;">
+    <form data-ng-submit="signin()">
       <fieldset>
         <div class="form-group">
           <label for="username" translate>Username</label>
@@ -14,6 +10,9 @@
             name="username"
             class="form-control"
             data-ng-model="credentials.username"
+            required
+            minlength="4"
+            autocomplete="username"
           />
         </div>
         <div class="form-group">
@@ -24,6 +23,9 @@
             name="password"
             class="form-control"
             data-ng-model="credentials.password"
+            required
+            minlength="4"
+            autocomplete="current-password"
           />
         </div>
         <div class="text-center form-group">

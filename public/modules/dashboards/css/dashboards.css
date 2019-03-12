@@ -597,6 +597,10 @@ h6,
   color: #ffffff;
   text-shadow: none;
 }
+.sidebar-modal .close:hover,
+.sidebar-modal .close:focus {
+  color: #cccccc;
+}
 .sidebar-modal h4 {
   font-size: 14px;
   font-weight: bold;

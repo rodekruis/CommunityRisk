@@ -132,6 +132,14 @@
   right: 5px;
   width: 38px;
 }
+.navbar-toggler:focus,
+.navbar-toggler:active {
+  outline: thin dotted #4c8293;
+}
+.navbar-toggler:hover,
+.navbar-toggler:focus {
+  background-color: #eeeeee;
+}
 
 @media only screen and (min-width: 1100px) {
   .navbar-toggler {

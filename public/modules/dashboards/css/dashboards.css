@@ -185,7 +185,7 @@ a {
   width: 100%;
 }
 .zoom-level button {
-  border-radius: 0px;
+  border-radius: 0;
   color: #bbbbbb;
   text-align: left;
   font-size: 12px;
@@ -406,7 +406,7 @@ a {
 .score-bar {
   border-radius: 5px;
   height: 12px;
-  margin-left: 0%;
+  margin-left: 0;
   margin-top: 10px;
   position: relative;
 }
@@ -466,7 +466,7 @@ a {
 .community-profiles-wrapper {
   background: #fff;
   border-radius: 2px;
-  margin-top: 0px;
+  margin-top: 0;
   margin-bottom: 10px;
   padding: 10px;
 }
@@ -536,7 +536,7 @@ a {
   background: none;
   border: none;
   float: right;
-  margin-top: 0px;
+  margin-top: 0;
   margin-right: 3px;
   opacity: 1;
   padding: 0;
@@ -769,7 +769,7 @@ a {
 }
 #row-chart {
   position: absolute;
-  left: 0%;
+  left: 0;
   width: 100%;
   height: 95%;
   background-color: #fff;
@@ -880,7 +880,7 @@ a {
 }
 #event_selector {
   width: 49%;
-  margin-right: 0%;
+  margin-right: 0;
 }
 @media only screen and (max-width: 767px) {
   #type_selector {
@@ -889,7 +889,7 @@ a {
   }
   #event_selector {
     width: 48%;
-    margin-right: 0%;
+    margin-right: 0;
   }
 }
 @media only screen and (max-width: 767px) {
@@ -909,7 +909,7 @@ a {
   .info.legend.leaflet-control {
     position: fixed;
     bottom: 8%;
-    right: 0px;
+    right: 0;
     width: 120px;
     z-index: 3;
   }
@@ -922,7 +922,7 @@ a {
   }
 }
 .leaflet-control-attribution {
-  bottom: 0px;
+  bottom: 0;
 }
 @media only screen and (max-width: 767px) {
   .leaflet-container .leaflet-control-attribution,

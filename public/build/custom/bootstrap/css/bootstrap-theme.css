@@ -562,5 +562,5 @@ a.list-group-item.active:focus .list-group-item-text {
 
 .dc-table-group {
   visibility: collapse;
-  height: 0px;
+  height: 0;
 }

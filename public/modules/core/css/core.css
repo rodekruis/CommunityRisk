@@ -1,10 +1,3 @@
-body {
-  background: #f3eee3;
-  padding: 0px;
-  margin: 0px;
-  overflow-x: hidden;
-}
-
 .content {
   top: 0;
   left: 0;
@@ -54,14 +47,12 @@ input[type="text"].transparent:hover {
   padding-top: 53px;
   padding-bottom: 72px;
   color: #fff;
-  font-family: "Raleway", sans-serif;
   min-height: 600px;
 }
 
 /* About
 -------------------------------------------------- */
 .about {
-  font-family: "Raleway", sans-serif;
   padding: 85px 0;
   font-size: 16px;
   line-height: 24px;
@@ -339,6 +330,13 @@ input[type="text"].transparent:hover {
   padding-bottom: 50px;
   padding-top: 0px;
 }
+
+.homepage h1,
+.homepage h2,
+.homepage h3 {
+  font-family: Calibri, serif;
+}
+
 .home-content h2 {
   color: #4c8293;
   font-weight: bold;
@@ -348,9 +346,6 @@ input[type="text"].transparent:hover {
 .home-content h3 {
   font-size: 15px;
   font-weight: bold;
-}
-.home-content p {
-  font-size: 12px;
 }
 
 .title-icon {

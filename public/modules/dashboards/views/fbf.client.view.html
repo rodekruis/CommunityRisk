@@ -526,28 +526,33 @@
           <span class="panel-header-icon">
             <img src="{{ metric_icon }}" />
           </span>
-          <h4 class="modal-title">
+          <h2 class="h5 modal-title">
             {{ "metric_label_popup" | translate: translateData }}
-            <!-- {{metric_label_popup}} -->
-          </h4>
+          </h2>
         </div>
         <div class="modal-body">
-          <h6>
-            <b>{{ "year_source" | translate }}:</b> {{ metric_year }}
-          </h6>
+          <p>
+            <strong>{{ "year_source" | translate }}:</strong>
+            <span ng-show="metric_year">{{ metric_year }}</span>
+            <span class="text-muted" ng-show="!metric_year">-</span>
+          </p>
           <br />
-          <h6>
-            <b>{{ "link_source" | translate }}:</b>
-            <a href="{{ metric_source }}" target="_blank">{{
-              metric_source
-            }}</a>
-          </h6>
+          <p>
+            <strong>{{ "link_source" | translate }}:</strong>
+            <a
+              href="{{ metric_source }}"
+              target="_blank"
+              ng-show="metric_source"
+            >
+              {{ metric_source }}
+            </a>
+            <span class="text-muted" ng-show="!metric_source">-</span>
+          </p>
           <br />
-          <h6>
-            <b>{{ "desc_source" | translate }}:</b>
+          <p>
+            <strong>{{ "desc_source" | translate }}:</strong>
             {{ "metric_desc" | translate: translateData }}
-          </h6>
-          <br />
+          </p>
         </div>
       </div>
     </div>
@@ -561,9 +566,9 @@
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h4 class="modal-title">
+          <h2 class="h5 modal-title">
             {{ "share_url_title" | translate }}
-          </h4>
+          </h2>
         </div>
         <div class="modal-body" style="word-break:break-all">
           <pre><a href="{{ shareable_URL }}">{{ shareable_URL }}</a></pre>
@@ -586,7 +591,7 @@
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h4 class="modal-title">{{ "warning" | translate }}</h4>
+          <h2 class="h5 modal-title">{{ "warning" | translate }}</h2>
         </div>
         <div class="modal-body" style="word-break:break-all">
           <p>{{ status_text }}</p>
@@ -605,7 +610,7 @@
           <button type="button" class="close" data-dismiss="modal">
             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
           </button>
-          <h3 class="modal-title">{{ "warning" | translate }}</h3>
+          <h2 class="h5 modal-title">{{ "warning" | translate }}</h2>
         </div>
         <div class="modal-body">
           <p>{{ "ie_warning" | translate }}</p>

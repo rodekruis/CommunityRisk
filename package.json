@@ -46,7 +46,7 @@
     "glob": "3.2.x",
     "google-spreadsheet": "2.0.x",
     "helmet": "0.2.x",
-    "lodash": "2.4.x",
+    "lodash": "^4.17.11",
     "method-override": "2.3.x",
     "morgan": "1.7.x",
     "nodemailer": "2.3.x",

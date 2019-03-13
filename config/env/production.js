@@ -46,9 +46,7 @@ module.exports = {
         "public/build/bower/jquery/js/jquery.min.js", // in bower.json
         "public/build/custom/slick/js/slick.min.js",
         "public/build/bower/crossfilter/js/crossfilter.min.js",
-        "public/build/bower/lodash/js/lodash.underscore.min.js", //in bower.json
         "public/build/bower/angular/js/angular.min.js", //in bower.json
-        "public/build/bower/angular-lodash/js/angular-lodash.js", //in bower.json
         "public/build/bower/angular-route/js/angular-route.min.js", //in bower.json
         "public/build/bower/angular-resource/js/angular-resource.min.js", //in bower.json
         "public/build/bower/angular-sanitize/js/angular-sanitize.min.js",

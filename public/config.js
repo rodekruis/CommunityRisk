@@ -10,7 +10,6 @@ window.ApplicationConfiguration = (function() {
     "angularCSS",
     "ngSanitize",
     "ui.router",
-    "angular-lodash",
     "gettext",
     "AngularDc",
     "angular-loading-bar",

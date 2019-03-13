@@ -27,7 +27,6 @@
     "angular-elastic": "2.5.*",
     "underscore": "1.8.*",
     "topojson": "1.6.26",
-    "WOW": "*",
     "dc-addons": "*"
   },
   "resolutions": {

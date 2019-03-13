@@ -29,9 +29,7 @@ module.exports = {
         "public/build/bower/jquery/js/jquery.min.js", // in bower.json
         "public/build/custom/slick/js/slick.min.js",
         "public/build/bower/crossfilter/js/crossfilter.min.js",
-        "public/build/bower/lodash/js/lodash.underscore.min.js", //in bower.json
         "public/build/bower/angular/js/angular.js", //in bower.json
-        "public/build/bower/angular-lodash/js/angular-lodash.js", //in bower.json
         "public/build/bower/angular-route/js/angular-route.js", //in bower.json
         "public/build/bower/angular-resource/js/angular-resource.js", //in bower.json
         "public/build/bower/angular-sanitize/js/angular-sanitize.js",
@@ -47,14 +45,9 @@ module.exports = {
         "public/build/custom/dc-leaflet/js/dc-leaflet-dev.js", // NOT in bower.json
         "public/build/custom/angular-dc/js/angular-dc.js", //in bower.json
         "public/build/custom/d3-tip/js/d3-tip.js", //NOT in bower.json
-        "public/build/bower/angular-messages/js/angular-messages.js", //in bower.json
-        "public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.js", //in bower.json
-        "public/build/bower/angular-elastic/js/elastic.js", //in bower.json
-        "public/build/bower/underscore/js/underscore.js", //in bower.json
         "public/build/bower/angular-loading-bar/js/loading-bar.js",
         "public/build/bower/jquery-countTo/js/jquery.countTo.js", // in bower.json
         "public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js", // in bower.json
-        "public/build/bower/wow/js/wow.js", // in bower.json
         "public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js", // in bower.json
         "public/build/bower/topojson/js/topojson.js", // in bower.json
         "public/build/custom/leaflet-geotiff-custom/geotiff.js",

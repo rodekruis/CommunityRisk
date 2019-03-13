@@ -22,7 +22,6 @@
     "angular-gettext": "2.2.1",
     "d3": "4.13.0",
     "crossfilter": "*",
-    "angular-elastic": "2.5.*",
     "underscore": "1.8.*",
     "topojson": "1.6.26",
     "dc-addons": "*"

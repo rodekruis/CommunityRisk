@@ -1,10 +1,3 @@
-body {
-  background: #f3eee3;
-  padding: 0px;
-  margin: 0px;
-  overflow-x: hidden;
-}
-
 .content {
   top: 0;
   left: 0;
@@ -21,7 +14,7 @@ body {
 }
 
 .page-header {
-  padding-top: 0px;
+  padding-top: 0;
 }
 
 /* Base candidates
@@ -53,23 +46,35 @@ input[type="text"].transparent:hover {
 #tophome {
   padding-top: 53px;
   padding-bottom: 72px;
-  color: #fff;
-  font-family: "Raleway", sans-serif;
   min-height: 600px;
+}
+
+/* Homepage
+-------------------------------------------------- */
+
+.homepage h1,
+.homepage h2 {
+  font-family: Calibri, serif;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.home-content {
+  padding-bottom: 50px;
+  padding-top: 0;
+}
+
+.home-content h2 {
+  color: #4c8293;
 }
 
 /* About
 -------------------------------------------------- */
 .about {
-  font-family: "Raleway", sans-serif;
   padding: 85px 0;
   font-size: 16px;
   line-height: 24px;
-}
-.about h2 {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 1em;
 }
 .about .icon {
   text-align: right;
@@ -97,17 +102,7 @@ input[type="text"].transparent:hover {
 /* Lifecycle
 -------------------------------------------------- */
 .walkthrough {
-  padding: 0px 0 100px;
-  text-align: center;
-}
-.walkthrough h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: black;
-  font-weight: 700;
-}
-.rhino-item img {
-  max-width: 100%;
+  padding: 0 0 100px;
 }
 
 .slider {
@@ -159,7 +154,7 @@ input[type="text"].transparent:hover {
 
 .slick-dots {
   position: absolute;
-  top: 0px;
+  top: 0;
   margin: 0 auto 0 auto;
   z-index: 3;
   background: #c8c5c2;
@@ -333,26 +328,6 @@ input[type="text"].transparent:hover {
   display: none;
 }
 
-/*homepage styles*/
-.home-content {
-  color: black;
-  padding-bottom: 50px;
-  padding-top: 0px;
-}
-.home-content h2 {
-  color: #4c8293;
-  font-weight: bold;
-  margin-top: 10px;
-  text-align: center;
-}
-.home-content h3 {
-  font-size: 15px;
-  font-weight: bold;
-}
-.home-content p {
-  font-size: 12px;
-}
-
 .title-icon {
   margin-right: 5px;
 }
@@ -383,7 +358,6 @@ input[type="text"].transparent:hover {
 }
 
 .hdx-3w-info {
-  float: left;
   padding: 5px;
   background-color: white;
   background: rgba(255, 255, 255, 0.8);

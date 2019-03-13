@@ -1,28 +1,5 @@
-body {
-  background: #b0ded3;
-  padding: 0px;
-  margin: 0px;
-  overflow-x: hidden;
-  overflow: hidden;
-  font-family: "Open Sans", sans-serif;
-}
 a {
   color: #4c8293;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
-  font-family: "Open Sans", sans-serif;
 }
 
 #header {
@@ -208,7 +185,7 @@ h6,
   width: 100%;
 }
 .zoom-level button {
-  border-radius: 0px;
+  border-radius: 0;
   color: #bbbbbb;
   text-align: left;
   font-size: 12px;
@@ -377,7 +354,6 @@ h6,
 .component-section:hover {
   background: #4c8293;
   color: #ffffff;
-  border-radius: 5px;
 }
 .component-label {
   font-size: 11px;
@@ -429,7 +405,7 @@ h6,
 .score-bar {
   border-radius: 5px;
   height: 12px;
-  margin-left: 0%;
+  margin-left: 0;
   margin-top: 10px;
   position: relative;
 }
@@ -489,7 +465,7 @@ h6,
 .community-profiles-wrapper {
   background: #fff;
   border-radius: 2px;
-  margin-top: 0px;
+  margin-top: 0;
   margin-bottom: 10px;
   padding: 10px;
 }
@@ -533,7 +509,6 @@ h6,
   font-size: 11px;
 }
 .profile-item {
-  border-radius: 3px;
   color: #354052;
   font-size: 12px;
   font-weight: bold;
@@ -559,7 +534,7 @@ h6,
   background: none;
   border: none;
   float: right;
-  margin-top: 0px;
+  margin-top: 0;
   margin-right: 3px;
   opacity: 1;
   padding: 0;
@@ -623,7 +598,6 @@ h6,
 }
 
 .hdx-3w-info {
-  float: left;
   padding: 5px;
   background-color: white;
   background: rgba(255, 255, 255, 0.8);
@@ -677,18 +651,13 @@ h6,
   background: #4c8293;
   color: #ffffff;
   font-weight: bold;
-  border-radius: 5px;
 }
-/* new */
 .section-active img,
 .component-section:hover img {
   filter: brightness(900%);
 }
 
 /* Collapsible sidebar */
-body {
-  background: none repeat scroll 0 0 white;
-}
 .sidebar-menu-collapsed {
   width: 75px;
 }
@@ -795,7 +764,7 @@ body {
 }
 #row-chart {
   position: absolute;
-  left: 0%;
+  left: 0;
   width: 100%;
   height: 95%;
   background-color: #fff;
@@ -906,7 +875,7 @@ body {
 }
 #event_selector {
   width: 49%;
-  margin-right: 0%;
+  margin-right: 0;
 }
 @media only screen and (max-width: 767px) {
   #type_selector {
@@ -915,7 +884,7 @@ body {
   }
   #event_selector {
     width: 48%;
-    margin-right: 0%;
+    margin-right: 0;
   }
 }
 @media only screen and (max-width: 767px) {
@@ -935,7 +904,7 @@ body {
   .info.legend.leaflet-control {
     position: fixed;
     bottom: 8%;
-    right: 0px;
+    right: 0;
     width: 120px;
     z-index: 3;
   }
@@ -948,7 +917,7 @@ body {
   }
 }
 .leaflet-control-attribution {
-  bottom: 0px;
+  bottom: 0;
 }
 @media only screen and (max-width: 767px) {
   .leaflet-container .leaflet-control-attribution,

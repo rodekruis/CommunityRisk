@@ -306,9 +306,6 @@ a {
 .card-header.last:hover .component-score.good {
   color: #4dce71;
 }
-.general-info {
-  margin-top: -8px;
-}
 /* end: new styles */
 .indicators-panels .card-block {
   border-bottom: none;
@@ -474,37 +471,15 @@ a {
   font-size: 16px;
   font-weight: bold;
 }
-.total-count {
-  color: #444444;
-  font-size: 18px;
-}
-#count-info {
+.general-info {
   margin-top: -3px;
 }
 @media only screen and (max-width: 767px) {
-  #count-info {
+  .general-info {
     margin-top: 0;
   }
 }
-#count-info .total-count {
-  font-size: 14px;
-  font-weight: bold;
-}
-.filter-count {
-  color: #b0ded3;
-  font-size: 14px;
-  font-weight: bold;
-}
-.total-count-pi {
-  color: #4c8293;
-  font-size: 14px;
-  font-weight: bold;
-}
-.filter-count-pi {
-  color: #444444;
-  font-size: 14px;
-  font-weight: bold;
-}
+
 .score-helptext {
   font-size: 11px;
 }

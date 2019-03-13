@@ -286,11 +286,11 @@
         </div>
         <div class="community-profiles-wrapper">
           <div id="count-info" class="general-info">
-            <span class="total-count total-count-pi"></span>
+            <strong class="total-count text-primary"></strong>
             {{ subtype_selection }}
-            {{ "hit" | translate: translateData }} (<span
-              class="filter-count filter-count-pi"
-            ></span>
+            {{ "hit" | translate: translateData }} (<strong
+              class="filter-count text-dark"
+            ></strong>
             {{ "selected" | translate: translateData }})
             <a class="reset-button" ng-click="reset_function()">{{
               "Select_all" | translate
@@ -312,11 +312,11 @@
             <strong>Date: </strong>{{ start_date }} {{ end_date }}
             <hr style="margin-top: 10px; margin-bottom: 10px" />
             <strong>Overall damage: </strong
-            ><span class="total-count-pi">{{ total_damage }}</span>
+            ><strong class="text-primary">{{ total_damage }}</strong>
             <span>{{ default_metric_label }}</span> out of
-            <span class="total-count-pi">{{ total_potential }}</span> total in
-            disaster area, or
-            <span class="total-count-pi">{{ total_intensity }}</span>
+            <strong class="text-primary">{{ total_potential }}</strong>
+            total in disaster area, or
+            <strong class="text-primary">{{ total_intensity }}</strong>
           </div>
           <div class="row"></div>
           <div class="tablearea" id="general"></div>

@@ -29,3 +29,13 @@ body {
   background-color: lightgoldenrodyellow;
   outline: 2px dashed hotpink;
 }
+
+/* Reserved class-names:
+   These are used by (external) libraries.
+   They have JS-functionality, so they shouldn't be styled.
+   Add styling classes to these elements when needed.
+
+   - .total-count
+   - .filter-count
+
+-------------------------------------------------- */

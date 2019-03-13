@@ -48,7 +48,7 @@ angular.module("core").controller("HomeController", [
       map.remove();
     }
 
-    var map_chart = dc.leafletChoroplethChart("#map-chart");
+    var map_chart = dc.leafletChoroplethChart("#map-chart-home");
     d3.dsv(";")("modules/core/data/country_metadata.csv", function(
       country_meta
     ) {
@@ -68,7 +68,7 @@ angular.module("core").controller("HomeController", [
         });
         // group with all, needed for data-count
         var all = cf.groupAll();
-        dc.dataCount("#count-info")
+        dc.dataCount("#count-info-home")
           .dimension(cf)
           .group(all);
 

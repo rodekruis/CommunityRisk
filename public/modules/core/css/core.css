@@ -365,7 +365,7 @@ input[type="text"].transparent:hover {
   border-radius: 5px;
 }
 
-.leaflet-clickable:hover {
+.homepage .leaflet-clickable:hover {
   stroke-width: 3px;
   stroke: black;
 }

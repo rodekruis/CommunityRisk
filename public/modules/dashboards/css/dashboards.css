@@ -576,11 +576,11 @@ a {
 }
 
 /* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
-.leaflet-interactive {
+.map-wrapper .leaflet-interactive {
   fill-opacity: 0.6;
   stroke-width: 0.5;
 }
-.leaflet-zoom-animated {
+.map-wrapper .leaflet-zoom-animated {
   fill-opacity: 0.6;
 }
 
@@ -772,7 +772,7 @@ a {
 }
 
 @media only screen and (max-width: 1024px) {
-  .leaflet-left .leaflet-control {
+  .map-wrapper .leaflet-left .leaflet-control {
     margin-top: 50px;
   }
 }
@@ -783,11 +783,6 @@ a {
   }
 }
 
-@media only screen and (max-width: 1024px) {
-  .leaflet-control-zoom {
-    display: none;
-  }
-}
 .navbar-top-links,
 .navbar-top-links2 li {
   background: #ffffff;
@@ -883,41 +878,22 @@ a {
   }
 }
 @media only screen and (max-width: 767px) {
-  .leaflet-top.leaflet-right {
+  .map-wrapper .leaflet-top.leaflet-right {
     top: auto;
     bottom: 60px;
   }
 }
-.leaflet-bottom {
-  bottom: 10px;
-}
 
 @media only screen and (max-width: 767px) {
-  .leaflet-control-container {
+  .map-wrapper .leaflet-control-container {
     position: absolute;
   }
-  .info.legend.leaflet-control {
+  .map-wrapper .info.legend.leaflet-control {
     position: fixed;
     bottom: 8%;
     right: 0;
     width: 120px;
     z-index: 3;
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .legend,
-  .leaflet-control-attribution .leaflet-control {
-    position: absolute;
-  }
-}
-.leaflet-control-attribution {
-  bottom: 0;
-}
-@media only screen and (max-width: 767px) {
-  .leaflet-container .leaflet-control-attribution,
-  .leaflet-container .leaflet-control-scale {
-    display: none;
   }
 }
 

@@ -61,10 +61,6 @@
         "public/lib/angular-resource/angular-resource.min.js",
         "public/lib/angular-resource/angular-resource.js"
       ],
-      "angular-touch": [
-        "public/lib/angular-touch/angular-touch.min.js",
-        "public/lib/angular-touch/angular-touch.js"
-      ],
       "angular-loading-bar": [
         "public/lib/angular-loading-bar/build/loading-bar.js",
         "public/lib/angular-loading-bar/build/loading-bar.min.js",

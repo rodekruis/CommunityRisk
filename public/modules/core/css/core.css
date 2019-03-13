@@ -13,10 +13,6 @@
   min-height: 100%;
 }
 
-.page-header {
-  padding-top: 0;
-}
-
 /* Base candidates
 -------------------------------------------------- */
 .pad0x {
@@ -34,13 +30,6 @@
   display: block;
   height: 53px;
   margin-top: -53px;
-}
-
-input[type="text"].transparent,
-input[type="text"].transparent:active,
-input[type="text"].transparent:focus,
-input[type="text"].transparent:hover {
-  background: transparent;
 }
 
 #tophome {

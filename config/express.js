@@ -102,11 +102,12 @@ module.exports = function() {
   app.use(passport.session());
 
   // Use helmet to secure Express headers
-  app.use(helmet.xframe("SAMEORIGIN"));
-  app.use(helmet.iexss());
-  app.use(helmet.contentTypeOptions());
-  app.use(helmet.ienoopen());
-  app.disable("x-powered-by");
+  app.use(
+    helmet({
+      policy: "no-referrer",
+      hsts: !(process.env.NODE_ENV === "development"),
+    })
+  );
 
   // Enable reverse proxy
   app.enable("trust proxy");

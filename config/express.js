@@ -9,10 +9,8 @@ var express = require("express"),
   session = require("express-session"),
   compress = require("compression"),
   methodOverride = require("method-override"),
-  cookieParser = require("cookie-parser"),
   helmet = require("helmet"),
   passport = require("passport"),
-  flash = require("connect-flash"),
   config = require("./config"),
   nunjucks = require("nunjucks"),
   path = require("path"),
@@ -90,9 +88,6 @@ module.exports = function() {
   // Enable jsonp
   app.enable("jsonp callback");
 
-  // CookieParser should be above session
-  app.use(cookieParser());
-
   // Express session storage
   app.use(
     session({
@@ -105,9 +100,6 @@ module.exports = function() {
   // use passport session
   app.use(passport.initialize());
   app.use(passport.session());
-
-  // connect flash for flash messages
-  app.use(flash());
 
   // Use helmet to secure Express headers
   app.use(helmet.xframe("SAMEORIGIN"));

@@ -38,7 +38,7 @@
       _paq.push(["setTrackerUrl", "https://tracking.510.global/piwik.php"]);
       _paq.push(["setSiteId", "2"]);
     </script>
-    {% if process.env.NODE_ENV === 'production' %}
+    {% if NODE_ENV === 'production' %}
     <script async defer src="https://tracking.510.global/piwik.js"></script>
     {% endif %} {# end: Matomo #}
 
@@ -76,10 +76,10 @@
     </section>
 
     <script>
-      {% if (process.env.NODE_ENV !== 'production') %}window.DEBUG = true;{% endif %}
+      {% if (NODE_ENV !== 'production') %}window.DEBUG = true;{% endif %}
 
       {# Embedding The User Object #}
-      var user = {{ user | json | safe }};
+      var user = {{ user | dump | safe }};
     </script>
 
     <script>

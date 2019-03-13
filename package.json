@@ -37,7 +37,6 @@
     "body-parser": "1.15.x",
     "compression": "1.6.1",
     "connect-flash": "0.1.x",
-    "consolidate": "0.14.x",
     "cookie-parser": "1.4.x",
     "cors": "2.7.x",
     "express": "4.1.x",
@@ -50,6 +49,7 @@
     "method-override": "2.3.x",
     "morgan": "1.7.x",
     "nodemailer": "2.3.x",
+    "nunjucks": "^3.2.0",
     "passport": "0.2.x",
     "passport-jwt": "4.0.0",
     "passport-local": "1.0.x",
@@ -57,7 +57,6 @@
     "pg": "6.1.x",
     "request": "2.88.0",
     "sequelize": "4.42.0",
-    "swig": "1.4.x",
     "url": "0.11.x"
   },
   "devDependencies": {

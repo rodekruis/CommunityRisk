@@ -10,7 +10,6 @@ module.exports = {
   sslport: process.env.SSLPORT || 444,
   key_file: "./config/cert/localhost-key.pem",
   cert_file: "./config/cert/localhost-cert.pem",
-  templateEngine: "swig",
   sessionSecret: "MEAN",
   assets: {
     lib: {

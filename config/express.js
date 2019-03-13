@@ -14,7 +14,7 @@ var express = require("express"),
   passport = require("passport"),
   flash = require("connect-flash"),
   config = require("./config"),
-  consolidate = require("consolidate"),
+  nunjucks = require("nunjucks"),
   path = require("path"),
   cors = require("cors");
 
@@ -58,8 +58,12 @@ module.exports = function() {
   // Showing stack errors
   app.set("showStackError", true);
 
-  // Set swig as the template engine
-  app.engine("server.view.html", consolidate[config.templateEngine]);
+  // Configure the template engine
+  nunjucks
+    .configure("./app/views", {
+      express: app,
+    })
+    .addGlobal("NODE_ENV", process.env.NODE_ENV);
 
   // Set views path and view engine
   app.set("view engine", "server.view.html");

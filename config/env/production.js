@@ -62,7 +62,6 @@ module.exports = {
         "public/build/bower/dcjs/js/dc.min.js", //in bower.json
         "public/build/custom/dc-leaflet/js/dc-leaflet-dev.js", // NOT in bower.json
         "public/build/custom/angular-dc/js/angular-dc.js", //in bower.json
-        "public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.min.js", //in bower.json
         "public/build/bower/angular-elastic/js/elastic.js", //in bower.json
         "public/build/bower/underscore/js/underscore.js", //in bower.json
         "public/build/bower/angular-loading-bar/js/loading-bar.min.js",

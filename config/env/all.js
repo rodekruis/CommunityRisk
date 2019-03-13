@@ -47,7 +47,6 @@ module.exports = {
         "public/build/custom/dc-leaflet/js/dc-leaflet-dev.js", // NOT in bower.json
         "public/build/custom/angular-dc/js/angular-dc.js", //in bower.json
         "public/build/custom/d3-tip/js/d3-tip.js", //NOT in bower.json
-        "public/build/bower/ngInfiniteScroll/js/ng-infinite-scroll.js", //in bower.json
         "public/build/bower/angular-elastic/js/elastic.js", //in bower.json
         "public/build/bower/underscore/js/underscore.js", //in bower.json
         "public/build/bower/angular-loading-bar/js/loading-bar.js",

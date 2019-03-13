@@ -22,7 +22,6 @@
     "angular-gettext": "2.2.1",
     "d3": "4.13.0",
     "crossfilter": "*",
-    "ngInfiniteScroll": "1.2.*",
     "angular-elastic": "2.5.*",
     "underscore": "1.8.*",
     "topojson": "1.6.26",
@@ -91,10 +90,6 @@
       ],
       "leaflet.markercluster": [
         "public/lib/leaflet.markercluster/dist/leaflet.markercluster.js"
-      ],
-      "ngInfiniteScroll": [
-        "public/lib/ngInfiniteScroll/build/ng-infinite-scroll.js",
-        "public/lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"
       ],
       "d3": ["public/lib/d3/d3.min.js", "public/lib/d3/d3.js"],
       "dcjs": [

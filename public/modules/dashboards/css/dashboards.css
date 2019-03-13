@@ -707,34 +707,29 @@ a {
 }
 
 .PIbuttons {
-  width: 49.1%;
+  width: 49%;
   padding: 0;
   border: 0;
 }
-.PIdropdown {
-  width: 100%;
-  height: 34px;
-  text-align: center;
-  vertical-align: middle;
-}
-@media only screen and (max-width: 767px) {
-  .PIdropdown {
-    height: 28px;
-  }
-}
-.PI-button .fa {
-  margin-left: 10px;
+
+.PI-button {
+  display: block;
+  padding: 8px 0;
+  font-size: 12px;
+  color: #ffffff;
+  background: #4c8293;
 }
 
 .PI-button:hover,
 .PI-button:focus,
 .PI-button:active {
+  color: #4c8293;
+  background: #eeeeee;
   text-decoration: none;
 }
 
-.PI-button:focus,
-.PI-button:active {
-  color: #ffffff;
+.PI-button .fa {
+  margin-left: 10px;
 }
 
 .export-button.models {

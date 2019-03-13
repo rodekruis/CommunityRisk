@@ -9,12 +9,10 @@ var express = require("express"),
   session = require("express-session"),
   compress = require("compression"),
   methodOverride = require("method-override"),
-  cookieParser = require("cookie-parser"),
   helmet = require("helmet"),
   passport = require("passport"),
-  flash = require("connect-flash"),
   config = require("./config"),
-  consolidate = require("consolidate"),
+  nunjucks = require("nunjucks"),
   path = require("path"),
   cors = require("cors");
 
@@ -58,8 +56,12 @@ module.exports = function() {
   // Showing stack errors
   app.set("showStackError", true);
 
-  // Set swig as the template engine
-  app.engine("server.view.html", consolidate[config.templateEngine]);
+  // Configure the template engine
+  nunjucks
+    .configure("./app/views", {
+      express: app,
+    })
+    .addGlobal("NODE_ENV", process.env.NODE_ENV);
 
   // Set views path and view engine
   app.set("view engine", "server.view.html");
@@ -86,9 +88,6 @@ module.exports = function() {
   // Enable jsonp
   app.enable("jsonp callback");
 
-  // CookieParser should be above session
-  app.use(cookieParser());
-
   // Express session storage
   app.use(
     session({
@@ -101,9 +100,6 @@ module.exports = function() {
   // use passport session
   app.use(passport.initialize());
   app.use(passport.session());
-
-  // connect flash for flash messages
-  app.use(flash());
 
   // Use helmet to secure Express headers
   app.use(helmet.xframe("SAMEORIGIN"));

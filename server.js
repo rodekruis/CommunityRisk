@@ -12,8 +12,7 @@ var config = require("./config/config"),
   path = require("path"),
   constants = require("constants"),
   compression = require("compression"),
-  passport = require("passport"),
-  bodyParser = require("body-parser");
+  passport = require("passport");
 
 /**
  * Main application entry file.
@@ -36,8 +35,6 @@ function shouldCompress(req, res) {
 app.use(compression({ filter: shouldCompress }));
 
 require("./config/passport")();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 

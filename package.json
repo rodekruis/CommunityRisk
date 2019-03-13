@@ -7,7 +7,6 @@
   "repository": "github:rodekruis/CommunityRisk",
   "homepage": "https://dashboard.510.global/",
   "config": {
-    "files_js": "**/*.js",
     "files_to_check_syntax": "**/**.{json,yaml,yml,css,html,js}"
   },
   "scripts": {
@@ -20,9 +19,9 @@
     "predeploy": "npm install",
     "deploy": "npm run build && echo 'Deployed!'",
     "fix:syntax": "prettier --write $npm_package_config_files_to_check_syntax",
-    "fix:js": "eslint --fix --fix-type suggestion --ignore-path .prettierignore $npm_package_config_files_js",
+    "fix:js": "eslint --fix --fix-type suggestion --ignore-path .prettierignore ./",
     "test:syntax": "prettier --check $npm_package_config_files_to_check_syntax",
-    "test:js": "eslint --quiet --cache --ignore-path .prettierignore $npm_package_config_files_js",
+    "test:js": "eslint --quiet --cache --ignore-path .prettierignore ./",
     "test": "npm run test:syntax && npm run test:js"
   },
   "husky": {

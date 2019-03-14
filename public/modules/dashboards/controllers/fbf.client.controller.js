@@ -3,7 +3,6 @@
 angular.module("dashboards").controller("FbfController", [
   "$translate",
   "$scope",
-  "$css",
   "$rootScope",
   "$compile",
   "$location",
@@ -17,7 +16,6 @@ angular.module("dashboards").controller("FbfController", [
   function(
     $translate,
     $scope,
-    $css,
     $rootScope,
     $compile,
     $location,
@@ -35,14 +33,6 @@ angular.module("dashboards").controller("FbfController", [
     if (!$scope.user && !DEBUG) {
       return $location.path("signin");
     }
-
-    //This is the only working method I found to load page-specific CSS.
-    //DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
-    $css.remove(["modules/dashboards/css/core.css"]);
-    $css.add([
-      "modules/dashboards/css/header.css",
-      "modules/dashboards/css/dashboards.css",
-    ]);
 
     ////////////////////////
     // SET MAIN VARIABLES //

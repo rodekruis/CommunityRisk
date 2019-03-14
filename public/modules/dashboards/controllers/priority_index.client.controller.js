@@ -3,7 +3,6 @@
 angular.module("dashboards").controller("PriorityIndexController", [
   "$translate",
   "$scope",
-  "$css",
   "$rootScope",
   "$compile",
   "Authentication",
@@ -14,7 +13,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
   function(
     $translate,
     $scope,
-    $css,
     $rootScope,
     $compile,
     Authentication,
@@ -23,14 +21,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     exportService,
     shareService
   ) {
-    //This is the only working method I found to load page-specific CSS.
-    //DOWNSIDE: upon first load, you shortly see the unstyled page before the CSS is added..
-    $css.remove(["modules/dashboards/css/core.css"]);
-    $css.add([
-      "modules/dashboards/css/header.css",
-      "modules/dashboards/css/dashboards.css",
-    ]);
-
     ////////////////////////
     // SET MAIN VARIABLES //
     ////////////////////////

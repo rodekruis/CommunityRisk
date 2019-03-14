@@ -287,14 +287,7 @@
   display: none;
 }
 
-.title-icon {
-  margin-right: 5px;
-}
-.image-icon {
-  margin-top: -7px;
-  width: 20px;
-}
-
+/* hover "tooltip": */
 .hdx-3w-info {
   padding: 5px;
   background-color: white;

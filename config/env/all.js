@@ -54,7 +54,7 @@ module.exports = {
         "//cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js",
       ],
     },
-    css: ["public/modules/*[!dashboards]*/css/*.css"],
+    css: ["public/modules/**/*.css"],
     js: [
       "public/config.js",
       "public/application.js",

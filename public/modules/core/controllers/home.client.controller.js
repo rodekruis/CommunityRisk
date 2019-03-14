@@ -3,24 +3,12 @@
 angular.module("core").controller("HomeController", [
   "$translate",
   "$scope",
-  "$css",
   "$rootScope",
   "$compile",
   "Authentication",
   "DEBUG",
-  function(
-    $translate,
-    $scope,
-    $css,
-    $rootScope,
-    $compile,
-    Authentication,
-    DEBUG
-  ) {
+  function($translate, $scope, $rootScope, $compile, Authentication, DEBUG) {
     $scope.DEBUG = DEBUG;
-
-    $css.remove("modules/dashboards/css/dashboards.css");
-    $css.add("modules/dashboards/css/header.css");
 
     $scope.authentication = Authentication;
 

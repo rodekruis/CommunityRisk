@@ -43,6 +43,11 @@
   padding-top: 0;
 }
 
+.home--action {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
 /* About
 -------------------------------------------------- */
 .about {
@@ -288,27 +293,6 @@
 .image-icon {
   margin-top: -7px;
   width: 20px;
-}
-
-.link-button,
-.link-button:visited {
-  background: #4c8293;
-  border-radius: 4px;
-  color: #ffffff;
-  display: block;
-  margin-bottom: 15px;
-  margin-top: 15px;
-  opacity: 1;
-  padding: 5px 20px;
-  text-align: center;
-  font-weight: bold;
-}
-.link-button:hover,
-.link-button:focus {
-  background: #125083;
-  color: #ffffff;
-  opacity: 1;
-  text-decoration: none;
 }
 
 .hdx-3w-info {

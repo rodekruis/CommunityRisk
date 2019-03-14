@@ -640,15 +640,6 @@ a {
   width: 380px;
 }
 
-.dropdown-submenu {
-  position: relative;
-}
-@media only screen and (max-width: 767px) {
-  #country-items {
-    width: 100%;
-  }
-}
-
 .collapse-button {
   background-color: #d9dcdc;
   border: 2px solid #d9dcdc;

@@ -1,12 +1,3 @@
-a {
-  color: #4c8293;
-}
-
-#header {
-  display: inline-block;
-  position: absolute;
-}
-
 .content-wrapper {
   position: absolute;
   width: 100%;
@@ -306,9 +297,6 @@ a {
 .card-header.last:hover .component-score.good {
   color: #4dce71;
 }
-.general-info {
-  margin-top: -8px;
-}
 /* end: new styles */
 .indicators-panels .card-block {
   border-bottom: none;
@@ -474,37 +462,15 @@ a {
   font-size: 16px;
   font-weight: bold;
 }
-.total-count {
-  color: #444444;
-  font-size: 18px;
-}
-#count-info {
+.general-info {
   margin-top: -3px;
 }
 @media only screen and (max-width: 767px) {
-  #count-info {
+  .general-info {
     margin-top: 0;
   }
 }
-#count-info .total-count {
-  font-size: 14px;
-  font-weight: bold;
-}
-.filter-count {
-  color: #b0ded3;
-  font-size: 14px;
-  font-weight: bold;
-}
-.total-count-pi {
-  color: #4c8293;
-  font-size: 14px;
-  font-weight: bold;
-}
-.filter-count-pi {
-  color: #444444;
-  font-size: 14px;
-  font-weight: bold;
-}
+
 .score-helptext {
   font-size: 11px;
 }
@@ -576,11 +542,11 @@ a {
 }
 
 /* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
-.leaflet-interactive {
+.map-wrapper .leaflet-interactive {
   fill-opacity: 0.6;
   stroke-width: 0.5;
 }
-.leaflet-zoom-animated {
+.map-wrapper .leaflet-zoom-animated {
   fill-opacity: 0.6;
 }
 
@@ -597,18 +563,6 @@ a {
   height: 34px;
 }
 
-.hdx-3w-info {
-  padding: 5px;
-  background-color: white;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
-}
-@media only screen and (max-width: 1024px) {
-  .hdx-3w-info {
-    display: none;
-  }
-}
 .dc-chart g.row text {
   fill: black;
 }
@@ -663,15 +617,6 @@ a {
 }
 .sidebar-menu-expanded {
   width: 380px;
-}
-
-.dropdown-submenu {
-  position: relative;
-}
-@media only screen and (max-width: 767px) {
-  #country-items {
-    width: 100%;
-  }
 }
 
 .collapse-button {
@@ -772,7 +717,7 @@ a {
 }
 
 @media only screen and (max-width: 1024px) {
-  .leaflet-left .leaflet-control {
+  .map-wrapper .leaflet-left .leaflet-control {
     margin-top: 50px;
   }
 }
@@ -783,11 +728,6 @@ a {
   }
 }
 
-@media only screen and (max-width: 1024px) {
-  .leaflet-control-zoom {
-    display: none;
-  }
-}
 .navbar-top-links,
 .navbar-top-links2 li {
   background: #ffffff;
@@ -883,41 +823,22 @@ a {
   }
 }
 @media only screen and (max-width: 767px) {
-  .leaflet-top.leaflet-right {
+  .map-wrapper .leaflet-top.leaflet-right {
     top: auto;
     bottom: 60px;
   }
 }
-.leaflet-bottom {
-  bottom: 10px;
-}
 
 @media only screen and (max-width: 767px) {
-  .leaflet-control-container {
+  .map-wrapper .leaflet-control-container {
     position: absolute;
   }
-  .info.legend.leaflet-control {
+  .map-wrapper .info.legend.leaflet-control {
     position: fixed;
     bottom: 8%;
     right: 0;
     width: 120px;
     z-index: 3;
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .legend,
-  .leaflet-control-attribution .leaflet-control {
-    position: absolute;
-  }
-}
-.leaflet-control-attribution {
-  bottom: 0;
-}
-@media only screen and (max-width: 767px) {
-  .leaflet-container .leaflet-control-attribution,
-  .leaflet-container .leaflet-control-scale {
-    display: none;
   }
 }
 

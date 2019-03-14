@@ -7,7 +7,6 @@ window.ApplicationConfiguration = (function() {
   var applicationModuleVendorDependencies = [
     "ngResource",
     "ngRoute",
-    "angularCSS",
     "ngSanitize",
     "ui.router",
     "gettext",

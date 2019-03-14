@@ -19,6 +19,16 @@ body {
   padding: 0 !important;
 }
 
+/* Colors */
+/* Colors - Typography */
+.text-highlight {
+  color: #a2d0d0;
+}
+.text-dark {
+  color: #444444;
+}
+
+/* Colors - Backgrounds */
 .bg-white {
   background-color: #ffffff;
 }
@@ -29,3 +39,13 @@ body {
   background-color: lightgoldenrodyellow;
   outline: 2px dashed hotpink;
 }
+
+/* Reserved class-names:
+   These are used by (external) libraries.
+   They have JS-functionality, so they shouldn't be styled.
+   Add styling classes to these elements when needed.
+
+   - .total-count
+   - .filter-count
+
+-------------------------------------------------- */

@@ -15,16 +15,6 @@
 
 /* Base candidates
 -------------------------------------------------- */
-.pad0x {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.pad10x {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
 .scroll {
   clear: both;
   display: block;
@@ -45,7 +35,6 @@
 .homepage h2 {
   font-family: Calibri, serif;
   font-weight: bold;
-  text-align: center;
   margin-bottom: 1em;
 }
 
@@ -54,38 +43,14 @@
   padding-top: 0;
 }
 
-.home-content h2 {
-  color: #4c8293;
-}
-
 /* About
 -------------------------------------------------- */
 .about {
-  padding: 85px 0;
   font-size: 16px;
   line-height: 24px;
 }
-.about .icon {
-  text-align: right;
-}
-.about .block {
-  margin-bottom: 20px;
-  overflow: hidden;
-}
-@media only screen and (max-width: 991px) {
-  .about {
-    padding: 40px 0;
-  }
-  .about .block,
-  .about .icon {
-    text-align: center;
-  }
-  .about .block {
-    margin-bottom: 40px;
-  }
-  .about .icon {
-    margin-bottom: 20px;
-  }
+.about--block {
+  margin-bottom: 40px;
 }
 
 /* Lifecycle
@@ -357,11 +322,4 @@
 .homepage .leaflet-clickable:hover {
   stroke-width: 3px;
   stroke: black;
-}
-
-.text-highlight {
-  color: #a2d0d0;
-}
-.text-dark {
-  color: #444444;
 }

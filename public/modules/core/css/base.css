@@ -19,6 +19,16 @@ body {
   padding: 0 !important;
 }
 
+/* Colors */
+/* Colors - Typography */
+.text-highlight {
+  color: #a2d0d0;
+}
+.text-dark {
+  color: #444444;
+}
+
+/* Colors - Backgrounds */
 .bg-white {
   background-color: #ffffff;
 }

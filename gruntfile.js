@@ -67,7 +67,11 @@ module.exports = function(grunt) {
   });
 
   // Load NPM tasks
-  require("load-grunt-tasks")(grunt);
+  grunt.loadNpmTasks("grunt-contrib-watch");
+  grunt.loadNpmTasks("grunt-concurrent");
+  grunt.loadNpmTasks("grunt-nodemon");
+  grunt.loadNpmTasks("grunt-contrib-uglify");
+  grunt.loadNpmTasks("grunt-contrib-cssmin");
 
   // Making grunt default to force in order not to break the project.
   grunt.option("force", true);

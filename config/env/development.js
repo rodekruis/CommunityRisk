@@ -1,6 +1,7 @@
 "use strict";
 
 var secrets = require("../secrets");
+var fs = require("fs");
 
 module.exports = {
   postgres: {
@@ -19,7 +20,9 @@ module.exports = {
     },
   },
   usehttp: true,
-  usessl: true,
+  usessl:
+    fs.existsSync("./config/cert/localhost-cert.pem") &&
+    fs.existsSync("./config/cert/localhost-key.pem"),
   app: {
     title: "Rode Kruis Dashboards - development",
     favicon: "/modules/core/img/510-logo_inverted_32x32.png",

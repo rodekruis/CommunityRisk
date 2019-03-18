@@ -61,7 +61,7 @@ module.exports = function() {
     .configure("./app/views", {
       express: app,
     })
-    .addGlobal("NODE_ENV", process.env.NODE_ENV);
+    .addGlobal("NODE_ENV", process.env.NODE_ENV || "development");
 
   // Set views path and view engine
   app.set("view engine", "server.view.html");
@@ -113,12 +113,11 @@ module.exports = function() {
   app.enable("trust proxy");
 
   // Redirect all http requests to https
-  // If environment is development, remove the port
   app.use(function(req, res, next) {
     if (config.usessl) {
       if (!req.secure) {
         if (process.env.NODE_ENV === "development") {
-          return res.redirect("https://localhost" + req.url);
+          return res.redirect("https://localhost:" + config.sslport + req.url);
         } else {
           return res.redirect("https://" + req.headers.host + req.url);
         }

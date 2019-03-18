@@ -5,35 +5,28 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
     watch: {
+      options: {
+        livereload: grunt.file.isFile("./config/cert/localhost-key.pem")
+          ? {
+              key: grunt.file.read("./config/cert/localhost-key.pem"),
+              cert: grunt.file.read("./config/cert/localhost-cert.pem"),
+            }
+          : true,
+      },
       serverViews: {
         files: ["app/views/**"],
-        options: {
-          livereload: true,
-        },
       },
       serverJS: {
         files: ["gruntfile.js", "server.js", "config/**/*.js", "app/**/*.js"],
-        options: {
-          livereload: true,
-        },
       },
       clientViews: {
         files: ["public/modules/**/views/*.html"],
-        options: {
-          livereload: true,
-        },
       },
       clientJS: {
         files: ["public/**/*.js"],
-        options: {
-          livereload: true,
-        },
       },
       clientCSS: {
         files: ["public/**/*.css"],
-        options: {
-          livereload: true,
-        },
       },
     },
     uglify: {

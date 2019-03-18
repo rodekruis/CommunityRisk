@@ -109,12 +109,11 @@
     <!--Application JavaScript Files-->
     {% for jsFile in jsFiles %}
     <script src="{{ jsFile }}"></script>
-    {% endfor %} {% if process.env.NODE_ENV === 'development' %}
-    <!--Livereload script rendered -->
-    <script
-      type="text/javascript"
-      src="https://localhost:35729/livereload.js"
-    ></script>
+    {% endfor %}
+
+    <!-- {# LiveReload #} -->
+    {% if NODE_ENV === 'development' %}
+    <script src="//localhost:35729/livereload.js"></script>
     {% endif %}
   </body>
 </html>

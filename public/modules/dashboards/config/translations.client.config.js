@@ -164,15 +164,57 @@ var static_fr = {
 
 };
 
+//OPTION 1: get data from database (via Data-service)
+// advantage: no double import of metadata needed (database + local file). With small change in metadata you only need to 'publish' database, and not database+code. 
+// disadvantage: the database import is a bit slower, so upon initial loading you might see the text-tags instead of the labels shortly. 
+// angular.module('dashboards').config(function ($translateProvider, DataProvider) {
 
+// 	var standard_input = "1,'BEN','{}','CRA','undefined','undefined'";
+// 	DataProvider.$get().get(
+// 		{adminLevel: standard_input}, 
+// 		function(pgData){
+
+// 			var metadata = pgData.usp_data.meta_indicators;
+
+// 			var labels_en = {};
+// 			var descriptions_en = {};
+// 			var labels_es = {};
+// 			var descriptions_es = {};
+// 			var labels_fr = {};
+// 			var descriptions_fr = {};
+// 			for (var i=0;i<metadata.length;i++){
+// 				labels_en[metadata[i].variable] = metadata[i].label;
+// 				descriptions_en['desc_' + metadata[i].variable] = metadata[i].description;
+// 				if (metadata[i].label_espanol) {
+// 					labels_es[metadata[i].variable] = metadata[i].label_espanol;
+// 					descriptions_es['desc_' + metadata[i].variable] = metadata[i].description_espanol;
+// 				}
+// 				if (metadata[i].label_french) {
+// 					labels_fr[metadata[i].variable] = metadata[i].label_french;
+// 					descriptions_fr['desc_' + metadata[i].variable] = metadata[i].description_french;
+// 				}
+// 			}
+
+// 			$translateProvider.translations('en', $.extend({},angular_vars,static_en,labels_en,descriptions_en));
+// 			$translateProvider.translations('es', $.extend({},angular_vars,static_es,labels_es,descriptions_es));
+// 			$translateProvider.translations('fr', $.extend({},angular_vars,static_fr,labels_fr,descriptions_fr));
+
+// 		}
+// 	);
+	
+// 	$translateProvider.preferredLanguage('en');
+// 	$translateProvider.fallbackLanguage('en');
+	
+// });
+
+//OPTION 2: get data from local file-system
+// disadvantage: double import of metadata needed (database + local file). So with small change you need to publish both database and code (via git).
+// advantage: the local-file import is faster, so you immediately see the labels, and not the tags upon initial loading.
 
 angular.module('dashboards').config(function ($translateProvider) {
-    
-    d3.dsv(';','text/plain; charset=ISO-8859-1')('modules/dashboards/data/metadata_prototype.csv', function(metadata) {
-    //d3.json("https://dashboard.510.global/data/2,'PHL','%7B%7D','CRA','Typhoon','Haima'",function(data) { 
-        
-        //var metadata = data.usp_data.meta_indicators;
-	
+
+	d3.dsv(';','text/plain; charset=ISO-8859-1')('modules/dashboards/data/metadata_prototype.csv', function(metadata) {
+        	
 		var labels_en = {};
 		var descriptions_en = {};
 		var labels_es = {};
@@ -191,12 +233,12 @@ angular.module('dashboards').config(function ($translateProvider) {
                 descriptions_fr['desc_' + metadata[i].variable] = metadata[i].description_french;
             }
 		}
-		
+
 		$translateProvider.translations('en', $.extend({},angular_vars,static_en,labels_en,descriptions_en));
 		$translateProvider.translations('es', $.extend({},angular_vars,static_es,labels_es,descriptions_es));
 		$translateProvider.translations('fr', $.extend({},angular_vars,static_fr,labels_fr,descriptions_fr));
-        
-	});
+		
+	});	
 	
 	$translateProvider.preferredLanguage('en');
 	$translateProvider.fallbackLanguage('en');

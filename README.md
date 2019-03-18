@@ -81,21 +81,19 @@ Now get the code for this application by downloading/cloning from this repositor
 
 ### 1.1B: Install all modules
 * Install NPM modules -  Now you have to include all the required packages for this application. These packages are not included by default in this repository.
-* The below command (run from root-folder, the one with package.json in it) will install all required npm modules in package.json to node_modules/.
-* After that it will run bower-installer, which uses bower.json to include all client side libraries, and puts these in public/build/bower
+* The below command (run from root-folder, the one with `package.json` in it) will install all required npm modules to `node_modules/`.
+* After that it will run `bower-installer`, which uses `bower.json` to include all client side libraries, and puts these in `public/build/bower`
 ```
 $ npm install
 ```
-* PS: Run command preferably from 'Git CMD'-terminal, as otherwise bower may run into a problem.
+* PS: Run command preferably from 'Git CMD'-terminal, as otherwise Bower may run into a problem.
 
-### 1.1C: Set password and certificates
-* Open the file config/secrets.json.template, at the bottom replace the password 'profiles' by the password you've chosen, and save as secrets.json.
+### 1.1C: Set secrets
+* Open the file `config/secrets.json.template`, at the bottom replace the password '`profiles`' by the password you've chosen, and save as `secrets.json`.
 
-You need the following files in the folder config/cert/ (ASK US)
-* localhost-cert.pem
-* localhost-key.pem
-* thawte.ca (for production environment only)
-* thawte2.ca (for production environment only)
+You need the following files in the folder config/cert/ (for production environment only)
+* thawte.ca
+* thawte2.ca
 
 ## 1.2: Get the database 
 To run this application locally, you also need to get an exact copy of the PostgreSQL database.
@@ -112,18 +110,26 @@ pg_restore -U cradatabase -d cradatabase -h localhost cradatabase.dump
 
 Run in terminal from root folder:
 ```
-$ NODE_ENV=development npm run build
-$ NODE_ENV=development node server.js
+$ npm start
 ```
-This will fire up the application on https://localhost:444
+This will fire up the application on <http://localhost:8080>
 
-Note that the application is mainly developed and thus best tested in Google Chrome, but is tested and works with almost the same functionality in IE, Firefox and Safari.
+To run in `production` or `staging` environment, do:
+```
+$ NODE_ENV=<environment>  npm run build && node server.js
+```
 
-To run in production environment, do:
+### 1.3.1 Using HTTPS when developing locally
+To access the dashboard via HTTPS a few extra steps are required.
+1. Install the tool `mkcert` [as described in its' README](https://github.com/FiloSottile/mkcert#readme).
+2. Run `mkcert -install` and follow the instructions.
+3. Create certificates for localhost with: (from the root-folder of this project)
 ```
-$ NODE_ENV=production npm run build
-$ NODE_ENV=production node server.js
+$ mkcert -cert-file ./config/cert/localhost-cert.pem -key-file ./config/cert/localhost-key.pem localhost 127.0.0.1 ::1
 ```
+You only have to do these steps once; So from now on:  
+Run `npm start` and open <https://localhost:8008> in your browser.
+
 
 ## 1.4 Copying to live dashboard
 

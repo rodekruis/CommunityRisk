@@ -3,6 +3,17 @@
 var secrets = require("../secrets");
 
 module.exports = {
+  app: {
+    title: "Rode Kruis Dashboards",
+  },
+  usehttp: true,
+  usessl: true,
+  port: process.env.PORT || 3000,
+  sslport: process.env.SSLPORT || 444,
+  key_file: "./config/cert/localhost-key.pem",
+  cert_file: "./config/cert/localhost-cert.pem",
+  ca_file: "./config/cert/thawte.ca",
+  ca2_file: "./config/cert/thawte2.ca",
   postgres: {
     db: "cradatabase",
     user: "cradatabase@510cradatabase",
@@ -17,17 +28,6 @@ module.exports = {
     options: {
       stream: "access.log",
     },
-  },
-  usehttp: true,
-  usessl: true,
-  port: process.env.PORT || 3000,
-  sslport: process.env.SSLPORT || 444,
-  key_file: "./config/cert/localhost-key.pem",
-  cert_file: "./config/cert/localhost-cert.pem",
-  ca_file: "./config/cert/thawte.ca",
-  ca2_file: "./config/cert/thawte2.ca",
-  app: {
-    title: "Rode Kruis Dashboards",
   },
   assets: {
     lib: {

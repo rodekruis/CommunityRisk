@@ -4,6 +4,14 @@ var secrets = require("../secrets");
 var fs = require("fs");
 
 module.exports = {
+  app: {
+    title: "Rode Kruis Dashboards - development",
+    favicon: "/modules/core/img/510-logo_inverted_32x32.png",
+  },
+  usehttp: true,
+  usessl:
+    fs.existsSync("./config/cert/localhost-cert.pem") &&
+    fs.existsSync("./config/cert/localhost-key.pem"),
   postgres: {
     db: "cradatabase",
     user: "cradatabase",
@@ -18,14 +26,6 @@ module.exports = {
     options: {
       stream: "access.log",
     },
-  },
-  usehttp: true,
-  usessl:
-    fs.existsSync("./config/cert/localhost-cert.pem") &&
-    fs.existsSync("./config/cert/localhost-key.pem"),
-  app: {
-    title: "Rode Kruis Dashboards - development",
-    favicon: "/modules/core/img/510-logo_inverted_32x32.png",
   },
   onedrive: {
     oneDriveBusinessBaseUrl: "https://rodekruis-my.sharepoint.com/_api/v2.0",

@@ -2,7 +2,7 @@
 
 module.exports = {
   app: {
-    title: "Community Profiles Dashboard",
+    title: "CommunityRisk Dashboard",
     socialImage: "/modules/core/img/510-logo_512x512.png",
     favicon: "/modules/core/img/510-logo_32x32.png",
   },

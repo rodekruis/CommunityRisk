@@ -15,8 +15,20 @@ body {
 /* Utilities / Helpers
 -------------------------------------------------- */
 
+.margin-t-8 {
+  margin-top: 8px !important;
+}
+
 .no-padding {
   padding: 0 !important;
+}
+
+.padding-t-8 {
+  padding-top: 8px !important;
+}
+
+.padding-l-8 {
+  padding-left: 8px !important;
 }
 
 /* Colors */
@@ -31,6 +43,14 @@ body {
 /* Colors - Backgrounds */
 .bg-white {
   background-color: #ffffff;
+}
+
+.border-top {
+  border-top: 1px solid;
+}
+
+.border-light {
+  border-color: #e5e5e5;
 }
 
 .debug {

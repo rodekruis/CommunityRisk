@@ -4,10 +4,9 @@ angular.module("core").controller("HomeController", [
   "$translate",
   "$scope",
   "$rootScope",
-  "$compile",
   "Authentication",
   "DEBUG",
-  function($translate, $scope, $rootScope, $compile, Authentication, DEBUG) {
+  function($translate, $scope, $rootScope, Authentication, DEBUG) {
     $scope.DEBUG = DEBUG;
 
     $scope.authentication = Authentication;
@@ -167,42 +166,9 @@ angular.module("core").controller("HomeController", [
         };
       })();
 
-      country_meta.sort(
+      $scope.countriesAvailable = country_meta.sort(
         sort_by("format", { name: "country_code", reverse: false })
       );
-
-      //Create HTML
-      var ul = document.getElementById("country-items");
-      while (ul.childElementCount > 0) {
-        ul.removeChild(ul.lastChild);
-      }
-      var formats = [];
-      for (var i = 0; i < country_meta.length; i++) {
-        var record = country_meta[i];
-
-        if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
-          var li2 = document.createElement("li");
-          li2.setAttribute("class", "divider");
-          ul.appendChild(li2);
-        }
-        var li = document.createElement("li");
-        ul.appendChild(li);
-        var a = document.createElement("a");
-        a.setAttribute(
-          "ng-click",
-          "choose_country('" + record.country_code + "')"
-        );
-        a.setAttribute("ng-href", "#!/community_risk");
-        a.setAttribute("role", "button");
-        a.innerHTML =
-          record.format == "all"
-            ? record.country_name
-            : record.country_name + " (" + record.format + ")";
-        $compile(a)($scope);
-        li.appendChild(a);
-
-        formats.push(record.format);
-      }
     });
 
     $(document).ready(function() {

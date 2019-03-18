@@ -264,10 +264,15 @@ upload_to_dashboard;order;view_code;disaster_type;country_code;variable;label;la
 1;;CRA;;ZMB;education_density;# schools per 10,000 people;;;decimal2;schools.png;coping_capacity;weighted_avg;population;education_density_score;1;1;Communication;3.2.1;;;To add;;;;0;3;5;4;;
 1;;CRA;;KEN;inequality;Gini Index;;;decimal2;inequality.png;vulnerability;weighted_avg;population;inequality_score;0;0;Development & Deprivation;2.1.1;;;To add;;;;0;3;;;;
 1;;CRA;;KEN;admin;Administrative areas - level 3;;;;area.png;admin;;;;;;#N/A;0.1.1;;;To add;;;;3;3;20;5;;
+1;;CRA;;KEN;cooking_fuel;% poor cooking fuel;;;percentage;;other;weighted_avg;population;;0;0;;;;;To add;;;;0;3;;;;
 1;;CRA;;KEN;lighting;% poor lighting;;;percentage;;vulnerability;weighted_avg;population;lighting_score;0;0;;;;;To add;;;;0;3;;;;
 1;;CRA;;KEN;population_u5;% population U5;;;percentage;infant.png;vulnerability;weighted_avg;population;population_u5_score;0;0;;;;;To add;;;;0;3;;;;
+1;;CRA;;KEN;population_65;% population 65+;;;percentage;;other;weighted_avg;population;;0;0;;;;;To add;;;;0;3;;;;
+1;;CRA;;KEN;adaptive_pop;% adaptive pop. (15-34);;;percentage;;other;weighted_avg;population;;1;0;;;;;To add;;;;0;3;;;;
 1;;CRA;;KEN;education_prim;% primary or higher education;;;percentage;schools.png;coping_capacity;weighted_avg;population;education_prim_score;1;0;;;;;To add;;;;0;3;;;;
+1;;CRA;;KEN;education_sec;% secondary or higher education;;;percentage;;other;weighted_avg;population;;1;0;;;;;To add;;;;0;3;;;;
 1;;CRA;;KEN;unemployment;% unemployed;;;percentage;incomeclass.png;vulnerability;weighted_avg;population;unemployment_score;1;0;;;;;To add;;;;0;3;;;;
+1;;CRA;;KEN;good_floor;% strong floor type;;;percentage;;other;weighted_avg;population;;1;0;;;;;To add;;;;0;3;;;;
 1;;CRA;;KEN;good_roof;% strong roof type;;;percentage;roof.png;coping_capacity;weighted_avg;population;good_roof_score;1;0;;;;;To add;;;;0;3;;;;
 1;;CRA;;KEN;good_wall;% strong wall type;;;percentage;wall.png;coping_capacity;weighted_avg;population;good_wall_score;1;0;;;;;To add;;;;0;3;;;;
 1;;CRA;;KEN;sanitation;% improved sanitation;;;percentage;sanitation.png;coping_capacity;weighted_avg;population;sanitation_score;1;0;;;;;To add;;;;2;3;;;;

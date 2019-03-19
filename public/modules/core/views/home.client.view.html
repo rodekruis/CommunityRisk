@@ -57,94 +57,20 @@
                           id="country-items"
                           style="z-index:1001"
                         >
-                          <li>
+                          <li
+                            ng-repeat="country in countriesAvailable"
+                            ng-class="(!$first && country.format !== countriesAvailable[$index-1].format) ? 'border-top border-light margin-t-8 padding-t-8' : ''"
+                          >
                             <a
-                              ng-click="choose_country('PHL')"
+                              ng-click="choose_country(country.country_code)"
                               ng-href="#!/community_risk"
                             >
-                              Philippines
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              ng-click="choose_country('MWI')"
-                              ng-href="#!/community_risk"
-                            >
-                              Malawi
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              ng-click="choose_country('PER')"
-                              ng-href="#!/community_risk"
-                            >
-                              Peru
-                            </a>
-                          </li>
-                          <li class="divider"></li>
-                          <li>
-                            <a
-                              ng-click="choose_country('BEN')"
-                              ng-href="#!/community_risk"
-                            >
-                              Benin (basic)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              ng-click="choose_country('ECU')"
-                              ng-href="#!/community_risk"
-                            >
-                              Ecuador (basic)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              ng-click="choose_country('MOZ')"
-                              ng-href="#!/community_risk"
-                            >
-                              Mozambique (basic)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              ng-click="choose_country('NPL')"
-                              ng-href="#!/community_risk"
-                            >
-                              Nepal (basic)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              ng-click="choose_country('ZMB')"
-                              ng-href="#!/community_risk"
-                            >
-                              Zambia (basic)
-                            </a>
-                          </li>
-                          <li class="divider"></li>
-                          <li>
-                            <a
-                              ng-click="choose_country('MLI')"
-                              ng-href="#!/community_risk"
-                            >
-                              Mali (template)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              ng-click="choose_country('LKA')"
-                              ng-href="#!/community_risk"
-                            >
-                              Sri Lanka (template)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              ng-click="choose_country('VNM')"
-                              ng-href="#!/community_risk"
-                            >
-                              Vietnam (template)
+                              {{ country.country_name }}
+                              <span
+                                ng-if="country.format !== 'all'"
+                                class="pull-right padding-l-8 text-muted"
+                                >{{ country.format }}</span
+                              >
                             </a>
                           </li>
                         </ul>

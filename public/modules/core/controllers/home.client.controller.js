@@ -4,10 +4,10 @@ angular.module("core").controller("HomeController", [
   "$translate",
   "$scope",
   "$rootScope",
-  "$compile",
+  "$filter",
   "Authentication",
   "DEBUG",
-  function($translate, $scope, $rootScope, $compile, Authentication, DEBUG) {
+  function($translate, $scope, $rootScope, $filter, Authentication, DEBUG) {
     $scope.DEBUG = DEBUG;
 
     $scope.authentication = Authentication;
@@ -104,105 +104,10 @@ angular.module("core").controller("HomeController", [
         map.fitBounds([[-30, -90], [45, 120]]);
       });
 
-      //Automatically fill country-dropdown menu
-      //First sort country-items in right order
-      var sort_by;
-      (function() {
-        // utility functions
-        var default_cmp = function(a, b) {
-            if (a == b) return 0;
-            return a < b ? -1 : 1;
-          },
-          getCmpFunc = function(primer, reverse) {
-            var dfc = default_cmp, // closer in scope
-              cmp = default_cmp;
-            if (primer) {
-              cmp = function(a, b) {
-                return dfc(primer(a), primer(b));
-              };
-            }
-            if (reverse) {
-              return function(a, b) {
-                return -1 * cmp(a, b);
-              };
-            }
-            return cmp;
-          };
-        // actual implementation
-        sort_by = function() {
-          var fields = [],
-            n_fields = arguments.length,
-            field,
-            name,
-            cmp;
-
-          // preprocess sorting options
-          for (var i = 0; i < n_fields; i++) {
-            field = arguments[i];
-            if (typeof field === "string") {
-              name = field;
-              cmp = default_cmp;
-            } else {
-              name = field.name;
-              cmp = getCmpFunc(field.primer, field.reverse);
-            }
-            fields.push({
-              name: name,
-              cmp: cmp,
-            });
-          }
-          // final comparison function
-          return function(A, B) {
-            var name, result;
-            for (var i = 0; i < n_fields; i++) {
-              result = 0;
-              field = fields[i];
-              name = field.name;
-
-              result = field.cmp(A[name], B[name]);
-              if (result !== 0) break;
-            }
-            return result;
-          };
-        };
-      })();
-
-      country_meta.sort(
-        sort_by("format", { name: "country_code", reverse: false })
-      );
-
-      //Create HTML
-      var ul = document.getElementById("country-items");
-      while (ul.childElementCount > 0) {
-        ul.removeChild(ul.lastChild);
-      }
-      var formats = [];
-      for (var i = 0; i < country_meta.length; i++) {
-        var record = country_meta[i];
-
-        if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
-          var li2 = document.createElement("li");
-          li2.setAttribute("class", "divider");
-          ul.appendChild(li2);
-        }
-        var li = document.createElement("li");
-        ul.appendChild(li);
-        var a = document.createElement("a");
-        a.setAttribute(
-          "ng-click",
-          "choose_country('" + record.country_code + "')"
-        );
-        a.setAttribute("ng-href", "#!/community_risk");
-        a.setAttribute("role", "button");
-        a.innerHTML =
-          record.format == "all"
-            ? record.country_name
-            : record.country_name + " (" + record.format + ")";
-        $compile(a)($scope);
-        li.appendChild(a);
-
-        formats.push(record.format);
-      }
+      $scope.countriesAvailable = $filter("orderBy")(country_meta, [
+        "+format",
+        "+country_code",
+      ]);
     });
 
     $(document).ready(function() {

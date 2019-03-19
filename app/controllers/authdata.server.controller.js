@@ -49,13 +49,13 @@ exports.getPoi = function(req, res, next) {
 
     client.query(
       {
-        text: "SELECT usp_fbf_zambia($1::text, $2::text);",
+        text: "SELECT usp_fbf_geodata($1::text, $2::text);",
         values: [req.query.country, req.query.type],
       },
       function(err, result) {
         if (err) return next(err);
 
-        res.jsonp(result.rows[0].usp_fbf_zambia.features);
+        res.jsonp(result.rows[0].usp_fbf_geodata.features);
         release();
       }
     );

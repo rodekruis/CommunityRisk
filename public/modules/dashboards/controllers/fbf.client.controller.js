@@ -2271,7 +2271,7 @@ angular.module("dashboards").controller("FbfController", [
     function prepareStationsData() {
       $scope.stations = AuthData.getPoi(
         $scope.country_code,
-        "glofas_stations_v2"
+        "dashboard_glofas_stations_v2"
       );
 
       return $scope.stations;
@@ -2289,24 +2289,24 @@ angular.module("dashboards").controller("FbfController", [
           "<strong>" +
           stationTitle +
           "</strong><br>" +
-          "2 yr: " +
-          station["2yr_threshold"] +
-          "<br>" +
-          "5 yr: " +
-          station["5yr_threshold"] +
+          "trigger-level: " +
+          station["trigger_level"] +
           "";
 
-        var stationMarker = L.marker([station.lat, station.lon], {
-          keyboard: true,
-          riseOnHover: true,
-          title: stationTitle,
-          icon: L.divIcon({
-            iconSize: [20, 20],
-            iconAnchor: [10, 0],
-            popupAnchor: [0, 0],
-            className: "marker-icon--station",
-          }),
-        });
+        var stationMarker = L.marker(
+          [item.geometry.coordinates[1], item.geometry.coordinates[0]],
+          {
+            keyboard: true,
+            riseOnHover: true,
+            title: stationTitle,
+            icon: L.divIcon({
+              iconSize: [20, 20],
+              iconAnchor: [10, 0],
+              popupAnchor: [0, 0],
+              className: "marker-icon--station",
+            }),
+          }
+        );
 
         stationMarker.addTo($scope.stationsLayer);
         stationMarker.bindPopup(stationInfoPopup);

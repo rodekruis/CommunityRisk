@@ -147,6 +147,33 @@
         >
           {{ "Hide Glofas Stations" | translate }}
         </button>
+
+        <br />
+
+        <button
+          type="button"
+          class="btn btn-default btn-block"
+          ng-click="prepare_rc_locations()"
+          ng-show="!rcLocationsLayer"
+        >
+          {{ "Prepare RC Locations" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-default btn-block"
+          ng-click="show_rc_locations()"
+          ng-show="rcLocationsLayer"
+        >
+          {{ "Show RC Locations" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-default btn-block"
+          ng-click="hide_rc_locations()"
+          ng-show="rcLocationsLayer"
+        >
+          {{ "Hide RC Locations" | translate }}
+        </button>
       </div>
 
       <div>

@@ -894,14 +894,14 @@ div.dc-chart {
   box-shadow: none;
 }
 
-.marker-icon--station {
+.marker-icon {
   position: absolute;
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: blue;
+  background-color: grey;
 }
-.marker-icon--station:before {
+.marker-icon:before {
   content: "";
   display: block;
   width: 0;
@@ -911,6 +911,21 @@ div.dc-chart {
   left: 50%;
   margin-left: -10px;
   border: 10px solid transparent;
+  border-top-color: grey;
+}
+.marker-icon:hover,
+.marker-icon:focus {
+  background-color: silver;
+}
+.marker-icon:hover:before,
+.marker-icon:focus:before {
+  border-top-color: silver;
+}
+
+.marker-icon--station {
+  background-color: blue;
+}
+.marker-icon--station:before {
   border-top-color: blue;
 }
 .marker-icon--station:hover,
@@ -920,4 +935,29 @@ div.dc-chart {
 .marker-icon--station:hover:before,
 .marker-icon--station:focus:before {
   border-top-color: skyblue;
+}
+
+.marker-icon--rc {
+  background-color: white;
+}
+.marker-icon--rc:before {
+  border-top-color: white;
+}
+.marker-icon--rc:hover,
+.marker-icon--rc:focus {
+  background-color: lightgrey;
+}
+.marker-icon--rc:hover:before,
+.marker-icon--rc:focus:before {
+  border-top-color: lightgrey;
+}
+.marker-icon--rc:after {
+  content: "+";
+  font-weight: bold;
+  font-size: 21px;
+  line-height: 1;
+  position: absolute;
+  top: -3px;
+  left: 3px;
+  color: red;
 }

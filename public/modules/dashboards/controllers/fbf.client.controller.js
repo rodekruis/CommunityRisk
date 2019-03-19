@@ -94,6 +94,7 @@ angular.module("dashboards").controller("FbfController", [
       color: "#0080ff",
     };
     $scope.stations = [];
+    $scope.rcLocations = [];
 
     ///////////////////////
     // INITIAL FUNCTIONS //
@@ -182,6 +183,7 @@ angular.module("dashboards").controller("FbfController", [
       });
 
       prepareStationsData();
+      prepareRcLocationsData();
     };
 
     ///////////////
@@ -2271,10 +2273,36 @@ angular.module("dashboards").controller("FbfController", [
     function prepareStationsData() {
       $scope.stations = AuthData.getPoi(
         $scope.country_code,
-        "glofas_stations_v2"
+        "dashboard_glofas_stations_v2"
       );
 
       return $scope.stations;
+    }
+
+    function prepareRcLocationsData() {
+      $scope.rcLocations = AuthData.getPoi(
+        $scope.country_code,
+        "dashboard_redcross_branches"
+      );
+
+      return $scope.rcLocations;
+    }
+
+    function createMarker(item, itemTitle, itemClass) {
+      return L.marker(
+        [item.geometry.coordinates[1], item.geometry.coordinates[0]],
+        {
+          keyboard: true,
+          riseOnHover: true,
+          title: itemTitle,
+          icon: L.divIcon({
+            iconSize: [20, 20],
+            iconAnchor: [10, 0],
+            popupAnchor: [0, 0],
+            className: "marker-icon marker-icon--" + itemClass,
+          }),
+        }
+      );
     }
 
     $scope.prepare_glofas_stations = function() {
@@ -2289,24 +2317,11 @@ angular.module("dashboards").controller("FbfController", [
           "<strong>" +
           stationTitle +
           "</strong><br>" +
-          "2 yr: " +
-          station["2yr_threshold"] +
-          "<br>" +
-          "5 yr: " +
-          station["5yr_threshold"] +
+          "trigger-level: " +
+          station.trigger_level +
           "";
 
-        var stationMarker = L.marker([station.lat, station.lon], {
-          keyboard: true,
-          riseOnHover: true,
-          title: stationTitle,
-          icon: L.divIcon({
-            iconSize: [20, 20],
-            iconAnchor: [10, 0],
-            popupAnchor: [0, 0],
-            className: "marker-icon--station",
-          }),
-        });
+        var stationMarker = createMarker(item, stationTitle, "station");
 
         stationMarker.addTo($scope.stationsLayer);
         stationMarker.bindPopup(stationInfoPopup);
@@ -2319,6 +2334,48 @@ angular.module("dashboards").controller("FbfController", [
 
     $scope.hide_glofas_stations = function() {
       map.removeLayer($scope.stationsLayer);
+    };
+
+    $scope.prepare_rc_locations = function() {
+      $scope.rcLocationsLayer = L.layerGroup();
+      $scope.rcLocations.forEach(function(item) {
+        if (!item.properties) return;
+
+        var location = item.properties;
+        var locationTitle = location.branch_name;
+        var locationInfoPopup =
+          "<strong class='h4'>" +
+          locationTitle +
+          "</strong><br>" +
+          "<strong>" +
+          "President: " +
+          "</strong>" +
+          location.president +
+          "<br>" +
+          "<strong>" +
+          "Volunteers: " +
+          "</strong>" +
+          location.nr_volunteers +
+          "<br>" +
+          "<strong>" +
+          "Address: " +
+          "</strong>" +
+          location.address +
+          "";
+
+        var locationMarker = createMarker(item, locationTitle, "rc");
+
+        locationMarker.addTo($scope.rcLocationsLayer);
+        locationMarker.bindPopup(locationInfoPopup);
+      });
+    };
+
+    $scope.show_rc_locations = function() {
+      map.addLayer($scope.rcLocationsLayer);
+    };
+
+    $scope.hide_rc_locations = function() {
+      map.removeLayer($scope.rcLocationsLayer);
     };
   },
 ]);

@@ -2277,6 +2277,23 @@ angular.module("dashboards").controller("FbfController", [
       return $scope.stations;
     }
 
+    function createMarker(item, itemTitle, itemClass) {
+      return L.marker(
+        [item.geometry.coordinates[1], item.geometry.coordinates[0]],
+        {
+          keyboard: true,
+          riseOnHover: true,
+          title: itemTitle,
+          icon: L.divIcon({
+            iconSize: [20, 20],
+            iconAnchor: [10, 0],
+            popupAnchor: [0, 0],
+            className: "marker-icon marker-icon--" + itemClass,
+          }),
+        }
+      );
+    }
+
     $scope.prepare_glofas_stations = function() {
       $scope.stationsLayer = L.layerGroup();
       $scope.stations.forEach(function(item) {
@@ -2293,20 +2310,7 @@ angular.module("dashboards").controller("FbfController", [
           station["trigger_level"] +
           "";
 
-        var stationMarker = L.marker(
-          [item.geometry.coordinates[1], item.geometry.coordinates[0]],
-          {
-            keyboard: true,
-            riseOnHover: true,
-            title: stationTitle,
-            icon: L.divIcon({
-              iconSize: [20, 20],
-              iconAnchor: [10, 0],
-              popupAnchor: [0, 0],
-              className: "marker-icon--station",
-            }),
-          }
-        );
+        var stationMarker = createMarker(item, stationTitle, "station");
 
         stationMarker.addTo($scope.stationsLayer);
         stationMarker.bindPopup(stationInfoPopup);

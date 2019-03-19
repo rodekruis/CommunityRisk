@@ -2318,7 +2318,7 @@ angular.module("dashboards").controller("FbfController", [
           stationTitle +
           "</strong><br>" +
           "trigger-level: " +
-          station["trigger_level"] +
+          station.trigger_level +
           "";
 
         var stationMarker = createMarker(item, stationTitle, "station");

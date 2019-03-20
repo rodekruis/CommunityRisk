@@ -31,9 +31,9 @@
     "base": "public/build/bower",
     "path": {
       "js": "{name}/js",
+      "/js.map$/": "{name}/js",
       "css": "{name}/css",
-      "scss": "{name}/css",
-      "map": "{name}/css",
+      "/css.map$/": "{name}/css",
       "eot": "{name}/fonts",
       "svg": "{name}/fonts",
       "ttf": "{name}/fonts",
@@ -42,10 +42,15 @@
       "png": "{name}/img"
     },
     "sources": {
-      "bootstrap": [
-        "public/lib/bootstrap/dist/js/bootstrap.min.js",
-        "public/lib/bootstrap/dist/css/bootstrap.min.css"
-      ],
+      "bootstrap": {
+        "mapping": [
+          "public/lib/bootstrap/dist/js/bootstrap.min.js",
+          {
+            "public/lib/bootstrap/dist/css/bootstrap.css.map": "bootstrap.min.css.map"
+          },
+          "public/lib/bootstrap/dist/css/bootstrap.min.css"
+        ]
+      },
       "jquery": ["public/lib/jquery/dist/jquery.min.js"],
       "angular": [
         "public/lib/angular/angular.min.js",
@@ -71,6 +76,7 @@
         "public/lib/angular-sanitize/angular-sanitize.js"
       ],
       "angular-ui-router": [
+        "public/lib/angular-ui-router/release/angular-ui-router.min.js.map",
         "public/lib/angular-ui-router/release/angular-ui-router.min.js"
       ],
       "crossfilter": ["public/lib/crossfilter/crossfilter.min.js"],

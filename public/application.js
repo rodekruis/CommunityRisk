@@ -7,6 +7,7 @@ var ngApp = angular.module(
 );
 
 ngApp.constant("DEBUG", !!window.DEBUG);
+ngApp.constant("GEOSERVER_BASEURL", window.GEOSERVER_BASEURL);
 
 // Setting HTML5 Location Mode
 angular.module(window.ApplicationConfiguration.applicationModuleName).config([

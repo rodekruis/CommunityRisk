@@ -33,6 +33,7 @@ module.exports = function() {
   app.locals.socialImage = config.app.socialImage;
   app.locals.jsFiles = config.getJavaScriptAssets();
   app.locals.cssFiles = config.getCSSAssets();
+  app.locals.geoServerBaseUrl = config.geoserver.baseUrl;
 
   // use cors
   app.use(cors());

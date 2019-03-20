@@ -12,6 +12,7 @@ angular.module("dashboards").controller("FbfController", [
   "cfpLoadingBar",
   "exportService",
   "shareService",
+  "GEOSERVER_BASEURL",
   "DEBUG",
   function(
     $translate,
@@ -25,6 +26,7 @@ angular.module("dashboards").controller("FbfController", [
     cfpLoadingBar,
     exportService,
     shareService,
+    GEOSERVER_BASEURL,
     DEBUG
   ) {
     $scope.user = Authentication.user;
@@ -2172,40 +2174,6 @@ angular.module("dashboards").controller("FbfController", [
       }
       zoomToGeom($scope.geom);
 
-      var prev_indicator = "";
-      var rasterLayer;
-      $scope.change_raster = function(indicator) {
-        if (indicator == prev_indicator) {
-          map.removeLayer(rasterLayer);
-          prev_indicator = "";
-        } else if (rasterLayer) {
-          rasterLayer.addTo(map);
-          map.fitBounds(rasterLayer.getBounds());
-          prev_indicator = indicator;
-        } else {
-          $scope.start();
-          var url = "modules/dashboards/data/ZMB_births_pp_v2_2015.tif";
-          fetch(url)
-            .then(function(r) {
-              return r.arrayBuffer();
-            })
-            .then(function(buffer) {
-              var s = L.ScalarField.fromGeoTIFF(buffer);
-              rasterLayer = L.canvasLayer
-                .scalarField(s, {
-                  color: chroma
-                    .scale("RdPu")
-                    .domain([s.range[0], s.range[1] / 100]),
-                  opacity: 0.88,
-                })
-                .addTo(map);
-              map.fitBounds(rasterLayer.getBounds());
-            });
-          $scope.complete();
-          prev_indicator = indicator;
-        }
-      };
-
       //Show map
       if ($scope.chart_show == "map") {
         $("#row-chart-container").hide();
@@ -2270,10 +2238,44 @@ angular.module("dashboards").controller("FbfController", [
       };
     };
 
+    ////////////////////////
+    /// DEBUG / TESTING ///
+    ///////////////////////
+
+    $scope.toggle_vector_layer = function() {
+      var vectorLayer = map.getPane("overlayPane");
+
+      vectorLayer.style.opacity = vectorLayer.style.opacity !== "0" ? 0 : 1;
+    };
+
+    ////////////////////
+    /// WMS LAYER(S) ///
+    ////////////////////
+
+    $scope.add_raster_layer = function() {
+      $scope.rasterLayer = L.tileLayer.wms(GEOSERVER_BASEURL, {
+        layers: "flood_extent_long_0",
+        transparent: true,
+        format: "image/png",
+      });
+    };
+
+    $scope.show_raster_layer = function() {
+      map.addLayer($scope.rasterLayer);
+    };
+
+    $scope.hide_raster_layer = function() {
+      map.removeLayer($scope.rasterLayer);
+    };
+
+    /////////////////////
+    /// POI & MARKERS ///
+    /////////////////////
+
     function prepareStationsData() {
       $scope.stations = AuthData.getPoi(
         $scope.country_code,
-        "dashboard_glofas_stations_v2"
+        "dashboard_forecast_per_station"
       );
 
       return $scope.stations;
@@ -2289,20 +2291,17 @@ angular.module("dashboards").controller("FbfController", [
     }
 
     function createMarker(item, itemTitle, itemClass) {
-      return L.marker(
-        [item.geometry.coordinates[1], item.geometry.coordinates[0]],
-        {
-          keyboard: true,
-          riseOnHover: true,
-          title: itemTitle,
-          icon: L.divIcon({
-            iconSize: [20, 20],
-            iconAnchor: [10, 0],
-            popupAnchor: [0, 0],
-            className: "marker-icon marker-icon--" + itemClass,
-          }),
-        }
-      );
+      return L.marker(item.geometry.coordinates, {
+        keyboard: true,
+        riseOnHover: true,
+        title: itemTitle,
+        icon: L.divIcon({
+          iconSize: [20, 20],
+          iconAnchor: [10, 0],
+          popupAnchor: [0, 0],
+          className: "marker-icon marker-icon--" + itemClass,
+        }),
+      });
     }
 
     $scope.prepare_glofas_stations = function() {

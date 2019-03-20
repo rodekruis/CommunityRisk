@@ -11,6 +11,9 @@ module.exports = {
   key_file: "./config/cert/localhost-key.pem",
   cert_file: "./config/cert/localhost-cert.pem",
   sessionSecret: "MEAN",
+  geoserver: {
+    baseUrl: "http://zambia.510.global/geoserver/fbf/wms",
+  },
   assets: {
     lib: {
       css: [

@@ -77,6 +77,7 @@
 
     <script>
       {% if (NODE_ENV !== 'production') %}window.DEBUG = true;{% endif %}
+      window.GEOSERVER_BASEURL = "{{ geoServerBaseUrl }}";
 
       {# Embedding The User Object #}
       var user = {{ user | dump | safe }};

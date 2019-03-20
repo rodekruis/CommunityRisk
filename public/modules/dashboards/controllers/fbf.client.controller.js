@@ -12,6 +12,7 @@ angular.module("dashboards").controller("FbfController", [
   "cfpLoadingBar",
   "exportService",
   "shareService",
+  "GEOSERVER_BASEURL",
   "DEBUG",
   function(
     $translate,
@@ -25,6 +26,7 @@ angular.module("dashboards").controller("FbfController", [
     cfpLoadingBar,
     exportService,
     shareService,
+    GEOSERVER_BASEURL,
     DEBUG
   ) {
     $scope.user = Authentication.user;
@@ -2235,6 +2237,30 @@ angular.module("dashboards").controller("FbfController", [
         };
       };
     };
+
+    ////////////////////
+    /// WMS LAYER(S) ///
+    ////////////////////
+
+    $scope.add_raster_layer = function() {
+      $scope.rasterLayer = L.tileLayer.wms(GEOSERVER_BASEURL, {
+        layers: "flood_extent_long_0",
+        transparent: true,
+        format: "image/png",
+      });
+    };
+
+    $scope.show_raster_layer = function() {
+      map.addLayer($scope.rasterLayer);
+    };
+
+    $scope.hide_raster_layer = function() {
+      map.removeLayer($scope.rasterLayer);
+    };
+
+    /////////////////////
+    /// POI & MARKERS ///
+    /////////////////////
 
     function prepareStationsData() {
       $scope.stations = AuthData.getPoi(

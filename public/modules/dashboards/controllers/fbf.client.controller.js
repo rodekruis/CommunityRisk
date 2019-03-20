@@ -2172,40 +2172,6 @@ angular.module("dashboards").controller("FbfController", [
       }
       zoomToGeom($scope.geom);
 
-      var prev_indicator = "";
-      var rasterLayer;
-      $scope.change_raster = function(indicator) {
-        if (indicator == prev_indicator) {
-          map.removeLayer(rasterLayer);
-          prev_indicator = "";
-        } else if (rasterLayer) {
-          rasterLayer.addTo(map);
-          map.fitBounds(rasterLayer.getBounds());
-          prev_indicator = indicator;
-        } else {
-          $scope.start();
-          var url = "modules/dashboards/data/ZMB_births_pp_v2_2015.tif";
-          fetch(url)
-            .then(function(r) {
-              return r.arrayBuffer();
-            })
-            .then(function(buffer) {
-              var s = L.ScalarField.fromGeoTIFF(buffer);
-              rasterLayer = L.canvasLayer
-                .scalarField(s, {
-                  color: chroma
-                    .scale("RdPu")
-                    .domain([s.range[0], s.range[1] / 100]),
-                  opacity: 0.88,
-                })
-                .addTo(map);
-              map.fitBounds(rasterLayer.getBounds());
-            });
-          $scope.complete();
-          prev_indicator = indicator;
-        }
-      };
-
       //Show map
       if ($scope.chart_show == "map") {
         $("#row-chart-container").hide();

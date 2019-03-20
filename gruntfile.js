@@ -6,12 +6,13 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON("package.json"),
     watch: {
       options: {
-        livereload: grunt.file.isFile("./config/cert/localhost-key.pem")
-          ? {
-              key: grunt.file.read("./config/cert/localhost-key.pem"),
-              cert: grunt.file.read("./config/cert/localhost-cert.pem"),
-            }
-          : true,
+        livereload:
+          process.env.USE_HTTPS !== "false"
+            ? {
+                key: grunt.file.read("./config/cert/localhost-key.pem"),
+                cert: grunt.file.read("./config/cert/localhost-cert.pem"),
+              }
+            : true,
       },
       serverViews: {
         files: ["app/views/**"],

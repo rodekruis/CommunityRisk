@@ -2275,7 +2275,7 @@ angular.module("dashboards").controller("FbfController", [
     function prepareStationsData() {
       $scope.stations = AuthData.getPoi(
         $scope.country_code,
-        "dashboard_glofas_stations_v2"
+        "dashboard_forecast_per_station"
       );
 
       return $scope.stations;
@@ -2291,20 +2291,17 @@ angular.module("dashboards").controller("FbfController", [
     }
 
     function createMarker(item, itemTitle, itemClass) {
-      return L.marker(
-        [item.geometry.coordinates[1], item.geometry.coordinates[0]],
-        {
-          keyboard: true,
-          riseOnHover: true,
-          title: itemTitle,
-          icon: L.divIcon({
-            iconSize: [20, 20],
-            iconAnchor: [10, 0],
-            popupAnchor: [0, 0],
-            className: "marker-icon marker-icon--" + itemClass,
-          }),
-        }
-      );
+      return L.marker(item.geometry.coordinates, {
+        keyboard: true,
+        riseOnHover: true,
+        title: itemTitle,
+        icon: L.divIcon({
+          iconSize: [20, 20],
+          iconAnchor: [10, 0],
+          popupAnchor: [0, 0],
+          className: "marker-icon marker-icon--" + itemClass,
+        }),
+      });
     }
 
     $scope.prepare_glofas_stations = function() {

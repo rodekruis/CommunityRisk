@@ -2238,6 +2238,16 @@ angular.module("dashboards").controller("FbfController", [
       };
     };
 
+    ////////////////////////
+    /// DEBUG / TESTING ///
+    ///////////////////////
+
+    $scope.toggle_vector_layer = function() {
+      var vectorLayer = map.getPane("overlayPane");
+
+      vectorLayer.style.opacity = vectorLayer.style.opacity !== "0" ? 0 : 1;
+    };
+
     ////////////////////
     /// WMS LAYER(S) ///
     ////////////////////

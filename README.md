@@ -130,6 +130,10 @@ $ mkcert -cert-file ./config/cert/localhost-cert.pem -key-file ./config/cert/loc
 You only have to do these steps once; So from now on:  
 Run `npm start` and open <https://localhost:8008> in your browser.
 
+If, for some reason, you want to run via HTTP only, use:
+```
+$ USE_HTTPS=false  npm start
+```
 
 ## 1.4 Copying to live dashboard
 

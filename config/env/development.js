@@ -10,8 +10,9 @@ module.exports = {
   },
   usehttp: true,
   usessl:
-    fs.existsSync("./config/cert/localhost-cert.pem") &&
-    fs.existsSync("./config/cert/localhost-key.pem"),
+    process.env.USE_HTTPS !== "false" &&
+    (fs.existsSync("./config/cert/localhost-cert.pem") &&
+      fs.existsSync("./config/cert/localhost-key.pem")),
   postgres: {
     db: "cradatabase",
     user: "cradatabase",

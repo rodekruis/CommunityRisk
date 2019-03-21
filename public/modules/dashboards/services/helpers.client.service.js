@@ -65,11 +65,30 @@ angular.module("dashboards").factory("helpers", [
       return lookup_country_meta;
     }
 
+    /**
+     * fill the lookup table with the metadata-information per variable
+     *
+     * @param {Object} metaData
+     * @param {String} field
+     *
+     * @returns {Object}
+     */
+    function genLookup_disaster_meta(metaData, field) {
+      var lookup_disaster_meta = {};
+
+      metaData.forEach(function(e) {
+        lookup_disaster_meta[e.name] = String(e[field]);
+      });
+
+      return lookup_disaster_meta;
+    }
+
     return {
       nullToEmptyString: nullToEmptyString,
       genLookup: genLookup,
       genLookup_meta: genLookup_meta,
       genLookup_country_meta: genLookup_country_meta,
+      genLookup_disaster_meta: genLookup_disaster_meta,
     };
   },
 ]);

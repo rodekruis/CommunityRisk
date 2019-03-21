@@ -361,15 +361,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     // LOOKUP FUNCTIONS //
     //////////////////////
 
-    // fill the lookup table with the metadata-information per variable
-    $scope.genLookup_disaster_meta = function(d, field) {
-      var lookup_disaster_meta = {};
-      d.Disaster_meta.forEach(function(e) {
-        lookup_disaster_meta[e.name] = String(e[field]);
-      });
-      return lookup_disaster_meta;
-    };
-
     ///////////////////////////////////////////
     // MAIN FUNCTION TO GENERATE ALL CONTENT //
     ///////////////////////////////////////////
@@ -416,13 +407,14 @@ angular.module("dashboards").controller("PriorityIndexController", [
         if ($scope.view_code_PI == "PI") {
           $scope.metric = "pred_damage_class";
         } else {
-          $scope.metric = $scope.genLookup_disaster_meta(d, "default_metric")[
-            $scope.disaster_name
-          ];
+          $scope.metric = helpers.genLookup_disaster_meta(
+            d.Disaster_meta,
+            "default_metric"
+          )[$scope.disaster_name];
         }
       }
-      $scope.default_metric = $scope.genLookup_disaster_meta(
-        d,
+      $scope.default_metric = helpers.genLookup_disaster_meta(
+        d.Disaster_meta,
         "default_metric"
       )[$scope.disaster_name];
       $scope.default_metric_label = $scope.default_metric.replace("_", " ");
@@ -622,12 +614,14 @@ angular.module("dashboards").controller("PriorityIndexController", [
       ///////////////////////////
 
       //Create total statistics per disaster
-      $scope.actuals = $scope.genLookup_disaster_meta(d, "actuals")[
-        $scope.disaster_name
-      ];
-      $scope.predictions = $scope.genLookup_disaster_meta(d, "predictions")[
-        $scope.disaster_name
-      ];
+      $scope.actuals = helpers.genLookup_disaster_meta(
+        d.Disaster_meta,
+        "actuals"
+      )[$scope.disaster_name];
+      $scope.predictions = helpers.genLookup_disaster_meta(
+        d.Disaster_meta,
+        "predictions"
+      )[$scope.disaster_name];
       $scope.metric_label = meta_label[$scope.metric];
       if ($scope.actuals == "yes" && $scope.predictions == "no") {
         $scope.type_text =
@@ -645,13 +639,16 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $scope.disaster_type.toLowerCase() +
           ", priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.";
       }
-      $scope.start_date = $scope.genLookup_disaster_meta(d, "startdate")[
-        $scope.disaster_name
-      ];
+      $scope.start_date = helpers.genLookup_disaster_meta(
+        d.Disaster_meta,
+        "startdate"
+      )[$scope.disaster_name];
       $scope.end_date =
         $scope.disaster_type == "Typhoon"
           ? "to " +
-            $scope.genLookup_disaster_meta(d, "enddate")[$scope.disaster_name]
+            helpers.genLookup_disaster_meta(d.Disaster_meta, "enddate")[
+              $scope.disaster_name
+            ]
           : "";
 
       var total_damage_temp;

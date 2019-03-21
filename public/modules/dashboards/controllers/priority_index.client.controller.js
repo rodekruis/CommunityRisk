@@ -147,11 +147,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     var mapfilters_length = 0;
     var d_prev = "";
     var map;
-    $scope.config = {
-      whereFieldName: "pcode",
-      nameAttribute: "name",
-      color: "#0080ff",
-    };
 
     ///////////////////////
     // INITIAL FUNCTIONS //
@@ -420,7 +415,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       }
 
       // get the lookup tables
-      var lookup = helpers.genLookup($scope.geom, $scope.config.nameAttribute);
+      var lookup = helpers.genLookup($scope.geom, "name");
       var meta_label = helpers.genLookup_meta(d.Metadata, "label");
       var meta_format = helpers.genLookup_meta(d.Metadata, "format");
       var meta_unit = helpers.genLookup_meta(d.Metadata, "unit");

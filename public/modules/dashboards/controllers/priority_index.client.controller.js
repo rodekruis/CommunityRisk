@@ -362,14 +362,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     //////////////////////
 
     // fill the lookup table with the metadata-information per variable
-    $scope.genLookup_country_meta = function(d, field) {
-      var lookup_country_meta = {};
-      d.Country_meta_full.forEach(function(e) {
-        lookup_country_meta[e.country_code] = String(e[field]);
-      });
-      return lookup_country_meta;
-    };
-    // fill the lookup table with the metadata-information per variable
     $scope.genLookup_disaster_meta = function(d, field) {
       var lookup_disaster_meta = {};
       d.Disaster_meta.forEach(function(e) {
@@ -398,17 +390,26 @@ angular.module("dashboards").controller("PriorityIndexController", [
       //////////////////////////
 
       //set up country metadata
-      var country_name = $scope.genLookup_country_meta(d, "country_name");
-      $scope.genLookup_country_meta(d, "level" + $scope.admlevel + "_name");
-      var country_zoom_min = $scope.genLookup_country_meta(d, "zoomlevel_min");
-      var country_zoom_max = $scope.genLookup_country_meta(d, "zoomlevel_max");
-      $scope.genLookup_country_meta(d, "default_metric");
+      var country_name = helpers.genLookup_country_meta(
+        d.Country_meta_full,
+        "country_name"
+      );
+      var country_zoom_min = helpers.genLookup_country_meta(
+        d.Country_meta_full,
+        "zoomlevel_min"
+      );
+      var country_zoom_max = helpers.genLookup_country_meta(
+        d.Country_meta_full,
+        "zoomlevel_max"
+      );
 
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
       var zoom_max = Number(country_zoom_max[$scope.country_code]);
       $scope.inform_admlevel = Number(
-        $scope.genLookup_country_meta(d, "inform_admlevel")[$scope.country_code]
+        helpers.genLookup_country_meta(d.Country_meta_full, "inform_admlevel")[
+          $scope.country_code
+        ]
       );
 
       if (!$scope.directURLload) {
@@ -445,12 +446,12 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.type_selection =
         $scope.admlevel == zoom_min
           ? "Country"
-          : $scope.genLookup_country_meta(
-              d,
+          : helpers.genLookup_country_meta(
+              d.Country_meta_full,
               "level" + ($scope.admlevel - 1) + "_name"
             )[$scope.country_code];
-      $scope.subtype_selection = $scope.genLookup_country_meta(
-        d,
+      $scope.subtype_selection = helpers.genLookup_country_meta(
+        d.Country_meta_full,
         "level" + $scope.admlevel + "_name"
       )[$scope.country_code];
 
@@ -1671,9 +1672,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
             "change_country('" + record.country_code + "')"
           );
           a.setAttribute("role", "button");
-          a.innerHTML = $scope.genLookup_country_meta(d, "country_name")[
-            record.country_code
-          ];
+          a.innerHTML = helpers.genLookup_country_meta(
+            d.Country_meta_full,
+            "country_name"
+          )[record.country_code];
           $compile(a)($scope);
           li.appendChild(a);
 

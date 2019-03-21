@@ -359,15 +359,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     // SET UP FUNCTIONS //
     //////////////////////
 
-    // fill the lookup table with the metadata-information per variable
-    $scope.genLookup_country_meta = function(d, field) {
-      var lookup_country_meta = {};
-      d.Country_meta.forEach(function(e) {
-        lookup_country_meta[e.country_code] = String(e[field]);
-      });
-      return lookup_country_meta;
-    };
-
     ///////////////////////////////////////////
     // MAIN FUNCTION TO GENERATE ALL CONTENT //
     ///////////////////////////////////////////
@@ -388,18 +379,27 @@ angular.module("dashboards").controller("CommunityRiskController", [
       //////////////////////////
 
       //set up country metadata
-      var country_name = $scope.genLookup_country_meta(d, "country_name");
-      $scope.genLookup_country_meta(d, "level" + $scope.admlevel + "_name");
-      var country_zoom_min = $scope.genLookup_country_meta(d, "zoomlevel_min");
-      var country_zoom_max = $scope.genLookup_country_meta(d, "zoomlevel_max");
-      var country_default_metric = $scope.genLookup_country_meta(
-        d,
+      var country_name = helpers.genLookup_country_meta(
+        d.Country_meta,
+        "country_name"
+      );
+      var country_zoom_min = helpers.genLookup_country_meta(
+        d.Country_meta,
+        "zoomlevel_min"
+      );
+      var country_zoom_max = helpers.genLookup_country_meta(
+        d.Country_meta,
+        "zoomlevel_max"
+      );
+      var country_default_metric = helpers.genLookup_country_meta(
+        d.Country_meta,
         "default_metric"
       );
 
-      var country_status = $scope.genLookup_country_meta(d, "format")[
-        $scope.country_code
-      ];
+      var country_status = helpers.genLookup_country_meta(
+        d.Country_meta,
+        "format"
+      )[$scope.country_code];
 
       function setViewStatus(isVisible) {
         var viewStatus = document.getElementById("status");
@@ -438,7 +438,9 @@ angular.module("dashboards").controller("CommunityRiskController", [
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
       var zoom_max = Number(country_zoom_max[$scope.country_code]);
       $scope.inform_admlevel = Number(
-        $scope.genLookup_country_meta(d, "inform_admlevel")[$scope.country_code]
+        helpers.genLookup_country_meta(d.Country_meta, "inform_admlevel")[
+          $scope.country_code
+        ]
       );
 
       if (!$scope.directURLload) {
@@ -472,12 +474,12 @@ angular.module("dashboards").controller("CommunityRiskController", [
       $scope.type_selection =
         $scope.admlevel == zoom_min
           ? "Country"
-          : $scope.genLookup_country_meta(
-              d,
+          : helpers.genLookup_country_meta(
+              d.Country_meta,
               "level" + ($scope.admlevel - 1) + "_name"
             )[$scope.country_code];
-      $scope.subtype_selection = $scope.genLookup_country_meta(
-        d,
+      $scope.subtype_selection = helpers.genLookup_country_meta(
+        d.Country_meta,
         "level" + $scope.admlevel + "_name"
       )[$scope.country_code];
 
@@ -494,8 +496,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
 
         if ($scope.admlevel == zoom_min) {
           $scope.levelB_selection_pre = "all_yes";
-          $scope.levelB_selection = $scope.genLookup_country_meta(
-            d,
+          $scope.levelB_selection = helpers.genLookup_country_meta(
+            d.Country_meta,
             "level" + (zoom_min + 1) + "_name"
           )[$scope.country_code];
           $scope.levelB_code = "";
@@ -512,8 +514,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
         ) {
           //This is the direct URL-link case
           $scope.levelB_selection_pre = "all_yes";
-          $scope.levelB_selection = $scope.genLookup_country_meta(
-            d,
+          $scope.levelB_selection = helpers.genLookup_country_meta(
+            d.Country_meta,
             "level" + (zoom_min + 1) + "_name"
           )[$scope.country_code];
           $scope.levelB_code = "";
@@ -524,8 +526,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
         ) {
           //This is the direct URL-link case
           $scope.levelB_selection_pre = "all_yes";
-          $scope.levelB_selection = $scope.genLookup_country_meta(
-            d,
+          $scope.levelB_selection = helpers.genLookup_country_meta(
+            d.Country_meta,
             "level" + (zoom_min + 1) + "_name"
           )[$scope.country_code];
           $scope.levelB_code = "";
@@ -536,8 +538,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
             $scope.parent_codes.length == 0 ? "all_yes" : undefined;
           $scope.levelC_selection =
             $scope.parent_codes.length == 0
-              ? $scope.genLookup_country_meta(
-                  d,
+              ? helpers.genLookup_country_meta(
+                  d.Country_meta,
                   "level" + (zoom_min + 2) + "_name"
                 )[$scope.country_code]
               : undefined;
@@ -551,8 +553,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
             $scope.parent_codes.length == 0 ? "all_yes" : undefined;
           $scope.levelC_selection =
             $scope.parent_codes.length == 0
-              ? $scope.genLookup_country_meta(
-                  d,
+              ? helpers.genLookup_country_meta(
+                  d.Country_meta,
                   "level" + (zoom_min + 2) + "_name"
                 )[$scope.country_code]
               : undefined;
@@ -1682,8 +1684,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
           $scope.name_selection =
             $scope.filters.length > 1
               ? "Multiple " +
-                $scope.genLookup_country_meta(
-                  d,
+                helpers.genLookup_country_meta(
+                  d.Country_meta,
                   "level" + ($scope.admlevel - 1) + "_name"
                 )[$scope.country_code]
               : lookup[$scope.parent_codes[0]];
@@ -1721,8 +1723,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
             $scope.admlevel = zoom_min;
             $scope.parent_codes = [];
             $scope.levelB_selection_pre = "all_yes";
-            $scope.levelB_selection = $scope.genLookup_country_meta(
-              d,
+            $scope.levelB_selection = helpers.genLookup_country_meta(
+              d.Country_meta,
               "level" + (zoom_min + 1) + "_name"
             )[$scope.country_code];
             $scope.reinitiate(d);
@@ -1731,8 +1733,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
             $scope.parent_codes = $scope.levelB_codes;
             $scope.name_selection = $scope.name_selection_prev;
             $scope.levelC_selection_pre = "all_yes";
-            $scope.levelC_selection = $scope.genLookup_country_meta(
-              d,
+            $scope.levelC_selection = helpers.genLookup_country_meta(
+              d.Country_meta,
               "level" + (zoom_min + 2) + "_name"
             )[$scope.country_code];
             $scope.reinitiate(d);

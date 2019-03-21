@@ -377,15 +377,15 @@ angular.module("dashboards").controller("PriorityIndexController", [
       //////////////////////////
 
       //set up country metadata
-      var country_name = helpers.genLookup_country_meta(
+      var country_name = helpers.lookUpByCountryCode(
         d.Country_meta_full,
         "country_name"
       );
-      var country_zoom_min = helpers.genLookup_country_meta(
+      var country_zoom_min = helpers.lookUpByCountryCode(
         d.Country_meta_full,
         "zoomlevel_min"
       );
-      var country_zoom_max = helpers.genLookup_country_meta(
+      var country_zoom_max = helpers.lookUpByCountryCode(
         d.Country_meta_full,
         "zoomlevel_max"
       );
@@ -394,7 +394,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
       var zoom_max = Number(country_zoom_max[$scope.country_code]);
       $scope.inform_admlevel = Number(
-        helpers.genLookup_country_meta(d.Country_meta_full, "inform_admlevel")[
+        helpers.lookUpByCountryCode(d.Country_meta_full, "inform_admlevel")[
           $scope.country_code
         ]
       );
@@ -403,13 +403,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
         if ($scope.view_code_PI == "PI") {
           $scope.metric = "pred_damage_class";
         } else {
-          $scope.metric = helpers.genLookup_disaster_meta(
+          $scope.metric = helpers.lookUpByName(
             d.Disaster_meta,
             "default_metric"
           )[$scope.disaster_name];
         }
       }
-      $scope.default_metric = helpers.genLookup_disaster_meta(
+      $scope.default_metric = helpers.lookUpByName(
         d.Disaster_meta,
         "default_metric"
       )[$scope.disaster_name];
@@ -434,11 +434,11 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.type_selection =
         $scope.admlevel == zoom_min
           ? "Country"
-          : helpers.genLookup_country_meta(
+          : helpers.lookUpByCountryCode(
               d.Country_meta_full,
               "level" + ($scope.admlevel - 1) + "_name"
             )[$scope.country_code];
-      $scope.subtype_selection = helpers.genLookup_country_meta(
+      $scope.subtype_selection = helpers.lookUpByCountryCode(
         d.Country_meta_full,
         "level" + $scope.admlevel + "_name"
       )[$scope.country_code];
@@ -610,14 +610,12 @@ angular.module("dashboards").controller("PriorityIndexController", [
       ///////////////////////////
 
       //Create total statistics per disaster
-      $scope.actuals = helpers.genLookup_disaster_meta(
-        d.Disaster_meta,
-        "actuals"
-      )[$scope.disaster_name];
-      $scope.predictions = helpers.genLookup_disaster_meta(
-        d.Disaster_meta,
-        "predictions"
-      )[$scope.disaster_name];
+      $scope.actuals = helpers.lookUpByName(d.Disaster_meta, "actuals")[
+        $scope.disaster_name
+      ];
+      $scope.predictions = helpers.lookUpByName(d.Disaster_meta, "predictions")[
+        $scope.disaster_name
+      ];
       $scope.metric_label = meta_label[$scope.metric];
       if ($scope.actuals == "yes" && $scope.predictions == "no") {
         $scope.type_text =
@@ -635,14 +633,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $scope.disaster_type.toLowerCase() +
           ", priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.";
       }
-      $scope.start_date = helpers.genLookup_disaster_meta(
-        d.Disaster_meta,
-        "startdate"
-      )[$scope.disaster_name];
+      $scope.start_date = helpers.lookUpByName(d.Disaster_meta, "startdate")[
+        $scope.disaster_name
+      ];
       $scope.end_date =
         $scope.disaster_type == "Typhoon"
           ? "to " +
-            helpers.genLookup_disaster_meta(d.Disaster_meta, "enddate")[
+            helpers.lookUpByName(d.Disaster_meta, "enddate")[
               $scope.disaster_name
             ]
           : "";
@@ -1665,7 +1662,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
             "change_country('" + record.country_code + "')"
           );
           a.setAttribute("role", "button");
-          a.innerHTML = helpers.genLookup_country_meta(
+          a.innerHTML = helpers.lookUpByCountryCode(
             d.Country_meta_full,
             "country_name"
           )[record.country_code];

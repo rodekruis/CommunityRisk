@@ -39,13 +39,13 @@ angular.module("dashboards").factory("helpers", [
      * @returns {Object}
      */
     function genLookup_meta(metaData, field) {
-      var lookup_meta = {};
+      var lookup = {};
 
       metaData.forEach(function(e) {
-        lookup_meta[e.variable] = nullToEmptyString(String(e[field]));
+        lookup[e.variable] = nullToEmptyString(String(e[field]));
       });
 
-      return lookup_meta;
+      return lookup;
     }
 
     /**
@@ -56,14 +56,8 @@ angular.module("dashboards").factory("helpers", [
      *
      * @returns {Object}
      */
-    function genLookup_country_meta(metaData, field) {
-      var lookup_country_meta = {};
-
-      metaData.forEach(function(e) {
-        lookup_country_meta[e.country_code] = String(e[field]);
-      });
-
-      return lookup_country_meta;
+    function lookUpByCountryCode(metaData, field) {
+      return lookup(metaData, "country_code", field);
     }
 
     /**
@@ -74,22 +68,33 @@ angular.module("dashboards").factory("helpers", [
      *
      * @returns {Object}
      */
-    function genLookup_disaster_meta(metaData, field) {
-      var lookup_disaster_meta = {};
+    function lookUpByName(metaData, field) {
+      return lookup(metaData, "name", field);
+    }
 
-      metaData.forEach(function(e) {
-        lookup_disaster_meta[e.name] = String(e[field]);
+    /**
+     * Generic lookup-function
+     *
+     * @param {Object} collection
+     * @param {String} attribute
+     * @param {String} field
+     */
+    function lookup(collection, attribute, field) {
+      var lookup = {};
+
+      collection.forEach(function(e) {
+        lookup[e[attribute]] = String(e[field]);
       });
 
-      return lookup_disaster_meta;
+      return lookup;
     }
 
     return {
       nullToEmptyString: nullToEmptyString,
       genLookup: genLookup,
       genLookup_meta: genLookup_meta,
-      genLookup_country_meta: genLookup_country_meta,
-      genLookup_disaster_meta: genLookup_disaster_meta,
+      lookUpByCountryCode: lookUpByCountryCode,
+      lookUpByName: lookUpByName,
     };
   },
 ]);

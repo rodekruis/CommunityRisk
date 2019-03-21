@@ -87,7 +87,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     var map;
     $scope.config = {
       whereFieldName: "pcode",
-      joinAttribute: "pcode",
       nameAttribute: "name",
       color: "#0080ff",
     };
@@ -360,16 +359,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     // SET UP FUNCTIONS //
     //////////////////////
 
-    // fill the lookup table which finds the community name with the community code
-    $scope.genLookup = function(field) {
-      var lookup = {};
-      $scope.geom.features.forEach(function(e) {
-        lookup[e.properties[$scope.config.joinAttribute]] = String(
-          e.properties[field]
-        );
-      });
-      return lookup;
-    };
     // fill the lookup table with the metadata-information per variable
     $scope.genLookup_meta = function(d, field) {
       var lookup_meta = {};
@@ -477,7 +466,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       }
 
       // get the lookup tables
-      var lookup = $scope.genLookup($scope.config.nameAttribute);
+      var lookup = helpers.genLookup($scope.geom, $scope.config.nameAttribute);
       var meta_label = $scope.genLookup_meta(d, "label");
       var meta_format = $scope.genLookup_meta(d, "format");
       var meta_unit = $scope.genLookup_meta(d, "unit");

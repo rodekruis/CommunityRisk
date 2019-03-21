@@ -366,10 +366,6 @@ angular.module("dashboards").controller("FbfController", [
       $scope.complete();
     };
 
-    //////////////////////
-    // SET UP FUNCTIONS //
-    //////////////////////
-
     ///////////////////////////////////////////
     // MAIN FUNCTION TO GENERATE ALL CONTENT //
     ///////////////////////////////////////////

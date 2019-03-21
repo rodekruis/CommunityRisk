@@ -355,10 +355,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
       $scope.complete();
     };
 
-    //////////////////////
-    // SET UP FUNCTIONS //
-    //////////////////////
-
     ///////////////////////////////////////////
     // MAIN FUNCTION TO GENERATE ALL CONTENT //
     ///////////////////////////////////////////

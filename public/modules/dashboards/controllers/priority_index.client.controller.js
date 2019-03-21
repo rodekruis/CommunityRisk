@@ -357,10 +357,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       }
     };
 
-    //////////////////////
-    // LOOKUP FUNCTIONS //
-    //////////////////////
-
     ///////////////////////////////////////////
     // MAIN FUNCTION TO GENERATE ALL CONTENT //
     ///////////////////////////////////////////

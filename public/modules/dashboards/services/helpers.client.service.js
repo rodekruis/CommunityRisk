@@ -26,6 +26,7 @@ angular.module("dashboards").factory("helpers", [
       geom.features.forEach(function(e) {
         lookup[e.properties[joinAttribute]] = String(e.properties[field]);
       });
+
       return lookup;
     }
 

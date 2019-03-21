@@ -10,7 +10,6 @@ window.ApplicationConfiguration = (function() {
     "ngSanitize",
     "ui.router",
     "gettext",
-    "AngularDc",
     "angular-loading-bar",
     "pascalprecht.translate",
   ];

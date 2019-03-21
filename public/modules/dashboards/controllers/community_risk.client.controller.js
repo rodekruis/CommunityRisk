@@ -9,6 +9,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
   "Authentication",
   "Data",
   "cfpLoadingBar",
+  "helpers",
   "exportService",
   "shareService",
   function(
@@ -20,6 +21,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
     Authentication,
     Data,
     cfpLoadingBar,
+    helpers,
     exportService,
     shareService
   ) {
@@ -99,9 +101,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     };
     $scope.complete = function() {
       cfpLoadingBar.complete();
-    };
-    $scope.replace_null = function(value) {
-      return value == null || value == "null" || !value ? "" : value;
     };
 
     ////////////////////////
@@ -214,8 +213,9 @@ angular.module("dashboards").controller("CommunityRiskController", [
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
           (e.view_code == "CRA" || e.view_code == "CRA,PI") &&
-          $scope.replace_null(e.country_code).indexOf($scope.country_code) >
-            -1 &&
+          helpers
+            .nullToEmptyString(e.country_code)
+            .indexOf($scope.country_code) > -1 &&
           e.admin_level >= $scope.admlevel &&
           e.admin_level_min <= $scope.admlevel
         );
@@ -334,8 +334,9 @@ angular.module("dashboards").controller("CommunityRiskController", [
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
           (e.view_code == "CRA" || e.view_code == "CRA,PI") &&
-          $scope.replace_null(e.country_code).indexOf($scope.country_code) >
-            -1 &&
+          helpers
+            .nullToEmptyString(e.country_code)
+            .indexOf($scope.country_code) > -1 &&
           e.admin_level >= $scope.admlevel &&
           e.admin_level_min <= $scope.admlevel
         );
@@ -373,7 +374,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
     $scope.genLookup_meta = function(d, field) {
       var lookup_meta = {};
       d.Metadata.forEach(function(e) {
-        lookup_meta[e.variable] = $scope.replace_null(String(e[field]));
+        lookup_meta[e.variable] = helpers.nullToEmptyString(String(e[field]));
       });
       return lookup_meta;
     };
@@ -1504,7 +1505,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
                   record.pcode === $scope.filters[$scope.filters.length - 1]
                 ) {
                   $scope.value_popup = currentFormat(record[$scope.metric]);
-                  $scope.value_popup_unit = $scope.replace_null(
+                  $scope.value_popup_unit = helpers.nullToEmptyString(
                     meta_unit[$scope.metric]
                   );
                   break;

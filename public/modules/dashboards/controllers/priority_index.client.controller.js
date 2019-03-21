@@ -9,6 +9,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "Authentication",
   "Data",
   "cfpLoadingBar",
+  "helpers",
   "exportService",
   "shareService",
   function(
@@ -20,6 +21,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     Authentication,
     Data,
     cfpLoadingBar,
+    helpers,
     exportService,
     shareService
   ) {
@@ -162,9 +164,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.complete = function() {
       cfpLoadingBar.complete();
     };
-    $scope.replace_null = function(value) {
-      return value == null || value == "null" || !value ? "" : value;
-    };
 
     ////////////////////////
     // INITIATE DASHBOARD //
@@ -283,11 +282,14 @@ angular.module("dashboards").controller("PriorityIndexController", [
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
           (((e.view_code == "PI" || e.view_code == "CRA,PI") &&
-            $scope.replace_null(e.disaster_type).indexOf($scope.disaster_type) >
-              -1) ||
-            ($scope.replace_null(e.view_code).indexOf("PI") > -1 &&
-              $scope.replace_null(e.disaster_type) == "")) &&
-          $scope.replace_null(e.country_code).indexOf($scope.country_code) > -1
+            helpers
+              .nullToEmptyString(e.disaster_type)
+              .indexOf($scope.disaster_type) > -1) ||
+            (helpers.nullToEmptyString(e.view_code).indexOf("PI") > -1 &&
+              helpers.nullToEmptyString(e.disaster_type) == "")) &&
+          helpers
+            .nullToEmptyString(e.country_code)
+            .indexOf($scope.country_code) > -1
         );
       });
 
@@ -374,7 +376,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.genLookup_meta = function(d, field) {
       var lookup_meta = {};
       d.Metadata.forEach(function(e) {
-        lookup_meta[e.variable] = $scope.replace_null(String(e[field]));
+        lookup_meta[e.variable] = helpers.nullToEmptyString(String(e[field]));
       });
       return lookup_meta;
     };
@@ -1187,8 +1189,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
         })
         .title(function(d) {
           if (!meta_scorevar[$scope.metric]) {
-            return $scope
-              .replace_null(lookup[d.key])
+            return helpers
+              .nullToEmptyString(lookup[d.key])
               .concat(
                 " - ",
                 meta_label[$scope.metric],
@@ -1361,7 +1363,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
               ": ",
               currentFormat(d.value.sum),
               " ",
-              $scope.replace_null(meta_unit[$scope.metric])
+              helpers.nullToEmptyString(meta_unit[$scope.metric])
             );
           });
 

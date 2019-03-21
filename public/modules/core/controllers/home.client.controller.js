@@ -1,13 +1,13 @@
 "use strict";
 
 angular.module("core").controller("HomeController", [
-  "$translate",
   "$scope",
   "$rootScope",
   "$filter",
   "Authentication",
+  "helpers",
   "DEBUG",
-  function($translate, $scope, $rootScope, $filter, Authentication, DEBUG) {
+  function($scope, $rootScope, $filter, Authentication, helpers, DEBUG) {
     $scope.DEBUG = DEBUG;
 
     $scope.authentication = Authentication;
@@ -19,14 +19,6 @@ angular.module("core").controller("HomeController", [
     $scope.choose_country = function(country) {
       $(window).scrollTop(0);
       $rootScope.country_code = country;
-    };
-    $scope.setup_PI = function(country, disaster_type) {
-      $rootScope.country_code = country;
-      $rootScope.disaster_type = disaster_type;
-    };
-    $scope.choose_view = function(view) {
-      $(window).scrollTop(0);
-      $rootScope.view_code = view;
     };
 
     var map;
@@ -62,11 +54,7 @@ angular.module("core").controller("HomeController", [
 
         var countries = topojson.feature(worldmap, worldmap.objects.countries);
 
-        // fill the lookup table which finds the community name with the community code
-        var lookup = {};
-        countries.features.forEach(function(e) {
-          lookup[e.properties.id] = String(e.properties.name);
-        });
+        var lookup = helpers.lookUpProperty(countries, "id", "name");
 
         map_chart
           .width(660)
@@ -130,22 +118,5 @@ angular.module("core").controller("HomeController", [
         $("#slider_PI").slick(slickOptions);
       }
     });
-
-    //////////////////////////////////////
-    /// TRANSLATION TO OTHER LANGUAGES ///
-    //////////////////////////////////////
-
-    //Translation button
-    $scope.changeLanguage = function(langKey) {
-      $translate.use(langKey);
-    };
-
-    $scope.translateData = function() {
-      return {
-        metric_label: $scope.metric,
-        metric_desc: "desc_" + $scope.metric,
-        subtype_selection: $scope.subtype_selection,
-      };
-    };
   },
 ]);

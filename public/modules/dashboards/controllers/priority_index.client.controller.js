@@ -9,6 +9,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "Authentication",
   "Data",
   "cfpLoadingBar",
+  "helpers",
   "exportService",
   "shareService",
   function(
@@ -20,6 +21,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     Authentication,
     Data,
     cfpLoadingBar,
+    helpers,
     exportService,
     shareService
   ) {
@@ -145,12 +147,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     var mapfilters_length = 0;
     var d_prev = "";
     var map;
-    $scope.config = {
-      whereFieldName: "pcode",
-      joinAttribute: "pcode",
-      nameAttribute: "name",
-      color: "#0080ff",
-    };
 
     ///////////////////////
     // INITIAL FUNCTIONS //
@@ -161,9 +157,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     };
     $scope.complete = function() {
       cfpLoadingBar.complete();
-    };
-    $scope.replace_null = function(value) {
-      return value == null || value == "null" || !value ? "" : value;
     };
 
     ////////////////////////
@@ -283,11 +276,14 @@ angular.module("dashboards").controller("PriorityIndexController", [
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
           (((e.view_code == "PI" || e.view_code == "CRA,PI") &&
-            $scope.replace_null(e.disaster_type).indexOf($scope.disaster_type) >
-              -1) ||
-            ($scope.replace_null(e.view_code).indexOf("PI") > -1 &&
-              $scope.replace_null(e.disaster_type) == "")) &&
-          $scope.replace_null(e.country_code).indexOf($scope.country_code) > -1
+            helpers
+              .nullToEmptyString(e.disaster_type)
+              .indexOf($scope.disaster_type) > -1) ||
+            (helpers.nullToEmptyString(e.view_code).indexOf("PI") > -1 &&
+              helpers.nullToEmptyString(e.disaster_type) == "")) &&
+          helpers
+            .nullToEmptyString(e.country_code)
+            .indexOf($scope.country_code) > -1
         );
       });
 
@@ -356,45 +352,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       }
     };
 
-    //////////////////////
-    // LOOKUP FUNCTIONS //
-    //////////////////////
-
-    // fill the lookup table which finds the community name with the community code
-    $scope.genLookup = function(field) {
-      var lookup = {};
-      $scope.geom.features.forEach(function(e) {
-        lookup[e.properties[$scope.config.joinAttribute]] = String(
-          e.properties[field]
-        );
-      });
-      return lookup;
-    };
-    // fill the lookup table with the metadata-information per variable
-    $scope.genLookup_meta = function(d, field) {
-      var lookup_meta = {};
-      d.Metadata.forEach(function(e) {
-        lookup_meta[e.variable] = $scope.replace_null(String(e[field]));
-      });
-      return lookup_meta;
-    };
-    // fill the lookup table with the metadata-information per variable
-    $scope.genLookup_country_meta = function(d, field) {
-      var lookup_country_meta = {};
-      d.Country_meta_full.forEach(function(e) {
-        lookup_country_meta[e.country_code] = String(e[field]);
-      });
-      return lookup_country_meta;
-    };
-    // fill the lookup table with the metadata-information per variable
-    $scope.genLookup_disaster_meta = function(d, field) {
-      var lookup_disaster_meta = {};
-      d.Disaster_meta.forEach(function(e) {
-        lookup_disaster_meta[e.name] = String(e[field]);
-      });
-      return lookup_disaster_meta;
-    };
-
     ///////////////////////////////////////////
     // MAIN FUNCTION TO GENERATE ALL CONTENT //
     ///////////////////////////////////////////
@@ -415,30 +372,40 @@ angular.module("dashboards").controller("PriorityIndexController", [
       //////////////////////////
 
       //set up country metadata
-      var country_name = $scope.genLookup_country_meta(d, "country_name");
-      $scope.genLookup_country_meta(d, "level" + $scope.admlevel + "_name");
-      var country_zoom_min = $scope.genLookup_country_meta(d, "zoomlevel_min");
-      var country_zoom_max = $scope.genLookup_country_meta(d, "zoomlevel_max");
-      $scope.genLookup_country_meta(d, "default_metric");
+      var country_name = helpers.lookUpByCountryCode(
+        d.Country_meta_full,
+        "country_name"
+      );
+      var country_zoom_min = helpers.lookUpByCountryCode(
+        d.Country_meta_full,
+        "zoomlevel_min"
+      );
+      var country_zoom_max = helpers.lookUpByCountryCode(
+        d.Country_meta_full,
+        "zoomlevel_max"
+      );
 
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
       var zoom_max = Number(country_zoom_max[$scope.country_code]);
       $scope.inform_admlevel = Number(
-        $scope.genLookup_country_meta(d, "inform_admlevel")[$scope.country_code]
+        helpers.lookUpByCountryCode(d.Country_meta_full, "inform_admlevel")[
+          $scope.country_code
+        ]
       );
 
       if (!$scope.directURLload) {
         if ($scope.view_code_PI == "PI") {
           $scope.metric = "pred_damage_class";
         } else {
-          $scope.metric = $scope.genLookup_disaster_meta(d, "default_metric")[
-            $scope.disaster_name
-          ];
+          $scope.metric = helpers.lookUpByName(
+            d.Disaster_meta,
+            "default_metric"
+          )[$scope.disaster_name];
         }
       }
-      $scope.default_metric = $scope.genLookup_disaster_meta(
-        d,
+      $scope.default_metric = helpers.lookUpByName(
+        d.Disaster_meta,
         "default_metric"
       )[$scope.disaster_name];
       $scope.default_metric_label = $scope.default_metric.replace("_", " ");
@@ -448,27 +415,26 @@ angular.module("dashboards").controller("PriorityIndexController", [
       }
 
       // get the lookup tables
-      var lookup = $scope.genLookup($scope.config.nameAttribute);
-
-      var meta_label = $scope.genLookup_meta(d, "label");
-      var meta_format = $scope.genLookup_meta(d, "format");
-      var meta_unit = $scope.genLookup_meta(d, "unit");
-      var meta_icon = $scope.genLookup_meta(d, "icon_src");
-      var meta_year = $scope.genLookup_meta(d, "year");
-      var meta_source = $scope.genLookup_meta(d, "source_link");
-      var meta_desc = $scope.genLookup_meta(d, "description");
-      var meta_scorevar = $scope.genLookup_meta(d, "scorevar_name");
+      var lookup = helpers.lookUpProperty($scope.geom, "pcode", "name");
+      var meta_label = helpers.genLookup_meta(d.Metadata, "label");
+      var meta_format = helpers.genLookup_meta(d.Metadata, "format");
+      var meta_unit = helpers.genLookup_meta(d.Metadata, "unit");
+      var meta_icon = helpers.genLookup_meta(d.Metadata, "icon_src");
+      var meta_year = helpers.genLookup_meta(d.Metadata, "year");
+      var meta_source = helpers.genLookup_meta(d.Metadata, "source_link");
+      var meta_desc = helpers.genLookup_meta(d.Metadata, "description");
+      var meta_scorevar = helpers.genLookup_meta(d.Metadata, "scorevar_name");
 
       $scope.metric_label = meta_label[$scope.metric];
       $scope.type_selection =
         $scope.admlevel == zoom_min
           ? "Country"
-          : $scope.genLookup_country_meta(
-              d,
+          : helpers.lookUpByCountryCode(
+              d.Country_meta_full,
               "level" + ($scope.admlevel - 1) + "_name"
             )[$scope.country_code];
-      $scope.subtype_selection = $scope.genLookup_country_meta(
-        d,
+      $scope.subtype_selection = helpers.lookUpByCountryCode(
+        d.Country_meta_full,
         "level" + $scope.admlevel + "_name"
       )[$scope.country_code];
 
@@ -639,10 +605,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
       ///////////////////////////
 
       //Create total statistics per disaster
-      $scope.actuals = $scope.genLookup_disaster_meta(d, "actuals")[
+      $scope.actuals = helpers.lookUpByName(d.Disaster_meta, "actuals")[
         $scope.disaster_name
       ];
-      $scope.predictions = $scope.genLookup_disaster_meta(d, "predictions")[
+      $scope.predictions = helpers.lookUpByName(d.Disaster_meta, "predictions")[
         $scope.disaster_name
       ];
       $scope.metric_label = meta_label[$scope.metric];
@@ -662,13 +628,15 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $scope.disaster_type.toLowerCase() +
           ", priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.";
       }
-      $scope.start_date = $scope.genLookup_disaster_meta(d, "startdate")[
+      $scope.start_date = helpers.lookUpByName(d.Disaster_meta, "startdate")[
         $scope.disaster_name
       ];
       $scope.end_date =
         $scope.disaster_type == "Typhoon"
           ? "to " +
-            $scope.genLookup_disaster_meta(d, "enddate")[$scope.disaster_name]
+            helpers.lookUpByName(d.Disaster_meta, "enddate")[
+              $scope.disaster_name
+            ]
           : "";
 
       var total_damage_temp;
@@ -957,10 +925,14 @@ angular.module("dashboards").controller("PriorityIndexController", [
         }
         $scope.quantile_max = quantile_range[quantile_range.length - 1];
         var colorDomain;
-        if ($scope.genLookup_meta(d, "group")[$scope.metric] == "pred_error") {
+        if (
+          helpers.genLookup_meta(d.Metadata, "group")[$scope.metric] ==
+          "pred_error"
+        ) {
           colorDomain = $scope.quantileColorDomain_PI_error;
         } else if (
-          $scope.genLookup_meta(d, "view_code")[$scope.metric] == "CRA,PI"
+          helpers.genLookup_meta(d.Metadata, "view_code")[$scope.metric] ==
+          "CRA,PI"
         ) {
           colorDomain = $scope.quantileColorDomain_CRA_std;
         } else {
@@ -1187,8 +1159,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
         })
         .title(function(d) {
           if (!meta_scorevar[$scope.metric]) {
-            return $scope
-              .replace_null(lookup[d.key])
+            return helpers
+              .nullToEmptyString(lookup[d.key])
               .concat(
                 " - ",
                 meta_label[$scope.metric],
@@ -1361,7 +1333,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
               ": ",
               currentFormat(d.value.sum),
               " ",
-              $scope.replace_null(meta_unit[$scope.metric])
+              helpers.nullToEmptyString(meta_unit[$scope.metric])
             );
           });
 
@@ -1685,9 +1657,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
             "change_country('" + record.country_code + "')"
           );
           a.setAttribute("role", "button");
-          a.innerHTML = $scope.genLookup_country_meta(d, "country_name")[
-            record.country_code
-          ];
+          a.innerHTML = helpers.lookUpByCountryCode(
+            d.Country_meta_full,
+            "country_name"
+          )[record.country_code];
           $compile(a)($scope);
           li.appendChild(a);
 

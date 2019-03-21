@@ -6,8 +6,17 @@ angular.module("core").controller("HomeController", [
   "$rootScope",
   "$filter",
   "Authentication",
+  "helpers",
   "DEBUG",
-  function($translate, $scope, $rootScope, $filter, Authentication, DEBUG) {
+  function(
+    $translate,
+    $scope,
+    $rootScope,
+    $filter,
+    Authentication,
+    helpers,
+    DEBUG
+  ) {
     $scope.DEBUG = DEBUG;
 
     $scope.authentication = Authentication;
@@ -62,11 +71,7 @@ angular.module("core").controller("HomeController", [
 
         var countries = topojson.feature(worldmap, worldmap.objects.countries);
 
-        // fill the lookup table which finds the community name with the community code
-        var lookup = {};
-        countries.features.forEach(function(e) {
-          lookup[e.properties.id] = String(e.properties.name);
-        });
+        var lookup = helpers.lookUpProperty(countries, "id", "name");
 
         map_chart
           .width(660)

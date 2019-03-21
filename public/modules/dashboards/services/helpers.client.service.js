@@ -14,17 +14,15 @@ angular.module("dashboards").factory("helpers", [
     }
 
     /**
-     * fill the lookup table which finds the community name with the community code
-     *
-     * @param {*} geom
-     * @param {*} field
+     * @param {Object} geom
+     * @param {String} attribute
+     * @param {String} field
      */
-    function genLookup(geom, field) {
+    function lookUpProperty(geom, attribute, field) {
       var lookup = {};
-      var joinAttribute = "pcode";
 
       geom.features.forEach(function(e) {
-        lookup[e.properties[joinAttribute]] = String(e.properties[field]);
+        lookup[e.properties[attribute]] = String(e.properties[field]);
       });
 
       return lookup;
@@ -91,7 +89,7 @@ angular.module("dashboards").factory("helpers", [
 
     return {
       nullToEmptyString: nullToEmptyString,
-      genLookup: genLookup,
+      lookUpProperty: lookUpProperty,
       genLookup_meta: genLookup_meta,
       lookUpByCountryCode: lookUpByCountryCode,
       lookUpByName: lookUpByName,

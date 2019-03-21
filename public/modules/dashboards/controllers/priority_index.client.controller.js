@@ -415,7 +415,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       }
 
       // get the lookup tables
-      var lookup = helpers.genLookup($scope.geom, "name");
+      var lookup = helpers.lookUpProperty($scope.geom, "pcode", "name");
       var meta_label = helpers.genLookup_meta(d.Metadata, "label");
       var meta_format = helpers.genLookup_meta(d.Metadata, "format");
       var meta_unit = helpers.genLookup_meta(d.Metadata, "unit");

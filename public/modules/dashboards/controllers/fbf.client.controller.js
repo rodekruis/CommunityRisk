@@ -371,14 +371,6 @@ angular.module("dashboards").controller("FbfController", [
     //////////////////////
 
     // fill the lookup table with the metadata-information per variable
-    $scope.genLookup_meta = function(d, field) {
-      var lookup_meta = {};
-      d.Metadata.forEach(function(e) {
-        lookup_meta[e.variable] = helpers.nullToEmptyString(String(e[field]));
-      });
-      return lookup_meta;
-    };
-    // fill the lookup table with the metadata-information per variable
     $scope.genLookup_country_meta = function(d, field) {
       var lookup_country_meta = {};
       d.Country_meta.forEach(function(e) {
@@ -478,14 +470,14 @@ angular.module("dashboards").controller("FbfController", [
 
       // get the lookup tables
       var lookup = helpers.genLookup($scope.geom, $scope.config.nameAttribute);
-      var meta_label = $scope.genLookup_meta(d, "label");
-      var meta_format = $scope.genLookup_meta(d, "format");
-      var meta_unit = $scope.genLookup_meta(d, "unit");
-      var meta_icon = $scope.genLookup_meta(d, "icon_src");
-      var meta_year = $scope.genLookup_meta(d, "year");
-      var meta_source = $scope.genLookup_meta(d, "source_link");
-      var meta_desc = $scope.genLookup_meta(d, "description");
-      var meta_scorevar = $scope.genLookup_meta(d, "scorevar_name");
+      var meta_label = helpers.genLookup_meta(d.Metadata, "label");
+      var meta_format = helpers.genLookup_meta(d.Metadata, "format");
+      var meta_unit = helpers.genLookup_meta(d.Metadata, "unit");
+      var meta_icon = helpers.genLookup_meta(d.Metadata, "icon_src");
+      var meta_year = helpers.genLookup_meta(d.Metadata, "year");
+      var meta_source = helpers.genLookup_meta(d.Metadata, "source_link");
+      var meta_desc = helpers.genLookup_meta(d.Metadata, "description");
+      var meta_scorevar = helpers.genLookup_meta(d.Metadata, "scorevar_name");
 
       $scope.metric_label = meta_label[$scope.metric];
       $scope.type_selection =

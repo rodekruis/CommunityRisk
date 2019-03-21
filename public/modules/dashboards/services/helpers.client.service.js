@@ -29,9 +29,28 @@ angular.module("dashboards").factory("helpers", [
       return lookup;
     }
 
+    /**
+     * fill the lookup table with the metadata-information per variable
+     *
+     * @param {Object} metaData
+     * @param {String} field
+     *
+     * @returns {Object}
+     */
+    function genLookup_meta(metaData, field) {
+      var lookup_meta = {};
+
+      metaData.forEach(function(e) {
+        lookup_meta[e.variable] = nullToEmptyString(String(e[field]));
+      });
+
+      return lookup_meta;
+    }
+
     return {
       nullToEmptyString: nullToEmptyString,
       genLookup: genLookup,
+      genLookup_meta: genLookup_meta,
     };
   },
 ]);

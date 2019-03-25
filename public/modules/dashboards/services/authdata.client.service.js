@@ -16,8 +16,19 @@ angular.module("dashboards").factory("AuthData", [
       });
     }
 
+    function getFbfJsonData(options, success) {
+      return $resource("/authdata/json").query(
+        {
+          country: options.country,
+          type: options.type,
+        },
+        success
+      );
+    }
+
     return {
       getPoi: getPoi,
+      getFbfJsonData: getFbfJsonData,
     };
   },
 ]);

@@ -444,44 +444,6 @@ angular.module("dashboards").controller("FbfController", [
         "default_metric"
       );
 
-      var country_status = helpers.lookUpByCountryCode(
-        d.Country_meta,
-        "format"
-      )[$scope.country_code];
-
-      function setViewStatus(isVisible) {
-        var viewStatus = document.getElementById("status");
-
-        if (viewStatus) {
-          viewStatus.style.visibility = isVisible ? "visible" : "hidden";
-        }
-      }
-
-      // if (country_status == "template") {
-      //   setViewStatus(true);
-      //   $scope.status_title = "Template only";
-      //   $scope.status_text =
-      //     "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
-      // } else if (country_status == "basic") {
-      //   setViewStatus(true);
-      //   $scope.status_title = "Draft version";
-      //   $scope.status_text =
-      //     "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
-      // } else if (country_status == "all") {
-      //   var dpi = d.dpi[0].dpi_score;
-      //   if (dpi > 0.1) {
-      //     setViewStatus(false);
-      //     $scope.status_title = "";
-      //     $scope.status_text = "";
-      //   } else {
-      //     setViewStatus(true);
-      //     $scope.status_title = "Needs data";
-      //     $scope.status_text =
-      //       "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
-      //       "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
-      //   }
-      // }
-
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
       var zoom_max = Number(country_zoom_max[$scope.country_code]);

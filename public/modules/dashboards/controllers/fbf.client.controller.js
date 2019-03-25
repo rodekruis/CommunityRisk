@@ -173,19 +173,43 @@ angular.module("dashboards").controller("FbfController", [
         $scope.disaster_name +
         "'";
 
-      Data.get({ adminLevel: $scope.data_input }, function(pgData) {
-        $scope.load_data(pgData);
-      });
+      loadFunction();
 
       prepareStationsData();
       prepareRcLocationsData();
+    };
+
+    var loadFunction = function(d) {
+      Data.get({ adminLevel: $scope.data_input }, function(pgData) {
+        AuthData.getFbfJsonData(
+          {
+            country: $scope.country_code.toLowerCase(),
+            type: "data_adm" + $scope.admlevel,
+          },
+          function(fbf_admin_data) {
+            AuthData.getFbfJsonData(
+              {
+                country: $scope.country_code.toLowerCase(),
+                type: "metadata_fbf_zambia",
+              },
+              function(fbf_metadata) {
+                if (!d) {
+                  $scope.load_data(pgData, fbf_admin_data, fbf_metadata);
+                } else {
+                  $scope.reload_data(d, pgData, fbf_admin_data, fbf_metadata);
+                }
+              }
+            );
+          }
+        );
+      });
     };
 
     ///////////////
     // LOAD DATA //
     ///////////////
 
-    $scope.load_data = function(pgData) {
+    $scope.load_data = function(pgData, fbf_admin_data, fbf_metadata) {
       var d = {};
       var i;
 
@@ -201,23 +225,34 @@ angular.module("dashboards").controller("FbfController", [
       for (i = 0; i < d.Districts.features.length; i++) {
         d.Rapportage[i] = d.Districts.features[i].properties;
       }
-
-      // 3. Data Preparedness Index data
-      d.dpi_temp = pgData.usp_data.dpi;
-      d.dpi = [];
-      if (d.dpi_temp) {
-        for (i = 0; i < d.dpi_temp.length; i++) {
-          if (d.dpi_temp[i].admin_level == $scope.admlevel) {
-            d.dpi[0] = d.dpi_temp[i];
+      d.Rapportage.forEach(function(e) {
+        for (var i = 0; i < fbf_admin_data.length; i++) {
+          if (e.pcode == fbf_admin_data[i].pcode) {
+            for (var attrname in fbf_admin_data[i]) {
+              e[attrname] = fbf_admin_data[i][attrname];
+            }
           }
         }
-      }
+      });
+
+      // 3. Data Preparedness Index data
+      // d.dpi_temp = pgData.usp_data.dpi;
+      // d.dpi = [];
+      // if (d.dpi_temp) {
+      //   for (i = 0; i < d.dpi_temp.length; i++) {
+      //     if (d.dpi_temp[i].admin_level == $scope.admlevel) {
+      //       d.dpi[0] = d.dpi_temp[i];
+      //     }
+      //   }
+      // }
 
       // 4. Variable-metadata
-      d.Metadata_full = pgData.usp_data.meta_indicators;
-      d.Metadata = $.grep(d.Metadata_full, function(e) {
+      // d.Metadata_full = pgData.usp_data.meta_indicators;
+      // d.Metadata = $.grep(d.Metadata_full, function(e) {
+      d.Metadata = $.grep(fbf_metadata, function(e) {
         return (
-          (e.view_code == "CRA" || e.view_code == "CRA,PI") &&
+          //(e.view_code == "CRA" || e.view_code == "CRA,PI") &&
+          e.upload_to_dashboard == 1 &&
           helpers
             .nullToEmptyString(e.country_code)
             .indexOf($scope.country_code) > -1 &&
@@ -227,10 +262,12 @@ angular.module("dashboards").controller("FbfController", [
       });
 
       // 5. Country-metadata
-      d.Country_meta_full = pgData.usp_data.meta_country;
-      d.Country_meta = $.grep(d.Country_meta_full, function(e) {
+      // d.Country_meta_full = pgData.usp_data.meta_country;
+      // d.Country_meta = $.grep(d.Country_meta_full, function(e) {
+      d.Country_meta = $.grep(pgData.usp_data.meta_country, function(e) {
         return e.country_code == $scope.country_code;
       });
+      console.log(d);
 
       //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)
       document
@@ -309,9 +346,7 @@ angular.module("dashboards").controller("FbfController", [
         $scope.disaster_name +
         "'";
 
-      Data.get({ adminLevel: $scope.data_input }, function(pgData) {
-        $scope.reload_data(d, pgData);
-      });
+      loadFunction(d);
     };
 
     /////////////////
@@ -320,7 +355,7 @@ angular.module("dashboards").controller("FbfController", [
 
     //Slightly adjusted version of prepare function upon reload. Needed because the d.Metadata could not be loaded again when the dashboard itself was not re-initiated.
     //Therefore the d-object needed to be saved, instead of completely re-created.
-    $scope.reload_data = function(d, pgData) {
+    $scope.reload_data = function(d, pgData, fbf_admin_data, fbf_metadata) {
       // load data (metadata does not have to be reloaded)
       d.Districts = pgData.usp_data.geo;
       $scope.geom = pgData.usp_data.geo;
@@ -328,17 +363,27 @@ angular.module("dashboards").controller("FbfController", [
       for (var i = 0; i < d.Districts.features.length; i++) {
         d.Rapportage[i] = d.Districts.features[i].properties;
       }
-      d.dpi = [];
-      if (d.dpi_temp) {
-        for (i = 0; i < d.dpi_temp.length; i++) {
-          if (d.dpi_temp[i].admin_level == $scope.admlevel) {
-            d.dpi[0] = d.dpi_temp[i];
+      d.Rapportage.forEach(function(e) {
+        for (var i = 0; i < fbf_admin_data.length; i++) {
+          if (e.pcode == fbf_admin_data[i].pcode) {
+            for (var attrname in fbf_admin_data[i]) {
+              e[attrname] = fbf_admin_data[i][attrname];
+            }
           }
         }
-      }
-      d.Metadata = $.grep(d.Metadata_full, function(e) {
+      });
+      // d.dpi = [];
+      // if (d.dpi_temp) {
+      //   for (i = 0; i < d.dpi_temp.length; i++) {
+      //     if (d.dpi_temp[i].admin_level == $scope.admlevel) {
+      //       d.dpi[0] = d.dpi_temp[i];
+      //     }
+      //   }
+      // }
+      d.Metadata = $.grep(fbf_metadata, function(e) {
         return (
-          (e.view_code == "CRA" || e.view_code == "CRA,PI") &&
+          //(e.view_code == "CRA" || e.view_code == "CRA,PI") &&
+          e.upload_to_dashboard == 1 &&
           helpers
             .nullToEmptyString(e.country_code)
             .indexOf($scope.country_code) > -1 &&
@@ -346,6 +391,7 @@ angular.module("dashboards").controller("FbfController", [
           e.admin_level_min <= $scope.admlevel
         );
       });
+      console.log(d);
 
       //Final CSS
       $(".view-buttons button.active").removeClass("active");
@@ -411,30 +457,30 @@ angular.module("dashboards").controller("FbfController", [
         }
       }
 
-      if (country_status == "template") {
-        setViewStatus(true);
-        $scope.status_title = "Template only";
-        $scope.status_text =
-          "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
-      } else if (country_status == "basic") {
-        setViewStatus(true);
-        $scope.status_title = "Draft version";
-        $scope.status_text =
-          "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
-      } else if (country_status == "all") {
-        var dpi = d.dpi[0].dpi_score;
-        if (dpi > 0.1) {
-          setViewStatus(false);
-          $scope.status_title = "";
-          $scope.status_text = "";
-        } else {
-          setViewStatus(true);
-          $scope.status_title = "Needs data";
-          $scope.status_text =
-            "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
-            "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
-        }
-      }
+      // if (country_status == "template") {
+      //   setViewStatus(true);
+      //   $scope.status_title = "Template only";
+      //   $scope.status_text =
+      //     "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
+      // } else if (country_status == "basic") {
+      //   setViewStatus(true);
+      //   $scope.status_title = "Draft version";
+      //   $scope.status_text =
+      //     "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
+      // } else if (country_status == "all") {
+      //   var dpi = d.dpi[0].dpi_score;
+      //   if (dpi > 0.1) {
+      //     setViewStatus(false);
+      //     $scope.status_title = "";
+      //     $scope.status_text = "";
+      //   } else {
+      //     setViewStatus(true);
+      //     $scope.status_title = "Needs data";
+      //     $scope.status_text =
+      //       "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
+      //       "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
+      //   }
+      // }
 
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);

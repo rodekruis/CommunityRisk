@@ -209,10 +209,9 @@ angular.module("dashboards").controller("FbfController", [
     //Process Data
     $scope.load_data = function(d, pgData, fbf_admin_data, fbf_metadata) {
       if (!d) {
-        var d = {};
+        d = {};
         $scope.reload = 0;
       } else {
-        var d = d;
         $scope.reload = 1;
       }
       var i;

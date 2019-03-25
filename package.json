@@ -15,7 +15,7 @@
     "build": "grunt build",
     "predeploy": "npm install",
     "deploy": "npm run build && echo 'Deployed!'",
-    "test:syntax": "prettier --check '**/**.{json,yaml,yml,css,html,js}' ",
+    "test:syntax": "prettier --check \"**/**.{json,yaml,yml,css,html,js}\" ",
     "test:js": "eslint --quiet --cache --ignore-path .prettierignore './'",
     "test": "npm run test:syntax && npm run test:js"
   },

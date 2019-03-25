@@ -11,22 +11,18 @@ angular.module("dashboards").factory("shareService", [
      * @returns {String}
      *  */
     function createFullUrl(
-      viewType,
       country,
       admlevel,
       metric,
       parent_code,
       disaster,
-      event
+      event,
+      viewType
     ) {
       var currentUrl = location.href;
       var baseUrl = currentUrl.split("?")[0];
       var separator = currentUrl.indexOf("?") !== -1 ? "&" : "?";
       var urlParameters = "country=" + country;
-
-      if (viewType) {
-        urlParameters += "&view=" + viewType;
-      }
 
       if (admlevel) {
         urlParameters += "&admlevel=" + admlevel;
@@ -46,6 +42,10 @@ angular.module("dashboards").factory("shareService", [
 
       if (event) {
         urlParameters += "&event=" + event;
+      }
+
+      if (viewType) {
+        urlParameters += "&view=" + viewType;
       }
 
       return baseUrl + separator + urlParameters;

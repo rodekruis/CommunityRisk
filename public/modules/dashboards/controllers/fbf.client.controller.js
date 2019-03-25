@@ -141,7 +141,7 @@ angular.module("dashboards").controller("FbfController", [
         } else {
           $scope.directURLload = false;
         }
-        window.history.pushState({}, document.title, "/#!/community_risk");
+        window.history.pushState({}, document.title, "/#!/fbf");
       } else {
         $scope.directURLload = false;
       }
@@ -241,7 +241,6 @@ angular.module("dashboards").controller("FbfController", [
       // 4. Variable-metadata
       d.Metadata = $.grep(fbf_metadata, function(e) {
         return (
-          //(e.view_code == "CRA" || e.view_code == "CRA,PI") &&
           e.upload_to_dashboard == 1 &&
           helpers
             .nullToEmptyString(e.country_code)
@@ -1938,10 +1937,10 @@ angular.module("dashboards").controller("FbfController", [
       $scope.share_URL = function() {
         $scope.shareable_URL = shareService.createFullUrl(
           $scope.country_code,
-          $scope.chart_show,
           $scope.admlevel,
           $scope.metric,
-          $scope.parent_codes
+          $scope.parent_codes,
+          $scope.chart_show
         );
         $("#URLModal").modal("show");
       };

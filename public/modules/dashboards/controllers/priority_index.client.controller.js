@@ -1480,12 +1480,12 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.share_URL = function() {
         $scope.shareable_URL = shareService.createFullUrl(
           $scope.country_code,
-          $scope.chart_show,
           $scope.admlevel,
           $scope.metric,
           $scope.parent_codes,
           $scope.disaster_type,
-          $scope.disaster_name
+          $scope.disaster_name,
+          $scope.chart_show
         );
         $("#URLModal").modal("show");
       };

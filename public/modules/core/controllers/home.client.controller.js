@@ -21,14 +21,10 @@ angular.module("core").controller("HomeController", [
       $rootScope.country_code = country;
     };
 
-    var map;
-
     dc.chartRegistry.clear();
-    if (map !== undefined) {
-      map.remove();
-    }
-
+    var map;
     var map_chart = dc.leafletChoroplethChart("#map-chart-home");
+
     d3.dsv(";")("modules/core/data/country_metadata.csv", function(
       country_meta
     ) {

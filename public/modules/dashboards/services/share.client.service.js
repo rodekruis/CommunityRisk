@@ -24,6 +24,9 @@ angular.module("dashboards").factory("shareService", [
       var separator = currentUrl.indexOf("?") !== -1 ? "&" : "?";
       var urlParameters = "country=" + country;
 
+      // The order of parameters in the URL is important,
+      // as they will be used IN ORDER, NOT by name.
+
       if (admlevel) {
         urlParameters += "&admlevel=" + admlevel;
       }

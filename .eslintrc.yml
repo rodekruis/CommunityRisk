@@ -6,4 +6,4 @@ extends:
   - "eslint:recommended"
   - "prettier"
 rules:
-  no-console: warn
+  no-console: "off"

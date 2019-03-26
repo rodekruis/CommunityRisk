@@ -585,12 +585,14 @@
             {{ "share_url_title" | translate }}
           </h2>
         </div>
-        <div class="modal-body" style="word-break:break-all">
-          <pre><a href="{{ shareable_URL }}">{{ shareable_URL }}</a></pre>
+        <div class="modal-body">
+          <pre><textarea rows="2"
+                         id="share-url-container"
+                         class="form-control">{{ shareable_URL }}</textarea></pre>
           <button
             type="button"
-            ng-click="copyToClipboard(shareable_URL)"
-            class="btn btn-default"
+            ng-click="copyToClipboard()"
+            class="btn btn-primary"
           >
             {{ "share_url_copy" | translate }}
           </button>

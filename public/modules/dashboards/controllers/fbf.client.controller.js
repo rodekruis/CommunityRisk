@@ -2061,6 +2061,9 @@ angular.module("dashboards").controller("FbfController", [
       }
       zoomToGeom($scope.geom);
 
+      // Make map object available to be used in other directives
+      $scope.map = map;
+
       //Show map
       if ($scope.chart_show == "map") {
         $("#row-chart-container").hide();

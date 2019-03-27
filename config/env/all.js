@@ -12,7 +12,7 @@ module.exports = {
   cert_file: "./config/cert/localhost-cert.pem",
   sessionSecret: "MEAN",
   geoserver: {
-    baseUrl: "http://zambia.510.global/geoserver/fbf/wms",
+    baseUrl: "https://zambia.510.global/geoserver/fbf/wms",
   },
   assets: {
     lib: {

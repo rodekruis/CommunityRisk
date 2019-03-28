@@ -227,11 +227,11 @@
 
       <div>
         <!-- start: community profiles -->
-        <div class="community-profiles-wrapper">
+        <!-- <div class="community-profiles-wrapper">
           <div class="row"></div>
           <div class="tablearea" id="general"></div>
           <div class="row"></div>
-        </div>
+        </div> -->
         <!-- end: community profiles -->
 
         <!-- start: accordion with stats  -->
@@ -254,14 +254,10 @@
                   <img src="modules/dashboards/img/risk_score.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >{{ "risk_score" | translate }} -
-                    <span class="component-score" id="risk_score_main"></span>
-                    <span class="score-helptext">/10</span>
+                  <span class="panel-header-title">Intervention maps </span>
+                  <span class="panel-header-description">
+                    Affected districts, population, cropland & livestock
                   </span>
-                  <span class="panel-header-description">{{
-                    "risk_score_tag" | translate
-                  }}</span>
                 </span>
               </a>
             </div>
@@ -272,7 +268,7 @@
               role="tabpanel"
               aria-labelledby="headingOne"
             >
-              <div class="card-block" id="scores"></div>
+              <div class="card-block" id="intervention"></div>
             </div>
           </div>
           <div class="card">
@@ -285,29 +281,25 @@
                 aria-controls="collapseThree"
               >
                 <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/cyclone_wind.png" />
+                  <img src="modules/dashboards/img/risk_score.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >{{ "hazard_score" | translate }} -
-                    <span class="component-score" id="hazard_score_main"></span>
-                    <span class="score-helptext">/10</span>
-                  </span>
-                  <span class="panel-header-description">{{
-                    "hazard_score_tag" | translate
-                  }}</span>
+                  <span class="panel-header-title">Flood Extents </span>
+                  <span class="panel-header-description"
+                    >Current forecast (event-specific) & general flood
+                    extents</span
+                  >
                 </span>
               </a>
             </div>
+
             <div
               id="collapseThree"
               class="collapse level1"
               role="tabpanel"
               aria-labelledby="headingThree"
             >
-              <div class="card-block" id="hazard">
-                <!-- Hazard components set up as the ones above. -->
-              </div>
+              <div class="card-block" id="flood_extent"></div>
             </div>
           </div>
           <div class="card">
@@ -317,35 +309,28 @@
                 data-parent="#accordion"
                 href="#collapseTwo"
                 aria-expanded="true"
-                aria-controls="Two"
+                aria-controls="collapseTwo"
               >
                 <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/vulnerability.png" />
+                  <img src="modules/dashboards/img/risk_score.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >{{ "vulnerability_score" | translate }} -
-                    <span
-                      class="component-score"
-                      id="vulnerability_score_main"
-                    ></span>
-                    <span class="score-helptext">/10</span>
-                  </span>
-                  <span class="panel-header-description">{{
-                    "vulnerability_score_tag" | translate
-                  }}</span>
+                  <span class="panel-header-title">General Features </span>
+                  <span class="panel-header-description"
+                    >Population, RedCross-offices, etc. (not
+                    event-specific)</span
+                  >
                 </span>
               </a>
             </div>
+
             <div
               id="collapseTwo"
               class="collapse level1"
               role="tabpanel"
               aria-labelledby="headingTwo"
             >
-              <div class="card-block" id="vulnerability">
-                <!-- Vulnerability components set up as the ones above. -->
-              </div>
+              <div class="card-block" id="general"></div>
             </div>
           </div>
           <div class="card">
@@ -358,32 +343,24 @@
                 aria-controls="collapseFour"
               >
                 <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/coping.png" />
+                  <img src="modules/dashboards/img/risk_score.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >{{ "coping_capacity_score" | translate }} -
-                    <span
-                      class="component-score"
-                      id="coping_capacity_score_main"
-                    ></span>
-                    <span class="score-helptext">/10</span>
-                  </span>
-                  <span class="panel-header-description">{{
-                    "coping_score_tag" | translate
-                  }}</span>
+                  <span class="panel-header-title">Exposure Maps </span>
+                  <span class="panel-header-description"
+                    >Full exposure maps (not event-specific)</span
+                  >
                 </span>
               </a>
             </div>
+
             <div
               id="collapseFour"
               class="collapse level1"
               role="tabpanel"
               aria-labelledby="headingFour"
             >
-              <div class="card-block" id="coping_capacity">
-                <!-- Coping capacity indicators set up as the ones above. -->
-              </div>
+              <div class="card-block" id="exposure"></div>
             </div>
           </div>
           <div class="card">
@@ -396,57 +373,26 @@
                 aria-controls="collapseFive"
               >
                 <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/other_variables.png" />
+                  <img src="modules/dashboards/img/risk_score.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title">{{
-                    "other_variables" | translate
-                  }}</span>
-                  <span class="panel-header-description">{{
-                    "other_variables_tag" | translate
-                  }}</span>
+                  <span class="panel-header-title"
+                    >Community Risk features
+                  </span>
+                  <span class="panel-header-description"
+                    >Relevant Risk features (not event-specific)</span
+                  >
                 </span>
               </a>
             </div>
+
             <div
               id="collapseFive"
               class="collapse level1"
               role="tabpanel"
               aria-labelledby="headingFive"
             >
-              <div class="card-block" id="other"></div>
-            </div>
-          </div>
-          <div class="card"></div>
-          <div class="card" id="dpi-card">
-            <div class="card-header last level1" role="tab" id="headingZero">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseZero"
-                aria-expanded="true"
-                aria-controls="collapseZero"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/dpi.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">{{
-                    "data_preparedness_index" | translate
-                  }}</span>
-                  <span class="panel-header-description">{{
-                    "dpi_tag" | translate
-                  }}</span>
-                </span>
-              </a>
-            </div>
-            <div
-              id="collapseZero"
-              class="collapse level1"
-              role="tabpanel"
-              aria-labelledby="headingZero"
-            >
-              <div class="card-block" id="dpi"></div>
+              <div class="card-block" id="cra"></div>
             </div>
           </div>
         </div>

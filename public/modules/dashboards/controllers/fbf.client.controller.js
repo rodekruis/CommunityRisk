@@ -148,13 +148,15 @@ angular.module("dashboards").controller("FbfController", [
 
       //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
       if (!$scope.directURLload && !d) {
-        $scope.admlevel = $scope.view_code == "CRA" ? 1 : 3;
-        if (
-          $scope.view_code == "CRA" &&
-          ["PHL", "MWI", "NPL", "LKA", "MOZ"].indexOf($scope.country_code) > -1
-        ) {
-          $scope.admlevel = 2;
-        } //These countries have a different min zoom-level: code better in future.
+        // Old default settings
+        //$scope.admlevel = 1;
+        // New default settings
+        $scope.directURLload = true;
+        $scope.admlevel = 2;
+        $scope.metric = "fc_short_trigger";
+        document
+          .getElementById("level2")
+          .setAttribute("class", "btn btn-secondary btn-active");
       }
 
       //This is the main search-query for PostgreSQL
@@ -263,12 +265,12 @@ angular.module("dashboards").controller("FbfController", [
         document.getElementById("mapPopup").style.visibility = "hidden";
         document.getElementsByClassName("reset-button")[0].style.visibility =
           "hidden";
-        if (document.getElementById("level2")) {
+        if (document.getElementById("level2") && $scope.admlevel < 2) {
           document
             .getElementById("level2")
             .setAttribute("class", "btn btn-secondary");
         }
-        if (document.getElementById("level3")) {
+        if (document.getElementById("level3") && $scope.admlevel < 3) {
           document
             .getElementById("level3")
             .setAttribute("class", "btn btn-secondary");
@@ -521,9 +523,6 @@ angular.module("dashboards").controller("FbfController", [
       // SETUP INDICATORS //
       //////////////////////
 
-      d.Metadata.sort(function(a, b) {
-        return a.order - b.order;
-      });
       $scope.tables = [];
       var j = 0;
       for (var i = 0; i < d.Metadata.length; i++) {
@@ -532,7 +531,13 @@ angular.module("dashboards").controller("FbfController", [
         if (record_temp.group !== "admin") {
           record.id = "data-table" + [i + 1];
           record.name = record_temp.variable;
-          record.group = record_temp.group;
+          record.label = record_temp.label;
+          record.group =
+            ["scores", "hazard", "vulnerability", "coping_capacity"].indexOf(
+              record_temp.group
+            ) > -1
+              ? "cra"
+              : record_temp.group;
           record.propertyPath =
             record_temp.agg_method === "sum" ? "value" : "value.finalVal";
           record.dimension = undefined;
@@ -734,7 +739,7 @@ angular.module("dashboards").controller("FbfController", [
           } else {
             if (t.propertyPath === "value.finalVal") {
               if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
-                keyvalue[key] = "N.A. on this level";
+                keyvalue[key] = "-"; //"N.A. on this level";
               } else if (meta_format[t.name] === "decimal0") {
                 keyvalue[key] = dec0Format(
                   dimensions[t.name].top(1)[0].value.finalVal
@@ -750,7 +755,7 @@ angular.module("dashboards").controller("FbfController", [
               }
             } else if (t.propertyPath === "value") {
               if (isNaN(dimensions[t.name].top(1)[0].value)) {
-                keyvalue[key] = "N.A. on this level";
+                keyvalue[key] = "-"; //"N.A. on this level";
               } else if (meta_format[t.name] === "decimal0") {
                 keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
               } else if (meta_format[t.name] === "percentage") {
@@ -849,94 +854,35 @@ angular.module("dashboards").controller("FbfController", [
       };
 
       $scope.createHTML = function(keyvalue) {
-        var dpi_score = document.getElementById("dpi_score_main");
-        if (dpi_score) {
-          dpi_score.textContent = keyvalue.dpi_score;
-          dpi_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("dpi_score", "dpi_score", "dpi")
-          );
-        }
-        var risk_score = document.getElementById("risk_score_main");
-        if (risk_score) {
-          risk_score.textContent = keyvalue.risk_score;
-          risk_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("risk_score", "risk_score")
-          );
-        }
-        var vulnerability_score = document.getElementById(
-          "vulnerability_score_main"
-        );
-        if (vulnerability_score) {
-          vulnerability_score.textContent = keyvalue.vulnerability_score;
-          vulnerability_score.setAttribute(
-            "class",
-            "component-score " +
-              high_med_low("vulnerability_score", "vulnerability_score")
-          );
-        }
-        var hazard_score = document.getElementById("hazard_score_main");
-        if (hazard_score) {
-          hazard_score.textContent = keyvalue.hazard_score;
-          hazard_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("hazard_score", "hazard_score")
-          );
-        }
-        var coping_score = document.getElementById(
-          "coping_capacity_score_main"
-        );
-        if (coping_score) {
-          coping_score.textContent = keyvalue.coping_capacity_score;
-          coping_score.setAttribute(
-            "class",
-            "component-score " +
-              high_med_low("coping_capacity_score", "coping_capacity_score")
-          );
-        }
-
         //Dynamically create HTML-elements for all indicator tables
         var general = document.getElementById("general");
-        var dpi = document.getElementById("dpi");
-        var scores = document.getElementById("scores");
-        var vulnerability = document.getElementById("vulnerability");
-        var hazard = document.getElementById("hazard");
-        var coping = document.getElementById("coping_capacity");
-        var other = document.getElementById("other");
+        var intervention = document.getElementById("intervention");
+        var flood_extent = document.getElementById("flood_extent");
+        var exposure = document.getElementById("exposure");
+        var cra = document.getElementById("cra");
         if (general) {
           while (general.firstChild) {
             general.removeChild(general.firstChild);
           }
         }
-        if (dpi) {
-          while (dpi.firstChild) {
-            dpi.removeChild(dpi.firstChild);
+        if (intervention) {
+          while (intervention.firstChild) {
+            intervention.removeChild(intervention.firstChild);
           }
         }
-        if (scores) {
-          while (scores.firstChild) {
-            scores.removeChild(scores.firstChild);
+        if (flood_extent) {
+          while (flood_extent.firstChild) {
+            flood_extent.removeChild(flood_extent.firstChild);
           }
         }
-        if (vulnerability) {
-          while (vulnerability.firstChild) {
-            vulnerability.removeChild(vulnerability.firstChild);
+        if (exposure) {
+          while (exposure.firstChild) {
+            exposure.removeChild(exposure.firstChild);
           }
         }
-        if (hazard) {
-          while (hazard.firstChild) {
-            hazard.removeChild(hazard.firstChild);
-          }
-        }
-        if (coping) {
-          while (coping.firstChild) {
-            coping.removeChild(coping.firstChild);
-          }
-        }
-        if (other) {
-          while (other.firstChild) {
-            other.removeChild(other.firstChild);
+        if (cra) {
+          while (cra.firstChild) {
+            cra.removeChild(cra.firstChild);
           }
         }
 
@@ -958,7 +904,11 @@ angular.module("dashboards").controller("FbfController", [
             unit = meta_unit[record.name];
           }
 
-          if (record.group === "general") {
+          if (
+            ["intervention", "flood_extent", "exposure", "general"].indexOf(
+              record.group
+            ) > -1
+          ) {
             var div = document.createElement("div");
             div.setAttribute("class", "row profile-item");
             div.setAttribute("id", "section-" + record.name);
@@ -980,7 +930,7 @@ angular.module("dashboards").controller("FbfController", [
               "ng-click",
               "change_indicator('" + record.name + "')"
             );
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
+            div1.innerHTML = record.label; //"{{ '" + record.name + "' | translate }}";
             div.appendChild(div1);
             $compile(div1)($scope);
             var div2 = document.createElement("div");
@@ -1002,77 +952,7 @@ angular.module("dashboards").controller("FbfController", [
             img.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
             img.setAttribute("style", "height:17px");
             button.appendChild(img);
-          } else if (record.group === "other") {
-            if (
-              $scope.admlevel == zoom_max &&
-              $scope.filters.length == 0 &&
-              !isNaN(d_prev[record.scorevar_name])
-            ) {
-              width = d_prev[record.scorevar_name] * 10;
-            } else {
-              width = dimensions[record.name].top(1)[0].value.finalVal * 10;
-            }
-
-            if (
-              !($scope.predictions == "no" && record.group == "predictions") &&
-              !($scope.actuals == "no" && record.group == "damage") &&
-              !(
-                ($scope.predictions == "no" || $scope.actuals == "no") &&
-                record.group == "pred_error"
-              )
-            ) {
-              div = document.createElement("div");
-              div.setAttribute("class", "component-section");
-              div.setAttribute("id", "section-" + record.name);
-              parent = document.getElementById(record.group);
-              parent.appendChild(div);
-              div0 = document.createElement("div");
-              div0.setAttribute("class", "col-md-2 col-sm-2 col-xs-2");
-              div.appendChild(div0);
-              var img1 = document.createElement("img");
-              img1.setAttribute("style", "height:20px");
-              img1.setAttribute("src", icon);
-              div0.appendChild(img1);
-              div1 = document.createElement("div");
-              div1.setAttribute(
-                "class",
-                "col-md-9 col-sm-9 col-xs-9 component-label"
-              );
-              div1.setAttribute(
-                "ng-click",
-                "change_indicator('" + record.name + "')"
-              );
-              div1.innerHTML = "{{ '" + record.name + "' | translate }}";
-              $compile(div1)($scope);
-              div.appendChild(div1);
-              var div1a = document.createElement("div");
-              div1a.setAttribute(
-                "class",
-                "component-score " +
-                  high_med_low(record.name, record.scorevar_name)
-              );
-              div1a.setAttribute("id", record.name);
-              div1a.innerHTML = keyvalue[record.name] + " " + unit;
-              div1.appendChild(div1a);
-              div3 = document.createElement("div");
-              div3.setAttribute(
-                "class",
-                "col-md-1 col-sm-1 col-xs-1 no-padding"
-              );
-              div.appendChild(div3);
-              button = document.createElement("button");
-              button.setAttribute("type", "button");
-              button.setAttribute("class", "btn-modal");
-              button.setAttribute("data-toggle", "modal");
-              button.setAttribute("ng-click", "info('" + record.name + "')");
-              div3.appendChild(button);
-              $compile(button)($scope);
-              var img3 = document.createElement("img");
-              img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
-              img3.setAttribute("style", "height:17px");
-              button.appendChild(img3);
-            }
-          } else if (record.group !== "hide") {
+          } else if (record.group === "cra") {
             if (record.group == "dpi") {
               width = d.dpi[0][record.name] * 100;
             } else if (
@@ -1094,7 +974,7 @@ angular.module("dashboards").controller("FbfController", [
             div0 = document.createElement("div");
             div0.setAttribute("class", "col-md-2 col-sm-2 col-xs-2");
             div.appendChild(div0);
-            img1 = document.createElement("img");
+            var img1 = document.createElement("img");
             img1.setAttribute("style", "height:20px");
             img1.setAttribute("src", icon);
             div0.appendChild(img1);
@@ -1109,10 +989,10 @@ angular.module("dashboards").controller("FbfController", [
                 "change_indicator('" + record.name + "')"
               );
             }
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
+            div1.innerHTML = record.label; //"{{ '" + record.name + "' | translate }}";
             $compile(div1)($scope);
             div.appendChild(div1);
-            div1a = document.createElement("div");
+            var div1a = document.createElement("div");
             div1a.setAttribute(
               "class",
               "component-score " +
@@ -1146,7 +1026,7 @@ angular.module("dashboards").controller("FbfController", [
             button.setAttribute("ng-click", "info('" + record.name + "')");
             div3.appendChild(button);
             $compile(button)($scope);
-            img3 = document.createElement("img");
+            var img3 = document.createElement("img");
             img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
             img3.setAttribute("style", "height:17px");
             button.appendChild(img3);
@@ -1160,53 +1040,6 @@ angular.module("dashboards").controller("FbfController", [
       }
 
       $scope.updateHTML = function(keyvalue) {
-        var dpi_score = document.getElementById("dpi_score_main");
-        if (dpi_score) {
-          dpi_score.textContent = keyvalue.dpi_score;
-          dpi_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("dpi_score", "dpi_score", "dpi")
-          );
-        }
-        var risk_score = document.getElementById("risk_score_main");
-        if (risk_score) {
-          risk_score.textContent = keyvalue.risk_score;
-          risk_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("risk_score", "risk_score")
-          );
-        }
-        var vulnerability_score = document.getElementById(
-          "vulnerability_score_main"
-        );
-        if (vulnerability_score) {
-          vulnerability_score.textContent = keyvalue.vulnerability_score;
-          vulnerability_score.setAttribute(
-            "class",
-            "component-score " +
-              high_med_low("vulnerability_score", "vulnerability_score")
-          );
-        }
-        var hazard_score = document.getElementById("hazard_score_main");
-        if (hazard_score) {
-          hazard_score.textContent = keyvalue.hazard_score;
-          hazard_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("hazard_score", "hazard_score")
-          );
-        }
-        var coping_score = document.getElementById(
-          "coping_capacity_score_main"
-        );
-        if (coping_score) {
-          coping_score.textContent = keyvalue.coping_capacity_score;
-          coping_score.setAttribute(
-            "class",
-            "component-score " +
-              high_med_low("coping_capacity_score", "coping_capacity_score")
-          );
-        }
-
         for (var i = 0; i < $scope.tables.length; i++) {
           var record = $scope.tables[i];
           var width;
@@ -1218,37 +1051,14 @@ angular.module("dashboards").controller("FbfController", [
             unit = meta_unit[record.name];
           }
 
-          if (record.group === "general") {
+          if (
+            ["intervention", "flood_extent", "exposure", "general"].indexOf(
+              record.group
+            ) > -1
+          ) {
             var div2 = document.getElementById(record.name);
             div2.innerHTML = keyvalue[record.name] + " " + unit;
-          } else if (record.group === "other") {
-            if (
-              $scope.admlevel == zoom_max &&
-              $scope.filters.length == 0 &&
-              !isNaN(d_prev[record.scorevar_name])
-            ) {
-              width = d_prev[record.scorevar_name] * 10;
-            } else {
-              width = dimensions[record.name].top(1)[0].value.finalVal * 10;
-            }
-
-            if (
-              !($scope.predictions == "no" && record.group == "predictions") &&
-              !($scope.actuals == "no" && record.group == "damage") &&
-              !(
-                ($scope.predictions == "no" || $scope.actuals == "no") &&
-                record.group == "pred_error"
-              )
-            ) {
-              var div1a = document.getElementById(record.name);
-              div1a.setAttribute(
-                "class",
-                "component-score " +
-                  high_med_low(record.name, record.scorevar_name)
-              );
-              div1a.innerHTML = keyvalue[record.name] + " " + unit;
-            }
-          } else if (record.group !== "hide") {
+          } else if (record.group === "cra") {
             if (record.group == "dpi") {
               width = d.dpi[0][record.name] * 100;
             } else if (
@@ -1262,7 +1072,7 @@ angular.module("dashboards").controller("FbfController", [
                 dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
             }
 
-            div1a = document.getElementById(record.name);
+            var div1a = document.getElementById(record.name);
             div1a.setAttribute(
               "class",
               "component-score " +

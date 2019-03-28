@@ -148,13 +148,15 @@ angular.module("dashboards").controller("FbfController", [
 
       //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
       if (!$scope.directURLload && !d) {
-        $scope.admlevel = $scope.view_code == "CRA" ? 1 : 3;
-        if (
-          $scope.view_code == "CRA" &&
-          ["PHL", "MWI", "NPL", "LKA", "MOZ"].indexOf($scope.country_code) > -1
-        ) {
-          $scope.admlevel = 2;
-        } //These countries have a different min zoom-level: code better in future.
+        // Old default settings
+        //$scope.admlevel = 1;
+        // New default settings
+        $scope.directURLload = true;
+        $scope.admlevel = 2;
+        $scope.metric = "fc_short_trigger";
+        document
+          .getElementById("level2")
+          .setAttribute("class", "btn btn-secondary btn-active");
       }
 
       //This is the main search-query for PostgreSQL
@@ -263,11 +265,11 @@ angular.module("dashboards").controller("FbfController", [
         document.getElementById("mapPopup").style.visibility = "hidden";
         document.getElementsByClassName("reset-button")[0].style.visibility =
           "hidden";
-        if (document.getElementById("level2")) {
-          document
-            .getElementById("level2")
-            .setAttribute("class", "btn btn-secondary");
-        }
+        // if (document.getElementById("level2")) {
+        //   document
+        //     .getElementById("level2")
+        //     .setAttribute("class", "btn btn-secondary");
+        // }
         if (document.getElementById("level3")) {
           document
             .getElementById("level3")

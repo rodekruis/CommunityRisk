@@ -287,3 +287,12 @@ upload_to_dashboard;order;view_code;disaster_type;country_code;variable;label;la
 1;;;;KEN;education_primary;% primary or higher education;;;percentage;;;weighted_avg;population;;1;0;Communication;3.2.1;2009;https://sda.international.ipums.org/cgi-bin/sdaweb/hsda?harcsda+ke2009a;Percentage of population that finished primary school (or higher education);;Government;IPUMS & KNBS;0;2;;;;
 1;;;;KEN;disability;% persons with disability;;;percentage;disability.png;;weighted_avg;population;;0;0;Other vulnerable groups;2.2.6;2009;https://sda.international.ipums.org/cgi-bin/sdaweb/hsda?harcsda+ke2009a;Percentage of population with a disability.;;Government;IPUMS & KNBS;0;2;;;;
 1;;;;KEN;computer_access;% with computer access;;;percentage;;;weighted_avg;population;;1;0;Communication;3.2.1;2009;https://sda.international.ipums.org/cgi-bin/sdaweb/hsda?harcsda+ke2009a;Percentage of households with a computer. Original data are available on the website of IPUMS International.;;Government;IPUMS & KNBS;0;2;;;;
+1;;FBF;;ZMB;fc_short_trigger;Districts triggered;;;decimal0;flood.png;general;sum;;;;;;;;;;;;;2;2;;;;
+1;;FBF;;ZMB;population_affected;Population affected;;;decimal0;livestock.png;general;sum;;;;;;;;;;;;;2;3;;;;
+1;;FBF;;ZMB;chicken_affected;Chicken affected;;;decimal0;livestock.png;general;sum;;;;;;;;;;;;;2;3;;;;
+1;;FBF;;ZMB;cattle_affected;Cattle affected;;;decimal0;livestock.png;general;sum;;;;;;;;;;;;;2;3;;;;
+1;;FBF;;ZMB;sheep_affected;Sheep affected;;;decimal0;livestock.png;general;sum;;;;;;;;;;;;;2;3;;;;
+1;;FBF;;ZMB;goat_affected;Goat affected;;;decimal0;livestock.png;general;sum;;;;;;;;;;;;;2;3;;;;
+1;;FBF;;ZMB;pig_affected;Pig affected;;;decimal0;livestock.png;general;sum;;;;;;;;;;;;;2;3;;;;
+1;;FBF;;ZMB;cropland_affected;Cropland affected;;km2;decimal0;agriculture.png;general;sum;;;;;;;;;;;;;2;3;;;;
+1;;FBF;;ZMB;livestock_affected;Livestock Units affected;;;decimal0;livestock.png;general;sum;;;;;;;;https://ec.europa.eu/eurostat/statistics-explained/index.php/Glossary:Livestock_unit_(LSU);All livestock numbers are added in one index with higher weights for larger animals. As definition the Livestock unit (LSU) is used, see link.;;;;2;3;;;;

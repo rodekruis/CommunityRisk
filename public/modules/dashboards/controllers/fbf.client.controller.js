@@ -523,9 +523,9 @@ angular.module("dashboards").controller("FbfController", [
       // SETUP INDICATORS //
       //////////////////////
 
-      d.Metadata.sort(function(a, b) {
-        return a.order - b.order;
-      });
+      // d.Metadata.sort(function(a, b) {
+      //   return a.order - b.order;
+      // });
       $scope.tables = [];
       var j = 0;
       for (var i = 0; i < d.Metadata.length; i++) {
@@ -534,7 +534,13 @@ angular.module("dashboards").controller("FbfController", [
         if (record_temp.group !== "admin") {
           record.id = "data-table" + [i + 1];
           record.name = record_temp.variable;
-          record.group = record_temp.group;
+          record.label = record_temp.label;
+          record.group =
+            ["scores", "hazard", "vulnerability", "coping_capacity"].indexOf(
+              record_temp.group
+            ) > -1
+              ? "cra"
+              : record_temp.group;
           record.propertyPath =
             record_temp.agg_method === "sum" ? "value" : "value.finalVal";
           record.dimension = undefined;
@@ -736,7 +742,7 @@ angular.module("dashboards").controller("FbfController", [
           } else {
             if (t.propertyPath === "value.finalVal") {
               if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
-                keyvalue[key] = "N.A. on this level";
+                keyvalue[key] = "-"; //"N.A. on this level";
               } else if (meta_format[t.name] === "decimal0") {
                 keyvalue[key] = dec0Format(
                   dimensions[t.name].top(1)[0].value.finalVal
@@ -752,7 +758,7 @@ angular.module("dashboards").controller("FbfController", [
               }
             } else if (t.propertyPath === "value") {
               if (isNaN(dimensions[t.name].top(1)[0].value)) {
-                keyvalue[key] = "N.A. on this level";
+                keyvalue[key] = "-"; //"N.A. on this level";
               } else if (meta_format[t.name] === "decimal0") {
                 keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
               } else if (meta_format[t.name] === "percentage") {
@@ -900,45 +906,33 @@ angular.module("dashboards").controller("FbfController", [
 
         //Dynamically create HTML-elements for all indicator tables
         var general = document.getElementById("general");
-        var dpi = document.getElementById("dpi");
-        var scores = document.getElementById("scores");
-        var vulnerability = document.getElementById("vulnerability");
-        var hazard = document.getElementById("hazard");
-        var coping = document.getElementById("coping_capacity");
-        var other = document.getElementById("other");
+        var intervention = document.getElementById("intervention");
+        var flood_extent = document.getElementById("flood_extent");
+        var exposure = document.getElementById("exposure");
+        var cra = document.getElementById("cra");
         if (general) {
           while (general.firstChild) {
             general.removeChild(general.firstChild);
           }
         }
-        if (dpi) {
-          while (dpi.firstChild) {
-            dpi.removeChild(dpi.firstChild);
+        if (intervention) {
+          while (intervention.firstChild) {
+            intervention.removeChild(intervention.firstChild);
           }
         }
-        if (scores) {
-          while (scores.firstChild) {
-            scores.removeChild(scores.firstChild);
+        if (flood_extent) {
+          while (flood_extent.firstChild) {
+            flood_extent.removeChild(flood_extent.firstChild);
           }
         }
-        if (vulnerability) {
-          while (vulnerability.firstChild) {
-            vulnerability.removeChild(vulnerability.firstChild);
+        if (exposure) {
+          while (exposure.firstChild) {
+            exposure.removeChild(exposure.firstChild);
           }
         }
-        if (hazard) {
-          while (hazard.firstChild) {
-            hazard.removeChild(hazard.firstChild);
-          }
-        }
-        if (coping) {
-          while (coping.firstChild) {
-            coping.removeChild(coping.firstChild);
-          }
-        }
-        if (other) {
-          while (other.firstChild) {
-            other.removeChild(other.firstChild);
+        if (cra) {
+          while (cra.firstChild) {
+            cra.removeChild(cra.firstChild);
           }
         }
 
@@ -960,7 +954,7 @@ angular.module("dashboards").controller("FbfController", [
             unit = meta_unit[record.name];
           }
 
-          if (record.group === "general") {
+          if (record.group === "xxx") {
             var div = document.createElement("div");
             div.setAttribute("class", "row profile-item");
             div.setAttribute("id", "section-" + record.name);
@@ -982,7 +976,7 @@ angular.module("dashboards").controller("FbfController", [
               "ng-click",
               "change_indicator('" + record.name + "')"
             );
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
+            div1.innerHTML = record.label; //"{{ '" + record.name + "' | translate }}";
             div.appendChild(div1);
             $compile(div1)($scope);
             var div2 = document.createElement("div");
@@ -1004,7 +998,11 @@ angular.module("dashboards").controller("FbfController", [
             img.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
             img.setAttribute("style", "height:17px");
             button.appendChild(img);
-          } else if (record.group === "other") {
+          } else if (
+            ["intervention", "flood_extent", "exposure", "general"].indexOf(
+              record.group
+            ) > -1
+          ) {
             if (
               $scope.admlevel == zoom_max &&
               $scope.filters.length == 0 &&
@@ -1044,7 +1042,7 @@ angular.module("dashboards").controller("FbfController", [
                 "ng-click",
                 "change_indicator('" + record.name + "')"
               );
-              div1.innerHTML = "{{ '" + record.name + "' | translate }}";
+              div1.innerHTML = record.label; //"{{ '" + record.name + "' | translate }}";
               $compile(div1)($scope);
               div.appendChild(div1);
               var div1a = document.createElement("div");
@@ -1074,7 +1072,7 @@ angular.module("dashboards").controller("FbfController", [
               img3.setAttribute("style", "height:17px");
               button.appendChild(img3);
             }
-          } else if (record.group !== "hide") {
+          } else if (record.group === "cra") {
             if (record.group == "dpi") {
               width = d.dpi[0][record.name] * 100;
             } else if (
@@ -1111,7 +1109,7 @@ angular.module("dashboards").controller("FbfController", [
                 "change_indicator('" + record.name + "')"
               );
             }
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
+            div1.innerHTML = record.label; //"{{ '" + record.name + "' | translate }}";
             $compile(div1)($scope);
             div.appendChild(div1);
             div1a = document.createElement("div");
@@ -1220,10 +1218,14 @@ angular.module("dashboards").controller("FbfController", [
             unit = meta_unit[record.name];
           }
 
-          if (record.group === "general") {
+          if (record.group === "xxx") {
             var div2 = document.getElementById(record.name);
             div2.innerHTML = keyvalue[record.name] + " " + unit;
-          } else if (record.group === "other") {
+          } else if (
+            ["intervention", "flood_extent", "exposure", "general"].indexOf(
+              record.group
+            ) > -1
+          ) {
             if (
               $scope.admlevel == zoom_max &&
               $scope.filters.length == 0 &&
@@ -1250,7 +1252,7 @@ angular.module("dashboards").controller("FbfController", [
               );
               div1a.innerHTML = keyvalue[record.name] + " " + unit;
             }
-          } else if (record.group !== "hide") {
+          } else if (record.group === "cra") {
             if (record.group == "dpi") {
               width = d.dpi[0][record.name] * 100;
             } else if (

@@ -1072,7 +1072,7 @@ angular.module("dashboards").controller("FbfController", [
                 dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
             }
 
-            div1a = document.getElementById(record.name);
+            var div1a = document.getElementById(record.name);
             div1a.setAttribute(
               "class",
               "component-score " +

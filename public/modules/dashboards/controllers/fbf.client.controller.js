@@ -179,6 +179,7 @@ angular.module("dashboards").controller("FbfController", [
 
       prepareStationsData();
       prepareRcLocationsData();
+      $scope.add_raster_layer();
     };
 
     ///////////////
@@ -532,6 +533,7 @@ angular.module("dashboards").controller("FbfController", [
           record.id = "data-table" + [i + 1];
           record.name = record_temp.variable;
           record.label = record_temp.label;
+          record.layer_type = record_temp.layer_type;
           record.group =
             ["scores", "hazard", "vulnerability", "coping_capacity"].indexOf(
               record_temp.group
@@ -926,10 +928,22 @@ angular.module("dashboards").controller("FbfController", [
               "class",
               "col col-md-5 col-sm-5 col-xs-5 general-component-label"
             );
-            div1.setAttribute(
-              "ng-click",
-              "change_indicator('" + record.name + "')"
-            );
+            if (record.layer_type == "raster") {
+              div1.setAttribute(
+                "ng-click",
+                "toggle_raster_layer('" + record.name + "')"
+              );
+              // } else if (record.layer_type == "point") {
+              //   div1.setAttribute(
+              //     "ng-click",
+              //     "toggle_poi_layer('" + record.name + "')"
+              //   );
+            } else if (record.layer_type == "polygon") {
+              div1.setAttribute(
+                "ng-click",
+                "change_indicator('" + record.name + "')"
+              );
+            }
             div1.innerHTML = record.label; //"{{ '" + record.name + "' | translate }}";
             div.appendChild(div1);
             $compile(div1)($scope);
@@ -1968,6 +1982,21 @@ angular.module("dashboards").controller("FbfController", [
       map.removeLayer($scope.rasterLayer);
     };
 
+    $scope.toggled = {};
+    $scope.toggle_raster_layer = function(layer) {
+      if (typeof $scope.toggled[layer] == "undefined") {
+        $scope.toggled[layer] = true;
+      } else {
+        $scope.toggled[layer] = !$scope.toggled[layer];
+      }
+
+      if ($scope.toggled[layer]) {
+        $scope.show_raster_layer();
+      } else {
+        $scope.hide_raster_layer();
+      }
+    };
+
     /////////////////////
     /// POI & MARKERS ///
     /////////////////////
@@ -2075,6 +2104,28 @@ angular.module("dashboards").controller("FbfController", [
 
     $scope.hide_rc_locations = function() {
       map.removeLayer($scope.rcLocationsLayer);
+    };
+
+    $scope.toggle_poi_layer = function(layer) {
+      if (typeof $scope.toggled[layer] == "undefined") {
+        $scope.toggled[layer] = true;
+      } else {
+        $scope.toggled[layer] = !$scope.toggled[layer];
+      }
+
+      if (layer == "poi_glofas") {
+        if ($scope.toggled[layer]) {
+          $scope.show_glofas_stations();
+        } else {
+          $scope.hide_glofas_stations();
+        }
+      } else if (layer == "poi_rc_offices") {
+        if ($scope.toggled[layer]) {
+          $scope.show_rc_locations();
+        } else {
+          $scope.hide_rc_locations();
+        }
+      }
     };
   },
 ]);

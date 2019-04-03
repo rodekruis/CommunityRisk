@@ -115,9 +115,6 @@
   margin-top: -5px;
   text-decoration: none;
 }
-.btn-scroll {
-  margin-top: 6px;
-}
 @media only screen and (max-width: 767px) {
   .zoom-level-nav.sort-nav .dropdown-toggle {
     float: left;

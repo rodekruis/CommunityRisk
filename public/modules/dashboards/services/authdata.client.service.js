@@ -26,9 +26,20 @@ angular.module("dashboards").factory("AuthData", [
       );
     }
 
+    function getTable(options, success) {
+      return $resource("/authdata/table").query(
+        {
+          schema: options.schema,
+          table: options.table,
+        },
+        success
+      );
+    }
+
     return {
       getPoi: getPoi,
       getFbfJsonData: getFbfJsonData,
+      getTable: getTable,
     };
   },
 ]);

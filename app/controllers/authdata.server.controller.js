@@ -17,27 +17,24 @@ exports.read = function(req, res) {
   res.jsonp(req.pgData);
 };
 
-exports.getData = function(req, res, next) {
-  console.log("Getting all sort of data!!");
+exports.getTable = function(req, res, next) {
+  console.log("Getting specific table:", req.query);
 
   pool.connect(function(err, client, release) {
     if (err) return next(err);
 
-    var sql =
-      "SELECT jsonb_build_object(                                " +
-      "    'type', 'Feature',                                    " +
-      "    'id', id,                                             " +
-      "    'geometry', ST_AsGeoJSON(geom)::jsonb,                " +
-      "    'properties', to_jsonb(row) - 'id' - 'geom'           " +
-      ") FROM(SELECT * FROM auth_zmb_source.glofas_stations) row;";
+    client.query(
+      {
+        text: "SELECT usp_get_table($1::text, $2::text);",
+        values: [req.query.schema, req.query.table],
+      },
+      function(err, result) {
+        if (err) return next(err);
 
-    client.query(sql, function(err, result) {
-      if (err) return next(err);
-
-      req.pgData = result.rows;
-      release();
-      next();
-    });
+        res.jsonp(result.rows[0].usp_get_table);
+        release();
+      }
+    );
   });
 };
 

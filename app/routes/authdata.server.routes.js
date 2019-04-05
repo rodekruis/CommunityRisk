@@ -10,6 +10,8 @@ module.exports = function(app) {
   app.route("/authdata/poi").get(users.requiresLogin, authdata.getPoi);
   app.route("/authdata/json").get(users.requiresLogin, authdata.getFbfJsonData);
 
-  app.route("/authdata:parameters").get(users.requiresLogin, authdata.read);
-  app.param("parameters", authdata.getData);
+  app.route("/authdata/table").get(authdata.getTable);
+
+  //app.route("/authdata:parameters").get(users.requiresLogin, authdata.read);
+  //app.param("parameters", authdata.getData);
 };

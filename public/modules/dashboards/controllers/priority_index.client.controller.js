@@ -1656,6 +1656,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       for (i = 0; i < d.Disaster_meta_full.length; i++) {
         if (
           d.Disaster_meta_full[i].country_code == $scope.country_code &&
+          d.Disaster_meta_full[i].pi_ddb == $scope.view_code_PI &&
           disaster_types.indexOf(d.Disaster_meta_full[i].disaster_type) <= -1
         ) {
           disaster_types.push(d.Disaster_meta_full[i].disaster_type);

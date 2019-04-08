@@ -15,9 +15,9 @@ angular.module("dashboards").factory("shareService", [
       admlevel,
       metric,
       parent_code,
+      viewType,
       disaster,
-      event,
-      viewType
+      event
     ) {
       var currentUrl = location.href;
       var baseUrl = currentUrl.split("?")[0];
@@ -39,16 +39,16 @@ angular.module("dashboards").factory("shareService", [
         urlParameters += "&parent_code=" + parent_code;
       }
 
+      if (viewType) {
+        urlParameters += "&view=" + viewType;
+      }
+
       if (disaster) {
         urlParameters += "&disaster=" + disaster;
       }
 
       if (event) {
         urlParameters += "&event=" + event;
-      }
-
-      if (viewType) {
-        urlParameters += "&view=" + viewType;
       }
 
       return baseUrl + separator + urlParameters;

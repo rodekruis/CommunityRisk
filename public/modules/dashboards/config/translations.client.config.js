@@ -12,7 +12,6 @@ var angular_vars = {
 };
 
 var static_en = {
-  //Static HTML
   COMMUNITY_RISK: "Community Risk",
   IMPACT_DATABASE: "Impact database",
   PRIORITY_INDEX: "Priority Index",
@@ -68,6 +67,7 @@ var static_en = {
   dpi_inspect: "",
   draft_warning: "",
   draft: "",
+  export_json: "Export (JSON)",
 };
 
 var static_es = {
@@ -130,6 +130,7 @@ var static_es = {
   dpi_inspect: "",
   draft_warning: "",
   draft: "",
+  export_json: "Exportar (JSON)",
 };
 
 var static_fr = {
@@ -192,6 +193,7 @@ var static_fr = {
   draft_warning:
     "Le tableau de bord ne contient que peu d'indicateurs qui ont besoin d'un contrôle de qualité et d'usage. Ces informations ne doivent pas encore être utilisées pour communication externe ou pour tirer des conclusions.",
   draft: "Version temporaire",
+  export_json: "Exporter (JSON)",
 };
 
 angular.module("dashboards").config(function($translateProvider) {

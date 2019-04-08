@@ -108,9 +108,19 @@ angular.module("dashboards").factory("exportService", [
       triggerDownload(exportData, "export.json", "application/json");
     }
 
+    /**
+     * @param {Object} data
+     */
+    function exportAsJSON(data) {
+      var exportData = JSON.stringify(data);
+
+      triggerDownload(exportData, "export.json", "application/json");
+    }
+
     return {
       exportAsCSV: exportAsCSV,
       exportAsGeoJSON: exportAsGeoJSON,
+      exportAsJSON: exportAsJSON,
     };
   },
 ]);

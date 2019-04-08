@@ -1446,6 +1446,11 @@ angular.module("dashboards").controller("PriorityIndexController", [
         exportService.exportAsGeoJSON(d.Districts);
       };
 
+      //Export to GEOJSON
+      $scope.export_json = function() {
+        exportService.exportAsJSON(d.Rapportage);
+      };
+
       //Export to CSV function
       $scope.export_csv = function() {
         exportService.exportAsCSV(d.Rapportage, meta_label);

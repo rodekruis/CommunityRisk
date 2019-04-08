@@ -7,16 +7,6 @@
 var config = require("../../config/config"),
   pg = require("pg");
 
-var connString =
-  "postgres://" +
-  config.postgres.user +
-  ":" +
-  config.postgres.password +
-  "@" +
-  config.postgres.host +
-  "/" +
-  config.postgres.db;
-
 var pool = new pg.Pool({
   host: config.postgres.host,
   user: config.postgres.user,

@@ -8,7 +8,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
   "$filter",
   "Authentication",
   "Data",
-  "cfpLoadingBar",
   "helpers",
   "exportService",
   "shareService",
@@ -20,7 +19,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     $filter,
     Authentication,
     Data,
-    cfpLoadingBar,
     helpers,
     exportService,
     shareService
@@ -86,24 +84,13 @@ angular.module("dashboards").controller("CommunityRiskController", [
     var d_prev = "";
     var map;
 
-    ///////////////////////
-    // INITIAL FUNCTIONS //
-    ///////////////////////
-
-    $scope.start = function() {
-      cfpLoadingBar.start();
-    };
-    $scope.complete = function() {
-      cfpLoadingBar.complete();
-    };
-
     ////////////////////////
     // INITIATE DASHBOARD //
     ////////////////////////
 
     $scope.initiate = function(d) {
       //Start loading bar
-      $scope.start();
+      helpers.start();
 
       //Load the map-view by default
       $("#row-chart-container").hide();
@@ -275,7 +262,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       });
 
       // end loading bar
-      $scope.complete();
+      helpers.complete();
 
       //Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)
       if ($rootScope.loadCount == 0 && typeof L_PREFER_CANVAS !== "undefined") {

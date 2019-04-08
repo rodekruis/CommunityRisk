@@ -1,7 +1,22 @@
 "use strict";
 
 angular.module("dashboards").factory("helpers", [
-  function() {
+  "cfpLoadingBar",
+  function(cfpLoadingBar) {
+    /**
+     * Start/complete functions
+     *
+     * @param nothing
+     *
+     * @returns nothing
+     */
+    function start() {
+      cfpLoadingBar.start();
+    }
+    function complete() {
+      cfpLoadingBar.complete();
+    }
+
     /**
      * Make sure to always return a string
      *
@@ -88,6 +103,8 @@ angular.module("dashboards").factory("helpers", [
     }
 
     return {
+      start: start,
+      complete: complete,
       nullToEmptyString: nullToEmptyString,
       lookUpProperty: lookUpProperty,
       genLookup_meta: genLookup_meta,

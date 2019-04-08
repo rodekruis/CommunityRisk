@@ -112,18 +112,20 @@ angular.module("dashboards").controller("FbfController", [
       //Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
       var url = location.href;
       if (url.indexOf("?") > -1) {
-        url = url.split("?")[1];
-        $scope.country_code = url
-          .split("&")[0]
-          .split("=")[1]
-          .toUpperCase();
-        if (url.split("&")[1]) {
+        var params_in = url.split("?")[1].split("&");
+        var params_out = {};
+        params_in.forEach(function(e) {
+          var pair = e.split("=");
+          params_out[pair[0]] = pair[1];
+        });
+        $scope.country_code = params_out.country;
+        if (params_in[1]) {
           $scope.directURLload = true;
-          $scope.admlevel = url.split("&")[1].split("=")[1];
-          $scope.metric = url.split("&")[2].split("=")[1];
-          $scope.chart_show = url.split("&")[4].split("=")[1];
+          $scope.admlevel = params_out.admlevel;
+          $scope.metric = params_out.metric;
+          $scope.chart_show = params_out.view;
           $scope.parent_codes =
-            url.split("&")[3].split("=")[1] == ""
+            params_out.parent_code == ""
               ? []
               : url
                   .split("&")[3]

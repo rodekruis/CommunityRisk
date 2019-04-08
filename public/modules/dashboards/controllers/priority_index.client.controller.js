@@ -126,22 +126,22 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
       if (url.indexOf("?") > -1) {
-        url = url.split("?")[1];
-        $scope.country_code = url.split("&")[0].split("=")[1];
-        if (url.split("&")[1]) {
+        var params_in = url.split("?")[1].split("&");
+        var params_out = {};
+        params_in.forEach(function(e) {
+          var pair = e.split("=");
+          params_out[pair[0]] = pair[1];
+        });
+        $scope.country_code = params_out.country;
+        if (params_in[1]) {
           $scope.directURLload = true;
-          $scope.country_code = url.split("&")[0].split("=")[1];
-          $scope.admlevel = url.split("&")[1].split("=")[1];
-          $scope.metric = url.split("&")[2].split("=")[1];
-          $scope.chart_show = url.split("&")[5].split("=")[1];
-          $scope.disaster_type = url.split("&")[3].split("=")[1];
-          $scope.disaster_name = url
-            .split("&")[4]
-            .split("=")[1]
-            .replace("%20", " ");
+          $scope.admlevel = params_out.admlevel;
+          $scope.metric = params_out.metric;
+          $scope.chart_show = params_out.view;
+          $scope.disaster_type = params_out.disaster;
+          $scope.disaster_name = params_out.event.replace("%20", " ");
         } else {
           $scope.directURLload = false;
-          $scope.set_defaults_country($scope.country_code);
         }
         window.history.pushState(
           {},
@@ -1347,9 +1347,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $scope.admlevel,
           $scope.metric,
           $scope.parent_codes,
+          $scope.chart_show,
           $scope.disaster_type,
-          $scope.disaster_name,
-          $scope.chart_show
+          $scope.disaster_name
         );
         $("#URLModal").modal("show");
       };

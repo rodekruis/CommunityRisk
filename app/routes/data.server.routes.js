@@ -6,8 +6,6 @@
 var data = require("../../app/controllers/data");
 
 module.exports = function(app) {
-  app.route("/data/:adminLevel").get(data.read);
-
-  // Finish by binding the middleware
-  app.param("adminLevel", data.getData);
+  app.route("/data/table").get(data.getTable);
+  app.route("/data/all").get(data.getData);
 };

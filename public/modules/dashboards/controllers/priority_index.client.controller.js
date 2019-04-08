@@ -167,7 +167,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         $scope.directURLload = false;
       }
 
-      AuthData.getTable(
+      Data.getTable(
         {
           schema: "metadata",
           table: "DPI_disaster_metadata",
@@ -205,23 +205,20 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
           //This is the main search-query for PostgreSQL
           $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
-          $scope.data_input =
-            $scope.admlevel +
-            ",'" +
-            $scope.country_code +
-            "','" +
-            $scope.parent_codes_input +
-            "','" +
-            $scope.view_code +
-            "','" +
-            $scope.disaster_type +
-            "','" +
-            $scope.disaster_name +
-            "'";
 
-          Data.get({ adminLevel: $scope.data_input }, function(pgData) {
-            $scope.load_data(pgData);
-          });
+          Data.getAll(
+            {
+              admlevel: $scope.admlevel,
+              country: $scope.country_code,
+              parent_codes: $scope.parent_codes_input,
+              view: $scope.view_code,
+              disaster_type: $scope.disaster_type,
+              disaster_name: $scope.disaster_name,
+            },
+            function(pgData) {
+              $scope.load_data(pgData[0]);
+            }
+          );
         }
       );
     };
@@ -1692,14 +1689,30 @@ angular.module("dashboards").controller("PriorityIndexController", [
       //Translation button
       $scope.changeLanguage = function(langKey) {
         $translate.use(langKey);
+        $scope.language = langKey;
         for (var i = 0; i < $("#menu-buttons.in").length; i++) {
           $("#menu-buttons.in")[i].classList.remove("in");
         }
       };
 
-      if ($scope.country_code == "PER" || $scope.country_code == "ECU") {
+      var languages_es = ["PER", "ECU"];
+      var languages_fr = ["MLI"];
+      var languages_all = [].concat(languages_es, languages_fr);
+      if (languages_all.indexOf($scope.country_code) > -1) {
         $("#language-selector").show();
-        $scope.changeLanguage("es");
+        if (languages_fr.indexOf($scope.country_code) > -1) {
+          $scope.changeLanguage("fr");
+          document.getElementById("language-selector-es").style.display =
+            "none";
+          document.getElementById("language-selector-fr").style.display =
+            "block";
+        } else if (languages_es.indexOf($scope.country_code) > -1) {
+          $scope.changeLanguage("es");
+          document.getElementById("language-selector-es").style.display =
+            "block";
+          document.getElementById("language-selector-fr").style.display =
+            "none";
+        }
       } else {
         $("#language-selector").hide();
         $scope.changeLanguage("en");
@@ -1711,16 +1724,22 @@ angular.module("dashboards").controller("PriorityIndexController", [
           metric_label_popup: $scope.metric_info,
           metric_desc: "desc_" + $scope.metric_info,
           subtype_selection: $scope.subtype_selection,
+          levelB_selection_pre: $scope.levelB_selection_pre,
+          levelC_selection_pre: $scope.levelC_selection_pre,
         };
       };
-    };
 
-    //Final CSS
-    $(".sidebar-wrapper").addClass("in");
-    $(document).ready(function() {
-      if ($(window).width() < 768) {
-        $(".sidebar-wrapper").removeClass("in");
-      }
-    });
+      ///////////////////
+      /// FINAL STUFF ///
+      ///////////////////
+
+      //Final CSS
+      $(".sidebar-wrapper").addClass("in");
+      $(document).ready(function() {
+        if ($(window).width() < 768) {
+          $(".sidebar-wrapper").removeClass("in");
+        }
+      });
+    };
   },
 ]);

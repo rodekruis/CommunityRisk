@@ -17,27 +17,6 @@ exports.read = function(req, res) {
   res.jsonp(req.pgData);
 };
 
-exports.getTable = function(req, res, next) {
-  console.log("Getting specific table:", req.query);
-
-  pool.connect(function(err, client, release) {
-    if (err) return next(err);
-
-    client.query(
-      {
-        text: "SELECT usp_get_table($1::text, $2::text);",
-        values: [req.query.schema, req.query.table],
-      },
-      function(err, result) {
-        if (err) return next(err);
-
-        res.jsonp(result.rows[0].usp_get_table);
-        release();
-      }
-    );
-  });
-};
-
 exports.getFbfJsonData = function(req, res, next) {
   console.log("Getting FBF JSON Data:", req.query);
 

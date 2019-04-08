@@ -4,8 +4,7 @@
 // Service to generate a url to share the current view/state of the dashboard
 //
 angular.module("dashboards").factory("crossfilterService", [
-  "helpers",
-  function(helpers) {
+  function() {
     /**
      * Create parameter-specific URL
      *

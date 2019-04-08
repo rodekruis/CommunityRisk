@@ -8,11 +8,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "$filter",
   "Authentication",
   "Data",
-  "AuthData",
-  "cfpLoadingBar",
   "helpers",
   "exportService",
   "shareService",
+  "crossfilterService",
   function(
     $translate,
     $scope,
@@ -21,11 +20,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $filter,
     Authentication,
     Data,
-    AuthData,
-    cfpLoadingBar,
     helpers,
     exportService,
-    shareService
+    shareService,
+    crossfilterService
   ) {
     ////////////////////////
     // SET MAIN VARIABLES //
@@ -109,24 +107,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
     var d_prev = "";
     var map;
 
-    ///////////////////////
-    // INITIAL FUNCTIONS //
-    ///////////////////////
-
-    $scope.start = function() {
-      cfpLoadingBar.start();
-    };
-    $scope.complete = function() {
-      cfpLoadingBar.complete();
-    };
-
     ////////////////////////
     // INITIATE DASHBOARD //
     ////////////////////////
 
     $scope.initiate = function() {
       //Start loading bar
-      $scope.start();
+      helpers.start();
 
       //Load the map-view by default
       $("#row-chart-container").hide();
@@ -317,7 +304,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       });
 
       // End loading bar
-      $scope.complete();
+      helpers.complete();
 
       //Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)
       if ($rootScope.loadCount == 0 && typeof L_PREFER_CANVAS !== "undefined") {
@@ -412,25 +399,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
         "level" + $scope.admlevel + "_name"
       )[$scope.country_code];
 
-      /////////////////////
-      // NUMBER FORMATS ///
-      /////////////////////
-
-      //Define number formats for absolute numbers and for percentage metrics
-      var dec0Format = d3.format(",.0f");
-      var dec2Format = d3.format(".2f");
-      var percFormat = d3.format(",.2%");
-
-      var currentFormat = function(value) {
-        if (meta_format[$scope.metric] === "decimal0") {
-          return dec0Format(value);
-        } else if (meta_format[$scope.metric] === "decimal2") {
-          return dec2Format(value);
-        } else if (meta_format[$scope.metric] === "percentage") {
-          return percFormat(value);
-        }
-      };
-
       //////////////////////
       // SETUP INDICATORS //
       //////////////////////
@@ -464,115 +432,25 @@ angular.module("dashboards").controller("PriorityIndexController", [
       // CROSSFILTER SETUP //
       ///////////////////////
 
-      //var cf = crossfilter(d3.range(0, data.Districts.features.length));
-      var cf = crossfilter(d.Rapportage);
-
-      // The wheredimension returns the unique identifier of the geo area
-      var whereDimension = cf.dimension(function(d) {
-        return d.pcode;
-      });
-      var whereDimension_tab = cf.dimension(function(d) {
-        return d.pcode;
-      });
-
-      // Create the groups for these two dimensions (i.e. sum the metric)
-      whereDimension.group().reduceSum(function(d) {
-        return d[$scope.metric];
-      });
-      whereDimension_tab.group().reduceSum(function(d) {
-        return d[$scope.metric];
-      });
-
-      var cf_scores_metric = $scope.metric;
-      var whereGroupSum_scores = whereDimension.group().reduce(
-        function(p, v) {
-          p.count = v[cf_scores_metric] !== null ? p.count + 1 : p.count;
-          p.sum = p.sum + v[cf_scores_metric];
-          return p;
-        },
-        function(p, v) {
-          p.count = v[cf_scores_metric] !== null ? p.count - 1 : p.count;
-          p.sum = p.sum - v[cf_scores_metric];
-          return p;
-        },
-        function() {
-          return { count: 0, sum: 0 };
-        }
+      var cf_result = crossfilterService.setupCrossfilter(
+        d.Rapportage,
+        $scope.metric,
+        meta_scorevar,
+        $scope.tables
       );
-      var whereGroupSum_scores_tab = whereDimension_tab.group().reduce(
-        function(p, v) {
-          p.count = v[cf_scores_metric] !== null ? p.count + 1 : p.count;
-          p.sum = p.sum + v[cf_scores_metric];
-          return p;
-        },
-        function(p, v) {
-          p.count = v[cf_scores_metric] !== null ? p.count - 1 : p.count;
-          p.sum = p.sum - v[cf_scores_metric];
-          return p;
-        },
-        function() {
-          return { count: 0, sum: 0 };
-        }
-      );
+      var cf = cf_result.cf;
+      var whereDimension = cf_result.whereDimension;
+      var whereDimension_tab = cf_result.whereDimension_tab;
+      $scope.genLookup_value = cf_result.genLookup_value;
+      var whereGroupSum_scores = cf_result.whereGroupSum_scores;
+      var whereGroupSum_scores_tab = cf_result.whereGroupSum_scores_tab;
+      var all = cf_result.all;
+      var dimensions = cf_result.dimensions;
+      $scope.tables = cf_result.tables;
 
-      // group with all, needed for data-count
-      var all = cf.groupAll();
-      // get the count of the number of rows in the dataset (total and filtered)
       dc.dataCount("#count-info")
         .dimension(cf)
         .group(all);
-
-      // Create customized reduce-functions to be able to calculated percentages over all or multiple districts (i.e. the % of male volunteers))
-      var reduceAddAvg = function(metricA, metricB) {
-        return function(p, v) {
-          p.sumOfSub += v[metricA] * v[metricB];
-          p.sumOfTotal += v[metricB];
-          p.finalVal = p.sumOfSub / p.sumOfTotal;
-          return p;
-        };
-      };
-      var reduceRemoveAvg = function(metricA, metricB) {
-        return function(p, v) {
-          p.sumOfSub -= v[metricA] * v[metricB];
-          p.sumOfTotal -= v[metricB];
-          p.finalVal = p.sumOfSub / p.sumOfTotal;
-          return p;
-        };
-      };
-      var reduceInitialAvg = function() {
-        return { sumOfSub: 0, sumOfTotal: 0, finalVal: 0 };
-      };
-
-      //All data-tables are not split up in dimensions. The metric is always the sum of all selected records. Therefore we create one total-dimension
-      var totaalDim = cf.dimension(function() {
-        return "Total";
-      });
-
-      //Create the appropriate crossfilter dimension-group for each element of Tables
-      var dimensions = [];
-      $scope.tables.forEach(function(t) {
-        var name = t.name;
-        if (t.propertyPath === "value.finalVal") {
-          var weight_var = t.weight_var;
-          dimensions[name] = totaalDim
-            .group()
-            .reduce(
-              reduceAddAvg([name], [weight_var]),
-              reduceRemoveAvg([name], [weight_var]),
-              reduceInitialAvg
-            );
-        } else if (t.propertyPath === "value") {
-          dimensions[name] = totaalDim.group().reduceSum(function(d) {
-            return d[name];
-          });
-        }
-      });
-
-      //Now attach the dimension to the tables-array
-      for (i = 0; i < $scope.tables.length; i++) {
-        var name = $scope.tables[i].name;
-        $scope.tables[i].dimension = dimensions[name];
-      }
 
       ///////////////////////////
       /// Priority Index ONLY ///
@@ -620,8 +498,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
           dimensions[$scope.default_metric].top(1)[0].value > 0
             ? dimensions[$scope.default_metric].top(1)[0].value
             : 0;
-        $scope.total_damage = dec0Format(total_damage_temp);
-        $scope.total_potential = dec0Format(
+        $scope.total_damage = helpers.dec0Format(total_damage_temp);
+        $scope.total_potential = helpers.dec0Format(
           dimensions[$scope.default_metric.concat("_potential")].top(1)[0].value
         );
         total_intensity =
@@ -629,16 +507,16 @@ angular.module("dashboards").controller("PriorityIndexController", [
           dimensions[$scope.default_metric.concat("_potential")].top(1)[0]
             .value;
         isNaN(total_intensity)
-          ? ($scope.total_intensity = percFormat(0))
-          : ($scope.total_intensity = percFormat(total_intensity));
+          ? ($scope.total_intensity = helpers.percFormat(0))
+          : ($scope.total_intensity = helpers.percFormat(total_intensity));
       } else {
         total_damage_temp = 0;
-        $scope.total_damage = dec0Format(total_damage_temp);
+        $scope.total_damage = helpers.dec0Format(total_damage_temp);
         $scope.total_potential = 1;
         total_intensity = total_damage_temp / 1;
         isNaN(total_intensity)
-          ? ($scope.total_intensity = percFormat(0))
-          : ($scope.total_intensity = percFormat(total_intensity));
+          ? ($scope.total_intensity = helpers.percFormat(0))
+          : ($scope.total_intensity = helpers.percFormat(total_intensity));
       }
 
       //Fill the event-dropdown in the sidebar
@@ -686,26 +564,26 @@ angular.module("dashboards").controller("PriorityIndexController", [
             !isNaN(d_prev[t.name])
           ) {
             if (meta_format[t.name] === "decimal0") {
-              keyvalue[key] = dec0Format(d_prev[t.name]);
+              keyvalue[key] = helpers.dec0Format(d_prev[t.name]);
             } else if (meta_format[t.name] === "percentage") {
-              keyvalue[key] = percFormat(d_prev[t.name]);
+              keyvalue[key] = helpers.percFormat(d_prev[t.name]);
             } else if (meta_format[t.name] === "decimal2") {
-              keyvalue[key] = dec2Format(d_prev[t.name]);
+              keyvalue[key] = helpers.dec2Format(d_prev[t.name]);
             }
           } else {
             if (t.propertyPath === "value.finalVal") {
               if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
                 keyvalue[key] = "N.A. on this level";
               } else if (meta_format[t.name] === "decimal0") {
-                keyvalue[key] = dec0Format(
+                keyvalue[key] = helpers.dec0Format(
                   dimensions[t.name].top(1)[0].value.finalVal
                 );
               } else if (meta_format[t.name] === "percentage") {
-                keyvalue[key] = percFormat(
+                keyvalue[key] = helpers.percFormat(
                   dimensions[t.name].top(1)[0].value.finalVal
                 );
               } else if (meta_format[t.name] === "decimal2") {
-                keyvalue[key] = dec2Format(
+                keyvalue[key] = helpers.dec2Format(
                   dimensions[t.name].top(1)[0].value.finalVal
                 );
               }
@@ -713,11 +591,17 @@ angular.module("dashboards").controller("PriorityIndexController", [
               if (isNaN(dimensions[t.name].top(1)[0].value)) {
                 keyvalue[key] = "N.A. on this level";
               } else if (meta_format[t.name] === "decimal0") {
-                keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
+                keyvalue[key] = helpers.dec0Format(
+                  dimensions[t.name].top(1)[0].value
+                );
               } else if (meta_format[t.name] === "percentage") {
-                keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value);
+                keyvalue[key] = helpers.percFormat(
+                  dimensions[t.name].top(1)[0].value
+                );
               } else if (meta_format[t.name] === "decimal2") {
-                keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value);
+                keyvalue[key] = helpers.dec2Format(
+                  dimensions[t.name].top(1)[0].value
+                );
               }
             }
           }
@@ -975,7 +859,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
             " - ",
             meta_label[$scope.metric],
             ": ",
-            currentFormat(d.value.sum),
+            helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
             " ",
             meta_unit[$scope.metric]
           );
@@ -1024,7 +908,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 if (
                   record.pcode === $scope.filters[$scope.filters.length - 1]
                 ) {
-                  $scope.value_popup = currentFormat(record[$scope.metric]);
+                  $scope.value_popup = helpers.currentFormat(
+                    meta_format[$scope.metric],
+                    record[$scope.metric]
+                  );
                   $scope.value_popup_unit = meta_unit[$scope.metric];
                   break;
                 }
@@ -1121,14 +1008,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
         })
         .label(function(d) {
           if (!meta_scorevar[$scope.metric]) {
-            return currentFormat(d.value.sum).concat(
-              " ",
-              meta_unit[$scope.metric],
-              " - ",
-              lookup[d.key]
-            );
+            return helpers
+              .currentFormat(meta_format[$scope.metric], d.value.sum)
+              .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
           } else {
-            return dec2Format(d.value.sum).concat(" / 10 - ", lookup[d.key]);
+            return helpers
+              .dec2Format(d.value.sum)
+              .concat(" / 10 - ", lookup[d.key]);
           }
         })
         .title(function(d) {
@@ -1139,7 +1025,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 " - ",
                 meta_label[$scope.metric],
                 ": ",
-                currentFormat(d.value.sum),
+                helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
                 " ",
                 meta_unit[$scope.metric]
               );
@@ -1148,7 +1034,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
             //   " - ",
             //   meta_label[$scope.metric],
             //   " (0-10): ",
-            //   dec2Format(d.value.sum)
+            //   helpers.dec2Format(d.value.sum)
             // );
           }
         })
@@ -1305,7 +1191,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
               " - ",
               meta_label[$scope.metric],
               ": ",
-              currentFormat(d.value.sum),
+              helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
               " ",
               helpers.nullToEmptyString(meta_unit[$scope.metric])
             );
@@ -1361,14 +1247,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
           })
           .label(function(d) {
             if (!meta_scorevar[$scope.metric]) {
-              return currentFormat(d.value.sum).concat(
-                " ",
-                meta_unit[$scope.metric],
-                " - ",
-                lookup[d.key]
-              );
+              return helpers
+                .currentFormat(meta_format[$scope.metric], d.value.sum)
+                .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
             } else {
-              return dec2Format(d.value.sum).concat(" / 10 - ", lookup[d.key]);
+              return helpers
+                .dec2Format(d.value.sum)
+                .concat(" / 10 - ", lookup[d.key]);
             }
           })
           .title(function(d) {
@@ -1377,7 +1262,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 " - ",
                 meta_label[$scope.metric],
                 ": ",
-                currentFormat(d.value.sum),
+                helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
                 " ",
                 meta_unit[$scope.metric]
               );
@@ -1386,7 +1271,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 " - ",
                 meta_label[$scope.metric],
                 " (0-10): ",
-                dec2Format(d.value.sum)
+                helpers.dec2Format(d.value.sum)
               );
             }
           })
@@ -1444,6 +1329,11 @@ angular.module("dashboards").controller("PriorityIndexController", [
       //Export to GEOJSON
       $scope.export_geojson = function() {
         exportService.exportAsGeoJSON(d.Districts);
+      };
+
+      //Export to GEOJSON
+      $scope.export_json = function() {
+        exportService.exportAsJSON(d.Rapportage);
       };
 
       //Export to CSV function

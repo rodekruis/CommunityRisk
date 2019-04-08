@@ -1,7 +1,22 @@
 "use strict";
 
 angular.module("dashboards").factory("helpers", [
-  function() {
+  "cfpLoadingBar",
+  function(cfpLoadingBar) {
+    /**
+     * Start/complete functions
+     *
+     * @param nothing
+     *
+     * @returns nothing
+     */
+    function start() {
+      cfpLoadingBar.start();
+    }
+    function complete() {
+      cfpLoadingBar.complete();
+    }
+
     /**
      * Make sure to always return a string
      *
@@ -86,13 +101,37 @@ angular.module("dashboards").factory("helpers", [
 
       return lookup;
     }
+    /**
+     * Number formats
+     *
+     */
+    //Define number formats for absolute numbers and for percentage metrics
+    var dec0Format = d3.format(",.0f");
+    var dec2Format = d3.format(".2f");
+    var percFormat = d3.format(",.2%");
+
+    var currentFormat = function(type, value) {
+      if (type === "decimal0") {
+        return dec0Format(value);
+      } else if (type === "decimal2") {
+        return dec2Format(value);
+      } else if (type === "percentage") {
+        return percFormat(value);
+      }
+    };
 
     return {
+      start: start,
+      complete: complete,
       nullToEmptyString: nullToEmptyString,
       lookUpProperty: lookUpProperty,
       genLookup_meta: genLookup_meta,
       lookUpByCountryCode: lookUpByCountryCode,
       lookUpByName: lookUpByName,
+      dec0Format: dec0Format,
+      dec2Format: dec2Format,
+      percFormat: percFormat,
+      currentFormat: currentFormat,
     };
   },
 ]);

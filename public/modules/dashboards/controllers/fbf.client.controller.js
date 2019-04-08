@@ -161,19 +161,6 @@ angular.module("dashboards").controller("FbfController", [
 
       //This is the main search-query for PostgreSQL
       $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
-      $scope.data_input =
-        $scope.admlevel +
-        ",'" +
-        $scope.country_code +
-        "','" +
-        $scope.parent_codes_input +
-        "','" +
-        $scope.view_code +
-        "','" +
-        $scope.disaster_type +
-        "','" +
-        $scope.disaster_name +
-        "'";
 
       loadFunction(d);
 
@@ -188,25 +175,35 @@ angular.module("dashboards").controller("FbfController", [
 
     //Get Data
     var loadFunction = function(d) {
-      Data.get({ adminLevel: $scope.data_input }, function(pgData) {
-        AuthData.getFbfJsonData(
-          {
-            country: $scope.country_code.toLowerCase(),
-            type: "data_adm" + $scope.admlevel,
-          },
-          function(fbf_admin_data) {
-            AuthData.getFbfJsonData(
-              {
-                country: $scope.country_code.toLowerCase(),
-                type: "metadata_fbf_zambia",
-              },
-              function(fbf_metadata) {
-                $scope.load_data(d, pgData, fbf_admin_data, fbf_metadata);
-              }
-            );
-          }
-        );
-      });
+      Data.getAll(
+        {
+          admlevel: $scope.admlevel,
+          country: $scope.country_code,
+          parent_codes: $scope.parent_codes_input,
+          view: $scope.view_code,
+          disaster_type: "",
+          disaster_name: "",
+        },
+        function(pgData) {
+          AuthData.getFbfJsonData(
+            {
+              country: $scope.country_code.toLowerCase(),
+              type: "data_adm" + $scope.admlevel,
+            },
+            function(fbf_admin_data) {
+              AuthData.getFbfJsonData(
+                {
+                  country: $scope.country_code.toLowerCase(),
+                  type: "metadata_fbf_zambia",
+                },
+                function(fbf_metadata) {
+                  $scope.load_data(d, pgData[0], fbf_admin_data, fbf_metadata);
+                }
+              );
+            }
+          );
+        }
+      );
     };
 
     //Process Data

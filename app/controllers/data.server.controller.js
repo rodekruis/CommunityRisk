@@ -17,6 +17,13 @@ var connString =
   "/" +
   config.postgres.db;
 
+var pool = new pg.Pool({
+  host: config.postgres.host,
+  user: config.postgres.user,
+  password: config.postgres.password,
+  database: config.postgres.db,
+});
+
 /**
  * Show the current map
  */
@@ -27,37 +34,54 @@ exports.read = function(req, res) {
 /**
  * AMap middleware
  */
-exports.getData = function(req, res, next, adminLevel) {
-  pg.connect(connString, function(err, client, release) {
+
+exports.getData = function(req, res, next) {
+  console.log("Getting data:", req.query);
+
+  pool.connect(function(err, client, release) {
     if (err) return next(err);
 
-    var sql1 = "SELECT usp_data(";
-    var sql2 = ");";
-    var sql = sql1 + adminLevel + sql2;
-    console.log(sql);
+    client.query(
+      {
+        text:
+          "SELECT usp_data($1::int,$2::varchar,$3::text[],$4::varchar,$5::varchar,$6::varchar);",
+        values: [
+          req.query.admlevel,
+          req.query.country,
+          req.query.parent_codes,
+          req.query.view,
+          req.query.disaster_type,
+          req.query.disaster_name,
+        ],
+      },
+      function(err, result) {
+        if (err) return next(err);
 
-    client.query(sql, function(err, result) {
-      if (err) return next(err);
-      req.pgData = result.rows[0];
-      release();
-      next();
-    });
+        res.jsonp([result.rows[0]]);
+        release();
+      }
+    );
   });
 };
 
-exports.getPIMetadata = function(req, res, next) {
-  pg.connect(connString, function(err, client, release) {
+exports.getTable = function(req, res, next) {
+  console.log("Getting specific table:", req.query);
+
+  pool.connect(function(err, client, release) {
     if (err) return next(err);
 
-    var sql = "SELECT usp_pi_metadata()";
-    console.log(sql);
+    client.query(
+      {
+        text: "SELECT usp_get_table($1::text, $2::text);",
+        values: [req.query.schema, req.query.table],
+      },
+      function(err, result) {
+        if (err) return next(err);
 
-    client.query(sql, function(err, result) {
-      if (err) return next(err);
-      req.pgData = result.rows[0];
-      release();
-      next();
-    });
+        res.jsonp(result.rows[0].usp_get_table);
+        release();
+      }
+    );
   });
 };
 

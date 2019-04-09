@@ -263,6 +263,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
         );
       });
 
+      DEBUG && console.log(d);
+
       //Necessary style-change in case sidebar is collapsed when changing countries
       document.getElementById("mapPopup").style.visibility = "hidden";
       if (document.getElementById("level2")) {

@@ -219,6 +219,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
         return e.country_code == $scope.country_code;
       });
 
+      DEBUG && console.log(d);
+
       //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)
       if ($scope.reload == 0) {
         document
@@ -542,7 +544,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
       var whereDimension_tab = cf_result.whereDimension_tab;
       var whereGroupSum = cf_result.whereGroupSum;
       var whereGroupSum_lookup = cf_result.whereGroupSum_lookup;
-      $scope.genLookup_value = cf_result.genLookup_value;
       var cf_scores_metric = cf_result.cf_scores_metric;
       var whereGroupSum_scores = cf_result.whereGroupSum_scores;
       var whereGroupSum_scores_tab = cf_result.whereGroupSum_scores_tab;
@@ -550,6 +551,15 @@ angular.module("dashboards").controller("CommunityRiskController", [
       var dimensions = cf_result.dimensions;
       var dimensions_scores = cf_result.dimensions_scores;
       $scope.tables = cf_result.tables;
+
+      // Create value-lookup function
+      $scope.genLookup_value = function() {
+        var lookup_value = {};
+        whereGroupSum_lookup.top(Infinity).forEach(function(e) {
+          lookup_value[e.key] = e.value.count == 0 ? "No data" : e.value.sum;
+        });
+        return lookup_value;
+      };
 
       dc.dataCount("#count-info")
         .dimension(cf)

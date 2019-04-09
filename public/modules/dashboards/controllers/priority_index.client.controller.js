@@ -33,6 +33,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
     $scope.change_country = function(country) {
       $scope.country_code = country;
+      $rootScope.country_code = country;
       $scope.parent_codes = [];
       $scope.metric = "";
       $scope.initiate($rootScope.view_code);
@@ -59,11 +60,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.authentication = Authentication;
     $scope.geom = null;
     $scope.view_code = "PI";
-    $scope.country_code = "PHL";
+    $scope.country_code_default = "PHL";
+    $scope.country_code = $scope.country_code_default;
     $scope.admlevel = 3;
     if ($rootScope.country_code) {
       $scope.country_code = $rootScope.country_code;
     }
+    $rootScope.country_code = $scope.country_code_default;
     $scope.metric = "";
     if ($rootScope.disaster_type) {
       $scope.disaster_type = $rootScope.disaster_type;
@@ -172,6 +175,10 @@ angular.module("dashboards").controller("PriorityIndexController", [
               );
             }
           });
+          if (event.length == 0) {
+            $scope.country_code = $scope.country_code_default;
+            $scope.initiate();
+          }
           $scope.disaster_type = event[0].disaster_type;
           $scope.disaster_name = event[0].name;
           $scope.admlevel = event[0].admin_level;

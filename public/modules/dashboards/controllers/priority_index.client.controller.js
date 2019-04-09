@@ -12,6 +12,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "exportService",
   "shareService",
   "crossfilterService",
+  "DEBUG",
   function(
     $translate,
     $scope,
@@ -23,7 +24,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
     helpers,
     exportService,
     shareService,
-    crossfilterService
+    crossfilterService,
+    DEBUG
   ) {
     ////////////////////////
     // SET MAIN VARIABLES //
@@ -262,6 +264,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
           e.country_code == $scope.country_code
         );
       });
+
+      DEBUG && console.log(d);
 
       //Necessary style-change in case sidebar is collapsed when changing countries
       document.getElementById("mapPopup").style.visibility = "hidden";

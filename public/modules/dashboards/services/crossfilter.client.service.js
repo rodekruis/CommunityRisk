@@ -50,15 +50,6 @@ angular.module("dashboards").factory("crossfilterService", [
         }
       );
 
-      // Create value-lookup function
-      var genLookup_value = function() {
-        var lookup_value = {};
-        whereGroupSum_lookup.top(Infinity).forEach(function(e) {
-          lookup_value[e.key] = e.value.count == 0 ? "No data" : e.value.sum;
-        });
-        return lookup_value;
-      };
-
       var cf_scores_metric = !meta_scorevar[metric]
         ? metric
         : meta_scorevar[metric];
@@ -184,15 +175,10 @@ angular.module("dashboards").factory("crossfilterService", [
         whereDimension_tab: whereDimension_tab,
         whereGroupSum: whereGroupSum,
         whereGroupSum_lookup: whereGroupSum_lookup,
-        genLookup_value: genLookup_value,
         cf_scores_metric: cf_scores_metric,
         whereGroupSum_scores: whereGroupSum_scores,
         whereGroupSum_scores_tab: whereGroupSum_scores_tab,
         all: all,
-        // reduceAddAvg: reduceAddAvg,
-        // reduceRemoveAvg: reduceRemoveAvg,
-        // reduceInitialAvg: reduceInitialAvg,
-        // totaalDim: totaalDim,
         dimensions: dimensions,
         dimensions_scores: dimensions_scores,
         tables: tables,

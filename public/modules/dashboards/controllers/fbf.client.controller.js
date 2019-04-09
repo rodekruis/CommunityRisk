@@ -110,33 +110,16 @@ angular.module("dashboards").controller("FbfController", [
       $scope.chart_show = "map";
 
       //Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
-      var url = location.href;
-      if (url.indexOf("?") > -1) {
-        var params_in = url.split("?")[1].split("&");
-        var params_out = {};
-        params_in.forEach(function(e) {
-          var pair = e.split("=");
-          params_out[pair[0]] = pair[1];
-        });
-        $scope.country_code = params_out.country;
-        if (params_in[1]) {
-          $scope.directURLload = true;
-          $scope.admlevel = params_out.admlevel;
-          $scope.metric = params_out.metric;
-          $scope.chart_show = params_out.view;
-          $scope.parent_codes =
-            params_out.parent_code == ""
-              ? []
-              : url
-                  .split("&")[3]
-                  .split("=")[1]
-                  .split(",");
-        } else {
-          $scope.directURLload = false;
-        }
-        window.history.pushState({}, document.title, "/#!/fbf");
-      } else {
-        $scope.directURLload = false;
+      var url = shareService.readParameterUrl(location.href);
+      $scope.directURLload = url.directURLload;
+      if (url.country_code) {
+        $scope.country_code = url.country_code;
+      }
+      if ($scope.directURLload) {
+        $scope.admlevel = url.admlevel;
+        $scope.metric = url.metric;
+        $scope.chart_show = url.chart_show;
+        $scope.parent_codes = url.parent_codes;
       }
 
       //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
@@ -537,7 +520,6 @@ angular.module("dashboards").controller("FbfController", [
       var whereDimension_tab = cf_result.whereDimension_tab;
       var whereGroupSum = cf_result.whereGroupSum;
       var whereGroupSum_lookup = cf_result.whereGroupSum_lookup;
-      $scope.genLookup_value = cf_result.genLookup_value;
       var cf_scores_metric = cf_result.cf_scores_metric;
       var whereGroupSum_scores = cf_result.whereGroupSum_scores;
       var whereGroupSum_scores_tab = cf_result.whereGroupSum_scores_tab;
@@ -545,6 +527,15 @@ angular.module("dashboards").controller("FbfController", [
       var dimensions = cf_result.dimensions;
       var dimensions_scores = cf_result.dimensions_scores;
       $scope.tables = cf_result.tables;
+
+      // Create value-lookup function
+      $scope.genLookup_value = function() {
+        var lookup_value = {};
+        whereGroupSum_lookup.top(Infinity).forEach(function(e) {
+          lookup_value[e.key] = e.value.count == 0 ? "No data" : e.value.sum;
+        });
+        return lookup_value;
+      };
 
       dc.dataCount("#count-info")
         .dimension(cf)

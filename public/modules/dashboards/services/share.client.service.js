@@ -70,10 +70,54 @@ angular.module("dashboards").factory("shareService", [
       document.execCommand("copy");
     }
 
+    function readParameterUrl(url) {
+      var directURLload;
+      if (url.indexOf("?") > -1) {
+        var params_in = url.split("?")[1].split("&");
+        var params_out = {};
+        params_in.forEach(function(e) {
+          var pair = e.split("=");
+          params_out[pair[0]] = pair[1];
+        });
+        var country_code = params_out.country;
+        if (params_in[1]) {
+          directURLload = true;
+          var admlevel = params_out.admlevel;
+          var metric = params_out.metric;
+          var chart_show = params_out.view;
+          var parent_codes =
+            params_out.parent_code == ""
+              ? []
+              : params_out.parent_code.split(",");
+          if (params_in.disaster_type) {
+            var disaster_type = params_out.disaster;
+            var disaster_name = params_out.event.replace("%20", " ");
+          }
+        } else {
+          directURLload = false;
+        }
+        var view = url.split("#!/")[1].split("?")[0];
+        window.history.pushState({}, document.title, "/#!/" + view);
+      } else {
+        directURLload = false;
+      }
+      return {
+        directURLload: directURLload,
+        country_code: country_code,
+        admlevel: admlevel,
+        metric: metric,
+        chart_show: chart_show,
+        parent_codes: parent_codes,
+        disaster_type: disaster_type,
+        disaster_name: disaster_name,
+      };
+    }
+
     return {
       createFullUrl: createFullUrl,
       createCountryUrl: createCountryUrl,
       copyToClipboard: copyToClipboard,
+      readParameterUrl: readParameterUrl,
     };
   },
 ]);

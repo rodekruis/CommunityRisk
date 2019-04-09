@@ -53,9 +53,9 @@ angular.module("dashboards").controller("CommunityRiskController", [
     $scope.metric = "";
     if ($rootScope.country_code) {
       $scope.country_code = $rootScope.country_code;
+    } else {
+      $rootScope.country_code = $scope.country_code_default;
     }
-    $rootScope.country_code = $scope.country_code_default;
-    //$rootScope.country_code = null;
     if ($rootScope.view_code) {
       $scope.view_code = $rootScope.view_code;
     }

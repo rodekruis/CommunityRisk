@@ -65,8 +65,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.admlevel = 3;
     if ($rootScope.country_code) {
       $scope.country_code = $rootScope.country_code;
+    } else {
+      $rootScope.country_code = $scope.country_code_default;
     }
-    $rootScope.country_code = $scope.country_code_default;
     $scope.metric = "";
     if ($rootScope.disaster_type) {
       $scope.disaster_type = $rootScope.disaster_type;

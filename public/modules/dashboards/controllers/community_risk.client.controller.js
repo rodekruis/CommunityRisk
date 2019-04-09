@@ -12,6 +12,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
   "exportService",
   "shareService",
   "crossfilterService",
+  "DEBUG",
   function(
     $translate,
     $scope,
@@ -23,7 +24,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
     helpers,
     exportService,
     shareService,
-    crossfilterService
+    crossfilterService,
+    DEBUG
   ) {
     ////////////////////////
     // SET MAIN VARIABLES //

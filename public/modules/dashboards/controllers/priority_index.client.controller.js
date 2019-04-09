@@ -12,6 +12,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "exportService",
   "shareService",
   "crossfilterService",
+  "DEBUG",
   function(
     $translate,
     $scope,
@@ -23,7 +24,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
     helpers,
     exportService,
     shareService,
-    crossfilterService
+    crossfilterService,
+    DEBUG
   ) {
     ////////////////////////
     // SET MAIN VARIABLES //

@@ -50,15 +50,6 @@ angular.module("dashboards").factory("crossfilterService", [
         }
       );
 
-      // Create value-lookup function
-      var genLookup_value = function() {
-        var lookup_value = {};
-        whereGroupSum_lookup.top(Infinity).forEach(function(e) {
-          lookup_value[e.key] = e.value.count == 0 ? "No data" : e.value.sum;
-        });
-        return lookup_value;
-      };
-
       var cf_scores_metric = !meta_scorevar[metric]
         ? metric
         : meta_scorevar[metric];

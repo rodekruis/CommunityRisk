@@ -33,6 +33,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
 
     $scope.change_country = function(country) {
       $scope.country_code = country;
+      $rootScope.country_code = country;
       $scope.parent_codes = [];
       $scope.metric = "";
       $scope.initiate($rootScope.view_code);
@@ -46,13 +47,15 @@ angular.module("dashboards").controller("CommunityRiskController", [
     $scope.reload = 0;
     $scope.authentication = Authentication;
     $scope.geom = null;
-    $scope.country_code = "PHL";
+    $scope.country_code_default = "PHL";
+    $scope.country_code = $scope.country_code_default;
     $scope.view_code = "CRA";
     $scope.metric = "";
     if ($rootScope.country_code) {
       $scope.country_code = $rootScope.country_code;
     }
-    $rootScope.country_code = null;
+    $rootScope.country_code = $scope.country_code_default;
+    //$rootScope.country_code = null;
     if ($rootScope.view_code) {
       $scope.view_code = $rootScope.view_code;
     }

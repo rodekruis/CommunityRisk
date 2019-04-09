@@ -52,13 +52,15 @@ angular.module("dashboards").controller("FbfController", [
     $scope.reload = 0;
     $scope.authentication = Authentication;
     $scope.geom = null;
-    $scope.country_code = "ZMB";
+    $scope.country_code_default = "ZMB";
+    $scope.country_code = $scope.country_code_default;
     $scope.view_code = "CRA";
     $scope.metric = "";
     if ($rootScope.country_code) {
       $scope.country_code = $rootScope.country_code;
     }
-    $rootScope.country_code = null;
+    $rootScope.country_code = $scope.country_code_default;
+    //$rootScope.country_code = null;
     if ($rootScope.view_code) {
       $scope.view_code = $rootScope.view_code;
     }

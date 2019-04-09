@@ -123,37 +123,21 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.chart_show = "map";
 
       //Read Disaster Database or PI from URL
-      var url = location.href;
-      $scope.view_code_PI = url.indexOf("priority_index") > -1 ? "PI" : "DDB";
+      $scope.view_code_PI =
+        location.href.indexOf("priority_index") > -1 ? "PI" : "DDB";
 
       //Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
-      if (url.indexOf("?") > -1) {
-        var params_in = url.split("?")[1].split("&");
-        var params_out = {};
-        params_in.forEach(function(e) {
-          var pair = e.split("=");
-          params_out[pair[0]] = pair[1];
-        });
-        $scope.country_code = params_out.country;
-        if (params_in[1]) {
-          $scope.directURLload = true;
-          $scope.admlevel = params_out.admlevel;
-          $scope.metric = params_out.metric;
-          $scope.chart_show = params_out.view;
-          $scope.disaster_type = params_out.disaster;
-          $scope.disaster_name = params_out.event.replace("%20", " ");
-        } else {
-          $scope.directURLload = false;
-        }
-        window.history.pushState(
-          {},
-          document.title,
-          $scope.view_code_PI == "PI"
-            ? "/#!/priority_index"
-            : "/#!/impact_database"
-        );
-      } else {
-        $scope.directURLload = false;
+      var url = shareService.readParameterUrl(location.href);
+      $scope.directURLload = url.directURLload;
+      if (url.country_code) {
+        $scope.country_code = url.country_code;
+      }
+      if ($scope.directURLload) {
+        $scope.admlevel = url.admlevel;
+        $scope.metric = url.metric;
+        $scope.chart_show = url.chart_show;
+        $scope.disaster_type = url.disaster_type;
+        $scope.disaster_name = url.disaster_name;
       }
 
       Data.getTable(
@@ -445,7 +429,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       var cf = cf_result.cf;
       var whereDimension = cf_result.whereDimension;
       var whereDimension_tab = cf_result.whereDimension_tab;
-      $scope.genLookup_value = cf_result.genLookup_value;
       var whereGroupSum_scores = cf_result.whereGroupSum_scores;
       var whereGroupSum_scores_tab = cf_result.whereGroupSum_scores_tab;
       var all = cf_result.all;

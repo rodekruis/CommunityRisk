@@ -12,6 +12,10 @@ angular.module("dashboards").controller("CommunityRiskController", [
   "exportService",
   "shareService",
   "crossfilterService",
+  "sidebarHtmlService",
+  "colorSetupService",
+  "admlevelsService",
+  "chartService",
   "DEBUG",
   function(
     $translate,
@@ -25,6 +29,10 @@ angular.module("dashboards").controller("CommunityRiskController", [
     exportService,
     shareService,
     crossfilterService,
+    sidebarHtmlService,
+    colorSetupService,
+    admlevelsService,
+    chartService,
     DEBUG
   ) {
     ////////////////////////
@@ -217,12 +225,12 @@ angular.module("dashboards").controller("CommunityRiskController", [
         document.getElementById("mapPopup").style.visibility = "hidden";
         document.getElementsByClassName("reset-button")[0].style.visibility =
           "hidden";
-        if (document.getElementById("level2")) {
+        if (document.getElementById("level2") && $scope.admlevel < 2) {
           document
             .getElementById("level2")
             .setAttribute("class", "btn btn-secondary");
         }
-        if (document.getElementById("level3")) {
+        if (document.getElementById("level3") && $scope.admlevel < 3) {
           document
             .getElementById("level3")
             .setAttribute("class", "btn btn-secondary");
@@ -270,16 +278,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     ///////////////////////////////////////////
 
     $scope.generateCharts = function(d) {
-      // Clear the charts
-      dc.chartRegistry.clear();
-      if (map !== undefined) {
-        map.remove();
-      }
-
-      //define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
-      var mapChart = dc.leafletChoroplethChart("#map-chart");
-      var rowChart = dc.rowChart("#row-chart");
-
       //////////////////////////
       // SETUP META VARIABLES //
       //////////////////////////
@@ -307,64 +305,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
         "format"
       )[$scope.country_code];
 
-      function setViewStatus(isVisible) {
-        var viewStatus = document.getElementById("status");
-
-        if (viewStatus) {
-          viewStatus.style.visibility = isVisible ? "visible" : "hidden";
-        }
-      }
-
-      if (country_status == "template") {
-        setViewStatus(true);
-        $scope.status_title = "Template only";
-        $scope.status_text =
-          "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
-      } else if (country_status == "basic") {
-        setViewStatus(true);
-        $scope.status_title = "Draft version";
-        $scope.status_text =
-          "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
-      } else if (country_status == "all") {
-        var dpi = d.dpi[0].dpi_score;
-        if (dpi > 0.1) {
-          setViewStatus(false);
-          $scope.status_title = "";
-          $scope.status_text = "";
-        } else {
-          setViewStatus(true);
-          $scope.status_title = "Needs data";
-          $scope.status_text =
-            "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
-            "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
-        }
-      }
-
-      $scope.country_selection = country_name[$scope.country_code];
-      var zoom_min = Number(country_zoom_min[$scope.country_code]);
-      var zoom_max = Number(country_zoom_max[$scope.country_code]);
-      $scope.inform_admlevel = Number(
-        helpers.lookUpByCountryCode(d.Country_meta, "inform_admlevel")[
-          $scope.country_code
-        ]
-      );
-
-      if (!$scope.directURLload) {
-        if ($scope.metric === "") {
-          $scope.metric = country_default_metric[$scope.country_code];
-        } else if (typeof d.Rapportage[0][$scope.metric] == "undefined") {
-          $scope.metric = "population";
-        }
-      }
-      if ($scope.admlevel === zoom_min) {
-        $scope.name_selection = country_name[$scope.country_code];
-      }
-      if (zoom_max - zoom_min < 2) {
-        document.getElementById("level3").style.visibility = "hidden";
-      } else if (document.getElementById("level3")) {
-        document.getElementById("level3").style.visibility = "visible";
-      }
-
       // get the lookup tables
       var lookup = helpers.lookUpProperty($scope.geom, "pcode", "name");
       var meta_label = helpers.genLookup_meta(d.Metadata, "label");
@@ -376,6 +316,17 @@ angular.module("dashboards").controller("CommunityRiskController", [
       var meta_desc = helpers.genLookup_meta(d.Metadata, "description");
       var meta_scorevar = helpers.genLookup_meta(d.Metadata, "scorevar_name");
 
+      /////////////////////////////////////
+      // CONFIGURE NEEDED HTML/VARIABLES //
+      /////////////////////////////////////
+
+      //Look up country parameters
+      $scope.country_selection = country_name[$scope.country_code];
+      var zoom_min = Number(country_zoom_min[$scope.country_code]);
+      var zoom_max = Number(country_zoom_max[$scope.country_code]);
+      if ($scope.admlevel === zoom_min) {
+        $scope.name_selection = country_name[$scope.country_code];
+      }
       $scope.metric_label = meta_label[$scope.metric];
       $scope.type_selection =
         $scope.admlevel == zoom_min
@@ -389,7 +340,23 @@ angular.module("dashboards").controller("CommunityRiskController", [
         "level" + $scope.admlevel + "_name"
       )[$scope.country_code];
 
-      //Changes to be able to show ALL lower-level districts, for now only applied to Malawi
+      //Look up default metric, take population if it's not found (i.e.: if not available on lower admin-level)
+      if (!$scope.directURLload) {
+        if ($scope.metric === "") {
+          $scope.metric = country_default_metric[$scope.country_code];
+        } else if (typeof d.Rapportage[0][$scope.metric] == "undefined") {
+          $scope.metric = "population";
+        }
+      }
+
+      //If a country contains only 2 instead of 3 admin-levels
+      if (zoom_max - zoom_min < 2) {
+        document.getElementById("level3").style.visibility = "hidden";
+      } else if (document.getElementById("level3")) {
+        document.getElementById("level3").style.visibility = "visible";
+      }
+
+      //This is a long piece of code that sets the name-buttons for the different admin-layers (id=level1, level2, level3) >> CAN BE IMPROVED
       $scope.levelB_selection_pre = "all_no";
       if (
         zoom_min == 1 ||
@@ -490,6 +457,59 @@ angular.module("dashboards").controller("CommunityRiskController", [
           $scope.admlevel < zoom_max ? "" : $scope.parent_code;
       }
 
+      //Color/fill the level2/level3 buttons (top-left) when coming in at higher level through direct URL
+      if ($scope.directURLload) {
+        var directURL = admlevelsService.directUrlHigherLevel(
+          $scope.admlevel,
+          zoom_min,
+          $scope.parent_codes,
+          d,
+          $scope.country_code
+        );
+        if ($scope.parent_codes.length > 0) {
+          $scope.levelC_codes = directURL.levelC_codes;
+          $scope.levelC_selection = directURL.levelC_selection;
+          $scope.levelB_codes = directURL.levelB_codes;
+          $scope.levelB_selection = directURL.levelB_selection;
+        }
+      }
+
+      //////////////////////////////////
+      // SETUP VIEW STATUS - CRA ONLY //
+      //////////////////////////////////
+
+      function setViewStatus(isVisible) {
+        var viewStatus = document.getElementById("status");
+
+        if (viewStatus) {
+          viewStatus.style.visibility = isVisible ? "visible" : "hidden";
+        }
+      }
+      if (country_status == "template") {
+        setViewStatus(true);
+        $scope.status_title = "Template only";
+        $scope.status_text =
+          "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
+      } else if (country_status == "basic") {
+        setViewStatus(true);
+        $scope.status_title = "Draft version";
+        $scope.status_text =
+          "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
+      } else if (country_status == "all") {
+        var dpi = d.dpi[0].dpi_score;
+        if (dpi > 0.1) {
+          setViewStatus(false);
+          $scope.status_title = "";
+          $scope.status_text = "";
+        } else {
+          setViewStatus(true);
+          $scope.status_title = "Needs data";
+          $scope.status_text =
+            "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
+            "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
+        }
+      }
+
       //////////////////////
       // SETUP INDICATORS //
       //////////////////////
@@ -549,629 +569,138 @@ angular.module("dashboards").controller("CommunityRiskController", [
         return lookup_value;
       };
 
-      dc.dataCount("#count-info")
-        .dimension(cf)
-        .group(all);
+      /////////////////
+      // COLOR SETUP //
+      /////////////////
+
+      //Define thresholds for colors-scales. They are stored in d, because the thresholds are carried when zooming in to deeper admin-level.
+      d = colorSetupService.setupThresholds(
+        $scope.admlevel,
+        zoom_min,
+        $scope.directURLload,
+        d,
+        meta_scorevar
+      );
+
+      //Define a function which determines the right color based on value
+      var high_med_low = function(ind, ind_score, group) {
+        return colorSetupService.high_med_low(
+          ind,
+          ind_score,
+          group,
+          $scope.admlevel,
+          zoom_max,
+          $scope.filters,
+          d,
+          d_prev,
+          dimensions_scores
+        );
+      };
+
+      //Define the colorScaale used in the chart. Additionally a quantile_max is returned for later use.
+      $scope.mapchartColors = function() {
+        return colorSetupService.mapchartColors(
+          meta_scorevar,
+          $scope.metric,
+          d,
+          $scope.quantileColorDomain_CRA_std,
+          $scope.quantileColorDomain_CRA_scores
+        );
+      };
+      var mapchartColors = $scope.mapchartColors().colorScale;
+      $scope.quantile_max = $scope.mapchartColors().quantile_max;
 
       ///////////////////////////////
       // SET UP ALL INDICATOR HTML //
       ///////////////////////////////
 
-      //Create table with current crossfilter-selection output, so that you can also access this in other ways than through DC.js
+      //Create all data for sidebar
       var fill_keyvalues = function() {
-        var keyvalue = [];
-        $scope.tables.forEach(function(t) {
-          var key = t.name;
-          if (t.group == "dpi") {
-            keyvalue[key] = helpers.dec2Format(d.dpi[0][t.name]);
-          } else if (
-            $scope.admlevel == zoom_max &&
-            $scope.filters.length == 0 &&
-            !isNaN(d_prev[t.name])
-          ) {
-            if (meta_format[t.name] === "decimal0") {
-              keyvalue[key] = helpers.dec0Format(d_prev[t.name]);
-            } else if (meta_format[t.name] === "percentage") {
-              keyvalue[key] = helpers.percFormat(d_prev[t.name]);
-            } else if (meta_format[t.name] === "decimal2") {
-              keyvalue[key] = helpers.dec2Format(d_prev[t.name]);
-            }
-          } else {
-            if (t.propertyPath === "value.finalVal") {
-              if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
-                keyvalue[key] = "N.A. on this level";
-              } else if (meta_format[t.name] === "decimal0") {
-                keyvalue[key] = helpers.dec0Format(
-                  dimensions[t.name].top(1)[0].value.finalVal
-                );
-              } else if (meta_format[t.name] === "percentage") {
-                keyvalue[key] = helpers.percFormat(
-                  dimensions[t.name].top(1)[0].value.finalVal
-                );
-              } else if (meta_format[t.name] === "decimal2") {
-                keyvalue[key] = helpers.dec2Format(
-                  dimensions[t.name].top(1)[0].value.finalVal
-                );
-              }
-            } else if (t.propertyPath === "value") {
-              if (isNaN(dimensions[t.name].top(1)[0].value)) {
-                keyvalue[key] = "N.A. on this level";
-              } else if (meta_format[t.name] === "decimal0") {
-                keyvalue[key] = helpers.dec0Format(
-                  dimensions[t.name].top(1)[0].value
-                );
-              } else if (meta_format[t.name] === "percentage") {
-                keyvalue[key] = helpers.percFormat(
-                  dimensions[t.name].top(1)[0].value
-                );
-              } else if (meta_format[t.name] === "decimal2") {
-                keyvalue[key] = helpers.dec2Format(
-                  dimensions[t.name].top(1)[0].value
-                );
-              }
-            }
-          }
-        });
-        return keyvalue;
+        return sidebarHtmlService.fill_keyvalues(
+          $scope.tables,
+          $scope.admlevel,
+          zoom_max,
+          $scope.filters,
+          meta_format,
+          dimensions,
+          d,
+          d_prev
+        );
       };
       var keyvalue = fill_keyvalues();
 
-      //Pool all values for all 0-10 score value together to determine quantile_range (so that quantile thresholds will not differ between indicators)
-      if ($scope.admlevel == zoom_min || $scope.directURLload) {
-        var quantile_range_scores = [];
-        j = 0;
-        for (i = 0; i < d.Rapportage.length; i++) {
-          Object.keys(d.Rapportage[i]).forEach(function(key) {
-            if (
-              meta_scorevar[key] &&
-              (d.Rapportage[i][meta_scorevar[key]] ||
-                d.Rapportage[i][meta_scorevar[key]] == 0)
-            ) {
-              quantile_range_scores[j] = d.Rapportage[i][meta_scorevar[key]];
-              j += 1;
-            }
-          });
-        }
-        quantile_range_scores.sort(function(a, b) {
-          return a - b;
-        });
-        d.quantile_range_scores = quantile_range_scores;
-
-        //Establish threshold-values for quantile-range (formula taken exactly from d3-library to mimic the way the thrsholds are established in the map, which happens automatically)
-        var quantile = function(values, p) {
-          var H = (values.length - 1) * p + 1,
-            h = Math.floor(H),
-            v = +values[h - 1],
-            e = H - h;
-          return e ? v + e * (values[h] - v) : v;
-        };
-        var k = 0,
-          q = 5;
-        var thresholds = [];
-        while (++k < q)
-          thresholds[k - 1] =
-            Math.round(quantile(quantile_range_scores, k / q) * 100) / 100;
-        d.thresholds = thresholds;
+      //Create all initial HTML for sidebar
+      var groups = [
+        "general",
+        "dpi",
+        "scores",
+        "vulnerability",
+        "hazard",
+        "coping",
+        "other",
+      ];
+      sidebarHtmlService.createHTML(
+        groups,
+        keyvalue,
+        $scope.tables,
+        $scope.admlevel,
+        zoom_max,
+        $scope.filters,
+        meta_icon,
+        meta_unit,
+        dimensions,
+        dimensions_scores,
+        d,
+        d_prev,
+        high_med_low,
+        "", //predictions
+        "" //actuals
+      );
+      //Compile clickable elements
+      var compile = $(".component-label, .general-component-label, .info-btn");
+      for (i = 0; i < compile.length; i++) {
+        $compile(compile[i])($scope);
       }
-
-      //Function for determining color of indicator-bars and -numbers in sidebar
-      var high_med_low = function(ind, ind_score, group) {
-        var width;
-        if (dimensions_scores[ind]) {
-          if (group == "dpi") {
-            width = 10 * (1 - d.dpi[0][ind]);
-          } else if (
-            $scope.admlevel == zoom_max &&
-            $scope.filters.length == 0 &&
-            !isNaN(d_prev[ind_score])
-          ) {
-            width = d_prev[ind_score];
-          } else {
-            if (dimensions_scores[ind].top(1)[0].value.count == 0) {
-              width = "na";
-            } else {
-              width = dimensions_scores[ind].top(1)[0].value.finalVal;
-            }
-          }
-          if (ind == "dpi_score") {
-            //This reflects that DPI < 0.1 is considered too low
-            if (1 - width / 10 < 0.1) {
-              return "bad";
-            } else {
-              return "good";
-            }
-          }
-
-          //Assign categories to each value (categories relate through colors via CSS)
-          if (isNaN(width)) {
-            return "notavailable";
-          } else if (width < d.thresholds[0]) {
-            return "good";
-          } else if (width <= d.thresholds[1]) {
-            return "medium-good";
-          } else if (width <= d.thresholds[2]) {
-            return "medium";
-          } else if (width <= d.thresholds[3]) {
-            return "medium-bad";
-          } else if (width > d.thresholds[3]) {
-            return "bad";
-          }
-        }
-      };
-
-      $scope.createHTML = function(keyvalue) {
-        var dpi_score = document.getElementById("dpi_score_main");
-        if (dpi_score) {
-          dpi_score.textContent = keyvalue.dpi_score;
-          dpi_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("dpi_score", "dpi_score", "dpi")
-          );
-        }
-        var risk_score = document.getElementById("risk_score_main");
-        if (risk_score) {
-          risk_score.textContent = keyvalue.risk_score;
-          risk_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("risk_score", "risk_score")
-          );
-        }
-        var vulnerability_score = document.getElementById(
-          "vulnerability_score_main"
-        );
-        if (vulnerability_score) {
-          vulnerability_score.textContent = keyvalue.vulnerability_score;
-          vulnerability_score.setAttribute(
-            "class",
-            "component-score " +
-              high_med_low("vulnerability_score", "vulnerability_score")
-          );
-        }
-        var hazard_score = document.getElementById("hazard_score_main");
-        if (hazard_score) {
-          hazard_score.textContent = keyvalue.hazard_score;
-          hazard_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("hazard_score", "hazard_score")
-          );
-        }
-        var coping_score = document.getElementById(
-          "coping_capacity_score_main"
-        );
-        if (coping_score) {
-          coping_score.textContent = keyvalue.coping_capacity_score;
-          coping_score.setAttribute(
-            "class",
-            "component-score " +
-              high_med_low("coping_capacity_score", "coping_capacity_score")
-          );
-        }
-
-        //Dynamically create HTML-elements for all indicator tables
-        var general = document.getElementById("general");
-        var dpi = document.getElementById("dpi");
-        var scores = document.getElementById("scores");
-        var vulnerability = document.getElementById("vulnerability");
-        var hazard = document.getElementById("hazard");
-        var coping = document.getElementById("coping_capacity");
-        var other = document.getElementById("other");
-        if (general) {
-          while (general.firstChild) {
-            general.removeChild(general.firstChild);
-          }
-        }
-        if (dpi) {
-          while (dpi.firstChild) {
-            dpi.removeChild(dpi.firstChild);
-          }
-        }
-        if (scores) {
-          while (scores.firstChild) {
-            scores.removeChild(scores.firstChild);
-          }
-        }
-        if (vulnerability) {
-          while (vulnerability.firstChild) {
-            vulnerability.removeChild(vulnerability.firstChild);
-          }
-        }
-        if (hazard) {
-          while (hazard.firstChild) {
-            hazard.removeChild(hazard.firstChild);
-          }
-        }
-        if (coping) {
-          while (coping.firstChild) {
-            coping.removeChild(coping.firstChild);
-          }
-        }
-        if (other) {
-          while (other.firstChild) {
-            other.removeChild(other.firstChild);
-          }
-        }
-
-        for (var i = 0; i < $scope.tables.length; i++) {
-          var record = $scope.tables[i];
-          var width;
-          var icon;
-          var unit;
-
-          if (!meta_icon[record.name]) {
-            icon = "modules/dashboards/img/undefined.png";
-          } else {
-            icon = "modules/dashboards/img/" + meta_icon[record.name];
-          }
-
-          if (meta_unit[record.name] === "null") {
-            unit = "";
-          } else {
-            unit = meta_unit[record.name];
-          }
-
-          if (record.group === "general") {
-            var div = document.createElement("div");
-            div.setAttribute("class", "row profile-item");
-            div.setAttribute("id", "section-" + record.name);
-            var parent = document.getElementById(record.group);
-            parent.appendChild(div);
-            var div0 = document.createElement("div");
-            div0.setAttribute("class", "col col-md-1 col-sm-1 col-xs-1");
-            div.appendChild(div0);
-            var img = document.createElement("img");
-            img.setAttribute("class", "community-icon");
-            img.setAttribute("src", icon);
-            div0.appendChild(img);
-            var div1 = document.createElement("div");
-            div1.setAttribute(
-              "class",
-              "col col-md-5 col-sm-5 col-xs-5 general-component-label"
-            );
-            div1.setAttribute(
-              "ng-click",
-              "change_indicator('" + record.name + "')"
-            );
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
-            div.appendChild(div1);
-            $compile(div1)($scope);
-            var div2 = document.createElement("div");
-            div2.setAttribute("class", "col col-md-5 col-sm-5 col-xs-5");
-            div2.setAttribute("id", record.name);
-            div2.innerHTML = keyvalue[record.name] + " " + unit;
-            div.appendChild(div2);
-            var div3 = document.createElement("div");
-            div3.setAttribute("class", "col col-md-1 col-sm-1 col-xs-1");
-            div.appendChild(div3);
-            var button = document.createElement("button");
-            button.setAttribute("type", "button");
-            button.setAttribute("class", "btn-modal");
-            button.setAttribute("data-toggle", "modal");
-            button.setAttribute("ng-click", "info('" + record.name + "')");
-            div3.appendChild(button);
-            $compile(button)($scope);
-            img = document.createElement("img");
-            img.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
-            img.setAttribute("style", "height:17px");
-            button.appendChild(img);
-          } else if (record.group === "other") {
-            if (
-              $scope.admlevel == zoom_max &&
-              $scope.filters.length == 0 &&
-              !isNaN(d_prev[record.scorevar_name])
-            ) {
-              width = d_prev[record.scorevar_name] * 10;
-            } else {
-              width = dimensions[record.name].top(1)[0].value.finalVal * 10;
-            }
-
-            if (
-              !($scope.predictions == "no" && record.group == "predictions") &&
-              !($scope.actuals == "no" && record.group == "damage") &&
-              !(
-                ($scope.predictions == "no" || $scope.actuals == "no") &&
-                record.group == "pred_error"
-              )
-            ) {
-              div = document.createElement("div");
-              div.setAttribute("class", "component-section");
-              div.setAttribute("id", "section-" + record.name);
-              parent = document.getElementById(record.group);
-              parent.appendChild(div);
-              div0 = document.createElement("div");
-              div0.setAttribute("class", "col-md-2 col-sm-2 col-xs-2");
-              div.appendChild(div0);
-              var img1 = document.createElement("img");
-              img1.setAttribute("style", "height:20px");
-              img1.setAttribute("src", icon);
-              div0.appendChild(img1);
-              div1 = document.createElement("div");
-              div1.setAttribute(
-                "class",
-                "col-md-9 col-sm-9 col-xs-9 component-label"
-              );
-              div1.setAttribute(
-                "ng-click",
-                "change_indicator('" + record.name + "')"
-              );
-              div1.innerHTML = "{{ '" + record.name + "' | translate }}";
-              $compile(div1)($scope);
-              div.appendChild(div1);
-              var div1a = document.createElement("div");
-              div1a.setAttribute(
-                "class",
-                "component-score " +
-                  high_med_low(record.name, record.scorevar_name)
-              );
-              div1a.setAttribute("id", record.name);
-              div1a.innerHTML = keyvalue[record.name] + " " + unit;
-              div1.appendChild(div1a);
-              div3 = document.createElement("div");
-              div3.setAttribute(
-                "class",
-                "col-md-1 col-sm-1 col-xs-1 no-padding"
-              );
-              div.appendChild(div3);
-              button = document.createElement("button");
-              button.setAttribute("type", "button");
-              button.setAttribute("class", "btn-modal");
-              button.setAttribute("data-toggle", "modal");
-              button.setAttribute("ng-click", "info('" + record.name + "')");
-              div3.appendChild(button);
-              $compile(button)($scope);
-              var img3 = document.createElement("img");
-              img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
-              img3.setAttribute("style", "height:17px");
-              button.appendChild(img3);
-            }
-          } else if (record.group !== "hide") {
-            if (record.group == "dpi") {
-              width = d.dpi[0][record.name] * 100;
-            } else if (
-              $scope.admlevel == zoom_max &&
-              $scope.filters.length == 0 &&
-              !isNaN(d_prev[record.scorevar_name])
-            ) {
-              width = d_prev[record.scorevar_name] * 10;
-            } else {
-              width =
-                dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
-            }
-
-            div = document.createElement("div");
-            div.setAttribute("class", "component-section");
-            div.setAttribute("id", "section-" + record.name);
-            parent = document.getElementById(record.group);
-            parent.appendChild(div);
-            div0 = document.createElement("div");
-            div0.setAttribute("class", "col-md-2 col-sm-2 col-xs-2");
-            div.appendChild(div0);
-            img1 = document.createElement("img");
-            img1.setAttribute("style", "height:20px");
-            img1.setAttribute("src", icon);
-            div0.appendChild(img1);
-            div1 = document.createElement("div");
-            div1.setAttribute(
-              "class",
-              "col-md-4 col-sm-4 col-xs-4 component-label"
-            );
-            if (record.group !== "dpi") {
-              div1.setAttribute(
-                "ng-click",
-                "change_indicator('" + record.name + "')"
-              );
-            }
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
-            $compile(div1)($scope);
-            div.appendChild(div1);
-            div1a = document.createElement("div");
-            div1a.setAttribute(
-              "class",
-              "component-score " +
-                high_med_low(record.name, record.scorevar_name, record.group)
-            );
-            div1a.setAttribute("id", record.name);
-            div1a.innerHTML = keyvalue[record.name] + " " + unit;
-            div1.appendChild(div1a);
-            div2 = document.createElement("div");
-            div2.setAttribute("class", "col-md-5 col-sm-5 col-xs-5");
-            div.appendChild(div2);
-            var div2a = document.createElement("div");
-            div2a.setAttribute("class", "component-scale");
-            div2.appendChild(div2a);
-            var div2a1 = document.createElement("div");
-            div2a1.setAttribute(
-              "class",
-              "score-bar " +
-                high_med_low(record.name, record.scorevar_name, record.group)
-            );
-            div2a1.setAttribute("id", "bar-" + record.name);
-            div2a1.setAttribute("style", "width:" + width + "%");
-            div2a.appendChild(div2a1);
-            div3 = document.createElement("div");
-            div3.setAttribute("class", "col-md-1 col-sm-1 col-xs-1 no-padding");
-            div.appendChild(div3);
-            button = document.createElement("button");
-            button.setAttribute("type", "button");
-            button.setAttribute("class", "btn-modal");
-            button.setAttribute("data-toggle", "modal");
-            button.setAttribute("ng-click", "info('" + record.name + "')");
-            div3.appendChild(button);
-            $compile(button)($scope);
-            img3 = document.createElement("img");
-            img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
-            img3.setAttribute("style", "height:17px");
-            button.appendChild(img3);
-          }
-        }
-      };
-      $scope.createHTML(keyvalue);
+      //Give active class to current indicator
       var section_id = document.getElementById("section-" + $scope.metric);
       if (section_id) {
         section_id.classList.add("section-active");
       }
 
+      //Define function to update HTML (only executed at other places)
       $scope.updateHTML = function(keyvalue) {
-        var dpi_score = document.getElementById("dpi_score_main");
-        if (dpi_score) {
-          dpi_score.textContent = keyvalue.dpi_score;
-          dpi_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("dpi_score", "dpi_score", "dpi")
-          );
-        }
-        var risk_score = document.getElementById("risk_score_main");
-        if (risk_score) {
-          risk_score.textContent = keyvalue.risk_score;
-          risk_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("risk_score", "risk_score")
-          );
-        }
-        var vulnerability_score = document.getElementById(
-          "vulnerability_score_main"
+        return sidebarHtmlService.updateHTML(
+          keyvalue,
+          $scope.tables,
+          $scope.admlevel,
+          zoom_max,
+          $scope.filters,
+          meta_unit,
+          dimensions,
+          dimensions_scores,
+          d,
+          d_prev,
+          high_med_low,
+          "", //predictions
+          "" //actuals
         );
-        if (vulnerability_score) {
-          vulnerability_score.textContent = keyvalue.vulnerability_score;
-          vulnerability_score.setAttribute(
-            "class",
-            "component-score " +
-              high_med_low("vulnerability_score", "vulnerability_score")
-          );
-        }
-        var hazard_score = document.getElementById("hazard_score_main");
-        if (hazard_score) {
-          hazard_score.textContent = keyvalue.hazard_score;
-          hazard_score.setAttribute(
-            "class",
-            "component-score " + high_med_low("hazard_score", "hazard_score")
-          );
-        }
-        var coping_score = document.getElementById(
-          "coping_capacity_score_main"
-        );
-        if (coping_score) {
-          coping_score.textContent = keyvalue.coping_capacity_score;
-          coping_score.setAttribute(
-            "class",
-            "component-score " +
-              high_med_low("coping_capacity_score", "coping_capacity_score")
-          );
-        }
-
-        for (var i = 0; i < $scope.tables.length; i++) {
-          var record = $scope.tables[i];
-          var width;
-          var unit;
-
-          if (meta_unit[record.name] === "null") {
-            unit = "";
-          } else {
-            unit = meta_unit[record.name];
-          }
-
-          if (record.group === "general") {
-            var div2 = document.getElementById(record.name);
-            div2.innerHTML = keyvalue[record.name] + " " + unit;
-          } else if (record.group === "other") {
-            if (
-              $scope.admlevel == zoom_max &&
-              $scope.filters.length == 0 &&
-              !isNaN(d_prev[record.scorevar_name])
-            ) {
-              width = d_prev[record.scorevar_name] * 10;
-            } else {
-              width = dimensions[record.name].top(1)[0].value.finalVal * 10;
-            }
-
-            if (
-              !($scope.predictions == "no" && record.group == "predictions") &&
-              !($scope.actuals == "no" && record.group == "damage") &&
-              !(
-                ($scope.predictions == "no" || $scope.actuals == "no") &&
-                record.group == "pred_error"
-              )
-            ) {
-              var div1a = document.getElementById(record.name);
-              div1a.setAttribute(
-                "class",
-                "component-score " +
-                  high_med_low(record.name, record.scorevar_name)
-              );
-              div1a.innerHTML = keyvalue[record.name] + " " + unit;
-            }
-          } else if (record.group !== "hide") {
-            if (record.group == "dpi") {
-              width = d.dpi[0][record.name] * 100;
-            } else if (
-              $scope.admlevel == zoom_max &&
-              $scope.filters.length == 0 &&
-              !isNaN(d_prev[record.scorevar_name])
-            ) {
-              width = d_prev[record.scorevar_name] * 10;
-            } else {
-              width =
-                dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
-            }
-
-            div1a = document.getElementById(record.name);
-            div1a.setAttribute(
-              "class",
-              "component-score " +
-                high_med_low(record.name, record.scorevar_name, record.group)
-            );
-            div1a.innerHTML = keyvalue[record.name] + " " + unit;
-            var div2a1 = document.getElementById("bar-" + record.name);
-            div2a1.setAttribute(
-              "class",
-              "score-bar " +
-                high_med_low(record.name, record.scorevar_name, record.group)
-            );
-            div2a1.setAttribute("style", "width:" + width + "%");
-          }
-        }
       };
 
-      /////////////////
-      // COLOR SETUP //
-      /////////////////
+      //////////////////
+      // CHARTS SETUP //
+      //////////////////
 
-      //Define the range of all values for current metric (to be used for quantile coloring)
-      //Define the color-quantiles based on this range
-      $scope.mapchartColors = function() {
-        var quantile_range = [];
-        if (meta_scorevar[$scope.metric]) {
-          quantile_range = d.quantile_range_scores;
-        } else {
-          for (i = 0; i < d.Rapportage.length; i++) {
-            if (d.Rapportage[i][$scope.metric]) {
-              quantile_range.push(d.Rapportage[i][$scope.metric]);
-              quantile_range.sort(function sortNumber(a, b) {
-                return a - b;
-              });
-            }
-          }
-          $scope.quantile_max = quantile_range[quantile_range.length - 1];
-        }
-        var colorDomain;
-        if (!meta_scorevar[$scope.metric]) {
-          colorDomain = $scope.quantileColorDomain_CRA_std;
-        } else {
-          colorDomain = $scope.quantileColorDomain_CRA_scores;
-        }
-
-        return d3.scale
-          .quantile()
-          .domain(quantile_range)
-          .range(colorDomain);
-      };
-      var mapchartColors = $scope.mapchartColors();
+      //Execute basic setup for charts
+      chartService.setupCharts(map, cf, all);
+      //define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
+      var mapChart = dc.leafletChoroplethChart("#map-chart");
+      var rowChart = dc.rowChart("#row-chart");
+      $scope.coming_from_map = false; //Setting which determines if filter happens while coming from Map (moving to Tabular)
+      $scope.coming_from_tab = false; //Setting which determines if filter happens while coming from Tabular (moving to Map)
 
       /////////////////////
       // MAP CHART SETUP //
       /////////////////////
-
-      $scope.coming_from_map = false; //Setting which determines if filter happens while coming from Map (moving to Tabular)
-      $scope.coming_from_tab = false; //Setting which determines if filter happens while coming from Tabular (moving to Map)
 
       //Set up the map itself with all its properties
       mapChart
@@ -1555,6 +1084,10 @@ angular.module("dashboards").controller("CommunityRiskController", [
         $scope.mapShow();
       };
 
+      /////////////////////////////////
+      // MAP & ROW RELATED FUNCTIONS //
+      /////////////////////////////////
+
       $scope.change_indicator = function(id) {
         var section_id = document.getElementById("section-" + $scope.metric);
         if (section_id) {
@@ -1562,7 +1095,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
         }
         $scope.metric = id;
         $scope.metric_label = meta_label[id];
-        var mapchartColors = $scope.mapchartColors();
+        var mapchartColors = $scope.mapchartColors().colorScale;
+        $scope.quantile_max = $scope.mapchartColors().quantile_max;
         cf_scores_metric = !meta_scorevar[$scope.metric]
           ? $scope.metric
           : meta_scorevar[$scope.metric];

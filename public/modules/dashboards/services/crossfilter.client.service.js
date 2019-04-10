@@ -1,7 +1,7 @@
 "use strict";
 
 // Share URL
-// Service to generate a url to share the current view/state of the dashboard
+// Service to transform data to a Crossfilter-setup, as used by the DC-charts in the various controllers
 //
 angular.module("dashboards").factory("crossfilterService", [
   function() {

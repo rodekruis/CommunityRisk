@@ -82,7 +82,7 @@ angular.module("dashboards").factory("shareService", [
         var country_code = params_out.country;
         if (params_in[1]) {
           directURLload = true;
-          var admlevel = params_out.admlevel;
+          var admlevel = parseInt(params_out.admlevel);
           var metric = params_out.metric;
           var chart_show = params_out.view;
           var parent_codes =

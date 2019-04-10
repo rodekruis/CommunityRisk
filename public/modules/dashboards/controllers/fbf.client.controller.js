@@ -14,6 +14,10 @@ angular.module("dashboards").controller("FbfController", [
   "exportService",
   "shareService",
   "crossfilterService",
+  "colorSetupService",
+  "sidebarHtmlService",
+  "admlevelsService",
+  "chartService",
   "GEOSERVER_BASEURL",
   "DEBUG",
   function(
@@ -30,6 +34,10 @@ angular.module("dashboards").controller("FbfController", [
     exportService,
     shareService,
     crossfilterService,
+    colorSetupService,
+    sidebarHtmlService,
+    admlevelsService,
+    chartService,
     GEOSERVER_BASEURL,
     DEBUG
   ) {
@@ -294,16 +302,6 @@ angular.module("dashboards").controller("FbfController", [
     ///////////////////////////////////////////
 
     $scope.generateCharts = function(d) {
-      // Clear the charts
-      dc.chartRegistry.clear();
-      if (map !== undefined) {
-        map.remove();
-      }
-
-      //define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
-      var mapChart = dc.leafletChoroplethChart("#map-chart");
-      var rowChart = dc.rowChart("#row-chart");
-
       //////////////////////////
       // SETUP META VARIABLES //
       //////////////////////////
@@ -326,9 +324,24 @@ angular.module("dashboards").controller("FbfController", [
         "default_metric"
       );
 
+      // get the lookup tables
+      var lookup = helpers.lookUpProperty($scope.geom, "pcode", "name");
+      var meta_label = helpers.genLookup_meta(d.Metadata, "label");
+      var meta_format = helpers.genLookup_meta(d.Metadata, "format");
+      var meta_unit = helpers.genLookup_meta(d.Metadata, "unit");
+      var meta_icon = helpers.genLookup_meta(d.Metadata, "icon_src");
+      var meta_year = helpers.genLookup_meta(d.Metadata, "year");
+      var meta_source = helpers.genLookup_meta(d.Metadata, "source_link");
+      var meta_desc = helpers.genLookup_meta(d.Metadata, "description");
+      var meta_scorevar = helpers.genLookup_meta(d.Metadata, "scorevar_name");
+
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
       var zoom_max = Number(country_zoom_max[$scope.country_code]);
+
+      /////////////////////////////////////
+      // CONFIGURE NEEDED HTML/VARIABLES //
+      /////////////////////////////////////
 
       if (!$scope.directURLload) {
         if ($scope.metric === "") {
@@ -345,17 +358,6 @@ angular.module("dashboards").controller("FbfController", [
       } else if (document.getElementById("level3")) {
         document.getElementById("level3").style.visibility = "visible";
       }
-
-      // get the lookup tables
-      var lookup = helpers.lookUpProperty($scope.geom, "pcode", "name");
-      var meta_label = helpers.genLookup_meta(d.Metadata, "label");
-      var meta_format = helpers.genLookup_meta(d.Metadata, "format");
-      var meta_unit = helpers.genLookup_meta(d.Metadata, "unit");
-      var meta_icon = helpers.genLookup_meta(d.Metadata, "icon_src");
-      var meta_year = helpers.genLookup_meta(d.Metadata, "year");
-      var meta_source = helpers.genLookup_meta(d.Metadata, "source_link");
-      var meta_desc = helpers.genLookup_meta(d.Metadata, "description");
-      var meta_scorevar = helpers.genLookup_meta(d.Metadata, "scorevar_name");
 
       $scope.metric_label = meta_label[$scope.metric];
       $scope.type_selection =
@@ -471,6 +473,23 @@ angular.module("dashboards").controller("FbfController", [
           $scope.admlevel < zoom_max ? "" : $scope.parent_code;
       }
 
+      //Color/fill the level2/level3 buttons (top-left) when coming in at higher level through direct URL
+      if ($scope.directURLload) {
+        var directURL = admlevelsService.directUrlHigherLevel(
+          $scope.admlevel,
+          zoom_min,
+          $scope.parent_codes,
+          d,
+          $scope.country_code
+        );
+        if ($scope.parent_codes.length > 0) {
+          $scope.levelC_codes = directURL.levelC_codes;
+          $scope.levelC_selection = directURL.levelC_selection;
+          $scope.levelB_codes = directURL.levelB_codes;
+          $scope.levelB_selection = directURL.levelB_selection;
+        }
+      }
+
       //////////////////////
       // SETUP INDICATORS //
       //////////////////////
@@ -534,446 +553,136 @@ angular.module("dashboards").controller("FbfController", [
         return lookup_value;
       };
 
-      dc.dataCount("#count-info")
-        .dimension(cf)
-        .group(all);
+      /////////////////
+      // COLOR SETUP //
+      /////////////////
+
+      //Define thresholds for colors-scales. They are stored in d, because the thresholds are carried when zooming in to deeper admin-level.
+      d = colorSetupService.setupThresholds(
+        $scope.admlevel,
+        zoom_min,
+        $scope.directURLload,
+        d,
+        meta_scorevar
+      );
+
+      //Define a function which determines the right color based on value
+      var high_med_low = function(ind, ind_score, group) {
+        return colorSetupService.high_med_low(
+          ind,
+          ind_score,
+          group,
+          $scope.admlevel,
+          zoom_max,
+          $scope.filters,
+          d,
+          d_prev,
+          dimensions_scores
+        );
+      };
+
+      //Define the colorScaale used in the chart. Additionally a quantile_max is returned for later use.
+      $scope.mapchartColors = function() {
+        return colorSetupService.mapchartColors(
+          meta_scorevar,
+          $scope.metric,
+          d,
+          $scope.quantileColorDomain_CRA_std,
+          $scope.quantileColorDomain_CRA_scores
+        );
+      };
+      var mapchartColors = $scope.mapchartColors().colorScale;
+      $scope.quantile_max = $scope.mapchartColors().quantile_max;
 
       ///////////////////////////////
       // SET UP ALL INDICATOR HTML //
       ///////////////////////////////
 
-      //Create table with current crossfilter-selection output, so that you can also access this in other ways than through DC.js
+      //Create all data for sidebar
       var fill_keyvalues = function() {
-        var keyvalue = [];
-        $scope.tables.forEach(function(t) {
-          var key = t.name;
-          if (t.group == "dpi") {
-            keyvalue[key] = helpers.dec2Format(d.dpi[0][t.name]);
-          } else if (
-            $scope.admlevel == zoom_max &&
-            $scope.filters.length == 0 &&
-            !isNaN(d_prev[t.name])
-          ) {
-            if (meta_format[t.name] === "decimal0") {
-              keyvalue[key] = helpers.dec0Format(d_prev[t.name]);
-            } else if (meta_format[t.name] === "percentage") {
-              keyvalue[key] = helpers.percFormat(d_prev[t.name]);
-            } else if (meta_format[t.name] === "decimal2") {
-              keyvalue[key] = helpers.dec2Format(d_prev[t.name]);
-            }
-          } else {
-            if (t.propertyPath === "value.finalVal") {
-              if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
-                keyvalue[key] = "-"; //"N.A. on this level";
-              } else if (meta_format[t.name] === "decimal0") {
-                keyvalue[key] = helpers.dec0Format(
-                  dimensions[t.name].top(1)[0].value.finalVal
-                );
-              } else if (meta_format[t.name] === "percentage") {
-                keyvalue[key] = helpers.percFormat(
-                  dimensions[t.name].top(1)[0].value.finalVal
-                );
-              } else if (meta_format[t.name] === "decimal2") {
-                keyvalue[key] = helpers.dec2Format(
-                  dimensions[t.name].top(1)[0].value.finalVal
-                );
-              }
-            } else if (t.propertyPath === "value") {
-              if (isNaN(dimensions[t.name].top(1)[0].value)) {
-                keyvalue[key] = "-"; //"N.A. on this level";
-              } else if (meta_format[t.name] === "decimal0") {
-                keyvalue[key] = helpers.dec0Format(
-                  dimensions[t.name].top(1)[0].value
-                );
-              } else if (meta_format[t.name] === "percentage") {
-                keyvalue[key] = helpers.percFormat(
-                  dimensions[t.name].top(1)[0].value
-                );
-              } else if (meta_format[t.name] === "decimal2") {
-                keyvalue[key] = helpers.dec2Format(
-                  dimensions[t.name].top(1)[0].value
-                );
-              }
-            }
-          }
-        });
-        return keyvalue;
+        return sidebarHtmlService.fill_keyvalues(
+          $scope.tables,
+          $scope.admlevel,
+          zoom_max,
+          $scope.filters,
+          meta_format,
+          dimensions,
+          d,
+          d_prev
+        );
       };
       var keyvalue = fill_keyvalues();
 
-      //Pool all values for all 0-10 score value together to determine quantile_range (so that quantile thresholds will not differ between indicators)
-      if ($scope.admlevel == zoom_min || $scope.directURLload) {
-        var quantile_range_scores = [];
-        j = 0;
-        for (i = 0; i < d.Rapportage.length; i++) {
-          Object.keys(d.Rapportage[i]).forEach(function(key) {
-            if (
-              meta_scorevar[key] &&
-              (d.Rapportage[i][meta_scorevar[key]] ||
-                d.Rapportage[i][meta_scorevar[key]] == 0)
-            ) {
-              quantile_range_scores[j] = d.Rapportage[i][meta_scorevar[key]];
-              j += 1;
-            }
-          });
-        }
-        quantile_range_scores.sort(function(a, b) {
-          return a - b;
-        });
-        d.quantile_range_scores = quantile_range_scores;
-
-        //Establish threshold-values for quantile-range (formula taken exactly from d3-library to mimic the way the thrsholds are established in the map, which happens automatically)
-        var quantile = function(values, p) {
-          var H = (values.length - 1) * p + 1,
-            h = Math.floor(H),
-            v = +values[h - 1],
-            e = H - h;
-          return e ? v + e * (values[h] - v) : v;
-        };
-        var k = 0,
-          q = 5;
-        var thresholds = [];
-        while (++k < q)
-          thresholds[k - 1] =
-            Math.round(quantile(quantile_range_scores, k / q) * 100) / 100;
-        d.thresholds = thresholds;
+      var groups = [
+        "general",
+        "intervention",
+        "flood_extents",
+        "exposure",
+        "cra",
+      ];
+      //Create all initial HTML for sidebar
+      sidebarHtmlService.createHTML(
+        groups,
+        keyvalue,
+        $scope.tables,
+        $scope.admlevel,
+        zoom_max,
+        $scope.filters,
+        meta_icon,
+        meta_unit,
+        dimensions,
+        dimensions_scores,
+        d,
+        d_prev,
+        high_med_low,
+        "", //predictions
+        "" //actuals
+      );
+      //Compile clickable elements
+      var compile = $(".component-label, .general-component-label, .info-btn");
+      for (i = 0; i < compile.length; i++) {
+        $compile(compile[i])($scope);
       }
-
-      //Function for determining color of indicator-bars and -numbers in sidebar
-      var high_med_low = function(ind, ind_score, group) {
-        var width;
-        if (dimensions_scores[ind]) {
-          if (group == "dpi") {
-            width = 10 * (1 - d.dpi[0][ind]);
-          } else if (
-            $scope.admlevel == zoom_max &&
-            $scope.filters.length == 0 &&
-            !isNaN(d_prev[ind_score])
-          ) {
-            width = d_prev[ind_score];
-          } else {
-            if (dimensions_scores[ind].top(1)[0].value.count == 0) {
-              width = "na";
-            } else {
-              width = dimensions_scores[ind].top(1)[0].value.finalVal;
-            }
-          }
-          if (ind == "dpi_score") {
-            //This reflects that DPI < 0.1 is considered too low
-            if (1 - width / 10 < 0.1) {
-              return "bad";
-            } else {
-              return "good";
-            }
-          }
-
-          //Assign categories to each value (categories relate through colors via CSS)
-          if (isNaN(width)) {
-            return "notavailable";
-          } else if (width < d.thresholds[0]) {
-            return "good";
-          } else if (width <= d.thresholds[1]) {
-            return "medium-good";
-          } else if (width <= d.thresholds[2]) {
-            return "medium";
-          } else if (width <= d.thresholds[3]) {
-            return "medium-bad";
-          } else if (width > d.thresholds[3]) {
-            return "bad";
-          }
-        }
-      };
-
-      $scope.createHTML = function(keyvalue) {
-        //Dynamically create HTML-elements for all indicator tables
-        var general = document.getElementById("general");
-        var intervention = document.getElementById("intervention");
-        var flood_extent = document.getElementById("flood_extent");
-        var exposure = document.getElementById("exposure");
-        var cra = document.getElementById("cra");
-        if (general) {
-          while (general.firstChild) {
-            general.removeChild(general.firstChild);
-          }
-        }
-        if (intervention) {
-          while (intervention.firstChild) {
-            intervention.removeChild(intervention.firstChild);
-          }
-        }
-        if (flood_extent) {
-          while (flood_extent.firstChild) {
-            flood_extent.removeChild(flood_extent.firstChild);
-          }
-        }
-        if (exposure) {
-          while (exposure.firstChild) {
-            exposure.removeChild(exposure.firstChild);
-          }
-        }
-        if (cra) {
-          while (cra.firstChild) {
-            cra.removeChild(cra.firstChild);
-          }
-        }
-
-        for (var i = 0; i < $scope.tables.length; i++) {
-          var record = $scope.tables[i];
-          var width;
-          var icon;
-          var unit;
-
-          if (!meta_icon[record.name]) {
-            icon = "modules/dashboards/img/undefined.png";
-          } else {
-            icon = "modules/dashboards/img/" + meta_icon[record.name];
-          }
-
-          if (meta_unit[record.name] === "null") {
-            unit = "";
-          } else {
-            unit = meta_unit[record.name];
-          }
-
-          if (
-            ["intervention", "flood_extent", "exposure", "general"].indexOf(
-              record.group
-            ) > -1
-          ) {
-            var div = document.createElement("div");
-            div.setAttribute("class", "row profile-item");
-            div.setAttribute("id", "section-" + record.name);
-            var parent = document.getElementById(record.group);
-            parent.appendChild(div);
-            var div0 = document.createElement("div");
-            div0.setAttribute("class", "col col-md-1 col-sm-1 col-xs-1");
-            div.appendChild(div0);
-            var img = document.createElement("img");
-            img.setAttribute("class", "community-icon");
-            img.setAttribute("src", icon);
-            div0.appendChild(img);
-            var div1 = document.createElement("div");
-            div1.setAttribute(
-              "class",
-              "col col-md-5 col-sm-5 col-xs-5 general-component-label"
-            );
-            if (record.layer_type == "raster") {
-              div1.setAttribute(
-                "ng-click",
-                "toggle_raster_layer('" + record.name + "')"
-              );
-              // } else if (record.layer_type == "point") {
-              //   div1.setAttribute(
-              //     "ng-click",
-              //     "toggle_poi_layer('" + record.name + "')"
-              //   );
-            } else if (record.layer_type == "polygon") {
-              div1.setAttribute(
-                "ng-click",
-                "change_indicator('" + record.name + "')"
-              );
-            }
-            div1.innerHTML = record.label; //"{{ '" + record.name + "' | translate }}";
-            div.appendChild(div1);
-            $compile(div1)($scope);
-            var div2 = document.createElement("div");
-            div2.setAttribute("class", "col col-md-5 col-sm-5 col-xs-5");
-            div2.setAttribute("id", record.name);
-            div2.innerHTML = keyvalue[record.name] + " " + unit;
-            div.appendChild(div2);
-            var div3 = document.createElement("div");
-            div3.setAttribute("class", "col col-md-1 col-sm-1 col-xs-1");
-            div.appendChild(div3);
-            var button = document.createElement("button");
-            button.setAttribute("type", "button");
-            button.setAttribute("class", "btn-modal");
-            button.setAttribute("data-toggle", "modal");
-            button.setAttribute("ng-click", "info('" + record.name + "')");
-            div3.appendChild(button);
-            $compile(button)($scope);
-            img = document.createElement("img");
-            img.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
-            img.setAttribute("style", "height:17px");
-            button.appendChild(img);
-          } else if (record.group === "cra") {
-            if (record.group == "dpi") {
-              width = d.dpi[0][record.name] * 100;
-            } else if (
-              $scope.admlevel == zoom_max &&
-              $scope.filters.length == 0 &&
-              !isNaN(d_prev[record.scorevar_name])
-            ) {
-              width = d_prev[record.scorevar_name] * 10;
-            } else {
-              width =
-                dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
-            }
-
-            div = document.createElement("div");
-            div.setAttribute("class", "component-section");
-            div.setAttribute("id", "section-" + record.name);
-            parent = document.getElementById(record.group);
-            parent.appendChild(div);
-            div0 = document.createElement("div");
-            div0.setAttribute("class", "col-md-2 col-sm-2 col-xs-2");
-            div.appendChild(div0);
-            var img1 = document.createElement("img");
-            img1.setAttribute("style", "height:20px");
-            img1.setAttribute("src", icon);
-            div0.appendChild(img1);
-            div1 = document.createElement("div");
-            div1.setAttribute(
-              "class",
-              "col-md-4 col-sm-4 col-xs-4 component-label"
-            );
-            if (record.group !== "dpi") {
-              div1.setAttribute(
-                "ng-click",
-                "change_indicator('" + record.name + "')"
-              );
-            }
-            div1.innerHTML = record.label; //"{{ '" + record.name + "' | translate }}";
-            $compile(div1)($scope);
-            div.appendChild(div1);
-            var div1a = document.createElement("div");
-            div1a.setAttribute(
-              "class",
-              "component-score " +
-                high_med_low(record.name, record.scorevar_name, record.group)
-            );
-            div1a.setAttribute("id", record.name);
-            div1a.innerHTML = keyvalue[record.name] + " " + unit;
-            div1.appendChild(div1a);
-            div2 = document.createElement("div");
-            div2.setAttribute("class", "col-md-5 col-sm-5 col-xs-5");
-            div.appendChild(div2);
-            var div2a = document.createElement("div");
-            div2a.setAttribute("class", "component-scale");
-            div2.appendChild(div2a);
-            var div2a1 = document.createElement("div");
-            div2a1.setAttribute(
-              "class",
-              "score-bar " +
-                high_med_low(record.name, record.scorevar_name, record.group)
-            );
-            div2a1.setAttribute("id", "bar-" + record.name);
-            div2a1.setAttribute("style", "width:" + width + "%");
-            div2a.appendChild(div2a1);
-            div3 = document.createElement("div");
-            div3.setAttribute("class", "col-md-1 col-sm-1 col-xs-1 no-padding");
-            div.appendChild(div3);
-            button = document.createElement("button");
-            button.setAttribute("type", "button");
-            button.setAttribute("class", "btn-modal");
-            button.setAttribute("data-toggle", "modal");
-            button.setAttribute("ng-click", "info('" + record.name + "')");
-            div3.appendChild(button);
-            $compile(button)($scope);
-            var img3 = document.createElement("img");
-            img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
-            img3.setAttribute("style", "height:17px");
-            button.appendChild(img3);
-          }
-        }
-      };
-      $scope.createHTML(keyvalue);
+      //Give active class to current indicator
       var section_id = document.getElementById("section-" + $scope.metric);
       if (section_id) {
         section_id.classList.add("section-active");
       }
 
+      //Define function to update HTML (only executed at other places)
       $scope.updateHTML = function(keyvalue) {
-        for (var i = 0; i < $scope.tables.length; i++) {
-          var record = $scope.tables[i];
-          var width;
-          var unit;
-
-          if (meta_unit[record.name] === "null") {
-            unit = "";
-          } else {
-            unit = meta_unit[record.name];
-          }
-
-          if (
-            ["intervention", "flood_extent", "exposure", "general"].indexOf(
-              record.group
-            ) > -1
-          ) {
-            var div2 = document.getElementById(record.name);
-            div2.innerHTML = keyvalue[record.name] + " " + unit;
-          } else if (record.group === "cra") {
-            if (record.group == "dpi") {
-              width = d.dpi[0][record.name] * 100;
-            } else if (
-              $scope.admlevel == zoom_max &&
-              $scope.filters.length == 0 &&
-              !isNaN(d_prev[record.scorevar_name])
-            ) {
-              width = d_prev[record.scorevar_name] * 10;
-            } else {
-              width =
-                dimensions_scores[record.name].top(1)[0].value.finalVal * 10;
-            }
-
-            var div1a = document.getElementById(record.name);
-            div1a.setAttribute(
-              "class",
-              "component-score " +
-                high_med_low(record.name, record.scorevar_name, record.group)
-            );
-            div1a.innerHTML = keyvalue[record.name] + " " + unit;
-            var div2a1 = document.getElementById("bar-" + record.name);
-            div2a1.setAttribute(
-              "class",
-              "score-bar " +
-                high_med_low(record.name, record.scorevar_name, record.group)
-            );
-            div2a1.setAttribute("style", "width:" + width + "%");
-          }
-        }
+        return sidebarHtmlService.updateHTML(
+          keyvalue,
+          $scope.tables,
+          $scope.admlevel,
+          zoom_max,
+          $scope.filters,
+          meta_unit,
+          dimensions,
+          dimensions_scores,
+          d,
+          d_prev,
+          high_med_low,
+          "", //predictions
+          "" //actuals
+        );
       };
 
-      /////////////////
-      // COLOR SETUP //
-      /////////////////
+      //////////////////
+      // CHARTS SETUP //
+      //////////////////
 
-      //Define the range of all values for current metric (to be used for quantile coloring)
-      //Define the color-quantiles based on this range
-      $scope.mapchartColors = function() {
-        var quantile_range = [];
-        if (meta_scorevar[$scope.metric]) {
-          quantile_range = d.quantile_range_scores;
-        } else {
-          for (i = 0; i < d.Rapportage.length; i++) {
-            if (d.Rapportage[i][$scope.metric]) {
-              quantile_range.push(d.Rapportage[i][$scope.metric]);
-              quantile_range.sort(function sortNumber(a, b) {
-                return a - b;
-              });
-            }
-          }
-          $scope.quantile_max = quantile_range[quantile_range.length - 1];
-        }
-        var colorDomain;
-        if (!meta_scorevar[$scope.metric]) {
-          colorDomain = $scope.quantileColorDomain_CRA_std;
-        } else {
-          colorDomain = $scope.quantileColorDomain_CRA_scores;
-        }
-
-        return d3.scale
-          .quantile()
-          .domain(quantile_range)
-          .range(colorDomain);
-      };
-      var mapchartColors = $scope.mapchartColors();
+      //Execute basic setup for charts
+      chartService.setupCharts(map, cf, all);
+      //define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
+      var mapChart = dc.leafletChoroplethChart("#map-chart");
+      var rowChart = dc.rowChart("#row-chart");
+      $scope.coming_from_map = false; //Setting which determines if filter happens while coming from Map (moving to Tabular)
+      $scope.coming_from_tab = false; //Setting which determines if filter happens while coming from Tabular (moving to Map)
 
       /////////////////////
       // MAP CHART SETUP //
       /////////////////////
-
-      $scope.coming_from_map = false; //Setting which determines if filter happens while coming from Map (moving to Tabular)
-      $scope.coming_from_tab = false; //Setting which determines if filter happens while coming from Tabular (moving to Map)
 
       //Set up the map itself with all its properties
       mapChart
@@ -1364,7 +1073,8 @@ angular.module("dashboards").controller("FbfController", [
         }
         $scope.metric = id;
         $scope.metric_label = meta_label[id];
-        var mapchartColors = $scope.mapchartColors();
+        var mapchartColors = $scope.mapchartColors().colorScale;
+        $scope.quantile_max = $scope.mapchartColors().quantile_max;
         cf_scores_metric = !meta_scorevar[$scope.metric]
           ? $scope.metric
           : meta_scorevar[$scope.metric];

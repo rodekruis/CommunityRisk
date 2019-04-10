@@ -345,11 +345,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
       var zoom_max = Number(country_zoom_max[$scope.country_code]);
-      $scope.inform_admlevel = Number(
-        helpers.lookUpByCountryCode(d.Country_meta_full, "inform_admlevel")[
-          $scope.country_code
-        ]
-      );
 
       if (!$scope.directURLload) {
         if ($scope.view_code_PI == "PI") {

@@ -217,12 +217,12 @@ angular.module("dashboards").controller("CommunityRiskController", [
         document.getElementById("mapPopup").style.visibility = "hidden";
         document.getElementsByClassName("reset-button")[0].style.visibility =
           "hidden";
-        if (document.getElementById("level2")) {
+        if (document.getElementById("level2") && $scope.admlevel < 2) {
           document
             .getElementById("level2")
             .setAttribute("class", "btn btn-secondary");
         }
-        if (document.getElementById("level3")) {
+        if (document.getElementById("level3") && $scope.admlevel < 3) {
           document
             .getElementById("level3")
             .setAttribute("class", "btn btn-secondary");
@@ -270,16 +270,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
     ///////////////////////////////////////////
 
     $scope.generateCharts = function(d) {
-      // Clear the charts
-      dc.chartRegistry.clear();
-      if (map !== undefined) {
-        map.remove();
-      }
-
-      //define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
-      var mapChart = dc.leafletChoroplethChart("#map-chart");
-      var rowChart = dc.rowChart("#row-chart");
-
       //////////////////////////
       // SETUP META VARIABLES //
       //////////////////////////
@@ -307,64 +297,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
         "format"
       )[$scope.country_code];
 
-      function setViewStatus(isVisible) {
-        var viewStatus = document.getElementById("status");
-
-        if (viewStatus) {
-          viewStatus.style.visibility = isVisible ? "visible" : "hidden";
-        }
-      }
-
-      if (country_status == "template") {
-        setViewStatus(true);
-        $scope.status_title = "Template only";
-        $scope.status_text =
-          "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
-      } else if (country_status == "basic") {
-        setViewStatus(true);
-        $scope.status_title = "Draft version";
-        $scope.status_text =
-          "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
-      } else if (country_status == "all") {
-        var dpi = d.dpi[0].dpi_score;
-        if (dpi > 0.1) {
-          setViewStatus(false);
-          $scope.status_title = "";
-          $scope.status_text = "";
-        } else {
-          setViewStatus(true);
-          $scope.status_title = "Needs data";
-          $scope.status_text =
-            "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
-            "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
-        }
-      }
-
-      $scope.country_selection = country_name[$scope.country_code];
-      var zoom_min = Number(country_zoom_min[$scope.country_code]);
-      var zoom_max = Number(country_zoom_max[$scope.country_code]);
-      $scope.inform_admlevel = Number(
-        helpers.lookUpByCountryCode(d.Country_meta, "inform_admlevel")[
-          $scope.country_code
-        ]
-      );
-
-      if (!$scope.directURLload) {
-        if ($scope.metric === "") {
-          $scope.metric = country_default_metric[$scope.country_code];
-        } else if (typeof d.Rapportage[0][$scope.metric] == "undefined") {
-          $scope.metric = "population";
-        }
-      }
-      if ($scope.admlevel === zoom_min) {
-        $scope.name_selection = country_name[$scope.country_code];
-      }
-      if (zoom_max - zoom_min < 2) {
-        document.getElementById("level3").style.visibility = "hidden";
-      } else if (document.getElementById("level3")) {
-        document.getElementById("level3").style.visibility = "visible";
-      }
-
       // get the lookup tables
       var lookup = helpers.lookUpProperty($scope.geom, "pcode", "name");
       var meta_label = helpers.genLookup_meta(d.Metadata, "label");
@@ -376,6 +308,17 @@ angular.module("dashboards").controller("CommunityRiskController", [
       var meta_desc = helpers.genLookup_meta(d.Metadata, "description");
       var meta_scorevar = helpers.genLookup_meta(d.Metadata, "scorevar_name");
 
+      /////////////////////////////////////
+      // CONFIGURE NEEDED HTML/VARIABLES //
+      /////////////////////////////////////
+
+      //Look up country parameters
+      $scope.country_selection = country_name[$scope.country_code];
+      var zoom_min = Number(country_zoom_min[$scope.country_code]);
+      var zoom_max = Number(country_zoom_max[$scope.country_code]);
+      if ($scope.admlevel === zoom_min) {
+        $scope.name_selection = country_name[$scope.country_code];
+      }
       $scope.metric_label = meta_label[$scope.metric];
       $scope.type_selection =
         $scope.admlevel == zoom_min
@@ -389,7 +332,23 @@ angular.module("dashboards").controller("CommunityRiskController", [
         "level" + $scope.admlevel + "_name"
       )[$scope.country_code];
 
-      //Changes to be able to show ALL lower-level districts, for now only applied to Malawi
+      //Look up default metric, take population if it's not found (i.e.: if not available on lower admin-level)
+      if (!$scope.directURLload) {
+        if ($scope.metric === "") {
+          $scope.metric = country_default_metric[$scope.country_code];
+        } else if (typeof d.Rapportage[0][$scope.metric] == "undefined") {
+          $scope.metric = "population";
+        }
+      }
+
+      //If a country contains only 2 instead of 3 admin-levels
+      if (zoom_max - zoom_min < 2) {
+        document.getElementById("level3").style.visibility = "hidden";
+      } else if (document.getElementById("level3")) {
+        document.getElementById("level3").style.visibility = "visible";
+      }
+
+      //This is a long piece of code that sets the name-buttons for the different admin-layers (id=level1, level2, level3) >> CAN BE IMPROVED
       $scope.levelB_selection_pre = "all_no";
       if (
         zoom_min == 1 ||
@@ -490,6 +449,76 @@ angular.module("dashboards").controller("CommunityRiskController", [
           $scope.admlevel < zoom_max ? "" : $scope.parent_code;
       }
 
+      //Also color and name level-2/3 buttons when coming in at higher level through direct URL
+      if ($scope.directURLload) {
+        if ($scope.admlevel == zoom_min + 2) {
+          document
+            .getElementById("level3")
+            .setAttribute("class", "btn btn-secondary btn-active");
+          if ($scope.parent_codes.length == 1) {
+            var level3name = helpers.lookUpByCountryCode(
+              d.Country_meta,
+              "level" + (zoom_min + 1) + "_name"
+            )[$scope.country_code];
+            $scope.levelC_selection = "Selected " + level3name;
+          } else if ($scope.parent_codes.length > 1) {
+            $scope.levelC_selection = "Multiple " + level3name;
+          }
+          $scope.levelC_codes = $scope.parent_codes;
+        }
+        if ($scope.admlevel >= zoom_min + 1) {
+          document
+            .getElementById("level2")
+            .setAttribute("class", "btn btn-secondary btn-active");
+          if ($scope.parent_codes.length == 1) {
+            var level2name = helpers.lookUpByCountryCode(
+              d.Country_meta,
+              "level" + zoom_min + "_name"
+            )[$scope.country_code];
+            $scope.levelB_selection = "Selected " + level2name;
+          } else if ($scope.parent_codes.length > 1) {
+            $scope.levelB_selection = "Multiple " + level2name;
+          }
+          $scope.levelB_codes = $scope.parent_codes;
+        }
+      }
+
+      ///////////////////////
+      // SETUP VIEW STATUS //
+      ///////////////////////
+
+      function setViewStatus(isVisible) {
+        var viewStatus = document.getElementById("status");
+
+        if (viewStatus) {
+          viewStatus.style.visibility = isVisible ? "visible" : "hidden";
+        }
+      }
+      if (country_status == "template") {
+        setViewStatus(true);
+        $scope.status_title = "Template only";
+        $scope.status_text =
+          "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
+      } else if (country_status == "basic") {
+        setViewStatus(true);
+        $scope.status_title = "Draft version";
+        $scope.status_text =
+          "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
+      } else if (country_status == "all") {
+        var dpi = d.dpi[0].dpi_score;
+        if (dpi > 0.1) {
+          setViewStatus(false);
+          $scope.status_title = "";
+          $scope.status_text = "";
+        } else {
+          setViewStatus(true);
+          $scope.status_title = "Needs data";
+          $scope.status_text =
+            "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
+            "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
+        }
+      }
+
       //////////////////////
       // SETUP INDICATORS //
       //////////////////////
@@ -548,10 +577,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
         });
         return lookup_value;
       };
-
-      dc.dataCount("#count-info")
-        .dimension(cf)
-        .group(all);
 
       ///////////////////////////////
       // SET UP ALL INDICATOR HTML //
@@ -1166,6 +1191,23 @@ angular.module("dashboards").controller("CommunityRiskController", [
       };
       var mapchartColors = $scope.mapchartColors();
 
+      //////////////////
+      // CHARTS SETUP //
+      //////////////////
+
+      // Clear & Set up the charts
+      dc.chartRegistry.clear();
+      if (map !== undefined) {
+        map.remove();
+      }
+      //define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
+      var mapChart = dc.leafletChoroplethChart("#map-chart");
+      var rowChart = dc.rowChart("#row-chart");
+
+      dc.dataCount("#count-info")
+        .dimension(cf)
+        .group(all);
+
       /////////////////////
       // MAP CHART SETUP //
       /////////////////////
@@ -1468,6 +1510,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
           }
           $scope.filters = [];
           $scope.initiate(d);
+          console.log($scope.admlevel);
+          console.log($scope.admlevel - zoom_min + 1);
           document
             .getElementById("level" + ($scope.admlevel - zoom_min + 1))
             .setAttribute("class", "btn btn-secondary btn-active");

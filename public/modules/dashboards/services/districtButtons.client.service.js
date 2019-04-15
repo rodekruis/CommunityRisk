@@ -31,68 +31,68 @@ angular.module("dashboards").factory("districtButtonsService", [
         d.Country_meta,
         "level" + zoom_min + "_name"
       )[country_code];
-      var levelB_selection_pre = "all_no";
+      levelB_selection_pre = "all_no";
       if (zoom_min == 1 || country_code == "MWI" || country_code == "MOZ") {
         //Apply different classes for this case
         $("#level2").addClass("btn-zoomin");
         $("#level3").addClass("btn-zoomin");
 
         if (admlevel == zoom_min) {
-          var levelB_selection_pre = "all_yes";
-          var levelB_selection = helpers.lookUpByCountryCode(
+          levelB_selection_pre = "all_yes";
+          levelB_selection = helpers.lookUpByCountryCode(
             d.Country_meta,
             "level" + (zoom_min + 1) + "_name"
           )[country_code];
-          var levelB_code = "";
-          var levelB_codes = [];
+          levelB_code = "";
+          levelB_codes = [];
         } else if (admlevel < zoom_max && parent_codes.length > 0) {
-          var levelB_selection = name_selection;
-          var levelB_codes = parent_codes;
+          levelB_selection = name_selection;
+          levelB_codes = parent_codes;
         } else if (admlevel < zoom_max && parent_codes.length == 0) {
           //This is the direct URL-link case
-          var levelB_selection_pre = "all_yes";
-          var levelB_selection = helpers.lookUpByCountryCode(
+          levelB_selection_pre = "all_yes";
+          levelB_selection = helpers.lookUpByCountryCode(
             d.Country_meta,
             "level" + (zoom_min + 1) + "_name"
           )[country_code];
-          var levelB_code = "";
-          var levelB_codes = [];
+          levelB_code = "";
+          levelB_codes = [];
         } else if (admlevel == zoom_max && parent_codes.length == 0) {
           //This is the direct URL-link case
-          var levelB_selection_pre = "all_yes";
-          var levelB_selection = helpers.lookUpByCountryCode(
+          levelB_selection_pre = "all_yes";
+          levelB_selection = helpers.lookUpByCountryCode(
             d.Country_meta,
             "level" + (zoom_min + 1) + "_name"
           )[country_code];
-          var levelB_code = "";
-          var levelB_codes = [];
+          levelB_code = "";
+          levelB_codes = [];
         }
         if (admlevel < zoom_max) {
-          var levelC_selection_pre =
+          levelC_selection_pre =
             parent_codes.length == 0 ? "all_yes" : undefined;
-          var levelC_selection =
+          levelC_selection =
             parent_codes.length == 0
               ? helpers.lookUpByCountryCode(
                   d.Country_meta,
                   "level" + (zoom_min + 2) + "_name"
                 )[country_code]
               : undefined;
-          var levelC_code = "";
+          levelC_code = "";
         } else if (admlevel == zoom_max && parent_codes.length == 0) {
           //This is the direct URL-link case
-          var levelC_selection_pre =
+          levelC_selection_pre =
             parent_codes.length == 0 ? "all_yes" : undefined;
-          var levelC_selection =
+          levelC_selection =
             parent_codes.length == 0
               ? helpers.lookUpByCountryCode(
                   d.Country_meta,
                   "level" + (zoom_min + 2) + "_name"
                 )[country_code]
               : undefined;
-          var levelC_code = "";
+          levelC_code = "";
         } else if (parent_codes.length > 0) {
-          var levelC_selection = name_selection;
-          var levelC_code = parent_code;
+          levelC_selection = name_selection;
+          levelC_code = parent_code;
         }
       } else {
         //Apply different classes for this case
@@ -100,14 +100,14 @@ angular.module("dashboards").factory("districtButtonsService", [
         $("#level3").removeClass("btn-zoomin");
 
         if (admlevel == zoom_min) {
-          var levelB_selection = undefined;
-          var levelB_codes = [];
+          levelB_selection = undefined;
+          levelB_codes = [];
         } else if (admlevel <= zoom_max && levelB_selection == undefined) {
-          var levelB_selection = name_selection;
-          var levelB_codes = parent_codes;
+          levelB_selection = name_selection;
+          levelB_codes = parent_codes;
         }
-        var levelC_selection = admlevel < zoom_max ? undefined : name_selection;
-        var levelC_code = admlevel < zoom_max ? "" : parent_code;
+        levelC_selection = admlevel < zoom_max ? undefined : name_selection;
+        levelC_code = admlevel < zoom_max ? "" : parent_code;
       }
       //Function that colors/fills the level2/level3 buttons (top-left) when coming in at higher level through direct URL
       if (directURLload) {
@@ -120,11 +120,11 @@ angular.module("dashboards").factory("districtButtonsService", [
               d.Country_meta,
               "level" + (zoom_min + 1) + "_name"
             )[country_code];
-            var levelC_selection = "Selected " + level3name;
+            levelC_selection = "Selected " + level3name;
           } else if (parent_codes.length > 1) {
             levelC_selection = "Multiple " + level3name;
           }
-          var levelC_codes = parent_codes;
+          levelC_codes = parent_codes;
         }
         if (admlevel >= zoom_min + 1) {
           document
@@ -135,11 +135,11 @@ angular.module("dashboards").factory("districtButtonsService", [
               d.Country_meta,
               "level" + zoom_min + "_name"
             )[country_code];
-            var levelB_selection = "Selected " + level2name;
+            levelB_selection = "Selected " + level2name;
           } else if (parent_codes.length > 1) {
             levelB_selection = "Multiple " + level2name;
           }
-          var levelB_codes = parent_codes;
+          levelB_codes = parent_codes;
         }
       }
       return {

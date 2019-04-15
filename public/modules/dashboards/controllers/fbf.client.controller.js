@@ -420,7 +420,7 @@ angular.module("dashboards").controller("FbfController", [
 
       $scope.tables = [];
       var j = 0;
-      for (var i = 0; i < d.Metadata.length; i++) {
+      for (i = 0; i < d.Metadata.length; i++) {
         var record = {};
         var record_temp = d.Metadata[i];
         if (record_temp.group !== "admin") {

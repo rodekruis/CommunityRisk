@@ -14,7 +14,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
   "crossfilterService",
   "sidebarHtmlService",
   "colorSetupService",
-  "admlevelsService",
+  "districtButtonsService",
   "chartService",
   "DEBUG",
   function(
@@ -31,7 +31,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
     crossfilterService,
     sidebarHtmlService,
     colorSetupService,
-    admlevelsService,
+    districtButtonsService,
     chartService,
     DEBUG
   ) {
@@ -136,7 +136,6 @@ angular.module("dashboards").controller("CommunityRiskController", [
         } //These countries have a different min zoom-level: code better in future.
       }
 
-      //This is the main search-query for PostgreSQL
       $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 
       loadFunction(d);
@@ -356,123 +355,36 @@ angular.module("dashboards").controller("CommunityRiskController", [
         document.getElementById("level3").style.visibility = "visible";
       }
 
-      //This is a long piece of code that sets the name-buttons for the different admin-layers (id=level1, level2, level3) >> CAN BE IMPROVED
-      $scope.levelB_selection_pre = "all_no";
-      if (
-        zoom_min == 1 ||
-        $scope.country_code == "MWI" ||
-        $scope.country_code == "MOZ"
-      ) {
-        //Apply different classes for this case
-        $("#level2").addClass("btn-zoomin");
-        $("#level3").addClass("btn-zoomin");
-
-        if ($scope.admlevel == zoom_min) {
-          $scope.levelB_selection_pre = "all_yes";
-          $scope.levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[$scope.country_code];
-          $scope.levelB_code = "";
-          $scope.levelB_codes = [];
-        } else if (
-          $scope.admlevel < zoom_max &&
-          $scope.parent_codes.length > 0
-        ) {
-          $scope.levelB_selection = $scope.name_selection;
-          $scope.levelB_codes = $scope.parent_codes;
-        } else if (
-          $scope.admlevel < zoom_max &&
-          $scope.parent_codes.length == 0
-        ) {
-          //This is the direct URL-link case
-          $scope.levelB_selection_pre = "all_yes";
-          $scope.levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[$scope.country_code];
-          $scope.levelB_code = "";
-          $scope.levelB_codes = [];
-        } else if (
-          $scope.admlevel == zoom_max &&
-          $scope.parent_codes.length == 0
-        ) {
-          //This is the direct URL-link case
-          $scope.levelB_selection_pre = "all_yes";
-          $scope.levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[$scope.country_code];
-          $scope.levelB_code = "";
-          $scope.levelB_codes = [];
-        }
-        if ($scope.admlevel < zoom_max) {
-          $scope.levelC_selection_pre =
-            $scope.parent_codes.length == 0 ? "all_yes" : undefined;
-          $scope.levelC_selection =
-            $scope.parent_codes.length == 0
-              ? helpers.lookUpByCountryCode(
-                  d.Country_meta,
-                  "level" + (zoom_min + 2) + "_name"
-                )[$scope.country_code]
-              : undefined;
-          $scope.levelC_code = "";
-        } else if (
-          $scope.admlevel == zoom_max &&
-          $scope.parent_codes.length == 0
-        ) {
-          //This is the direct URL-link case
-          $scope.levelC_selection_pre =
-            $scope.parent_codes.length == 0 ? "all_yes" : undefined;
-          $scope.levelC_selection =
-            $scope.parent_codes.length == 0
-              ? helpers.lookUpByCountryCode(
-                  d.Country_meta,
-                  "level" + (zoom_min + 2) + "_name"
-                )[$scope.country_code]
-              : undefined;
-          $scope.levelC_code = "";
-        } else if ($scope.parent_codes.length > 0) {
-          $scope.levelC_selection = $scope.name_selection;
-          $scope.levelC_code = $scope.parent_code;
-        }
-      } else {
-        //Apply different classes for this case
-        $("#level2").removeClass("btn-zoomin");
-        $("#level3").removeClass("btn-zoomin");
-
-        if ($scope.admlevel == zoom_min) {
-          $scope.levelB_selection = undefined;
-          $scope.levelB_codes = [];
-        } else if (
-          $scope.admlevel <= zoom_max &&
-          $scope.levelB_selection == undefined
-        ) {
-          $scope.levelB_selection = $scope.name_selection;
-          $scope.levelB_codes = $scope.parent_codes;
-        }
-        $scope.levelC_selection =
-          $scope.admlevel < zoom_max ? undefined : $scope.name_selection;
-        $scope.levelC_code =
-          $scope.admlevel < zoom_max ? "" : $scope.parent_code;
-      }
-
-      //Color/fill the level2/level3 buttons (top-left) when coming in at higher level through direct URL
-      if ($scope.directURLload) {
-        var directURL = admlevelsService.directUrlHigherLevel(
-          $scope.admlevel,
-          zoom_min,
-          $scope.parent_codes,
-          d,
-          $scope.country_code
-        );
-        if ($scope.parent_codes.length > 0) {
-          $scope.levelC_codes = directURL.levelC_codes;
-          $scope.levelC_selection = directURL.levelC_selection;
-          $scope.levelB_codes = directURL.levelB_codes;
-          $scope.levelB_selection = directURL.levelB_selection;
-        }
-      }
+      //Set the text/color of the district buttons
+      var districtButtons = districtButtonsService.setDistrictButtons(
+        $scope.admlevel,
+        zoom_min,
+        zoom_max,
+        $scope.parent_code,
+        $scope.parent_codes,
+        d,
+        $scope.country_code,
+        $scope.directURLload,
+        $scope.name_selection,
+        $scope.levelB_selection,
+        $scope.levelB_selection_pre,
+        $scope.levelB_codes,
+        $scope.levelB_code,
+        $scope.levelC_selection,
+        $scope.levelC_selection_pre,
+        $scope.levelC_codes,
+        $scope.levelC_code
+      );
+      $scope.levelC_codes = districtButtons.levelC_codes;
+      $scope.levelC_code = districtButtons.levelC_code;
+      $scope.levelC_selection = districtButtons.levelC_selection;
+      $scope.levelC_selection_pre = districtButtons.levelC_selection_pre;
+      $scope.levelB_codes = districtButtons.levelB_codes;
+      $scope.levelB_code = districtButtons.levelB_code;
+      $scope.levelB_selection = districtButtons.levelB_selection;
+      $scope.levelB_selection_pre = districtButtons.levelB_selection_pre;
+      $scope.levelA_selection = districtButtons.levelA_selection;
+      $scope.levelA_selection_pre = districtButtons.levelA_selection_pre;
 
       //////////////////////////////////
       // SETUP VIEW STATUS - CRA ONLY //
@@ -1549,6 +1461,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
           metric_label_popup: $scope.metric_info,
           metric_desc: "desc_" + $scope.metric_info,
           subtype_selection: $scope.subtype_selection,
+          levelA_selection_pre: $scope.levelA_selection_pre,
           levelB_selection_pre: $scope.levelB_selection_pre,
           levelC_selection_pre: $scope.levelC_selection_pre,
         };

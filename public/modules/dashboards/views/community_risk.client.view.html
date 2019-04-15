@@ -195,7 +195,8 @@
             data-toggle="dropdown"
             href="#"
           >
-            {{ "COUNTRY" | translate }}
+            {{ country_selection }}
+            <!-- {{ "COUNTRY" | translate }} -->
             <i class="fa fa-angle-down export-btn-arrow"></i>
           </a>
           <ul class="dropdown-menu submenu-items" id="country-items"></ul>
@@ -249,7 +250,10 @@
             class="btn btn-secondary btn-zoomin btn-active "
             ng-click="zoom_out(1)"
           >
-            <span class="button-label">{{ country_selection }}</span>
+            <span class="button-label">
+              {{ "levelA_selection_pre" | translate: translateData()
+              }}{{ levelA_selection }}</span
+            >
           </button>
           <button
             id="level2"

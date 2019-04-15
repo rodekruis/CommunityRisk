@@ -7,6 +7,7 @@ var angular_vars = {
   metric_label: "{{metric_label | translate}}",
   metric_label_popup: "{{metric_label_popup | translate}}",
   metric_desc: "{{metric_desc | translate}}",
+  levelA_selection_pre: "{{levelA_selection_pre | translate}}",
   levelB_selection_pre: "{{levelB_selection_pre | translate}}",
   levelC_selection_pre: "{{levelC_selection_pre | translate}}",
 };

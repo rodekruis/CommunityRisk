@@ -60,7 +60,10 @@
             class="btn btn-secondary btn-zoomin btn-active "
             ng-click="zoom_out(1)"
           >
-            <span class="button-label">{{ country_selection }}</span>
+            <span class="button-label"
+              >{{ "levelA_selection_pre" | translate: translateData()
+              }}{{ levelA_selection }}</span
+            >
           </button>
           <button
             id="level2"
@@ -81,8 +84,8 @@
             style="margin-right:0px"
           >
             <span class="button-label"
-              >{{ "levelC_selection_pre" | translate: translateData()
-              }}{{ levelC_selection }}</span
+              >{{ "levelC_selection_pre" | translate: translateData() }}
+              {{ levelC_selection }}</span
             >
           </button>
         </div>

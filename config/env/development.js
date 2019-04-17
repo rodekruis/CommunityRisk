@@ -18,6 +18,7 @@ module.exports = {
     user: "cradatabase",
     password: secrets.postgres.password_dev,
     host: "localhost",
+    port: 5439,
   },
   log: {
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'

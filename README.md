@@ -38,25 +38,14 @@ $ nvm use
 ```
 
 ### PostgreSQL
-* Download and install the database software PostgresQL (v9.5 is used here) through https://www.postgresql.org/download/.
-* After installation make sure to install the PostGIS extension as well (through Stackbuilder > Spatial Extensions)
-* On Windows:  
-  Add `C:/Program Files/PostgreSQL/9.5/bin` and `C:/Program Files/PostgreSQL/9.5/lib` to your environment PATH variable.
-* From a terminal create a new user and database
+* Download and install docker community edition for your OS: https://docs.docker.com/install/
+* Run the following command to start a postgis database on port 5439 with the following credentials
 ```
-$ createuser -U postgres -P cradatabase (>> It will ask you to create a password, remember this, as you will need it later in secrets.json!)
-$ createDB -U postgres cradatabase
-```
-* Open pgAdmin III, navigate to the new `cradatabase` database, open an empty SQL editor and run:
-```sql
-GRANT ALL PRIVILEGES ON DATABASE cradatabase TO cradatabase;
-GRANT postgres TO cradatabase;
-CREATE EXTENSION postgis;
-ALTER ROLE cradatabase SUPERUSER CREATEDB;
+docker run --name cradb -p 5439:5432 -e POSTGRES_USER=cradatabase -e POSTGRES_PASS=cradatabase -e POSTGRES_DBNAME=cradatabase -t kartoza/postgis:9.5-2.2
 ```
 * Test connection (from terminal again) with:
 ```
-$ psql -h localhost -U cradatabase cradatabase
+$ psql -h localhost -U cradatabase -p 5439 cradatabase
 ```
 
 ### Bower
@@ -102,9 +91,9 @@ To run this application locally, you also need to get an exact copy of the Postg
 * Other users can send an e-mail to support@510.global to request access.
 * Run the following code to restore the database (possibly adapt for other OS than Windows)
 ```
-pg_restore -U cradatabase -d cradatabase -h localhost cradatabase.dump
+pg_restore -U cradatabase -d cradatabase -h localhost -p 5439 cradatabase.dump
 ```
-* NOTE that you should have already created a postgres database 'cradatabase' with a user 'cradatabase' and the required password at this point (see Prerequisites > Postgres above)
+
 
 ## 1.3: Getting Started With the Dashboard
 

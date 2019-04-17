@@ -19,6 +19,7 @@ module.exports = {
     user: "cradatabase@510cradatabase",
     password: secrets.postgres.password_prod,
     host: "510cradatabase.postgres.database.azure.com",
+    port: 5432,
   },
   log: {
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'

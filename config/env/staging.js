@@ -16,5 +16,6 @@ module.exports = _.extend(productionConfig, {
     user: "cradatabase@510cradatabase",
     password: secrets.postgres.password_prod,
     host: "510cradatabase.postgres.database.azure.com",
+    port: 5432,
   },
 });

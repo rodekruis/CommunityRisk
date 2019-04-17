@@ -11,6 +11,7 @@ var pool = new pg.Pool({
   user: config.postgres.user,
   password: config.postgres.password,
   database: config.postgres.db,
+  port: config.postgres.port,
 });
 
 exports.read = function(req, res) {

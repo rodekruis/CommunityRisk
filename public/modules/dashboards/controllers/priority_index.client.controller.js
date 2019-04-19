@@ -14,7 +14,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "crossfilterService",
   "sidebarHtmlService",
   "colorSetupService",
-  "admlevelsService",
   "chartService",
   "DEBUG",
   function(
@@ -31,7 +30,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
     crossfilterService,
     sidebarHtmlService,
     colorSetupService,
-    admlevelsService,
     chartService,
     DEBUG
   ) {

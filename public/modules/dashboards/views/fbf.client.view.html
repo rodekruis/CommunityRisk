@@ -125,7 +125,14 @@
       role="navigation"
       id="demo"
     >
-      <div class="debug">
+      <button
+        type="button"
+        class="btn btn-default btn-block"
+        ng-click="toggle_debug()"
+      >
+        {{ "Hide/Show Debug" | translate }}
+      </button>
+      <div class="debug" style="display: block">
         <div
           class="checkbox"
           map-state-sync
@@ -230,11 +237,11 @@
 
       <div>
         <!-- start: community profiles -->
-        <!-- <div class="community-profiles-wrapper">
+        <div class="community-profiles-wrapper">
           <div class="row"></div>
           <div class="tablearea" id="general"></div>
           <div class="row"></div>
-        </div> -->
+        </div>
         <!-- end: community profiles -->
 
         <!-- start: accordion with stats  -->
@@ -257,9 +264,9 @@
                   <img src="modules/dashboards/img/risk_score.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title">Intervention maps </span>
+                  <span class="panel-header-title">Key Actors</span>
                   <span class="panel-header-description">
-                    Affected districts, population, cropland & livestock
+                    Information about locations and status of Key Actors
                   </span>
                 </span>
               </a>
@@ -271,7 +278,7 @@
               role="tabpanel"
               aria-labelledby="headingOne"
             >
-              <div class="card-block" id="intervention"></div>
+              <div class="card-block" id="key-actors"></div>
             </div>
           </div>
           <div class="card">
@@ -287,10 +294,9 @@
                   <img src="modules/dashboards/img/risk_score.png" />
                 </span>
                 <span class="panel-header-content">
-                  <span class="panel-header-title">Flood Extents </span>
+                  <span class="panel-header-title">Impact & EAP</span>
                   <span class="panel-header-description"
-                    >Current forecast (event-specific) & general flood
-                    extents</span
+                    >Estimated Impact per EAP-category</span
                   >
                 </span>
               </a>
@@ -298,14 +304,14 @@
 
             <div
               id="collapseThree"
-              class="collapse level1"
+              class="collapse level1 in"
               role="tabpanel"
               aria-labelledby="headingThree"
             >
-              <div class="card-block" id="flood_extent"></div>
+              <div class="card-block" id="impact"></div>
             </div>
           </div>
-          <div class="card">
+          <!-- <div class="card">
             <div class="card-header level1" role="tab" id="headingTwo">
               <a
                 data-toggle="collapse"
@@ -335,37 +341,7 @@
             >
               <div class="card-block" id="general"></div>
             </div>
-          </div>
-          <div class="card">
-            <div class="card-header level1" role="tab" id="headingFour">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseFour"
-                aria-expanded="true"
-                aria-controls="collapseFour"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">Exposure Maps </span>
-                  <span class="panel-header-description"
-                    >Full exposure maps (not event-specific)</span
-                  >
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseFour"
-              class="collapse level1"
-              role="tabpanel"
-              aria-labelledby="headingFour"
-            >
-              <div class="card-block" id="exposure"></div>
-            </div>
-          </div>
+          </div> -->
           <div class="card">
             <div class="card-header level1" role="tab" id="headingFive">
               <a
@@ -380,7 +356,7 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >Community Risk features
+                    >Vulnerability & Coping (CRA)
                   </span>
                   <span class="panel-header-description"
                     >Relevant Risk features (not event-specific)</span
@@ -396,6 +372,36 @@
               aria-labelledby="headingFive"
             >
               <div class="card-block" id="cra"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header level1" role="tab" id="headingFour">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseFour"
+                aria-expanded="true"
+                aria-controls="collapseFour"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/risk_score.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title">Exposure Maps</span>
+                  <span class="panel-header-description"
+                    >Full exposure maps (not event-specific)</span
+                  >
+                </span>
+              </a>
+            </div>
+
+            <div
+              id="collapseFour"
+              class="collapse level1"
+              role="tabpanel"
+              aria-labelledby="headingFour"
+            >
+              <div class="card-block" id="exposure"></div>
             </div>
           </div>
         </div>

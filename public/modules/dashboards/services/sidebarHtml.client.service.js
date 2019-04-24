@@ -169,7 +169,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
         }
 
         if (
-          ["intervention", "flood_extent", "exposure", "general"].indexOf(
+          ["impact", "key-actors", "exposure", "general"].indexOf(
             record.group
           ) > -1
         ) {
@@ -190,10 +190,14 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             "class",
             "col col-md-5 col-sm-5 col-xs-5 general-component-label"
           );
-          div1.setAttribute(
-            "ng-click",
-            "change_indicator('" + record.name + "')"
-          );
+          if (record.layer_type == "polygon") {
+            var click_fn_string = "change_indicator('" + record.name + "')";
+          } else if (record.layer_type == "raster") {
+            var click_fn_string = "toggle_raster_layer('" + record.name + "')";
+          } else if (record.layer_type == "point") {
+            var click_fn_string = "toggle_poi_layer('" + record.name + "')";
+          }
+          div1.setAttribute("ng-click", click_fn_string);
           div1.innerHTML = "{{ '" + record.name + "' | translate }}";
           div.appendChild(div1);
           //$compile(div1)($scope);

@@ -197,17 +197,15 @@ var static_fr = {
   export_json: "Exporter (JSON)",
 };
 
-angular.module("dashboards").config(function($translateProvider) {
-  d3.dsv(
-    ";",
-    "text/plain; charset=ISO-8859-1"
-  )("modules/dashboards/data/metadata_prototype.csv", function(metadata) {
+angular.module("dashboards").config(function($translateProvider, DataProvider) {
+  var translateFunction = function(metadata) {
     var labels_en = {};
     var descriptions_en = {};
     var labels_es = {};
     var descriptions_es = {};
     var labels_fr = {};
     var descriptions_fr = {};
+
     for (var i = 0; i < metadata.length; i++) {
       labels_en[metadata[i].variable] = metadata[i].label;
       descriptions_en["desc_" + metadata[i].variable] = metadata[i].description;
@@ -235,9 +233,28 @@ angular.module("dashboards").config(function($translateProvider) {
       "fr",
       $.extend({}, angular_vars, static_fr, labels_fr, descriptions_fr)
     );
-  });
 
-  $translateProvider.preferredLanguage("en");
-  $translateProvider.fallbackLanguage("en");
-  $translateProvider.useSanitizeValueStrategy("escape");
+    $translateProvider.preferredLanguage("en");
+    $translateProvider.fallbackLanguage("en");
+    $translateProvider.useSanitizeValueStrategy("escape");
+  };
+
+  if (location.href.indexOf("fbf") > -1) {
+    DataProvider.$get().getTable(
+      {
+        schema: "zmb_fbf",
+        table: "metadata_fbf_zambia",
+      },
+      function(fbf_metadata) {
+        translateFunction(fbf_metadata);
+      }
+    );
+  } else {
+    d3.dsv(";", "text/plain; charset=ISO-8859-1")(
+      "modules/dashboards/data/metadata_prototype.csv",
+      function(cra_metadata) {
+        translateFunction(cra_metadata);
+      }
+    );
+  }
 });

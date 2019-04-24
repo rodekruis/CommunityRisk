@@ -537,13 +537,7 @@ angular.module("dashboards").controller("FbfController", [
       };
       var keyvalue = fill_keyvalues();
 
-      var groups = [
-        "general",
-        "intervention",
-        "flood_extents",
-        "exposure",
-        "cra",
-      ];
+      var groups = ["general", "key-actors", "impact", "exposure", "cra"];
       //Create all initial HTML for sidebar
       sidebarHtmlService.createHTML(
         groups,
@@ -1407,6 +1401,12 @@ angular.module("dashboards").controller("FbfController", [
     /// DEBUG / TESTING ///
     ///////////////////////
 
+    $scope.toggle_debug = function() {
+      $(".debug").css("display") == "block"
+        ? $(".debug").css("display", "none")
+        : $(".debug").css("display", "block");
+    };
+
     $scope.toggle_vector_layer = function() {
       var vectorLayer = map.getPane("overlayPane");
 
@@ -1419,7 +1419,7 @@ angular.module("dashboards").controller("FbfController", [
 
     $scope.add_raster_layer = function() {
       $scope.rasterLayer = L.tileLayer.wms(GEOSERVER_BASEURL, {
-        layers: "flood_extent_long_0",
+        layers: "flood_extent_short_0",
         transparent: true,
         format: "image/png",
       });
@@ -1453,21 +1453,27 @@ angular.module("dashboards").controller("FbfController", [
     /////////////////////
 
     function prepareStationsData() {
-      $scope.stations = AuthData.getPoi(
-        $scope.country_code,
-        "dashboard_forecast_per_station"
+      AuthData.getPoi(
+        {
+          country: $scope.country_code,
+          type: "dashboard_forecast_per_station",
+        },
+        function(stations) {
+          $scope.prepare_glofas_stations(stations);
+        }
       );
-
-      return $scope.stations;
     }
 
     function prepareRcLocationsData() {
-      $scope.rcLocations = AuthData.getPoi(
-        $scope.country_code,
-        "dashboard_redcross_branches"
+      AuthData.getPoi(
+        {
+          country: $scope.country_code,
+          type: "dashboard_redcross_branches",
+        },
+        function(rcLocations) {
+          $scope.prepare_rc_locations(rcLocations);
+        }
       );
-
-      return $scope.rcLocations;
     }
 
     function createMarker(item, itemTitle, itemClass) {
@@ -1484,9 +1490,9 @@ angular.module("dashboards").controller("FbfController", [
       });
     }
 
-    $scope.prepare_glofas_stations = function() {
+    $scope.prepare_glofas_stations = function(stations) {
       $scope.stationsLayer = L.layerGroup();
-      $scope.stations.forEach(function(item) {
+      stations.forEach(function(item) {
         if (!item.properties) return;
 
         var station = item.properties;
@@ -1515,9 +1521,9 @@ angular.module("dashboards").controller("FbfController", [
       map.removeLayer($scope.stationsLayer);
     };
 
-    $scope.prepare_rc_locations = function() {
+    $scope.prepare_rc_locations = function(rcLocations) {
       $scope.rcLocationsLayer = L.layerGroup();
-      $scope.rcLocations.forEach(function(item) {
+      rcLocations.forEach(function(item) {
         if (!item.properties) return;
 
         var location = item.properties;

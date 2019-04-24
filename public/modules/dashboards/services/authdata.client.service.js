@@ -9,11 +9,14 @@ angular.module("dashboards").factory("AuthData", [
      *
      * @returns {Array}
      */
-    function getPoi(country, type) {
-      return $resource("/authdata/poi").query({
-        country: country,
-        type: type,
-      });
+    function getPoi(options, success) {
+      return $resource("/authdata/poi").query(
+        {
+          country: options.country,
+          type: options.type,
+        },
+        success
+      );
     }
 
     function getFbfJsonData(options, success) {

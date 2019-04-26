@@ -233,12 +233,18 @@ angular.module("dashboards").config(function($translateProvider, DataProvider) {
       "fr",
       $.extend({}, angular_vars, static_fr, labels_fr, descriptions_fr)
     );
-
-    $translateProvider.preferredLanguage("en");
-    $translateProvider.fallbackLanguage("en");
-    $translateProvider.useSanitizeValueStrategy("escape");
   };
 
+  $translateProvider.preferredLanguage("en");
+  $translateProvider.fallbackLanguage("en");
+  $translateProvider.useSanitizeValueStrategy("escape");
+
+  d3.dsv(
+    ";",
+    "text/plain; charset=ISO-8859-1"
+  )("modules/dashboards/data/metadata_prototype.csv", function(cra_metadata) {
+    translateFunction(cra_metadata);
+  });
   if (location.href.indexOf("fbf") > -1) {
     DataProvider.$get().getTable(
       {
@@ -247,13 +253,6 @@ angular.module("dashboards").config(function($translateProvider, DataProvider) {
       },
       function(fbf_metadata) {
         translateFunction(fbf_metadata);
-      }
-    );
-  } else {
-    d3.dsv(";", "text/plain; charset=ISO-8859-1")(
-      "modules/dashboards/data/metadata_prototype.csv",
-      function(cra_metadata) {
-        translateFunction(cra_metadata);
       }
     );
   }

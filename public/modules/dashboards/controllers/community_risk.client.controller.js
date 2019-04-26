@@ -548,7 +548,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
         "scores",
         "vulnerability",
         "hazard",
-        "coping",
+        "coping_capacity",
         "other",
       ];
       sidebarHtmlService.createHTML(

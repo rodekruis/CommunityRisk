@@ -41,7 +41,7 @@ $ nvm use
 * Download and install docker community edition for your OS: https://docs.docker.com/install/
 * Run the following command to start a postgis database on port 5439 with the following credentials
 ```
-docker run --name cradb -p 5439:5432 -e POSTGRES_USER=cradatabase -e POSTGRES_PASS=cradatabase -e POSTGRES_DBNAME=cradatabase -t kartoza/postgis:9.5-2.2
+docker run --name cradb -p 5439:5432 -e POSTGRES_USER=cradatabase -e POSTGRES_PASS=cradatabase -e POSTGRES_DBNAME=cradatabase -t --restart always -d kartoza/postgis:9.5-2.2
 ```
 * Test connection (from terminal again) with:
 ```

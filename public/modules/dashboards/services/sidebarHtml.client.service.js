@@ -197,6 +197,8 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             click_fn_string = "toggle_raster_layer('" + record.name + "')";
           } else if (record.layer_type == "point") {
             click_fn_string = "toggle_poi_layer('" + record.name + "')";
+          } else {
+            click_fn_string = "change_indicator('" + record.name + "')";
           }
           div1.setAttribute("ng-click", click_fn_string);
           div1.innerHTML = "{{ '" + record.name + "' | translate }}";

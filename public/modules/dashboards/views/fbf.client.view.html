@@ -127,12 +127,13 @@
     >
       <button
         type="button"
-        class="btn btn-default btn-block"
-        ng-click="toggle_debug()"
+        class="btn btn-default btn-sm btn-block"
+        ng-click="debugHidden = !debugHidden"
       >
-        {{ "Hide/Show Debug" | translate }}
+        <span ng-show="debugHidden">{{ "Show Debug" | translate }}</span>
+        <span ng-show="!debugHidden">{{ "Hide Debug" | translate }}</span>
       </button>
-      <div class="debug" style="display: block">
+      <div class="debug" ng-show="!debugHidden">
         <div
           class="checkbox"
           map-state-sync

@@ -1399,12 +1399,6 @@ angular.module("dashboards").controller("FbfController", [
     /// DEBUG / TESTING ///
     ///////////////////////
 
-    $scope.toggle_debug = function() {
-      $(".debug").css("display") == "block"
-        ? $(".debug").css("display", "none")
-        : $(".debug").css("display", "block");
-    };
-
     $scope.toggle_vector_layer = function() {
       var vectorLayer = map.getPane("overlayPane");
 

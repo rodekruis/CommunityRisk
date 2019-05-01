@@ -1,15 +1,14 @@
 "use strict";
 
 // Share URL
-// Service to generate a url to share the current view/state of the dashboard
-//
+// Generate a url to share the current view/state of the dashboard
 angular.module("dashboards").factory("shareService", [
   function() {
     /**
      * Create parameter-specific URL
      *
      * @returns {String}
-     *  */
+     */
     function createFullUrl(
       country,
       admlevel,
@@ -63,6 +62,9 @@ angular.module("dashboards").factory("shareService", [
       return location.href + "?country=" + countryCode;
     }
 
+    /**
+     * Copy the value of the #share-url-container element to the users' clipboard
+     */
     function copyToClipboard() {
       var containerElement = document.getElementById("share-url-container");
 
@@ -70,8 +72,16 @@ angular.module("dashboards").factory("shareService", [
       document.execCommand("copy");
     }
 
+    /**
+     * Parse a url into an object with properties/parameters
+     *
+     * @param {String} url
+     *
+     * @returns {Object}
+     */
     function readParameterUrl(url) {
       var directURLload;
+
       if (url.indexOf("?") > -1) {
         var params_in = url.split("?")[1].split("&");
         var params_out = {};
@@ -101,6 +111,7 @@ angular.module("dashboards").factory("shareService", [
       } else {
         directURLload = false;
       }
+
       return {
         directURLload: directURLload,
         country_code: country_code,

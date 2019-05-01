@@ -1,20 +1,16 @@
 "use strict";
 
-// Share URL
-// Service to transform data to a Crossfilter-setup, as used by the DC-charts in the various controllers
-//
+// Transform data to a Crossfilter-setup, as used by the DC-charts in the various controllers
 angular.module("dashboards").factory("crossfilterService", [
   function() {
     /**
-     * Create parameter-specific URL
+     * @param {*} data
+     * @param {*} metric
+     * @param {*} meta_scorevar
+     * @param {*} tables
      *
-     * @param {Object} data
-     * @param {String} metric
-     * @param {Function} meta_scorevar
-     * @param {Array} tables
-     *
-     * @returns {multiple}
-     *  */
+     * @returns {Object}
+     */
     function setupCrossfilter(data, metric, meta_scorevar, tables) {
       var cf = crossfilter(data);
 
@@ -22,6 +18,7 @@ angular.module("dashboards").factory("crossfilterService", [
       var whereDimension = cf.dimension(function(d) {
         return d.pcode;
       });
+
       var whereDimension_tab = cf.dimension(function(d) {
         return d.pcode;
       });
@@ -30,6 +27,7 @@ angular.module("dashboards").factory("crossfilterService", [
       var whereGroupSum = whereDimension.group().reduceSum(function(d) {
         return d[metric];
       });
+
       whereDimension_tab.group().reduceSum(function(d) {
         return d[metric];
       });
@@ -69,6 +67,7 @@ angular.module("dashboards").factory("crossfilterService", [
           return { count: 0, sum: 0 };
         }
       );
+
       var whereGroupSum_scores_tab = whereDimension_tab.group().reduce(
         function(p, v) {
           p.count = v[cf_scores_metric] !== null ? p.count + 1 : p.count;
@@ -102,6 +101,7 @@ angular.module("dashboards").factory("crossfilterService", [
           return p;
         };
       };
+
       var reduceRemoveAvg = function(metricA, metricB) {
         return function(p, v) {
           p.count = v[metricA] !== null ? p.count - 1 : p.count;
@@ -111,6 +111,7 @@ angular.module("dashboards").factory("crossfilterService", [
           return p;
         };
       };
+
       var reduceInitialAvg = function() {
         return { count: 0, sumOfSub: 0, sumOfTotal: 0, finalVal: 0 };
       };

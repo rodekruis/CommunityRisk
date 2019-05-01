@@ -8,7 +8,7 @@ var sequelize = new Sequelize(
   {
     dialect: "postgres",
     host: config.postgres.host,
-    port: 5432,
+    port: config.postgres.port,
   }
 );
 

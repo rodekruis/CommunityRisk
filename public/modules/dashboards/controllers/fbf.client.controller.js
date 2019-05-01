@@ -1483,7 +1483,7 @@ angular.module("dashboards").controller("FbfController", [
         title: itemTitle,
         icon: L.divIcon({
           iconSize: [20, 20],
-          iconAnchor: [10, 0],
+          iconAnchor: [10, 20],
           popupAnchor: [0, 0],
           className: "marker-icon marker-icon--" + itemClass,
         }),

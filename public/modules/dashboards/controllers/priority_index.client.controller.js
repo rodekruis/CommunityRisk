@@ -85,7 +85,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.metric_year = "";
     $scope.metric_source = "";
     $scope.metric_desc = "";
-    $scope.metric_icon = "";
+    $scope.metric_icon = "modules/dashboards/img/undefined.png";
     $scope.name_selection = "";
     $scope.name_popup = "";
     $scope.value_popup = 0;
@@ -1140,9 +1140,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         $scope.metric_year = meta_year[id];
         $scope.metric_source = meta_source[id];
         $scope.metric_desc = meta_desc[id];
-        if (!meta_icon[id]) {
-          $scope.metric_icon = "modules/dashboards/img/undefined.png";
-        } else {
+        if (meta_icon[id]) {
           $scope.metric_icon = "modules/dashboards/img/" + meta_icon[id];
         }
         $("#infoModal").modal("show");

@@ -1151,7 +1151,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         exportService.exportAsGeoJSON(d.Districts);
       };
 
-      //Export to GEOJSON
+      //Export to JSON
       $scope.export_json = function() {
         exportService.exportAsJSON(d.Rapportage);
       };

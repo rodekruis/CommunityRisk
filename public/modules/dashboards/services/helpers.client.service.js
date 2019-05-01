@@ -117,7 +117,7 @@ angular.module("dashboards").factory("helpers", [
      * @param {String} type
      * @param {Number} value
      */
-    function currentFormat(type, value) {
+    function formatAsType(type, value) {
       if (type === "decimal0") {
         return dec0Format(value);
       } else if (type === "decimal2") {
@@ -138,7 +138,7 @@ angular.module("dashboards").factory("helpers", [
       dec0Format: dec0Format,
       dec2Format: dec2Format,
       percFormat: percFormat,
-      currentFormat: currentFormat,
+      formatAsType: formatAsType,
     };
   },
 ]);

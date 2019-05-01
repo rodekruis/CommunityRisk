@@ -680,7 +680,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
             " - ",
             meta_label[$scope.metric],
             ": ",
-            helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
+            helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
             " ",
             meta_unit[$scope.metric]
           );
@@ -729,7 +729,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 if (
                   record.pcode === $scope.filters[$scope.filters.length - 1]
                 ) {
-                  $scope.value_popup = helpers.currentFormat(
+                  $scope.value_popup = helpers.formatAsType(
                     meta_format[$scope.metric],
                     record[$scope.metric]
                   );
@@ -830,7 +830,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         .label(function(d) {
           if (!meta_scorevar[$scope.metric]) {
             return helpers
-              .currentFormat(meta_format[$scope.metric], d.value.sum)
+              .formatAsType(meta_format[$scope.metric], d.value.sum)
               .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
           } else {
             return helpers
@@ -846,7 +846,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 " - ",
                 meta_label[$scope.metric],
                 ": ",
-                helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
+                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
                 " ",
                 meta_unit[$scope.metric]
               );
@@ -1013,7 +1013,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
               " - ",
               meta_label[$scope.metric],
               ": ",
-              helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
+              helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
               " ",
               helpers.nullToEmptyString(meta_unit[$scope.metric])
             );
@@ -1070,7 +1070,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
           .label(function(d) {
             if (!meta_scorevar[$scope.metric]) {
               return helpers
-                .currentFormat(meta_format[$scope.metric], d.value.sum)
+                .formatAsType(meta_format[$scope.metric], d.value.sum)
                 .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
             } else {
               return helpers
@@ -1084,7 +1084,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 " - ",
                 meta_label[$scope.metric],
                 ": ",
-                helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
+                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
                 " ",
                 meta_unit[$scope.metric]
               );

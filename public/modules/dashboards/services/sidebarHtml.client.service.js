@@ -1,15 +1,9 @@
 "use strict";
 
-// Share URL
-// Service to to generate the HTML for the left sidebar
-//
+// Generate the HTML for the left sidebar
 angular.module("dashboards").factory("sidebarHtmlService", [
   "helpers",
   function(helpers) {
-    /**
-     * Create parameter-specific URL
-     *
-     *  */
     //Create table with current crossfilter-selection output, so that you can also access this in other ways than through DC.js
     var fill_keyvalues = function(
       tables,

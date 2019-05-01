@@ -1,6 +1,6 @@
 "use strict";
 
-//Dashboards service used for communicating with the articles REST endpoints
+// Communicate with the REST endpoint(s)
 angular.module("dashboards").factory("Data", [
   "$resource",
   function($resource) {

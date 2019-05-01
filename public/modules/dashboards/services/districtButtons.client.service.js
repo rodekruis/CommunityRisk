@@ -1,8 +1,6 @@
 "use strict";
 
-// Share URL
-// Service to to configure the buttons that tell you which district (etc) you're in (top-left)
-//
+// Configure the buttons that tell you which district (etc) you're in (top-left)
 angular.module("dashboards").factory("districtButtonsService", [
   "helpers",
   function(helpers) {

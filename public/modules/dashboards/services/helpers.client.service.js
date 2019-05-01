@@ -4,15 +4,15 @@ angular.module("dashboards").factory("helpers", [
   "cfpLoadingBar",
   function(cfpLoadingBar) {
     /**
-     * Start/complete functions
-     *
-     * @param nothing
-     *
-     * @returns nothing
+     * Start the loading-bar animation
      */
     function start() {
       cfpLoadingBar.start();
     }
+
+    /**
+     * Stop the loading-bar animation
+     */
     function complete() {
       cfpLoadingBar.complete();
     }
@@ -32,6 +32,8 @@ angular.module("dashboards").factory("helpers", [
      * @param {Object} geom
      * @param {String} attribute
      * @param {String} field
+     *
+     * @returns {Object}
      */
     function lookUpProperty(geom, attribute, field) {
       var lookup = {};
@@ -101,16 +103,21 @@ angular.module("dashboards").factory("helpers", [
 
       return lookup;
     }
+
     /**
-     * Number formats
-     *
+     * Define number formats for absolute numbers and for percentage metrics
      */
-    //Define number formats for absolute numbers and for percentage metrics
     var dec0Format = d3.format(",.0f");
     var dec2Format = d3.format(".2f");
     var percFormat = d3.format(",.2%");
 
-    var currentFormat = function(type, value) {
+    /**
+     * Format a value as the specified type
+     *
+     * @param {String} type
+     * @param {Number} value
+     */
+    function currentFormat(type, value) {
       if (type === "decimal0") {
         return dec0Format(value);
       } else if (type === "decimal2") {
@@ -118,7 +125,7 @@ angular.module("dashboards").factory("helpers", [
       } else if (type === "percentage") {
         return percFormat(value);
       }
-    };
+    }
 
     return {
       start: start,

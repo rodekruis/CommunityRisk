@@ -21,6 +21,7 @@
   },
   "husky": {
     "hooks": {
+      "post-merge": "npm install",
       "pre-commit": "pretty-quick --staged --verbose",
       "pre-push": "npm test"
     }

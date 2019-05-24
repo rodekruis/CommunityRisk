@@ -278,7 +278,7 @@
                 data-toggle="dropdown"
                 href="#"
               >
-                <strong>{{ disaster_name }}</strong>
+                <strong>{{ disaster_name_string }}</strong>
                 <i class="fa fa-angle-down PI-btn-arrow"></i>
               </a>
               <ul
@@ -307,6 +307,16 @@
       role="navigation"
       id="demo"
     >
+      <!-- <div class="debug" style="display: block">
+        <button
+          type="button"
+          class="btn btn-default btn-block"
+          ng-click="show_tracks()"
+        >
+          {{ "Show track" | translate }}
+        </button>
+      </div> -->
+
       <div>
         <!-- start: accordion with stats  -->
         <div

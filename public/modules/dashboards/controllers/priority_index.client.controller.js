@@ -162,8 +162,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 e.country_code == $scope.country_code &&
                 e.disaster_type == $scope.disaster_type &&
                 e.pi_ddb == $scope.view_code_PI &&
-                ((e.name == $scope.disaster_name && e.pi_ddb == "DDB") ||
-                  e.pi_ddb == "PI")
+                // ((e.name == $scope.disaster_name && e.pi_ddb == "DDB") ||
+                //   e.pi_ddb == "PI")
+                e.name == $scope.disaster_name
               );
             } else if ($scope.disaster_type_toggle == 1) {
               return (
@@ -188,6 +189,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
           }
           $scope.disaster_type = event[0].disaster_type;
           $scope.disaster_name = event[0].name;
+          $scope.disaster_name_string = $scope.disaster_name.replace(/_/g, " ");
           $scope.admlevel = event[0].admin_level;
 
           //This is the main search-query for PostgreSQL
@@ -204,6 +206,17 @@ angular.module("dashboards").controller("PriorityIndexController", [
             },
             function(pgData) {
               $scope.load_data(pgData[0]);
+
+              if (
+                $scope.country_code == "PHL" &&
+                $scope.disaster_type == "Typhoon"
+              ) {
+                prepareTrackData(
+                  $scope.country_code,
+                  $scope.disaster_type,
+                  $scope.disaster_name
+                );
+              }
             }
           );
         }
@@ -523,12 +536,15 @@ angular.module("dashboards").controller("PriorityIndexController", [
           var a = document.createElement("a");
           a.setAttribute("ng-click", "change_disaster('" + record.name + "')");
           a.setAttribute("class", "event-drop");
-          if (record.startdate) {
+          if (record.startdate && $scope.view_code_PI == "DDB") {
             var len = record.startdate.length;
             a.innerHTML =
-              record.name + " (" + record.startdate.substr(len - 4, len) + ")";
+              record.name.replace(/_/g, " ") +
+              " (" +
+              record.startdate.substr(len - 4, len) +
+              ")";
           } else {
-            a.innerHTML = record.name;
+            a.innerHTML = record.name.replace(/_/g, " ");
           }
           li.appendChild(a);
           $compile(a)($scope);
@@ -1452,6 +1468,46 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $(".sidebar-wrapper").removeClass("in");
         }
       });
+    };
+
+    //////////////////
+    /// TRACK DATA ///
+    //////////////////
+
+    function prepareTrackData(country_code, disaster_type, disaster_name) {
+      Data.getTable(
+        {
+          schema: country_code + "_datamodel",
+          table: "PI_" + disaster_type + "_tracks",
+        },
+        function(tracks_input) {
+          var tracks = tracks_input.filter(function(item) {
+            return item.disaster_name == disaster_name;
+          });
+          $scope.prepare_tracks(tracks[0].tracks);
+        }
+      );
+    }
+
+    $scope.prepare_tracks = function(tracks) {
+      $scope.tracks_obs = tracks.features[0];
+      $scope.tracks_fc = tracks.features[1];
+      $scope.tracksObsLayer = L.geoJSON($scope.tracks_obs, {
+        style: {
+          color: "#444444",
+          weight: 500,
+        },
+      });
+      $scope.tracksFcLayer = L.geoJSON($scope.tracks_fc, {
+        style: {
+          color: "#444444",
+          weight: 500,
+          dashArray: "5,10",
+        },
+      });
+
+      map.addLayer($scope.tracksObsLayer);
+      map.addLayer($scope.tracksFcLayer);
     };
   },
 ]);

@@ -1,15 +1,18 @@
 "use strict";
 
-// Share URL
-// Service to configure color scales for maps and charts
-//
+// Cconfigure color scales for maps and charts
 angular.module("dashboards").factory("colorSetupService", [
   "helpers",
   function(helpers) {
     /**
-     * Create parameter-specific URL
+     * @param {*} admlevel
+     * @param {*} zoom_min
+     * @param {*} directURLload
+     * @param {*} d
+     * @param {*} meta_scorevar
      *
-     *  */
+     * @returns {Object}
+     */
     function setupThresholds(
       admlevel,
       zoom_min,
@@ -21,6 +24,7 @@ angular.module("dashboards").factory("colorSetupService", [
       if (admlevel == zoom_min || directURLload) {
         var quantile_range_scores = [];
         var j = 0;
+
         for (var i = 0; i < d.Rapportage.length; i++) {
           Object.keys(d.Rapportage[i]).forEach(function(key) {
             if (
@@ -44,6 +48,7 @@ angular.module("dashboards").factory("colorSetupService", [
             h = Math.floor(H),
             v = +values[h - 1],
             e = H - h;
+
           return e ? v + e * (values[h] - v) : v;
         };
         var k = 0,
@@ -54,11 +59,26 @@ angular.module("dashboards").factory("colorSetupService", [
             Math.round(quantile(quantile_range_scores, k / q) * 100) / 100;
         d.thresholds = thresholds;
       }
+
       return d;
     }
 
-    //Function for determining color of indicator-bars and -numbers in sidebar
-    var high_med_low = function(
+    /**
+     * Determine color of indicator-bars and -numbers in sidebar
+     *
+     * @param {*} ind
+     * @param {*} ind_score
+     * @param {*} group
+     * @param {*} admlevel
+     * @param {*} zoom_max
+     * @param {*} filters
+     * @param {*} d
+     * @param {*} d_prev
+     * @param {*} dimensions_scores
+     *
+     * @returns {String}
+     */
+    function high_med_low(
       ind,
       ind_score,
       group,
@@ -70,6 +90,7 @@ angular.module("dashboards").factory("colorSetupService", [
       dimensions_scores
     ) {
       var width;
+
       if (dimensions_scores[ind]) {
         if (group == "dpi") {
           width = 10 * (1 - d.dpi[0][ind]);
@@ -110,9 +131,18 @@ angular.module("dashboards").factory("colorSetupService", [
           return "bad";
         }
       }
-    };
+    }
 
-    var mapchartColors = function(
+    /**
+     * @param {*} meta_scorevar
+     * @param {*} metric
+     * @param {*} d
+     * @param {*} quantileColorDomain_CRA_std
+     * @param {*} quantileColorDomain_CRA_scores
+     *
+     * @returns {Object}
+     */
+    function mapchartColors(
       meta_scorevar,
       metric,
       d,
@@ -120,6 +150,7 @@ angular.module("dashboards").factory("colorSetupService", [
       quantileColorDomain_CRA_scores
     ) {
       var quantile_range = [];
+
       if (meta_scorevar[metric]) {
         quantile_range = d.quantile_range_scores;
       } else {
@@ -133,7 +164,9 @@ angular.module("dashboards").factory("colorSetupService", [
         }
         var quantile_max = quantile_range[quantile_range.length - 1];
       }
+
       var colorDomain;
+
       if (!meta_scorevar[metric]) {
         colorDomain = quantileColorDomain_CRA_std;
       } else {
@@ -147,9 +180,18 @@ angular.module("dashboards").factory("colorSetupService", [
           .range(colorDomain),
         quantile_max: quantile_max,
       };
-    };
+    }
 
-    var mapchartColors_PI = function(
+    /**
+     * @param {*} metric
+     * @param {*} d
+     * @param {*} quantileColorDomain_CRA_std
+     * @param {*} quantileColorDomain_PI_std
+     * @param {*} quantileColorDomain_PI_error
+     *
+     * @returns {Object}
+     */
+    function mapchartColors_PI(
       metric,
       d,
       quantileColorDomain_CRA_std,
@@ -165,6 +207,7 @@ angular.module("dashboards").factory("colorSetupService", [
       }
       var quantile_max = quantile_range[quantile_range.length - 1];
       var colorDomain;
+
       if (helpers.genLookup_meta(d.Metadata, "group")[metric] == "pred_error") {
         colorDomain = quantileColorDomain_PI_error;
       } else if (
@@ -174,6 +217,7 @@ angular.module("dashboards").factory("colorSetupService", [
       } else {
         colorDomain = quantileColorDomain_PI_std;
       }
+
       return {
         colorScale: d3.scale
           .quantile()
@@ -181,7 +225,7 @@ angular.module("dashboards").factory("colorSetupService", [
           .range(colorDomain),
         quantile_max: quantile_max,
       };
-    };
+    }
 
     return {
       setupThresholds: setupThresholds,

@@ -70,7 +70,7 @@ angular.module("dashboards").controller("FbfController", [
     $scope.metric_year = "";
     $scope.metric_source = "";
     $scope.metric_desc = "";
-    $scope.metric_icon = "";
+    $scope.metric_icon = "modules/dashboards/img/undefined.png";
     $scope.name_selection = "";
     $scope.name_selection_prev = "";
     $scope.name_popup = "";
@@ -624,7 +624,7 @@ angular.module("dashboards").controller("FbfController", [
               " - ",
               meta_label[$scope.metric],
               ": ",
-              helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
+              helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
               " ",
               meta_unit[$scope.metric]
             );
@@ -633,7 +633,7 @@ angular.module("dashboards").controller("FbfController", [
               " - ",
               meta_label[$scope.metric],
               ": ",
-              helpers.currentFormat(
+              helpers.formatAsType(
                 meta_format[$scope.metric],
                 $scope.genLookup_value()[d.key]
               )
@@ -684,7 +684,7 @@ angular.module("dashboards").controller("FbfController", [
                 if (
                   record.pcode === $scope.filters[$scope.filters.length - 1]
                 ) {
-                  $scope.value_popup = helpers.currentFormat(
+                  $scope.value_popup = helpers.formatAsType(
                     meta_format[$scope.metric],
                     record[$scope.metric]
                   );
@@ -768,14 +768,14 @@ angular.module("dashboards").controller("FbfController", [
         .label(function(d) {
           if (!meta_scorevar[$scope.metric]) {
             return helpers
-              .currentFormat(meta_format[$scope.metric], d.value.sum)
+              .formatAsType(meta_format[$scope.metric], d.value.sum)
               .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
           } else {
             if ($scope.genLookup_value()[d.key] == "No data") {
               return "No data - ".concat(lookup[d.key]);
             } else {
               return helpers
-                .currentFormat(
+                .formatAsType(
                   meta_format[$scope.metric],
                   $scope.genLookup_value()[d.key]
                 )
@@ -789,7 +789,7 @@ angular.module("dashboards").controller("FbfController", [
               " - ",
               meta_label[$scope.metric],
               ": ",
-              helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
+              helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
               " ",
               meta_unit[$scope.metric]
             );
@@ -1044,7 +1044,7 @@ angular.module("dashboards").controller("FbfController", [
                 " - ",
                 meta_label[$scope.metric],
                 ": ",
-                helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
+                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
                 " ",
                 meta_unit[$scope.metric]
               );
@@ -1053,7 +1053,7 @@ angular.module("dashboards").controller("FbfController", [
                 " - ",
                 meta_label[$scope.metric],
                 ": ",
-                helpers.currentFormat(
+                helpers.formatAsType(
                   meta_format[$scope.metric],
                   $scope.genLookup_value()[d.key]
                 )
@@ -1081,14 +1081,14 @@ angular.module("dashboards").controller("FbfController", [
           .label(function(d) {
             if (!meta_scorevar[$scope.metric]) {
               return helpers
-                .currentFormat(meta_format[$scope.metric], d.value.sum)
+                .formatAsType(meta_format[$scope.metric], d.value.sum)
                 .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
             } else {
               if ($scope.genLookup_value()[d.key] == "No data") {
                 return "No data - ".concat(lookup[d.key]);
               } else {
                 return helpers
-                  .currentFormat(
+                  .formatAsType(
                     meta_format[$scope.metric],
                     $scope.genLookup_value()[d.key]
                   )
@@ -1102,7 +1102,7 @@ angular.module("dashboards").controller("FbfController", [
                 " - ",
                 meta_label[$scope.metric],
                 ": ",
-                helpers.currentFormat(meta_format[$scope.metric], d.value.sum),
+                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
                 " ",
                 meta_unit[$scope.metric]
               );
@@ -1145,9 +1145,7 @@ angular.module("dashboards").controller("FbfController", [
         $scope.metric_year = meta_year[id];
         $scope.metric_source = meta_source[id];
         $scope.metric_desc = meta_desc[id];
-        if (!meta_icon[id]) {
-          $scope.metric_icon = "modules/dashboards/img/undefined.png";
-        } else {
+        if (meta_icon[id]) {
           $scope.metric_icon = "modules/dashboards/img/" + meta_icon[id];
         }
         $("#infoModal").modal("show");
@@ -1401,12 +1399,6 @@ angular.module("dashboards").controller("FbfController", [
     /// DEBUG / TESTING ///
     ///////////////////////
 
-    $scope.toggle_debug = function() {
-      $(".debug").css("display") == "block"
-        ? $(".debug").css("display", "none")
-        : $(".debug").css("display", "block");
-    };
-
     $scope.toggle_vector_layer = function() {
       var vectorLayer = map.getPane("overlayPane");
 
@@ -1483,7 +1475,7 @@ angular.module("dashboards").controller("FbfController", [
         title: itemTitle,
         icon: L.divIcon({
           iconSize: [20, 20],
-          iconAnchor: [10, 0],
+          iconAnchor: [10, 20],
           popupAnchor: [0, 0],
           className: "marker-icon marker-icon--" + itemClass,
         }),

@@ -1,15 +1,9 @@
 "use strict";
 
-// Share URL
-// Service to to generate the HTML for the left sidebar
-//
+// Generate the HTML for the left sidebar
 angular.module("dashboards").factory("sidebarHtmlService", [
   "helpers",
   function(helpers) {
-    /**
-     * Create parameter-specific URL
-     *
-     *  */
     //Create table with current crossfilter-selection output, so that you can also access this in other ways than through DC.js
     var fill_keyvalues = function(
       tables,
@@ -153,18 +147,14 @@ angular.module("dashboards").factory("sidebarHtmlService", [
       for (var i = 0; i < tables.length; i++) {
         var record = tables[i];
         var width;
-        var icon;
-        var unit;
+        var icon = "modules/dashboards/img/undefined.png";
+        var unit = "";
 
-        if (!meta_icon[record.name]) {
-          icon = "modules/dashboards/img/undefined.png";
-        } else {
+        if (meta_icon[record.name]) {
           icon = "modules/dashboards/img/" + meta_icon[record.name];
         }
 
-        if (meta_unit[record.name] === "null") {
-          unit = "";
-        } else {
+        if (meta_unit[record.name] !== "null") {
           unit = meta_unit[record.name];
         }
 

@@ -4,10 +4,12 @@ angular.module("dashboards").factory("AuthData", [
   "$resource",
   function($resource) {
     /**
-     * @param {String} country
-     * @param {String} type
+     * @param {Object} options
+     * @param {String} options.country
+     * @param {String} options.type
+     * @param {Function} success
      *
-     * @returns {Array}
+     * @returns {*}
      */
     function getPoi(options, success) {
       return $resource("/authdata/poi").query(
@@ -19,6 +21,14 @@ angular.module("dashboards").factory("AuthData", [
       );
     }
 
+    /**
+     * @param {Object} options
+     * @param {String} options.country
+     * @param {String} options.type
+     * @param {Function} success
+     *
+     * @returns {*}
+     */
     function getFbfJsonData(options, success) {
       return $resource("/authdata/json").query(
         {
@@ -29,6 +39,14 @@ angular.module("dashboards").factory("AuthData", [
       );
     }
 
+    /**
+     * @param {Object} options
+     * @param {String} options.schema
+     * @param {String} options.table
+     * @param {Function} success
+     *
+     * @returns {*}
+     */
     function getTable(options, success) {
       return $resource("/authdata/table").query(
         {

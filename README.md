@@ -1,14 +1,17 @@
-## Live dashboard
-View live dashboard at https://dashboard.510.global
+# CommunityRisk Dashboard
+The Community Risk Assessment dashboard is a data-driven solution to identify the geographic areas that are most affected by a humanitarian disaster or crisis and the individuals that are most in need.
+
+View live dashboard at: https://dashboard.510.global/
 
 ## License
-Code is created by 510 and is available under the [LGPL v3 license](./LICENSE.md)
+Code is created by [510](https://www.510.global/) and is available under the [LGPL v3 license](./LICENSE.md)
 
 # Table of Contents
 
 1. Getting a local version of the application running
 2. Getting production version running on Ubuntu 16.04 server
 3. Data pipeline
+4. Useful documentation
 
 # 1. Getting a local version of the application running
 
@@ -433,3 +436,21 @@ Related to the above, I have already worked on https://github.com/jannisvisser/A
 - processing them further within PostGIS (to prepare for Community Risk Assessment-dasbhaord)
 
 The ultimate goal here would be to fully automatically be able to create a base-version of Community Risk Assessment (admin-boundaries + population) for every country available on HDX.
+
+
+# 4: Useful documentation/resources
+When working on the dasboard, the following resources for the currently used versions of external dependencies will be valueable.
+
+## 4.1: Front-end code
+### Angular:
+- Guide to AngularJS 1.5.5: <https://code.angularjs.org/1.5.5/docs/guide>
+- AngularJS 1.5.5 API: <https://code.angularjs.org/1.5.5/docs/api>
+
+### Leaflet/DC:
+- https://leafletjs.com/reference-1.3.0.html
+- http://dc-js.github.io/dc.js/docs/html/dc.geoChoroplethChart.html
+- http://intellipharm.github.io/dc-addons/#leafletjs
+
+### Bootstrap:
+- https://getbootstrap.com/docs/3.3/css/
+

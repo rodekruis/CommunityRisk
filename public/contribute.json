@@ -1,0 +1,31 @@
+{
+  "name": "CommunityRisk Dashboard",
+  "description": "The Community Risk Assessment dashboard is a data-driven solution to identify the geographic areas that are most affected by a humanitarian disaster or crisis and the individuals that are most in need.",
+  "repository": {
+    "type": "git",
+    "license": "LGPL v3",
+    "url": "https://github.com/rodekruis/CommunityRisk",
+    "clone": "git@github.com:rodekruis/CommunityRisk.git",
+    "tests": "https://travis-ci.com/rodekruis/CommunityRisk"
+  },
+  "bugs": {
+    "list": "https://github.com/rodekruis/CommunityRisk/issues",
+    "report": "https://github.com/rodekruis/CommunityRisk/issues/new"
+  },
+  "participate": {
+    "home": "https://dashboard.510.global/",
+    "docs": "https://github.com/rodekruis/CommunityRisk#readme"
+  },
+  "urls": {
+    "prod": "https://dashboard.510.global/"
+  },
+  "keywords": [
+    "community risk assessment",
+    "humanitatian data",
+    "open data",
+    "data visualization",
+    "dashboard",
+    "open street map",
+    "map"
+  ]
+}

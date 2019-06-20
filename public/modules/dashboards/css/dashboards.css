@@ -925,6 +925,18 @@ div.dc-chart {
 .marker-icon--station:before {
   border-top-color: blue;
 }
+.marker-icon--station.is-triggered {
+  background-color: orange;
+}
+.marker-icon--station.is-triggered:before {
+  border-top-color: orange;
+}
+.marker-icon--station.is-triggered-high {
+  background-color: orangered;
+}
+.marker-icon--station.is-triggered-high:before {
+  border-top-color: orangered;
+}
 .marker-icon--station:hover,
 .marker-icon--station:focus {
   background-color: skyblue;

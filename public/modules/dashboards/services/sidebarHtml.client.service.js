@@ -153,6 +153,9 @@ angular.module("dashboards").factory("sidebarHtmlService", [
         if (meta_icon[record.name]) {
           icon = "modules/dashboards/img/" + meta_icon[record.name];
         }
+        if (record.name === "poi_glofas") {
+          icon = "modules/dashboards/img/glofas_icon.png";
+        }
 
         if (meta_unit[record.name] !== "null") {
           unit = meta_unit[record.name];

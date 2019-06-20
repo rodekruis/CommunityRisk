@@ -147,6 +147,12 @@ angular.module("dashboards").controller("FbfController", [
       prepareStationsData();
       prepareRcLocationsData();
       $scope.add_raster_layer();
+
+      // Add timeout to give map time to load
+      window.setTimeout(function() {
+        $scope.show_raster_layer();
+        $scope.show_glofas_stations();
+      }, 2000);
     };
 
     ///////////////
@@ -1497,8 +1503,18 @@ angular.module("dashboards").controller("FbfController", [
           "trigger-level: " +
           station.trigger_level +
           "";
+        var stationClass = "station";
+        var stationTriggerLevelLow = 2000;
+        var stationTriggerLevelHigh = 4000;
 
-        var stationMarker = createMarker(item, stationTitle, "station");
+        if (station.trigger_level > stationTriggerLevelLow) {
+          stationClass += " is-triggered";
+        }
+        if (station.trigger_level > stationTriggerLevelHigh) {
+          stationClass += " is-triggered-high";
+        }
+
+        var stationMarker = createMarker(item, stationTitle, stationClass);
 
         stationMarker.addTo($scope.stationsLayer);
         stationMarker.bindPopup(stationInfoPopup);

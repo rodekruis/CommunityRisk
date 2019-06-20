@@ -147,6 +147,12 @@ angular.module("dashboards").controller("FbfController", [
       prepareStationsData();
       prepareRcLocationsData();
       $scope.add_raster_layer();
+
+      // Add timeout to give map time to load
+      window.setTimeout(function() {
+        $scope.show_raster_layer();
+        $scope.show_glofas_stations();
+      }, 2000);
     };
 
     ///////////////

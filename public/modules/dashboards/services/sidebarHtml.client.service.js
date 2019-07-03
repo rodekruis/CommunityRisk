@@ -133,6 +133,16 @@ angular.module("dashboards").factory("sidebarHtmlService", [
         );
       }
 
+      //New for FBF-view
+      var pop_affected = document.getElementById("pop_affected_main");
+      if (pop_affected) {
+        pop_affected.textContent = keyvalue.population_affected;
+      }
+      var pop_main = document.getElementById("population_main");
+      if (pop_main) {
+        pop_main.textContent = keyvalue.population;
+      }
+
       //Dynamically create HTML-elements for all indicator tables
       var groupElements = {};
       groups.forEach(function(e) {
@@ -162,9 +172,15 @@ angular.module("dashboards").factory("sidebarHtmlService", [
         }
 
         if (
-          ["impact", "key-actors", "exposure", "general"].indexOf(
-            record.group
-          ) > -1
+          [
+            "impact-shelter",
+            "impact-access",
+            "impact-wash",
+            "impact-health",
+            "impact-food",
+            "key-actors",
+            "general",
+          ].indexOf(record.group) > -1
         ) {
           var div = document.createElement("div");
           div.setAttribute("class", "row profile-item");
@@ -521,6 +537,16 @@ angular.module("dashboards").factory("sidebarHtmlService", [
         );
       }
 
+      //New for FBF-view
+      var pop_affected = document.getElementById("pop_affected_main");
+      if (pop_affected) {
+        pop_affected.textContent = keyvalue.population_affected;
+      }
+      var pop_main = document.getElementById("population_main");
+      if (pop_main) {
+        pop_main.textContent = keyvalue.population;
+      }
+
       for (var i = 0; i < tables.length; i++) {
         var record = tables[i];
         var width;
@@ -533,9 +559,15 @@ angular.module("dashboards").factory("sidebarHtmlService", [
         }
 
         if (
-          ["intervention", "flood_extent", "exposure", "general"].indexOf(
-            record.group
-          ) > -1
+          [
+            "impact-shelter",
+            "impact-access",
+            "impact-wash",
+            "impact-health",
+            "impact-food",
+            "key-actors",
+            "general",
+          ].indexOf(record.group) > -1
         ) {
           var div2 = document.getElementById(record.name);
           div2.innerHTML = keyvalue[record.name] + " " + unit;

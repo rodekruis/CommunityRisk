@@ -161,7 +161,7 @@ angular.module("dashboards").controller("FbfController", [
           document.getElementById("flood-toggle").click();
         }
         // $scope.show_glofas_stations();
-      }, 1000);
+      }, 2000);
     };
 
     ///////////////

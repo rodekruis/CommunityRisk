@@ -44,6 +44,72 @@
           ></div>
         </div>
         <div class="btn-group zoom-level" role="group">
+          <ul
+            class="btn btn-secondary btn-active PIbuttons"
+            style="margin-right:2%"
+          >
+            <div class="dropdown PIdropdown" style="background-color: #4C8293">
+              <a
+                class="dropdown-toggle PI-button"
+                data-toggle="dropdown"
+                href="#"
+              >
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <strong>{{ lead_time }}</strong>
+                <i class="fa fa-angle-down PI-btn-arrow"></i>
+              </a>
+              <ul class="dropdown-menu submenu-items" id="disaster-type-items">
+                <li>
+                  <a class="submenu-item" ng-click="change_lead_time('3-day')"
+                    >3-day</a
+                  >
+                </li>
+                <li>
+                  <a class="submenu-item" ng-click="change_lead_time('7-day')"
+                    ><i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                    7-day</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </ul>
+          <ul
+            class="btn btn-secondary btn-active PIbuttons"
+            style="margin-right:0%"
+          >
+            <div class="dropdown PIdropdown" style="background-color: #4C8293">
+              <a
+                class="dropdown-toggle PI-button"
+                data-toggle="dropdown"
+                href="#"
+              >
+                <strong>{{ current_prev }}</strong>
+                <i class="fa fa-angle-down PI-btn-arrow"></i>
+              </a>
+              <ul
+                class="dropdown-menu submenu-items"
+                id="events"
+                style="z-index:2000"
+              >
+                <li>
+                  <a
+                    class="submenu-item"
+                    ng-click="change_disaster_type('Typhoon')"
+                    >Current</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="submenu-item"
+                    ng-click="change_disaster_type('Earthquake')"
+                    >Previous Forecast</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </ul>
+        </div>
+        <!-- <div class="btn-group zoom-level" role="group">
           <button type="button" class="btn btn-secondary btn-score">
             <i class="fa fa-tachometer" aria-hidden="true"></i>
             <span class="button-label"
@@ -52,7 +118,7 @@
               }}</strong></span
             >
           </button>
-        </div>
+        </div> -->
         <div class="btn-group zoom-level" role="group">
           <button
             id="level1"
@@ -89,11 +155,52 @@
             >
           </button>
         </div>
+        <div class="btn-group zoom-level" role="group">
+          <button
+            id="flood-toggle"
+            type="button"
+            class="btn btn-secondary btn-score-lowercase"
+            style="width:49%; margin-right:1%"
+            ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent_current')"
+          >
+            <span ng-show="!floodHidden"
+              ><i
+                class="fa fa-toggle-off"
+                style="font-size:15px"
+                aria-hidden="true"
+              ></i>
+              {{ "Show flood extent" | translate }}</span
+            >
+            <span ng-show="floodHidden"
+              ><i
+                class="fa fa-toggle-on"
+                style="font-size:15px"
+                aria-hidden="true"
+              ></i>
+              {{ "Hide flood extent" | translate }}</span
+            >
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary btn-score-lowercase"
+            style="width:49%; margin-left:1%"
+            ng-click="glofasHidden = !glofasHidden; toggle_poi_layer('poi_glofas')"
+          >
+            <span ng-show="!glofasHidden"
+              ><i class="fa fa-toggle-off" aria-hidden="true"></i>
+              {{ "Show GLOFAS stations" | translate }}</span
+            >
+            <span ng-show="glofasHidden"
+              ><i class="fa fa-toggle-on" aria-hidden="true"></i>
+              {{ "Hide GLOFAS stations" | translate }}</span
+            >
+          </button>
+        </div>
         <!-- </div> -->
         <!-- end: zoom navigation -->
         <!-- start: community profiles -->
-        <div class="community-profiles-wrapper">
-          <div id="count-info" class="general-info">
+        <div class="community-profiles-wrapper" style="margin-bottom:-10px">
+          <div id="count-info" class="general-info" style="display:none">
             <strong class="filter-count text-primary"></strong> /
             <strong class="total-count text-dark"></strong>
             <span style="font-size: 12px"
@@ -115,25 +222,143 @@
               />
             </button>
           </div>
+          <div class="tablearea">
+            <div class="row profile-item">
+              <div class="col col-md-1 col-sm-1 col-xs-1">
+                <img
+                  class="community-icon"
+                  src="modules/dashboards/img/flood.png"
+                />
+              </div>
+              <div
+                class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
+                ng-click="change_indicator('fc_trigger')"
+              >
+                Affected {{ subtype_selection }}
+              </div>
+              <div
+                class="col col-md-5 col-sm-5 col-xs-5"
+                id="trigger_main"
+              ></div>
+              <div class="col col-md-1 col-sm-1 col-xs-1">
+                <button
+                  type="button"
+                  class="btn-modal info-btn ng-scope"
+                  data-toggle="modal"
+                  ng-click="info('fc_trigger')"
+                >
+                  <img
+                    src="modules/dashboards/img/icon-popup.svg"
+                    style="height:17px"
+                  />
+                </button>
+              </div>
+            </div>
+            <div class="row profile-item">
+              <div class="col col-md-1 col-sm-1 col-xs-1">
+                <img
+                  class="community-icon"
+                  src="modules/dashboards/img/affected_pop.png"
+                />
+              </div>
+              <div
+                class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
+                ng-click="change_indicator('population_affected')"
+              >
+                Affected Population
+              </div>
+              <div
+                class="col col-md-5 col-sm-5 col-xs-5"
+                id="pop_affected_main"
+              ></div>
+              <div class="col col-md-1 col-sm-1 col-xs-1">
+                <button
+                  type="button"
+                  class="btn-modal info-btn ng-scope"
+                  data-toggle="modal"
+                  ng-click="info('population_affected')"
+                >
+                  <img
+                    src="modules/dashboards/img/icon-popup.svg"
+                    style="height:17px"
+                  />
+                </button>
+              </div>
+            </div>
+            <div class="row profile-item">
+              <div class="col col-md-1 col-sm-1 col-xs-1">
+                <img
+                  class="community-icon"
+                  src="modules/dashboards/img/population.png"
+                />
+              </div>
+              <div
+                class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
+                ng-click="change_indicator('population')"
+              >
+                Total Population
+              </div>
+              <div
+                class="col col-md-5 col-sm-5 col-xs-5"
+                id="population_main"
+              ></div>
+              <div class="col col-md-1 col-sm-1 col-xs-1">
+                <button
+                  type="button"
+                  class="btn-modal info-btn ng-scope"
+                  data-toggle="modal"
+                  ng-click="info('population')"
+                >
+                  <img
+                    src="modules/dashboards/img/icon-popup.svg"
+                    style="height:17px"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- <div class="btn-group zoom-level view-buttons" role="group">
+          <button
+            type="button"
+            class="btn btn-secondary btn-score-lowercase"
+            style="width:49%; margin-right:1%"
+          >
+            <span class="button-label"
+              ><strong>{{ "Population affected" | translate }}</strong>
+              <span class="component-score" id="pop_affected_main"></span
+            ></span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary btn-score-lowercase"
+            style="width:49%; margin-left:1%"
+          >
+            <span class="button-label"
+              ><strong>{{ "Total population" | translate }}</strong>
+              <span class="component-score" id="population_main"></span
+            ></span>
+          </button>
+        </div> -->
         <!-- end: community profiles -->
       </div>
     </div>
 
     <div
-      class="navbar-default sidebar-wrapper collapse"
+      class="navbar-default sidebar-wrapper-fbf collapse"
+      style="top:270px"
       role="navigation"
       id="demo"
     >
       <button
         type="button"
-        class="btn btn-default btn-sm btn-block"
+        class="btn btn-default btn-sm btn-block ng-hide"
         ng-click="debugHidden = !debugHidden"
       >
         <span ng-show="debugHidden">{{ "Show Debug" | translate }}</span>
         <span ng-show="!debugHidden">{{ "Hide Debug" | translate }}</span>
       </button>
-      <div class="debug" ng-show="!debugHidden">
+      <div class="debug" ng-show="debugHidden">
         <div
           class="checkbox"
           map-state-sync
@@ -238,7 +463,7 @@
 
       <div>
         <!-- start: community profiles -->
-        <div class="community-profiles-wrapper">
+        <div class="community-profiles-wrapper ng-hide">
           <div class="row"></div>
           <div class="tablearea" id="general"></div>
           <div class="row"></div>
@@ -253,13 +478,195 @@
           aria-multiselectable="true"
         >
           <div class="card">
-            <div class="card-header level1" role="tab" id="headingOne">
+            <div class="card-header level1" role="tab" id="headingImpact">
               <a
                 data-toggle="collapse"
                 data-parent="#accordion"
-                href="#collapseOne"
+                href="#collapseImpact"
                 aria-expanded="true"
-                aria-controls="collapseOne"
+                aria-controls="collapseImpact"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/risk_score.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title">Impact & EAP</span>
+                  <span class="panel-header-description"
+                    >Impact indicators by EAP-section</span
+                  >
+                </span>
+              </a>
+            </div>
+
+            <div
+              id="collapseImpact"
+              class="collapse level1 in"
+              role="tabpanel"
+              aria-labelledby="headingImpact"
+            >
+              <div class="impact-eap-section">Impact on Shelter</div>
+              <div class="card-block" id="impact-shelter"></div>
+              <div class="impact-eap-section">Impact on Access</div>
+              <div class="card-block" id="impact-access"></div>
+              <div class="impact-eap-section">Impact on WASH</div>
+              <div class="card-block" id="impact-wash"></div>
+              <div class="impact-eap-section">Impact on Health</div>
+              <div class="card-block" id="impact-health"></div>
+              <div class="impact-eap-section">Impact on Food Security</div>
+              <div class="card-block" id="impact-food"></div>
+            </div>
+          </div>
+          <!-- 
+          <div class="card">
+              <div class="card-header level1" role="tab" id="headingShelter">
+                <a
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseShelter"
+                  aria-expanded="true"
+                  aria-controls="collapseShelter"
+                >
+                  <span class="panel-header-icon">
+                    <img src="modules/dashboards/img/risk_score.png" />
+                  </span>
+                  <span class="panel-header-content">
+                    <span class="panel-header-title">Impact - Shelter</span>
+                    <span class="panel-header-description">...</span>
+                  </span>
+                </a>
+              </div>
+  
+              <div
+                id="collapseShelter"
+                class="collapse level1 in"
+                role="tabpanel"
+                aria-labelledby="headingShelter"
+              >
+                <div class="card-block" id="impact-shelter"></div>
+              </div>
+            </div>
+
+          <div class="card">
+            <div class="card-header level1" role="tab" id="headingAccess">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseAccess"
+                aria-expanded="true"
+                aria-controls="collapseAccess"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/risk_score.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title">Impact - Access</span>
+                  <span class="panel-header-description">...</span>
+                </span>
+              </a>
+            </div>
+
+            <div
+              id="collapseAccess"
+              class="collapse level1 in"
+              role="tabpanel"
+              aria-labelledby="headingAccess"
+            >
+              <div class="card-block" id="impact-access"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header level1" role="tab" id="headingWash">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseWash"
+                aria-expanded="true"
+                aria-controls="collapseWash"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/risk_score.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title">Impact - WASH</span>
+                  <span class="panel-header-description">...</span>
+                </span>
+              </a>
+            </div>
+
+            <div
+              id="collapseWash"
+              class="collapse level1 in"
+              role="tabpanel"
+              aria-labelledby="headingWash"
+            >
+              <div class="card-block" id="impact-wash"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header level1" role="tab" id="headingHealth">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseHealth"
+                aria-expanded="true"
+                aria-controls="collapseHealth"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/risk_score.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title">Impact - Health</span>
+                  <span class="panel-header-description">...</span>
+                </span>
+              </a>
+            </div>
+
+            <div
+              id="collapseHealth"
+              class="collapse level1 in"
+              role="tabpanel"
+              aria-labelledby="headingHealth"
+            >
+              <div class="card-block" id="impact-health"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header level1" role="tab" id="headingFood">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseFood"
+                aria-expanded="true"
+                aria-controls="collapseFood"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/risk_score.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title">Impact - Food Security</span>
+                  <span class="panel-header-description">...</span>
+                </span>
+              </a>
+            </div>
+
+            <div
+              id="collapseFood"
+              class="collapse level1 in"
+              role="tabpanel"
+              aria-labelledby="headingFood"
+            >
+              <div class="card-block" id="impact-food"></div>
+            </div>
+          </div> -->
+
+          <div class="card">
+            <div class="card-header level1" role="tab" id="headingActors">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseActors"
+                aria-expanded="true"
+                aria-controls="collapseActors"
               >
                 <span class="panel-header-icon">
                   <img src="modules/dashboards/img/risk_score.png" />
@@ -274,83 +681,23 @@
             </div>
 
             <div
-              id="collapseOne"
+              id="collapseActors"
               class="collapse level1 in"
               role="tabpanel"
-              aria-labelledby="headingOne"
+              aria-labelledby="headingActors"
             >
               <div class="card-block" id="key-actors"></div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header level1" role="tab" id="headingThree">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseThree"
-                aria-expanded="true"
-                aria-controls="collapseThree"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">Impact & EAP</span>
-                  <span class="panel-header-description"
-                    >Estimated Impact per EAP-category</span
-                  >
-                </span>
-              </a>
-            </div>
 
-            <div
-              id="collapseThree"
-              class="collapse level1 in"
-              role="tabpanel"
-              aria-labelledby="headingThree"
-            >
-              <div class="card-block" id="impact"></div>
-            </div>
-          </div>
-          <!-- <div class="card">
-            <div class="card-header level1" role="tab" id="headingTwo">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseTwo"
-                aria-expanded="true"
-                aria-controls="collapseTwo"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">General Features </span>
-                  <span class="panel-header-description"
-                    >Population, RedCross-offices, etc. (not
-                    event-specific)</span
-                  >
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseTwo"
-              class="collapse level1"
-              role="tabpanel"
-              aria-labelledby="headingTwo"
-            >
-              <div class="card-block" id="general"></div>
-            </div>
-          </div> -->
           <div class="card">
-            <div class="card-header level1" role="tab" id="headingFive">
+            <div class="card-header level1" role="tab" id="headingCRA">
               <a
                 data-toggle="collapse"
                 data-parent="#accordion"
-                href="#collapseFive"
+                href="#collapseCRA"
                 aria-expanded="true"
-                aria-controls="collapseFive"
+                aria-controls="collapseCRA"
               >
                 <span class="panel-header-icon">
                   <img src="modules/dashboards/img/risk_score.png" />
@@ -367,42 +714,12 @@
             </div>
 
             <div
-              id="collapseFive"
+              id="collapseCRA"
               class="collapse level1"
               role="tabpanel"
-              aria-labelledby="headingFive"
+              aria-labelledby="headingCRA"
             >
               <div class="card-block" id="cra"></div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header level1" role="tab" id="headingFour">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseFour"
-                aria-expanded="true"
-                aria-controls="collapseFour"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">Exposure Maps</span>
-                  <span class="panel-header-description"
-                    >Full exposure maps (not event-specific)</span
-                  >
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseFour"
-              class="collapse level1"
-              role="tabpanel"
-              aria-labelledby="headingFour"
-            >
-              <div class="card-block" id="exposure"></div>
             </div>
           </div>
         </div>

@@ -17,6 +17,17 @@
   padding: 20px;
   background-color: #f3eee3;
 }
+.sidebar-wrapper-fbf {
+  position: absolute;
+  z-index: 2;
+  top: 270px;
+  left: 0;
+  bottom: 0;
+  width: 380px;
+  overflow: auto;
+  padding: 20px;
+  background-color: #f3eee3;
+}
 
 .sidebar-wrapper::-webkit-scrollbar {
   width: 10px;
@@ -300,6 +311,14 @@
   background-color: #fff;
   border-top: none;
   padding: 10px;
+}
+.indicators-panels .impact-eap-section {
+  border-bottom: none;
+  background-color: rgb(221, 221, 221);
+  border-top: none;
+  padding: 5px;
+  font-weight: bold;
+  text-transform: upper;
 }
 .panel-header-icon {
   background: #e8eaf1;
@@ -878,6 +897,13 @@ div.dc-chart {
   text-transform: uppercase;
   cursor: default;
 }
+.btn-secondary.btn-score-lowercase {
+  background-color: #4c8293;
+  border-color: #4c8293;
+  color: #ffffff;
+  width: 100%;
+  cursor: default;
+}
 @media only screen and (max-width: 767px) {
   .btn.btn-secondary.btn-score {
     line-height: 100%;
@@ -969,4 +995,59 @@ div.dc-chart {
   top: -3px;
   left: 3px;
   color: red;
+}
+
+.marker-icon--health {
+  background-color: white;
+}
+.marker-icon--health:before {
+  border-top-color: white;
+}
+.marker-icon--health:hover,
+.marker-icon--health:focus {
+  background-color: lightgrey;
+}
+.marker-icon--health:hover:before,
+.marker-icon--health:focus:before {
+  border-top-color: lightgrey;
+}
+.marker-icon--health:after {
+  content: "H";
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 1;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  color: green;
+}
+
+.marker-icon--wash {
+  background-color: white;
+}
+.marker-icon--wash:before {
+  border-top-color: white;
+}
+.marker-icon--wash:hover,
+.marker-icon--wash:focus {
+  background-color: lightgrey;
+}
+.marker-icon--wash:hover:before,
+.marker-icon--wash:focus:before {
+  border-top-color: lightgrey;
+}
+.marker-icon--wash:after {
+  content: "W";
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 1;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  color: blue;
+}
+
+.fa-exclamation-circle {
+  color: red;
+  font-size: 20px;
 }

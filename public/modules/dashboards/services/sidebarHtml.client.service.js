@@ -142,6 +142,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
       if (pop_main) {
         pop_main.textContent = keyvalue.population;
       }
+      var trigger_main = document.getElementById("trigger_main");
+      if (trigger_main) {
+        trigger_main.textContent = keyvalue.fc_trigger;
+      }
 
       //Dynamically create HTML-elements for all indicator tables
       var groupElements = {};
@@ -173,6 +177,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
 
         if (
           [
+            "impact",
             "impact-shelter",
             "impact-access",
             "impact-wash",
@@ -205,18 +210,43 @@ angular.module("dashboards").factory("sidebarHtmlService", [
           } else if (record.layer_type == "raster") {
             click_fn_string = "toggle_raster_layer('" + record.name + "')";
           } else if (record.layer_type == "point") {
-            click_fn_string = "toggle_poi_layer('" + record.name + "')";
+            click_fn_string =
+              "toggle_poi_layer('" +
+              record.name +
+              "')" +
+              "; " +
+              record.name +
+              "Hidden = !" +
+              record.name +
+              "Hidden";
           } else {
             click_fn_string = "change_indicator('" + record.name + "')";
           }
           div1.setAttribute("ng-click", click_fn_string);
-          div1.innerHTML = "{{ '" + record.name + "' | translate }}";
+          if (record.layer_type == "point") {
+            div1.innerHTML =
+              '{{ "' +
+              record.name +
+              '" | translate }} \
+                          <i ng-show="!' +
+              record.name +
+              'Hidden" class="fa fa-toggle-off" style="font-size:15px" aria-hidden="true"></i> \
+                          <i ng-show="' +
+              record.name +
+              'Hidden" class="fa fa-toggle-on" style="font-size:15px" aria-hidden="true"></i>';
+          } else {
+            div1.innerHTML = '{{ "' + record.name + '" | translate }}';
+          }
           div.appendChild(div1);
           //$compile(div1)($scope);
           var div2 = document.createElement("div");
           div2.setAttribute("class", "col col-md-5 col-sm-5 col-xs-5");
           div2.setAttribute("id", record.name);
-          div2.innerHTML = keyvalue[record.name] + " " + unit;
+          if (record.layer_type == "polygon") {
+            div2.innerHTML = keyvalue[record.name] + " " + unit;
+          } else if (record.layer_type == "point") {
+            div2.innerHTML = "Click to toggle";
+          }
           div.appendChild(div2);
           var div3 = document.createElement("div");
           div3.setAttribute("class", "col col-md-1 col-sm-1 col-xs-1");
@@ -546,6 +576,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
       if (pop_main) {
         pop_main.textContent = keyvalue.population;
       }
+      var trigger_main = document.getElementById("trigger_main");
+      if (trigger_main) {
+        trigger_main.textContent = keyvalue.fc_trigger;
+      }
 
       for (var i = 0; i < tables.length; i++) {
         var record = tables[i];
@@ -560,6 +594,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
 
         if (
           [
+            "impact",
             "impact-shelter",
             "impact-access",
             "impact-wash",

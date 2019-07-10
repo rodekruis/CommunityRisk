@@ -17,6 +17,17 @@
   padding: 20px;
   background-color: #f3eee3;
 }
+.sidebar-wrapper-fbf {
+  position: absolute;
+  z-index: 2;
+  top: 270px;
+  left: 0;
+  bottom: 0;
+  width: 380px;
+  overflow: auto;
+  padding: 20px;
+  background-color: #f3eee3;
+}
 
 .sidebar-wrapper::-webkit-scrollbar {
   width: 10px;
@@ -300,6 +311,14 @@
   background-color: #fff;
   border-top: none;
   padding: 10px;
+}
+.indicators-panels .impact-eap-section {
+  border-bottom: none;
+  background-color: rgb(221, 221, 221);
+  border-top: none;
+  padding: 5px;
+  font-weight: bold;
+  text-transform: upper;
 }
 .panel-header-icon {
   background: #e8eaf1;

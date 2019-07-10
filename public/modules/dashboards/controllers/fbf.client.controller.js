@@ -46,6 +46,16 @@ angular.module("dashboards").controller("FbfController", [
       return $location.path("signin");
     }
 
+    ////////////////////////
+    // SET MAIN VARIABLES //
+    ////////////////////////
+
+    $scope.change_lead_time = function(lead_time) {
+      $scope.lead_time_toggle = 1;
+      $scope.lead_time = lead_time;
+      $scope.initiate();
+    };
+
     //////////////////////
     // DEFINE VARIABLES //
     //////////////////////
@@ -100,6 +110,7 @@ angular.module("dashboards").controller("FbfController", [
     $scope.stations = [];
     $scope.rcLocations = [];
     $scope.lead_time = "3-day";
+    $scope.lead_time_toggle = 0;
     $scope.current_prev = "Current";
 
     ////////////////////////
@@ -225,7 +236,10 @@ angular.module("dashboards").controller("FbfController", [
       }
       d.Rapportage.forEach(function(e) {
         for (var i = 0; i < fbf_admin_data.length; i++) {
-          if (e.pcode == fbf_admin_data[i].pcode) {
+          if (
+            e.pcode == fbf_admin_data[i].pcode &&
+            fbf_admin_data[i].lead_time == $scope.lead_time
+          ) {
             for (var attrname in fbf_admin_data[i]) {
               e[attrname] = fbf_admin_data[i][attrname];
             }
@@ -255,7 +269,7 @@ angular.module("dashboards").controller("FbfController", [
       //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)
       if ($scope.reload == 0) {
         document
-          .getElementsByClassName("sidebar-wrapper")[0]
+          .getElementsByClassName("sidebar-wrapper-fbf")[0]
           .setAttribute("style", "");
         document.getElementById("mapPopup").style.visibility = "hidden";
         document.getElementsByClassName("reset-button")[0].style.visibility =
@@ -270,10 +284,10 @@ angular.module("dashboards").controller("FbfController", [
             .getElementById("level3")
             .setAttribute("class", "btn btn-secondary");
         }
-        $(".sidebar-wrapper").addClass("in");
+        $(".sidebar-wrapper-fbf").addClass("in");
         $(document).ready(function() {
           if ($(window).width() < 768) {
-            $(".sidebar-wrapper").removeClass("in");
+            $(".sidebar-wrapper-fbf").removeClass("in");
           }
         });
         for (i = 0; i < $("#menu-buttons.in").length; i++) {
@@ -381,7 +395,7 @@ angular.module("dashboards").controller("FbfController", [
       // [FBF-SPECIFIC] Create list of triggered districts (for 'zoom in to all triggered districts' button)
       $scope.trigger_codes = [];
       for (var i = 0; i < d.Rapportage.length; i++) {
-        if (d.Rapportage[i].fc_short_trigger == 1) {
+        if (d.Rapportage[i].fc_trigger == 1) {
           $scope.trigger_codes.push(d.Rapportage[i].pcode);
         }
       }
@@ -558,6 +572,7 @@ angular.module("dashboards").controller("FbfController", [
       var groups = [
         "general",
         "key-actors",
+        "impact",
         "impact-shelter",
         "impact-access",
         "impact-wash",
@@ -1695,7 +1710,7 @@ angular.module("dashboards").controller("FbfController", [
     $scope.prepare_roads = function(roads) {
       $scope.layers["roadsLocationsLayer"] = L.geoJSON(roads.features, {
         style: {
-          color: "#444444",
+          color: "purple",
           weight: 500,
         },
       });

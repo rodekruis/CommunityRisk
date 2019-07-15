@@ -37,7 +37,7 @@
     "glob": "^7.1.4",
     "google-spreadsheet": "2.0.x",
     "helmet": "^3.18.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "method-override": "^3.0.0",
     "morgan": "^1.9.1",
     "nodemailer": "2.3.x",

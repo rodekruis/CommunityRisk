@@ -275,13 +275,13 @@ angular.module("dashboards").controller("FbfController", [
 
       //ADDITIONAL OUTPUT
       //Get current Date
-      for (var i = 0; i < fbf_admin_data.length; i++) {
+      for (i = 0; i < fbf_admin_data.length; i++) {
         if (fbf_admin_data[i].current_prev == "Current") {
           $scope.current_date = fbf_admin_data[i].date;
           break;
         }
       }
-      for (var i = 0; i < fbf_admin_data.length; i++) {
+      for (i = 0; i < fbf_admin_data.length; i++) {
         if (fbf_admin_data[i].current_prev == "Previous") {
           $scope.prev_date = fbf_admin_data[i].date;
           break;
@@ -298,7 +298,7 @@ angular.module("dashboards").controller("FbfController", [
       $scope.trigger_3day = 0;
       $scope.trigger_7day = 0;
       $scope.trigger_current = 0;
-      for (var i = 0; i < fbf_admin_data.length; i++) {
+      for (i = 0; i < fbf_admin_data.length; i++) {
         var record = fbf_admin_data[i];
         if (
           $scope.lead_time == "3-day" &&

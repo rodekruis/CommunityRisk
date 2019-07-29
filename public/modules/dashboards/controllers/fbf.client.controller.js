@@ -56,6 +56,12 @@ angular.module("dashboards").controller("FbfController", [
       $scope.initiate();
     };
 
+    $scope.change_current_prev = function(current_prev) {
+      $scope.current_prev_toggle = 1;
+      $scope.current_prev = current_prev;
+      $scope.initiate();
+    };
+
     //////////////////////
     // DEFINE VARIABLES //
     //////////////////////
@@ -238,7 +244,8 @@ angular.module("dashboards").controller("FbfController", [
         for (var i = 0; i < fbf_admin_data.length; i++) {
           if (
             e.pcode == fbf_admin_data[i].pcode &&
-            fbf_admin_data[i].lead_time == $scope.lead_time
+            fbf_admin_data[i].lead_time == $scope.lead_time &&
+            fbf_admin_data[i].current_prev == $scope.current_prev
           ) {
             for (var attrname in fbf_admin_data[i]) {
               e[attrname] = fbf_admin_data[i][attrname];
@@ -264,7 +271,75 @@ angular.module("dashboards").controller("FbfController", [
         return e.country_code == $scope.country_code;
       });
 
-      console.log(d);
+      DEBUG && console.log(d);
+
+      //ADDITIONAL OUTPUT
+      //Get current Date
+      for (var i = 0; i < fbf_admin_data.length; i++) {
+        if (fbf_admin_data[i].current_prev == "Current") {
+          $scope.current_date = fbf_admin_data[i].date;
+          break;
+        }
+      }
+      for (var i = 0; i < fbf_admin_data.length; i++) {
+        if (fbf_admin_data[i].current_prev == "Previous") {
+          $scope.prev_date = fbf_admin_data[i].date;
+          break;
+        }
+      }
+      var date =
+        $scope.current_prev == "Current"
+          ? $scope.current_date
+          : $scope.prev_date;
+      date = new Date(date);
+      $scope.date =
+        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+      //Get triggers for other lead-time (to signal)
+      $scope.trigger_3day = 0;
+      $scope.trigger_7day = 0;
+      $scope.trigger_current = 0;
+      for (var i = 0; i < fbf_admin_data.length; i++) {
+        var record = fbf_admin_data[i];
+        if (
+          $scope.lead_time == "3-day" &&
+          record.lead_time == "3-day" &&
+          record.current_prev == $scope.current_prev
+        ) {
+          $scope.trigger_3day += record.fc_trigger == 1 ? 1 : 0;
+          $scope.trigger_7day += record.other_lead_time_trigger == 1 ? 1 : 0;
+        } else if (
+          $scope.lead_time == "7-day" &&
+          record.lead_time == "7-day" &&
+          record.current_prev == $scope.current_prev
+        ) {
+          $scope.trigger_3day += record.other_lead_time_trigger == 1 ? 1 : 0;
+          $scope.trigger_7day += record.fc_trigger == 1 ? 1 : 0;
+        } else if (
+          $scope.current_prev == "Previous" &&
+          record.current_prev == "Current"
+        ) {
+          $scope.trigger_current += record.fc_trigger == 1 ? 1 : 0;
+        }
+      }
+      document.getElementById("3-day-signal").style.display =
+        $scope.trigger_3day >= 1 ? "inline" : "none";
+      document.getElementById("7-day-signal").style.display =
+        $scope.trigger_7day >= 1 ? "inline" : "none";
+      // document.getElementById('lead-time-signal').style.display = $scope.trigger_3day >= 1 || $scope.trigger_7day >= 1 ? "inline" : "none";
+      if (
+        ($scope.trigger_7day >= 1 && $scope.lead_time == "3-day") ||
+        ($scope.trigger_3day >= 1 && $scope.lead_time == "7-day")
+      ) {
+        document.getElementById("lead-time-signal").style.display = "inline";
+      } else {
+        document.getElementById("lead-time-signal").style.display = "none";
+      }
+      document.getElementById("current-signal").style.display =
+        $scope.trigger_current >= 1 ? "inline" : "none";
+      document.getElementById("current_prev-signal").style.display =
+        $scope.trigger_current >= 1 && $scope.current_prev == "Previous"
+          ? "inline"
+          : "none";
 
       //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)
       if ($scope.reload == 0) {
@@ -1176,6 +1251,9 @@ angular.module("dashboards").controller("FbfController", [
         document
           .getElementById("section-" + id)
           .classList.add("section-active");
+
+        //FBF-only
+        hide_show_legend();
       };
 
       ////////////////////////////
@@ -1388,6 +1466,23 @@ angular.module("dashboards").controller("FbfController", [
       var zoom_parent = $(".leaflet-bottom.leaflet-right")[0];
       zoom_parent.insertBefore(zoom_child, zoom_parent.childNodes[0]);
 
+      //FBF-only
+      var hide_show_legend = function() {
+        var values = [];
+        for (var i = 0; i < whereGroupSum_scores.top(Infinity).length; i++) {
+          values.push(whereGroupSum_scores.top(Infinity)[i].value.sum);
+        }
+        if (
+          Math.max(...values) == Math.min(...values) ||
+          $scope.metric == "fc_trigger"
+        ) {
+          $(".legend.leaflet-control").css("display", "none");
+        } else {
+          $(".legend.leaflet-control").css("display", "block");
+        }
+      };
+      hide_show_legend();
+
       //////////////////////////////////////
       /// TRANSLATION TO OTHER LANGUAGES ///
       //////////////////////////////////////
@@ -1456,9 +1551,14 @@ angular.module("dashboards").controller("FbfController", [
     /// WMS LAYER(S) ///
     ////////////////////
 
+    var layer = "".concat(
+      "flood_extent_",
+      $scope.lead_time == "3-day" ? "short_" : "long_",
+      $scope.current_prev == "Current" ? "0" : "1"
+    );
     $scope.add_raster_layer = function() {
       $scope.rasterLayer = L.tileLayer.wms(GEOSERVER_BASEURL, {
-        layers: "flood_extent_short_0",
+        layers: layer,
         transparent: true,
         format: "image/png",
       });
@@ -1497,7 +1597,13 @@ angular.module("dashboards").controller("FbfController", [
           country: $scope.country_code,
           type: "dashboard_forecast_per_station",
         },
-        function(stations) {
+        function(stations_temp) {
+          var stations = $.grep(stations_temp, function(e) {
+            return (
+              e.properties.current_prev == $scope.current_prev &&
+              e.properties.lead_time == $scope.lead_time
+            );
+          });
           $scope.prepare_glofas_stations(stations);
         }
       );
@@ -1566,18 +1672,20 @@ angular.module("dashboards").controller("FbfController", [
           "<strong>" +
           stationTitle +
           "</strong><br>" +
-          "trigger-level: " +
-          station.trigger_level +
+          "Forecast: " +
+          helpers.formatAsType("decimal0", station.fc) +
+          "<br>Trigger-level: " +
+          helpers.formatAsType("decimal0", station.trigger_level) +
+          "<br>Districts related to station: " +
+          (station.station_used == 0 ? "no" : "yes") +
           "";
         var stationClass = "station";
-        var stationTriggerLevelLow = 2000;
-        var stationTriggerLevelHigh = 4000;
 
-        if (station.trigger_level > stationTriggerLevelLow) {
+        if (station.station_used == 1 && station.fc_trigger == 1) {
           stationClass += " is-triggered";
         }
-        if (station.trigger_level > stationTriggerLevelHigh) {
-          stationClass += " is-triggered-high";
+        if (station.station_used == 1 && station.fc_trigger == 0) {
+          stationClass += " is-not-triggered";
         }
 
         var stationMarker = createMarker(item, stationTitle, stationClass);

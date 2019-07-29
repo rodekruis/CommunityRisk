@@ -946,22 +946,22 @@ div.dc-chart {
 }
 
 .marker-icon--station {
-  background-color: blue;
+  background-color: grey;
 }
 .marker-icon--station:before {
-  border-top-color: blue;
+  border-top-color: grey;
 }
 .marker-icon--station.is-triggered {
-  background-color: orange;
-}
-.marker-icon--station.is-triggered:before {
-  border-top-color: orange;
-}
-.marker-icon--station.is-triggered-high {
   background-color: orangered;
 }
-.marker-icon--station.is-triggered-high:before {
+.marker-icon--station.is-triggered:before {
   border-top-color: orangered;
+}
+.marker-icon--station.is-not-triggered {
+  background-color: rgb(85, 133, 14);
+}
+.marker-icon--station.is-not-triggered:before {
+  border-top-color: rgb(85, 133, 14);
 }
 .marker-icon--station:hover,
 .marker-icon--station:focus {
@@ -1049,5 +1049,5 @@ div.dc-chart {
 
 .fa-exclamation-circle {
   color: red;
-  font-size: 20px;
+  font-size: 16px;
 }

@@ -46,7 +46,7 @@
         <div class="btn-group zoom-level" role="group">
           <ul
             class="btn btn-secondary btn-active PIbuttons"
-            style="margin-right:2%"
+            style="margin-right:2%; width:42%"
           >
             <div class="dropdown PIdropdown" style="background-color: #4C8293">
               <a
@@ -54,19 +54,35 @@
                 data-toggle="dropdown"
                 href="#"
               >
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <i
+                  id="lead-time-signal"
+                  class="fa fa-exclamation-circle"
+                  style="display: none"
+                  aria-hidden="true"
+                ></i>
                 <strong>{{ lead_time }}</strong>
                 <i class="fa fa-angle-down PI-btn-arrow"></i>
               </a>
               <ul class="dropdown-menu submenu-items" id="disaster-type-items">
                 <li>
                   <a class="submenu-item" ng-click="change_lead_time('3-day')"
-                    >3-day</a
+                    ><i
+                      id="3-day-signal"
+                      class="fa fa-exclamation-circle"
+                      style="display: none"
+                      aria-hidden="true"
+                    ></i>
+                    3-day</a
                   >
                 </li>
                 <li>
                   <a class="submenu-item" ng-click="change_lead_time('7-day')"
-                    ><i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                    ><i
+                      id="7-day-signal"
+                      class="fa fa-exclamation-circle"
+                      style="display: none"
+                      aria-hidden="true"
+                    ></i>
                     7-day</a
                   >
                 </li>
@@ -75,7 +91,7 @@
           </ul>
           <ul
             class="btn btn-secondary btn-active PIbuttons"
-            style="margin-right:0%"
+            style="margin-right:0%; width:56%"
           >
             <div class="dropdown PIdropdown" style="background-color: #4C8293">
               <a
@@ -83,7 +99,13 @@
                 data-toggle="dropdown"
                 href="#"
               >
-                <strong>{{ current_prev }}</strong>
+                <i
+                  id="current_prev-signal"
+                  class="fa fa-exclamation-circle"
+                  style="display: none"
+                  aria-hidden="true"
+                ></i>
+                <strong>{{ current_prev }} ({{ date }})</strong>
                 <i class="fa fa-angle-down PI-btn-arrow"></i>
               </a>
               <ul
@@ -94,14 +116,21 @@
                 <li>
                   <a
                     class="submenu-item"
-                    ng-click="change_disaster_type('Typhoon')"
-                    >Current</a
+                    ng-click="change_current_prev('Current')"
+                  >
+                    <i
+                      id="current-signal"
+                      class="fa fa-exclamation-circle"
+                      style="display: none"
+                      aria-hidden="true"
+                    ></i>
+                    Current Forecast</a
                   >
                 </li>
                 <li>
                   <a
                     class="submenu-item"
-                    ng-click="change_disaster_type('Earthquake')"
+                    ng-click="change_current_prev('Previous')"
                     >Previous Forecast</a
                   >
                 </li>

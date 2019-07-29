@@ -1473,7 +1473,7 @@ angular.module("dashboards").controller("FbfController", [
           values.push(whereGroupSum_scores.top(Infinity)[i].value.sum);
         }
         if (
-          Math.max(...values) == Math.min(...values) ||
+          Math.max.apply(null, values) == Math.min.apply(null, values) ||
           $scope.metric == "fc_trigger"
         ) {
           $(".legend.leaflet-control").css("display", "none");

@@ -15,6 +15,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "sidebarHtmlService",
   "colorSetupService",
   "chartService",
+  "geoLayersService",
   "DEBUG",
   function(
     $translate,
@@ -31,6 +32,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     sidebarHtmlService,
     colorSetupService,
     chartService,
+    geoLayersService,
     DEBUG
   ) {
     ////////////////////////
@@ -216,6 +218,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
                   $scope.disaster_type,
                   $scope.disaster_name
                 );
+                prepareChapterData($scope.country_code);
               }
             }
           );
@@ -415,6 +418,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         if (record_temp.group !== "admin") {
           record.id = "data-table" + [i + 1];
           record.name = record_temp.variable;
+          record.layer_type = record_temp.layer_type;
           record.group =
             ["vulnerability", "coping_capacity", "general", "other"].indexOf(
               record_temp.group
@@ -595,6 +599,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         "disaster",
         "geographic",
         "cra_features",
+        "key-actors",
       ];
       sidebarHtmlService.createHTML_PI(
         groups,
@@ -945,7 +950,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
       // MAP RELATED FUNCTIONS //
       ///////////////////////////
 
-      $scope.map_coloring = function(id) {
+      $scope.change_indicator = function(id) {
         var section_id = document.getElementById("section-" + $scope.metric);
         if (section_id) {
           section_id.classList.remove("section-active");
@@ -1468,9 +1473,92 @@ angular.module("dashboards").controller("PriorityIndexController", [
       });
     };
 
-    //////////////////
-    /// TRACK DATA ///
-    //////////////////
+    ////////////////////////
+    /// POI & TRACK DATA ///
+    ////////////////////////
+
+    function prepareChapterData(country_code) {
+      Data.getTable(
+        {
+          schema: country_code + "_datamodel",
+          table: "Indicators_poi_RC_chapters",
+        },
+        function(chapters) {
+          $scope.prepare_rc_locations(chapters);
+        }
+      );
+    }
+
+    $scope.layers = {};
+    $scope.prepare_rc_locations = function(rcLocations) {
+      $scope.layers["poi_rc_officesLocationsLayer"] = L.layerGroup();
+      rcLocations.forEach(function(item) {
+        if (!item.properties) return;
+
+        var location = item.properties;
+        var locationTitle = location.name;
+        var locationInfoPopup =
+          "<strong class='h4'>" +
+          locationTitle +
+          "</strong><br>" +
+          "<strong>" +
+          "Type: " +
+          "</strong>" +
+          location.type +
+          "<br>" +
+          "<strong>" +
+          "Chairman: " +
+          "</strong>" +
+          location.chairman +
+          "<br>" +
+          "<strong>" +
+          "Address: " +
+          "</strong>" +
+          location.address +
+          "";
+
+        var locationMarker = geoLayersService.createMarker(
+          item,
+          locationTitle,
+          "rc"
+        );
+
+        locationMarker.addTo($scope.layers["poi_rc_officesLocationsLayer"]);
+        locationMarker.bindPopup(locationInfoPopup);
+      });
+    };
+
+    $scope.toggled = {};
+    $scope.toggle_poi_layer = function(layer) {
+      return geoLayersService.toggle_poi_layer(
+        layer,
+        $scope.toggled,
+        $scope.layers,
+        map
+      );
+    };
+
+    // $scope.show_locations = function(poi_layer) {
+    //   map.addLayer(poi_layer);
+    // };
+    // $scope.hide_locations = function(poi_layer) {
+    //   map.removeLayer(poi_layer);
+    // };
+    // $scope.toggle_poi_layer = function(layer) {
+    //   if (typeof $scope.toggled[layer] == "undefined") {
+    //     $scope.toggled[layer] = true;
+    //   } else {
+    //     $scope.toggled[layer] = !$scope.toggled[layer];
+    //   }
+
+    //   var layer_full = layer + "LocationsLayer";
+    //   if ($scope.toggled[layer]) {
+    //     $scope.show_locations($scope.layers[layer_full]);
+    //   } else {
+    //     $scope.hide_locations($scope.layers[layer_full]);
+    //   }
+    // };
+    // $scope.toggle_poi_layer('poi_rc_offices');
 
     function prepareTrackData(country_code, disaster_type, disaster_name) {
       Data.getTable(

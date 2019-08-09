@@ -17,6 +17,7 @@ angular.module("dashboards").controller("FbfController", [
   "sidebarHtmlService",
   "districtButtonsService",
   "chartService",
+  "geoLayersService",
   "GEOSERVER_BASEURL",
   "DEBUG",
   function(
@@ -36,6 +37,7 @@ angular.module("dashboards").controller("FbfController", [
     sidebarHtmlService,
     districtButtonsService,
     chartService,
+    geoLayersService,
     GEOSERVER_BASEURL,
     DEBUG
   ) {
@@ -1645,20 +1647,6 @@ angular.module("dashboards").controller("FbfController", [
       );
     }
 
-    function createMarker(item, itemTitle, itemClass) {
-      return L.marker(item.geometry.coordinates, {
-        keyboard: true,
-        riseOnHover: true,
-        title: itemTitle,
-        icon: L.divIcon({
-          iconSize: [20, 20],
-          iconAnchor: [10, 20],
-          popupAnchor: [0, 0],
-          className: "marker-icon marker-icon--" + itemClass,
-        }),
-      });
-    }
-
     $scope.layers = {};
     $scope.prepare_glofas_stations = function(stations) {
       $scope.layers["poi_glofasLocationsLayer"] = L.layerGroup();
@@ -1688,7 +1676,11 @@ angular.module("dashboards").controller("FbfController", [
           stationClass += " is-not-triggered";
         }
 
-        var stationMarker = createMarker(item, stationTitle, stationClass);
+        var stationMarker = geoLayersService.createMarker(
+          item,
+          stationTitle,
+          stationClass
+        );
 
         stationMarker.addTo($scope.layers["poi_glofasLocationsLayer"]);
         stationMarker.bindPopup(stationInfoPopup);
@@ -1722,7 +1714,11 @@ angular.module("dashboards").controller("FbfController", [
           location.address +
           "";
 
-        var locationMarker = createMarker(item, locationTitle, "rc");
+        var locationMarker = geoLayersService.createMarker(
+          item,
+          locationTitle,
+          "rc"
+        );
 
         locationMarker.addTo($scope.layers["poi_rc_officesLocationsLayer"]);
         locationMarker.bindPopup(locationInfoPopup);
@@ -1746,7 +1742,11 @@ angular.module("dashboards").controller("FbfController", [
           location.type +
           "";
 
-        var locationMarker = createMarker(item, locationTitle, "health");
+        var locationMarker = geoLayersService.createMarker(
+          item,
+          locationTitle,
+          "health"
+        );
 
         locationMarker.addTo($scope.layers["healthsitesLocationsLayer"]);
         locationMarker.bindPopup(locationInfoPopup);
@@ -1770,33 +1770,24 @@ angular.module("dashboards").controller("FbfController", [
           location.water_tech +
           "";
 
-        var locationMarker = createMarker(item, locationTitle, "wash");
+        var locationMarker = geoLayersService.createMarker(
+          item,
+          locationTitle,
+          "wash"
+        );
 
         locationMarker.addTo($scope.layers["waterpointsLocationsLayer"]);
         locationMarker.bindPopup(locationInfoPopup);
       });
     };
 
-    $scope.show_locations = function(poi_layer) {
-      map.addLayer(poi_layer);
-    };
-    $scope.hide_locations = function(poi_layer) {
-      map.removeLayer(poi_layer);
-    };
-
     $scope.toggle_poi_layer = function(layer) {
-      if (typeof $scope.toggled[layer] == "undefined") {
-        $scope.toggled[layer] = true;
-      } else {
-        $scope.toggled[layer] = !$scope.toggled[layer];
-      }
-
-      var layer_full = layer + "LocationsLayer";
-      if ($scope.toggled[layer]) {
-        $scope.show_locations($scope.layers[layer_full]);
-      } else {
-        $scope.hide_locations($scope.layers[layer_full]);
-      }
+      return geoLayersService.toggle_poi_layer(
+        layer,
+        $scope.toggled,
+        $scope.layers,
+        map
+      );
     };
 
     /////////////////////

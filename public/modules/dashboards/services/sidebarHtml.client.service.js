@@ -476,11 +476,35 @@ angular.module("dashboards").factory("sidebarHtmlService", [
               "class",
               "col-md-9 col-sm-9 col-xs-9 component-label"
             );
-            div1.setAttribute(
-              "ng-click",
-              "map_coloring('" + record.name + "')"
-            );
-            div1.innerHTML = meta_label[record.name];
+            var click_fn_string;
+            if (record.layer_type == "point") {
+              click_fn_string =
+                "toggle_poi_layer('" +
+                record.name +
+                "')" +
+                "; " +
+                record.name +
+                "Hidden = !" +
+                record.name +
+                "Hidden";
+            } else {
+              click_fn_string = "change_indicator('" + record.name + "')";
+            }
+            div1.setAttribute("ng-click", click_fn_string);
+            if (record.layer_type == "point") {
+              div1.innerHTML =
+                '{{ "' +
+                record.name +
+                '" | translate }} \
+                            <i ng-show="!' +
+                record.name +
+                'Hidden" class="fa fa-toggle-off" style="font-size:15px" aria-hidden="true"></i> \
+                            <i ng-show="' +
+                record.name +
+                'Hidden" class="fa fa-toggle-on" style="font-size:15px" aria-hidden="true"></i>';
+            } else {
+              div1.innerHTML = '{{ "' + record.name + '" | translate }}';
+            }
             //$compile(div1)($scope);
             div.appendChild(div1);
             var div1a = document.createElement("div");

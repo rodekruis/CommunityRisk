@@ -17,6 +17,7 @@ angular.module("dashboards").controller("FbfController", [
   "sidebarHtmlService",
   "districtButtonsService",
   "chartService",
+  "geoLayersService",
   "GEOSERVER_BASEURL",
   "DEBUG",
   function(
@@ -36,6 +37,7 @@ angular.module("dashboards").controller("FbfController", [
     sidebarHtmlService,
     districtButtonsService,
     chartService,
+    geoLayersService,
     GEOSERVER_BASEURL,
     DEBUG
   ) {
@@ -66,6 +68,7 @@ angular.module("dashboards").controller("FbfController", [
     // DEFINE VARIABLES //
     //////////////////////
 
+    $scope.lizard = false;
     $rootScope.loadCount = 0;
     $scope.reload = 0;
     $scope.authentication = Authentication;
@@ -168,7 +171,25 @@ angular.module("dashboards").controller("FbfController", [
       prepareHealthsitesData();
       prepareWaterpointsData();
       prepareRoadData();
-      $scope.add_raster_layer();
+      var BASEURL = $scope.lizard
+        ? "https://zambia.lizard.net/wms/"
+        : GEOSERVER_BASEURL;
+      var layer = "".concat(
+        "flood_extent_",
+        $scope.lead_time == "3-day" ? "short_" : "long_",
+        $scope.current_prev == "Current" ? "0" : "1"
+      );
+      if ($scope.lizard) {
+        if ($scope.current_prev == "Current") {
+          layer =
+            $scope.lead_time == "3-day"
+              ? "red-cross:actual-flood-extent"
+              : "red-cross:flood-extent-7-day-forecast";
+        } else {
+          layer = "scenarios:7680:depth-max-dtri";
+        }
+      }
+      $scope.add_raster_layer(BASEURL, layer);
 
       // Add timeout to give map time to load (only upon first load, not when changing zoom-level)
 
@@ -200,7 +221,11 @@ angular.module("dashboards").controller("FbfController", [
           AuthData.getFbfJsonData(
             {
               country: $scope.country_code.toLowerCase(),
-              type: "data_adm" + $scope.admlevel,
+              // type: "data_adm" + $scope.admlevel,
+              type: "data_adm".concat(
+                $scope.admlevel,
+                $scope.lizard ? "_lizard" : ""
+              ),
             },
             function(fbf_admin_data) {
               AuthData.getFbfJsonData(
@@ -574,6 +599,8 @@ angular.module("dashboards").controller("FbfController", [
       var dimensions = cf_result.dimensions;
       var dimensions_scores = cf_result.dimensions_scores;
       $scope.tables = cf_result.tables;
+
+      console.log(dimensions["population_affected"].top(1));
 
       // Create value-lookup function
       $scope.genLookup_value = function() {
@@ -1551,13 +1578,8 @@ angular.module("dashboards").controller("FbfController", [
     /// WMS LAYER(S) ///
     ////////////////////
 
-    var layer = "".concat(
-      "flood_extent_",
-      $scope.lead_time == "3-day" ? "short_" : "long_",
-      $scope.current_prev == "Current" ? "0" : "1"
-    );
-    $scope.add_raster_layer = function() {
-      $scope.rasterLayer = L.tileLayer.wms(GEOSERVER_BASEURL, {
+    $scope.add_raster_layer = function(url, layer) {
+      $scope.rasterLayer = L.tileLayer.wms(url, {
         layers: layer,
         transparent: true,
         format: "image/png",
@@ -1595,7 +1617,10 @@ angular.module("dashboards").controller("FbfController", [
       AuthData.getPoi(
         {
           country: $scope.country_code,
-          type: "dashboard_forecast_per_station",
+          // type: "dashboard_forecast_per_station",
+          type: "dashboard_forecast_per_station".concat(
+            $scope.lizard ? "_lizard" : ""
+          ),
         },
         function(stations_temp) {
           var stations = $.grep(stations_temp, function(e) {
@@ -1645,20 +1670,6 @@ angular.module("dashboards").controller("FbfController", [
       );
     }
 
-    function createMarker(item, itemTitle, itemClass) {
-      return L.marker(item.geometry.coordinates, {
-        keyboard: true,
-        riseOnHover: true,
-        title: itemTitle,
-        icon: L.divIcon({
-          iconSize: [20, 20],
-          iconAnchor: [10, 20],
-          popupAnchor: [0, 0],
-          className: "marker-icon marker-icon--" + itemClass,
-        }),
-      });
-    }
-
     $scope.layers = {};
     $scope.prepare_glofas_stations = function(stations) {
       $scope.layers["poi_glofasLocationsLayer"] = L.layerGroup();
@@ -1688,7 +1699,11 @@ angular.module("dashboards").controller("FbfController", [
           stationClass += " is-not-triggered";
         }
 
-        var stationMarker = createMarker(item, stationTitle, stationClass);
+        var stationMarker = geoLayersService.createMarker(
+          item,
+          stationTitle,
+          stationClass
+        );
 
         stationMarker.addTo($scope.layers["poi_glofasLocationsLayer"]);
         stationMarker.bindPopup(stationInfoPopup);
@@ -1722,7 +1737,11 @@ angular.module("dashboards").controller("FbfController", [
           location.address +
           "";
 
-        var locationMarker = createMarker(item, locationTitle, "rc");
+        var locationMarker = geoLayersService.createMarker(
+          item,
+          locationTitle,
+          "rc"
+        );
 
         locationMarker.addTo($scope.layers["poi_rc_officesLocationsLayer"]);
         locationMarker.bindPopup(locationInfoPopup);
@@ -1746,7 +1765,11 @@ angular.module("dashboards").controller("FbfController", [
           location.type +
           "";
 
-        var locationMarker = createMarker(item, locationTitle, "health");
+        var locationMarker = geoLayersService.createMarker(
+          item,
+          locationTitle,
+          "health"
+        );
 
         locationMarker.addTo($scope.layers["healthsitesLocationsLayer"]);
         locationMarker.bindPopup(locationInfoPopup);
@@ -1770,33 +1793,24 @@ angular.module("dashboards").controller("FbfController", [
           location.water_tech +
           "";
 
-        var locationMarker = createMarker(item, locationTitle, "wash");
+        var locationMarker = geoLayersService.createMarker(
+          item,
+          locationTitle,
+          "wash"
+        );
 
         locationMarker.addTo($scope.layers["waterpointsLocationsLayer"]);
         locationMarker.bindPopup(locationInfoPopup);
       });
     };
 
-    $scope.show_locations = function(poi_layer) {
-      map.addLayer(poi_layer);
-    };
-    $scope.hide_locations = function(poi_layer) {
-      map.removeLayer(poi_layer);
-    };
-
     $scope.toggle_poi_layer = function(layer) {
-      if (typeof $scope.toggled[layer] == "undefined") {
-        $scope.toggled[layer] = true;
-      } else {
-        $scope.toggled[layer] = !$scope.toggled[layer];
-      }
-
-      var layer_full = layer + "LocationsLayer";
-      if ($scope.toggled[layer]) {
-        $scope.show_locations($scope.layers[layer_full]);
-      } else {
-        $scope.hide_locations($scope.layers[layer_full]);
-      }
+      return geoLayersService.toggle_poi_layer(
+        layer,
+        $scope.toggled,
+        $scope.layers,
+        map
+      );
     };
 
     /////////////////////

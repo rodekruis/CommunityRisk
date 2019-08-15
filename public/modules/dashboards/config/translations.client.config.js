@@ -48,6 +48,8 @@ var static_en = {
   desc_source: "Description",
   share_url_title: "Share current settings directly through URL",
   share_url_copy: "Copy URL",
+  export_print: "Print",
+  export_print_howto: "How to print...",
   warning: "Warning",
   ie_warning:
     "This beta-version is currently best viewed in Google Chrome, and second-best in Firefox or Safari. Internet Explorer works, but has substantial interaction downsides.",
@@ -112,6 +114,8 @@ var static_es = {
   share_url_title:
     "Comparte la configuración actual directamente a través de la URL",
   share_url_copy: "Copiar URL",
+  export_print: "Print",
+  export_print_howto: "How to print...",
   warning: "Advertencia",
   ie_warning:
     "Actualmente, esta versión beta se visualiza mejor en el navegador Google Chrome, seguido de Firefox o Safari. Internet Explorer funciona, pero tiene desventajas sustanciales de interacción.",
@@ -170,6 +174,8 @@ var static_fr = {
   desc_source: "Description",
   share_url_title: "Partager la configuration actuelle avec un lien",
   share_url_copy: "Copier le lien",
+  export_print: "Print",
+  export_print_howto: "How to print...",
   warning: "Avertissement",
   ie_warning:
     "Cette version beta est mieux accessible avec Google Chrome et ensuite avec Firefox ou Safari. Internet Explorer fonctionne aussi, mais l'accès n'est pas optimal.",

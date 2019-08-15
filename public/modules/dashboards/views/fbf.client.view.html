@@ -11,6 +11,7 @@
     fn-share-country-url="share_country_URL"
     fn-export-csv="export_csv"
     fn-export-geojson="export_geojson"
+    fn-export-print="export_print"
     show-help="true"
     view-type="view_code"
   ></cr-header>
@@ -932,6 +933,25 @@
         <div class="modal-body" style="word-break:break-all">
           <p>{{ status_text }}</p>
           <button ng-click="open_DPI()">Inspect Data Preparedness Index</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="printModal" tabindex="-1" class="modal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+          </button>
+          <h2 class="h5 modal-title">{{ "export_print" | translate }}</h2>
+        </div>
+        <div class="modal-body" style="word-break:break-all">
+          <p>{{ "export_print_howto" | translate }}</p>
+          <button ng-click="window.print()">
+            {{ "export_print" | translate }}
+          </button>
         </div>
       </div>
     </div>

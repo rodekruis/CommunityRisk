@@ -1372,6 +1372,11 @@ angular.module("dashboards").controller("FbfController", [
 
       $scope.copyToClipboard = shareService.copyToClipboard;
 
+      // Export to PDF / Print
+      $scope.export_print = function() {
+        $("#printModal").modal("show");
+      };
+
       ///////////////////////////////////
       // SIDEBAR: MAP & TABULAR SWITCH //
       ///////////////////////////////////

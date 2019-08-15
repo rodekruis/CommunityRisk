@@ -1,0 +1,21 @@
+/*
+  PRINT styles/overrides:
+*/
+@media print {
+  /* Fix UI-elements visually */
+  .sidebar-wrapper-fbf,
+  .sidebar-wrapper,
+  .zoom-level-nav {
+    background: white !important;
+  }
+
+  /* Hide interactive elements */
+  .leaflet-control:not(.leaflet-control-attribution) {
+    display: none !important;
+  }
+
+  /* Make 'activated' elements more visible */
+  .zoom-level-nav .btn-active {
+    background: silver !important;
+  }
+}

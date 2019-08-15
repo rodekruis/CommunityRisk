@@ -118,6 +118,17 @@
                 {{ "export_geojson" | translate }}
               </a>
             </li>
+            <li role="separator" class="divider" ng-show="fnExportPrint"></li>
+            <li ng-show="fnExportPrint">
+              <a
+                href=""
+                role="button"
+                aria-haspopup="true"
+                ng-click="fnExportPrint()"
+              >
+                {{ "export_print" | translate }}
+              </a>
+            </li>
           </ul>
         </li>
         <li class="dropdown navbar--item" ng-show="showHelp">

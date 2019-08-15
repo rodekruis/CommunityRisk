@@ -15,10 +15,20 @@
     view-type="view_code"
   ></cr-header>
 
+  <div class="header-for-print hidden visible-print">
+    <img
+      src="modules/core/img/510logo-new.png"
+      class="navbar-brand--logo-img"
+    />
+  </div>
+
   <div class="content-wrapper">
     <div class="zoom-level-nav-wrapper">
       <div class="zoom-level-nav map-views">
-        <div class="btn-group zoom-level view-buttons" role="group">
+        <div
+          class="btn-group zoom-level view-buttons hidden-print"
+          role="group"
+        >
           <button
             type="button"
             class="btn btn-tab btn-map-view active"
@@ -545,7 +555,7 @@
               <div class="card-block" id="impact-food"></div>
             </div>
           </div>
-          <!-- 
+          <!--
           <div class="card">
               <div class="card-header level1" role="tab" id="headingShelter">
                 <a
@@ -564,7 +574,7 @@
                   </span>
                 </a>
               </div>
-  
+
               <div
                 id="collapseShelter"
                 class="collapse level1 in"

@@ -5,5 +5,3 @@ env:
 extends:
   - "eslint:recommended"
   - "prettier"
-rules:
-  no-console: "off"

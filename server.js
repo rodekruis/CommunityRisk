@@ -52,14 +52,14 @@ if (config.usehttp) {
 // set certicicates and start SSL server
 if (config.usessl) {
   var sslconfig = {};
-  if (config.hasOwnProperty("pfx_file")) {
+  if (Object.prototype.hasOwnProperty.call(config, "pfx_file")) {
     sslconfig.pfx = fs.readFileSync(
       path.resolve(__dirname, config.pfx_file),
       "UTF-8"
     );
   } else if (
-    config.hasOwnProperty("key_file") &&
-    config.hasOwnProperty("cert_file")
+    Object.prototype.hasOwnProperty.call(config, "key_file") &&
+    Object.prototype.hasOwnProperty.call(config, "cert_file")
   ) {
     sslconfig.key = fs.readFileSync(
       path.resolve(__dirname, config.key_file),
@@ -71,12 +71,15 @@ if (config.usessl) {
     );
   }
 
-  if (config.hasOwnProperty("ca_file") && config.hasOwnProperty("ca2_file")) {
+  if (
+    Object.prototype.hasOwnProperty.call(config, "ca_file") &&
+    Object.prototype.hasOwnProperty.call(config, "ca2_file")
+  ) {
     sslconfig.ca = [
       fs.readFileSync(path.resolve(__dirname, config.ca_file), "UTF-8"),
       fs.readFileSync(path.resolve(__dirname, config.ca2_file), "UTF-8"),
     ];
-  } else if (config.hasOwnProperty("ca_file")) {
+  } else if (Object.prototype.hasOwnProperty.call(config, "ca_file")) {
     sslconfig.ca = fs.readFileSync(
       path.resolve(__dirname, config.ca_file),
       "UTF-8"

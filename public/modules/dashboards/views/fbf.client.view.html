@@ -138,16 +138,6 @@
             </div>
           </ul>
         </div>
-        <!-- <div class="btn-group zoom-level" role="group">
-          <button type="button" class="btn btn-secondary btn-score">
-            <i class="fa fa-tachometer" aria-hidden="true"></i>
-            <span class="button-label"
-              ><strong>{{
-                "metric_label" | translate: translateData()
-              }}</strong></span
-            >
-          </button>
-        </div> -->
         <div class="btn-group zoom-level" role="group">
           <button
             id="level1"
@@ -190,7 +180,7 @@
             type="button"
             class="btn btn-secondary btn-score-lowercase"
             style="width:49%; margin-right:1%"
-            ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent_current')"
+            ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
           >
             <span ng-show="!floodHidden"
               ><i
@@ -208,6 +198,11 @@
               ></i>
               {{ "Hide flood extent" | translate }}</span
             >
+            <!-- <img
+              src="modules/dashboards/img/icon-popup.svg"
+              style="height:17px; color:white"
+              ng-click="info('flood_extent')"
+            /> -->
           </button>
           <button
             type="button"
@@ -229,28 +224,6 @@
         <!-- end: zoom navigation -->
         <!-- start: community profiles -->
         <div class="community-profiles-wrapper" style="margin-bottom:-10px">
-          <div id="count-info" class="general-info" style="display:none">
-            <strong class="filter-count text-primary"></strong> /
-            <strong class="total-count text-dark"></strong>
-            <span style="font-size: 12px"
-              >{{ subtype_selection
-              }}{{ "selected" | translate: translateData }}</span
-            >
-            <a class="reset-button" ng-click="reset_function()">{{
-              "Select_all" | translate
-            }}</a>
-            <button
-              type="button"
-              class="btn-modal"
-              data-toggle="modal"
-              ng-click="info('admin')"
-            >
-              <img
-                src="modules/dashboards/img/icon-popup.svg"
-                style="height:17px"
-              />
-            </button>
-          </div>
           <div class="tablearea">
             <div class="row profile-item">
               <div class="col col-md-1 col-sm-1 col-xs-1">
@@ -267,8 +240,14 @@
               </div>
               <div
                 class="col col-md-5 col-sm-5 col-xs-5"
-                id="trigger_main"
-              ></div>
+                id="count-info"
+                style="width:41.6666666666%"
+              >
+                <span id="trigger_main"></span>
+                /
+                <span class="total-count"></span>
+                <a class="reset-button" ng-click="reset_function()">All</a>
+              </div>
               <div class="col col-md-1 col-sm-1 col-xs-1">
                 <button
                   type="button"
@@ -375,7 +354,6 @@
 
     <div
       class="navbar-default sidebar-wrapper-fbf collapse"
-      style="top:270px"
       role="navigation"
       id="demo"
     >

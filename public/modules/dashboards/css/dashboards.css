@@ -20,7 +20,7 @@
 .sidebar-wrapper-fbf {
   position: absolute;
   z-index: 2;
-  top: 270px;
+  top: 265px;
   left: 0;
   bottom: 0;
   width: 380px;
@@ -951,11 +951,23 @@ div.dc-chart {
 .marker-icon--station:before {
   border-top-color: grey;
 }
-.marker-icon--station.is-triggered {
-  background-color: orangered;
+.marker-icon--station.is-triggered-minimum {
+  background-color: #fc8d59;
 }
-.marker-icon--station.is-triggered:before {
-  border-top-color: orangered;
+.marker-icon--station.is-triggered-minimum:before {
+  border-top-color: #fc8d59;
+}
+.marker-icon--station.is-triggered-medium {
+  background-color: #e34a33;
+}
+.marker-icon--station.is-triggered-medium:before {
+  border-top-color: #e34a33;
+}
+.marker-icon--station.is-triggered-maximum {
+  background-color: #b30000;
+}
+.marker-icon--station.is-triggered-maximum:before {
+  border-top-color: #b30000;
 }
 .marker-icon--station.is-not-triggered {
   background-color: rgb(85, 133, 14);

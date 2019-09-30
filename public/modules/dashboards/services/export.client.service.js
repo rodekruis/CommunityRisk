@@ -22,7 +22,7 @@ angular.module("dashboards").factory("exportService", [
         }
 
         for (var key in value) {
-          if (value.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(value, key)) {
             var innerValue = JSON.stringify(value[key]);
             csvFile += cleanValue(innerValue, key);
           }
@@ -38,7 +38,7 @@ angular.module("dashboards").factory("exportService", [
       var line = "";
 
       for (var key in value) {
-        if (value.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(value, key)) {
           var label = createLabel(meta_label, key);
 
           line += cleanValue(label, key);

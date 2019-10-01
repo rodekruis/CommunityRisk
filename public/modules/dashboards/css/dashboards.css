@@ -20,7 +20,7 @@
 .sidebar-wrapper-fbf {
   position: absolute;
   z-index: 2;
-  top: 270px;
+  top: 265px;
   left: 0;
   bottom: 0;
   width: 380px;
@@ -145,6 +145,9 @@
 .zoom-level button {
   cursor: default;
 }
+.lead-time-buttons button {
+  cursor: pointer;
+}
 .zoom-level button.btn-active {
   background: #4c8293;
   color: #ffffff;
@@ -203,7 +206,7 @@
   color: black;
   font-weight: bold;
   text-transform: uppercase;
-  padding-left: 15px;
+  /* padding-left: 15px; */
   padding-right: 15px;
   text-align: left;
 }
@@ -256,6 +259,51 @@
     width: 42%;
   }
 }
+.btn-tab.btn-3-day {
+  color: #4c8293;
+  float: left;
+  margin-right: 4px;
+  width: 43%;
+}
+.btn-tab.btn-3-day:hover,
+.btn-tab.btn-3-day.active {
+  background: #4c8293;
+  color: #ffffff;
+}
+.btn-tab.btn-3-day .btn-label {
+  color: #4c8293;
+}
+@media only screen and (max-width: 767px) {
+  .btn-tab.btn-3-day {
+    font-size: 10px;
+    margin-right: 1%;
+    text-align: center;
+    width: 42%;
+  }
+}
+.btn-tab.btn-7-day {
+  color: #4c8293;
+  float: left;
+  margin-right: 4px;
+  width: 43%;
+}
+.btn-tab.btn-7-day:hover,
+.btn-tab.btn-7-day.active {
+  background: #4c8293;
+  color: #ffffff;
+}
+.btn-tab.btn-7-day .btn-label {
+  color: #4c8293;
+}
+@media only screen and (max-width: 767px) {
+  .btn-tab.btn-7-day {
+    font-size: 10px;
+    margin-right: 1%;
+    text-align: center;
+    width: 42%;
+  }
+}
+
 .metric_label {
   overflow: hidden;
   text-transform: uppercase;
@@ -951,11 +999,23 @@ div.dc-chart {
 .marker-icon--station:before {
   border-top-color: grey;
 }
-.marker-icon--station.is-triggered {
-  background-color: orangered;
+.marker-icon--station.is-triggered-minimum {
+  background-color: #fc8d59;
 }
-.marker-icon--station.is-triggered:before {
-  border-top-color: orangered;
+.marker-icon--station.is-triggered-minimum:before {
+  border-top-color: #fc8d59;
+}
+.marker-icon--station.is-triggered-medium {
+  background-color: #e34a33;
+}
+.marker-icon--station.is-triggered-medium:before {
+  border-top-color: #e34a33;
+}
+.marker-icon--station.is-triggered-maximum {
+  background-color: #b30000;
+}
+.marker-icon--station.is-triggered-maximum:before {
+  border-top-color: #b30000;
 }
 .marker-icon--station.is-not-triggered {
   background-color: rgb(85, 133, 14);

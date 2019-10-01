@@ -174,22 +174,24 @@ angular.module("dashboards").controller("FbfController", [
       var BASEURL = $scope.lizard
         ? "https://zambia.lizard.net/wms/"
         : GEOSERVER_BASEURL;
-      var layer = "".concat(
+      $scope.floodExtentLayer = "".concat(
         "flood_extent_",
         $scope.lead_time == "3-day" ? "short_" : "long_",
         $scope.current_prev == "Current" ? "0" : "1"
       );
       if ($scope.lizard) {
         if ($scope.current_prev == "Current") {
-          layer =
+          $scope.floodExtentLayer =
             $scope.lead_time == "3-day"
               ? "red-cross:actual-flood-extent"
               : "red-cross:flood-extent-7-day-forecast";
         } else {
-          layer = "scenarios:7680:depth-max-dtri";
+          $scope.floodExtentLayer = "scenarios:7680:depth-max-dtri";
         }
       }
-      $scope.add_raster_layer(BASEURL, layer);
+      $scope.add_raster_layer(BASEURL, $scope.floodExtentLayer);
+      $scope.add_raster_layer(BASEURL, "crop_resampled");
+      $scope.add_raster_layer(BASEURL, "hrsl_zmb_pop");
 
       // Add timeout to give map time to load (only upon first load, not when changing zoom-level)
 
@@ -351,14 +353,14 @@ angular.module("dashboards").controller("FbfController", [
       document.getElementById("7-day-signal").style.display =
         $scope.trigger_7day >= 1 ? "inline" : "none";
       // document.getElementById('lead-time-signal').style.display = $scope.trigger_3day >= 1 || $scope.trigger_7day >= 1 ? "inline" : "none";
-      if (
-        ($scope.trigger_7day >= 1 && $scope.lead_time == "3-day") ||
-        ($scope.trigger_3day >= 1 && $scope.lead_time == "7-day")
-      ) {
-        document.getElementById("lead-time-signal").style.display = "inline";
-      } else {
-        document.getElementById("lead-time-signal").style.display = "none";
-      }
+      // if (
+      //   ($scope.trigger_7day >= 1 && $scope.lead_time == "3-day") ||
+      //   ($scope.trigger_3day >= 1 && $scope.lead_time == "7-day")
+      // ) {
+      //   document.getElementById("lead-time-signal").style.display = "inline";
+      // } else {
+      //   document.getElementById("lead-time-signal").style.display = "none";
+      // }
       document.getElementById("current-signal").style.display =
         $scope.trigger_current >= 1 ? "inline" : "none";
       document.getElementById("current_prev-signal").style.display =
@@ -600,8 +602,6 @@ angular.module("dashboards").controller("FbfController", [
       var dimensions_scores = cf_result.dimensions_scores;
       $scope.tables = cf_result.tables;
 
-      console.log(dimensions["population_affected"].top(1));
-
       // Create value-lookup function
       $scope.genLookup_value = function() {
         var lookup_value = {};
@@ -681,6 +681,7 @@ angular.module("dashboards").controller("FbfController", [
         "impact-health",
         "impact-food",
         "cra",
+        "exposure",
       ];
       //Create all initial HTML for sidebar
       sidebarHtmlService.createHTML(
@@ -1450,6 +1451,15 @@ angular.module("dashboards").controller("FbfController", [
         }
         e.preventDefault();
       });
+      // This changes the active-state styling between Map View and Tabular View buttons, after switching
+      $(".lead-time-buttons button").click(function(e) {
+        $(".lead-time-buttons button.active").removeClass("active");
+        var $this = $(this);
+        if (!$this.hasClass("active")) {
+          $this.addClass("active");
+        }
+        e.preventDefault();
+      });
 
       $scope.reset_function = function() {
         dc.filterAll();
@@ -1578,34 +1588,35 @@ angular.module("dashboards").controller("FbfController", [
     /// WMS LAYER(S) ///
     ////////////////////
 
+    $scope.rasterLayers = [];
     $scope.add_raster_layer = function(url, layer) {
-      $scope.rasterLayer = L.tileLayer.wms(url, {
+      $scope.rasterLayers[layer] = L.tileLayer.wms(url, {
         layers: layer,
         transparent: true,
         format: "image/png",
       });
     };
 
-    $scope.show_raster_layer = function() {
-      map.addLayer($scope.rasterLayer);
+    $scope.show_raster_layer = function(layer) {
+      map.addLayer($scope.rasterLayers[layer]);
     };
 
-    $scope.hide_raster_layer = function() {
-      map.removeLayer($scope.rasterLayer);
+    $scope.hide_raster_layer = function(layer) {
+      map.removeLayer($scope.rasterLayers[layer]);
     };
 
     $scope.toggled = {};
     $scope.toggle_raster_layer = function(layer) {
+      if (layer == "flood_extent") layer = $scope.floodExtentLayer;
       if (typeof $scope.toggled[layer] == "undefined") {
         $scope.toggled[layer] = true;
       } else {
         $scope.toggled[layer] = !$scope.toggled[layer];
       }
-
       if ($scope.toggled[layer]) {
-        $scope.show_raster_layer();
+        $scope.show_raster_layer(layer);
       } else {
-        $scope.hide_raster_layer();
+        $scope.hide_raster_layer(layer);
       }
     };
 
@@ -1675,6 +1686,7 @@ angular.module("dashboards").controller("FbfController", [
       $scope.layers["poi_glofasLocationsLayer"] = L.layerGroup();
       stations.forEach(function(item) {
         if (!item.properties) return;
+        if (item.properties.station_used === 0) return;
 
         var station = item.properties;
         var stationTitle =
@@ -1683,17 +1695,35 @@ angular.module("dashboards").controller("FbfController", [
           "<strong>" +
           stationTitle +
           "</strong><br>" +
-          "Forecast: " +
+          "Avg. forecast level: " +
           helpers.formatAsType("decimal0", station.fc) +
           "<br>Trigger-level: " +
           helpers.formatAsType("decimal0", station.trigger_level) +
-          "<br>Districts related to station: " +
-          (station.station_used == 0 ? "no" : "yes") +
+          "<br>Glofas probability: " +
+          helpers.formatAsType("percentage", station.fc_prob) +
           "";
         var stationClass = "station";
 
-        if (station.station_used == 1 && station.fc_trigger == 1) {
-          stationClass += " is-triggered";
+        if (
+          station.station_used == 1 &&
+          station.fc_trigger == 1 &&
+          station.fc_prob >= 0.6
+        ) {
+          stationClass += " is-triggered-minimum";
+        }
+        if (
+          station.station_used == 1 &&
+          station.fc_trigger == 1 &&
+          station.fc_prob >= 0.7
+        ) {
+          stationClass += " is-triggered-medium";
+        }
+        if (
+          station.station_used == 1 &&
+          station.fc_trigger == 1 &&
+          station.fc_prob >= 0.8
+        ) {
+          stationClass += " is-triggered-maximum";
         }
         if (station.station_used == 1 && station.fc_trigger == 0) {
           stationClass += " is-not-triggered";
@@ -1777,7 +1807,9 @@ angular.module("dashboards").controller("FbfController", [
     };
 
     $scope.prepare_waterpoint_locations = function(waterpointLocations) {
-      $scope.layers["waterpointsLocationsLayer"] = L.layerGroup();
+      // $scope.layers["waterpointsLocationsLayer"] = L.layerGroup();
+      $scope.layers["waterpointsLocationsLayer"] = L.markerClusterGroup();
+
       waterpointLocations.forEach(function(item) {
         if (!item.properties) return;
 

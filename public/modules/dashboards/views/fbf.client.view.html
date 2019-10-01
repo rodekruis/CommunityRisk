@@ -44,51 +44,37 @@
           ></div>
         </div>
         <div class="btn-group zoom-level" role="group">
-          <ul
-            class="btn btn-secondary btn-active PIbuttons"
-            style="margin-right:2%; width:42%"
-          >
-            <div class="dropdown PIdropdown" style="background-color: #4C8293">
-              <a
-                class="dropdown-toggle PI-button"
-                data-toggle="dropdown"
-                href="#"
-              >
-                <i
-                  id="lead-time-signal"
-                  class="fa fa-exclamation-circle"
-                  style="display: none"
-                  aria-hidden="true"
-                ></i>
-                <strong>{{ lead_time }}</strong>
-                <i class="fa fa-angle-down PI-btn-arrow"></i>
-              </a>
-              <ul class="dropdown-menu submenu-items" id="disaster-type-items">
-                <li>
-                  <a class="submenu-item" ng-click="change_lead_time('3-day')"
-                    ><i
-                      id="3-day-signal"
-                      class="fa fa-exclamation-circle"
-                      style="display: none"
-                      aria-hidden="true"
-                    ></i>
-                    3-day</a
-                  >
-                </li>
-                <li>
-                  <a class="submenu-item" ng-click="change_lead_time('7-day')"
-                    ><i
-                      id="7-day-signal"
-                      class="fa fa-exclamation-circle"
-                      style="display: none"
-                      aria-hidden="true"
-                    ></i>
-                    7-day</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </ul>
+          <div class="lead-time-buttons">
+            <button
+              type="button"
+              class="btn btn-tab btn-3-day active"
+              style="width:20%; margin-right:2%"
+              ng-click="change_lead_time('3-day')"
+            >
+              <i
+                id="3-day-signal"
+                class="fa fa-exclamation-circle"
+                style="display: none"
+                aria-hidden="true"
+              ></i>
+              3-day
+            </button>
+            <button
+              type="button"
+              class="btn btn-tab btn-3-day"
+              style="width:20%; margin-right:2%"
+              ng-click="change_lead_time('7-day')"
+            >
+              <i
+                id="7-day-signal"
+                class="fa fa-exclamation-circle"
+                style="display: none"
+                aria-hidden="true"
+              ></i>
+              7-day
+            </button>
+          </div>
+
           <ul
             class="btn btn-secondary btn-active PIbuttons"
             style="margin-right:0%; width:56%"
@@ -523,148 +509,6 @@
               <div class="card-block" id="impact-food"></div>
             </div>
           </div>
-          <!-- 
-          <div class="card">
-              <div class="card-header level1" role="tab" id="headingShelter">
-                <a
-                  data-toggle="collapse"
-                  data-parent="#accordion"
-                  href="#collapseShelter"
-                  aria-expanded="true"
-                  aria-controls="collapseShelter"
-                >
-                  <span class="panel-header-icon">
-                    <img src="modules/dashboards/img/risk_score.png" />
-                  </span>
-                  <span class="panel-header-content">
-                    <span class="panel-header-title">Impact - Shelter</span>
-                    <span class="panel-header-description">...</span>
-                  </span>
-                </a>
-              </div>
-  
-              <div
-                id="collapseShelter"
-                class="collapse level1 in"
-                role="tabpanel"
-                aria-labelledby="headingShelter"
-              >
-                <div class="card-block" id="impact-shelter"></div>
-              </div>
-            </div>
-
-          <div class="card">
-            <div class="card-header level1" role="tab" id="headingAccess">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseAccess"
-                aria-expanded="true"
-                aria-controls="collapseAccess"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">Impact - Access</span>
-                  <span class="panel-header-description">...</span>
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseAccess"
-              class="collapse level1 in"
-              role="tabpanel"
-              aria-labelledby="headingAccess"
-            >
-              <div class="card-block" id="impact-access"></div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header level1" role="tab" id="headingWash">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseWash"
-                aria-expanded="true"
-                aria-controls="collapseWash"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">Impact - WASH</span>
-                  <span class="panel-header-description">...</span>
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseWash"
-              class="collapse level1 in"
-              role="tabpanel"
-              aria-labelledby="headingWash"
-            >
-              <div class="card-block" id="impact-wash"></div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header level1" role="tab" id="headingHealth">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseHealth"
-                aria-expanded="true"
-                aria-controls="collapseHealth"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">Impact - Health</span>
-                  <span class="panel-header-description">...</span>
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseHealth"
-              class="collapse level1 in"
-              role="tabpanel"
-              aria-labelledby="headingHealth"
-            >
-              <div class="card-block" id="impact-health"></div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header level1" role="tab" id="headingFood">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseFood"
-                aria-expanded="true"
-                aria-controls="collapseFood"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">Impact - Food Security</span>
-                  <span class="panel-header-description">...</span>
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseFood"
-              class="collapse level1 in"
-              role="tabpanel"
-              aria-labelledby="headingFood"
-            >
-              <div class="card-block" id="impact-food"></div>
-            </div>
-          </div> -->
 
           <div class="card">
             <div class="card-header level1" role="tab" id="headingActors">
@@ -727,6 +571,39 @@
               aria-labelledby="headingCRA"
             >
               <div class="card-block" id="cra"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header level1" role="tab" id="headingExposure">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseExposure"
+                aria-expanded="true"
+                aria-controls="collapseExposure"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/risk_score.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title"
+                    >Total original exposure
+                  </span>
+                  <span class="panel-header-description"
+                    >Country-wide exposure (not event-specific)</span
+                  >
+                </span>
+              </a>
+            </div>
+
+            <div
+              id="collapseExposure"
+              class="collapse level1"
+              role="tabpanel"
+              aria-labelledby="headingExposure"
+            >
+              <div class="card-block" id="exposure"></div>
             </div>
           </div>
         </div>

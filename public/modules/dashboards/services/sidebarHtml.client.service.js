@@ -185,6 +185,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             "impact-food",
             "key-actors",
             "general",
+            "exposure",
           ].indexOf(record.group) > -1
         ) {
           var div = document.createElement("div");
@@ -208,7 +209,15 @@ angular.module("dashboards").factory("sidebarHtmlService", [
           if (record.layer_type == "polygon") {
             click_fn_string = "change_indicator('" + record.name + "')";
           } else if (record.layer_type == "raster") {
-            click_fn_string = "toggle_raster_layer('" + record.name + "')";
+            click_fn_string =
+              "toggle_raster_layer('" +
+              record.name +
+              "') " +
+              "; " +
+              record.name +
+              "Hidden = !" +
+              record.name +
+              "Hidden";
           } else if (record.layer_type == "point") {
             click_fn_string =
               "toggle_poi_layer('" +
@@ -631,6 +640,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             "impact-food",
             "key-actors",
             "general",
+            "exposure",
           ].indexOf(record.group) > -1
         ) {
           var div2 = document.getElementById(record.name);

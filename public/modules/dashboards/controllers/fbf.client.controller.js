@@ -353,14 +353,14 @@ angular.module("dashboards").controller("FbfController", [
       document.getElementById("7-day-signal").style.display =
         $scope.trigger_7day >= 1 ? "inline" : "none";
       // document.getElementById('lead-time-signal').style.display = $scope.trigger_3day >= 1 || $scope.trigger_7day >= 1 ? "inline" : "none";
-      if (
-        ($scope.trigger_7day >= 1 && $scope.lead_time == "3-day") ||
-        ($scope.trigger_3day >= 1 && $scope.lead_time == "7-day")
-      ) {
-        document.getElementById("lead-time-signal").style.display = "inline";
-      } else {
-        document.getElementById("lead-time-signal").style.display = "none";
-      }
+      // if (
+      //   ($scope.trigger_7day >= 1 && $scope.lead_time == "3-day") ||
+      //   ($scope.trigger_3day >= 1 && $scope.lead_time == "7-day")
+      // ) {
+      //   document.getElementById("lead-time-signal").style.display = "inline";
+      // } else {
+      //   document.getElementById("lead-time-signal").style.display = "none";
+      // }
       document.getElementById("current-signal").style.display =
         $scope.trigger_current >= 1 ? "inline" : "none";
       document.getElementById("current_prev-signal").style.display =
@@ -681,6 +681,7 @@ angular.module("dashboards").controller("FbfController", [
         "impact-health",
         "impact-food",
         "cra",
+        "exposure",
       ];
       //Create all initial HTML for sidebar
       sidebarHtmlService.createHTML(
@@ -1444,6 +1445,15 @@ angular.module("dashboards").controller("FbfController", [
       // This changes the active-state styling between Map View and Tabular View buttons, after switching
       $(".view-buttons button").click(function(e) {
         $(".view-buttons button.active").removeClass("active");
+        var $this = $(this);
+        if (!$this.hasClass("active")) {
+          $this.addClass("active");
+        }
+        e.preventDefault();
+      });
+      // This changes the active-state styling between Map View and Tabular View buttons, after switching
+      $(".lead-time-buttons button").click(function(e) {
+        $(".lead-time-buttons button.active").removeClass("active");
         var $this = $(this);
         if (!$this.hasClass("active")) {
           $this.addClass("active");

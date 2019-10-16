@@ -41,6 +41,8 @@ module.exports = {
         "public/build/bower/angular-loading-bar/css/loading-bar.min.css", // in bower.json
         "public/build/custom/font-awesome/css/font-awesome.min.css", // NOT in bower.json
         "public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css", // NOT in bower.json
+        "https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css",
+        "https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css",
       ],
       js: [
         "public/build/bower/jquery/js/jquery.min.js", // in bower.json
@@ -62,6 +64,7 @@ module.exports = {
         "public/build/bower/jquery-countTo/js/jquery.countTo.js", // in bower.json
         "public/build/bower/jquery-scrollTo/js/jquery-scrollTo.js", // in bower.json
         "public/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js", // in bower.json
+        "https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js",
         "public/build/bower/topojson/js/topojson.js", // in bower.json
       ],
     },

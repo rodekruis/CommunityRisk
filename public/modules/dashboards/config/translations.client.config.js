@@ -69,6 +69,9 @@ var static_en = {
   draft_warning: "",
   draft: "",
   export_json: "Export (JSON)",
+  export_pdf: "Export (PDF)",
+  signup_mailing: "Sign up to mailing list",
+  join_whatsapp: "Join Whatsapp group",
 };
 
 var static_es = {

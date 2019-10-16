@@ -146,13 +146,12 @@ angular.module("dashboards").controller("FbfController", [
         $scope.metric = url.metric;
         $scope.chart_show = url.chart_show;
         $scope.parent_codes = url.parent_codes;
+        $scope.lead_time = url.lead_time;
+        $scope.current_prev = url.current_prev;
       }
 
       //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
       if (!$scope.directURLload && !d) {
-        // Old default settings
-        //$scope.admlevel = 1;
-        // New default settings
         $scope.directURLload = true;
         $scope.admlevel = 2;
         $scope.metric = "population_affected";
@@ -192,6 +191,13 @@ angular.module("dashboards").controller("FbfController", [
       $scope.add_raster_layer(BASEURL, $scope.floodExtentLayer);
       $scope.add_raster_layer(BASEURL, "crop_resampled");
       $scope.add_raster_layer(BASEURL, "hrsl_zmb_pop");
+      $scope.add_raster_layer(BASEURL, "flood_10year");
+      $scope.add_raster_layer(BASEURL, "flood_20year");
+      $scope.add_raster_layer(BASEURL, "cattle");
+      $scope.add_raster_layer(BASEURL, "chicken");
+      $scope.add_raster_layer(BASEURL, "sheep");
+      $scope.add_raster_layer(BASEURL, "goat");
+      $scope.add_raster_layer(BASEURL, "pig");
 
       // Add timeout to give map time to load (only upon first load, not when changing zoom-level)
 
@@ -223,7 +229,6 @@ angular.module("dashboards").controller("FbfController", [
           AuthData.getFbfJsonData(
             {
               country: $scope.country_code.toLowerCase(),
-              // type: "data_adm" + $scope.admlevel,
               type: "data_adm".concat(
                 $scope.admlevel,
                 $scope.lizard ? "_lizard" : ""
@@ -352,15 +357,6 @@ angular.module("dashboards").controller("FbfController", [
         $scope.trigger_3day >= 1 ? "inline" : "none";
       document.getElementById("7-day-signal").style.display =
         $scope.trigger_7day >= 1 ? "inline" : "none";
-      // document.getElementById('lead-time-signal').style.display = $scope.trigger_3day >= 1 || $scope.trigger_7day >= 1 ? "inline" : "none";
-      // if (
-      //   ($scope.trigger_7day >= 1 && $scope.lead_time == "3-day") ||
-      //   ($scope.trigger_3day >= 1 && $scope.lead_time == "7-day")
-      // ) {
-      //   document.getElementById("lead-time-signal").style.display = "inline";
-      // } else {
-      //   document.getElementById("lead-time-signal").style.display = "none";
-      // }
       document.getElementById("current-signal").style.display =
         $scope.trigger_current >= 1 ? "inline" : "none";
       document.getElementById("current_prev-signal").style.display =
@@ -403,6 +399,10 @@ angular.module("dashboards").controller("FbfController", [
         //Final CSS
         $(".view-buttons button.active").removeClass("active");
         $(".view-buttons button.btn-map-view").addClass("active");
+      }
+      if ($scope.lead_time == "7-day") {
+        $(".btn-3-day").removeClass("active");
+        $(".btn-7-day").addClass("active");
       }
 
       //Load actual content
@@ -1359,7 +1359,11 @@ angular.module("dashboards").controller("FbfController", [
           $scope.admlevel,
           $scope.metric,
           $scope.parent_codes,
-          $scope.chart_show
+          $scope.chart_show,
+          null, //disaster
+          null, //event
+          $scope.lead_time,
+          $scope.current_prev
         );
         $("#URLModal").modal("show");
       };
@@ -1372,6 +1376,26 @@ angular.module("dashboards").controller("FbfController", [
       };
 
       $scope.copyToClipboard = shareService.copyToClipboard;
+
+      $scope.export_pdf = function() {
+        // TO DO
+      };
+
+      $scope.signup_mailing = function() {
+        $("#MailChimpModal").modal("show");
+      };
+      $scope.close_signup = function() {
+        $("#MailChimpModal").modal("hide");
+      };
+
+      $scope.join_whatsapp = function() {
+        $scope.whatsapp_link =
+          "https://chat.whatsapp.com/FH2hls1iOeNJF844L4cOjr";
+        $("#WhatsappModal").modal("show");
+      };
+      if ($scope.trigger_3day > 0 || $scope.trigger_7day > 0) {
+        $("#join-whatsapp").removeClass("li-disabled");
+      }
 
       ///////////////////////////////////
       // SIDEBAR: MAP & TABULAR SWITCH //

@@ -8,9 +8,11 @@
     show-view-status="false"
     show-share-export="true"
     fn-share-url="share_URL"
-    fn-share-country-url="share_country_URL"
     fn-export-csv="export_csv"
     fn-export-geojson="export_geojson"
+    fn-export-pdf="export_pdf"
+    fn-signup-mailing="signup_mailing"
+    fn-join-whatsapp="join_whatsapp"
     show-help="true"
     view-type="view_code"
   ></cr-header>
@@ -61,7 +63,7 @@
             </button>
             <button
               type="button"
-              class="btn btn-tab btn-3-day"
+              class="btn btn-tab btn-7-day"
               style="width:20%; margin-right:2%"
               ng-click="change_lead_time('7-day')"
             >
@@ -222,7 +224,7 @@
                 class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
                 ng-click="change_indicator('fc_trigger')"
               >
-                Affected {{ subtype_selection }}
+                Exposed {{ subtype_selection }}
               </div>
               <div
                 class="col col-md-5 col-sm-5 col-xs-5"
@@ -259,7 +261,7 @@
                 class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
                 ng-click="change_indicator('population_affected')"
               >
-                Affected Population
+                Exposed Population
               </div>
               <div
                 class="col col-md-5 col-sm-5 col-xs-5"
@@ -533,7 +535,7 @@
 
             <div
               id="collapseActors"
-              class="collapse level1 in"
+              class="collapse level1"
               role="tabpanel"
               aria-labelledby="headingActors"
             >
@@ -541,7 +543,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <!-- <div class="card">
             <div class="card-header level1" role="tab" id="headingCRA">
               <a
                 data-toggle="collapse"
@@ -572,7 +574,7 @@
             >
               <div class="card-block" id="cra"></div>
             </div>
-          </div>
+          </div> -->
 
           <div class="card">
             <div class="card-header level1" role="tab" id="headingExposure">
@@ -755,7 +757,34 @@
                          class="form-control">{{ shareable_URL }}</textarea></pre>
           <button
             type="button"
-            ng-click="copyToClipboard()"
+            ng-click="copyToClipboard('share-url-container')"
+            class="btn btn-primary"
+          >
+            {{ "share_url_copy" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="WhatsappModal" tabindex="-1" class="modal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+          </button>
+          <h2 class="h5 modal-title">
+            {{ "Join Whatsapp group related to current event" | translate }}
+          </h2>
+        </div>
+        <div class="modal-body">
+          <pre><textarea rows="2"
+                           id="whatsapp-container"
+                           class="form-control">{{ whatsapp_link }}</textarea></pre>
+          <button
+            type="button"
+            ng-click="copyToClipboard('whatsapp-container')"
             class="btn btn-primary"
           >
             {{ "share_url_copy" | translate }}
@@ -800,4 +829,84 @@
     </div>
   </div>
   <!-- end: IE message -->
+
+  <!-- start: Mailchimp modal -->
+  <div id="MailChimpModal" tabindex="-1" class="modal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+          </button>
+          <h2 class="h5 modal-title">
+            {{ "Sign up to mailing list" | translate }}
+          </h2>
+        </div>
+        <div class="modal-body">
+          <link
+            href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css"
+            rel="stylesheet"
+            type="text/css"
+          />
+          <style type="text/css">
+            #mc_embed_signup {
+              background: #fff;
+              clear: left;
+              font: 14px Helvetica, Arial, sans-serif;
+            }
+            /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+              We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+          </style>
+          <div id="mc_embed_signup">
+            <form
+              action="https://global.us20.list-manage.com/subscribe/post?u=acdf2ad027e3073babce9067d&amp;id=f3a585f6ba"
+              method="post"
+              id="mc-embedded-subscribe-form"
+              name="mc-embedded-subscribe-form"
+              class="validate"
+              target="_blank"
+              novalidate
+            >
+              <div id="mc_embed_signup_scroll">
+                <label for="mce-EMAIL">Subscribe</label>
+                <input
+                  type="email"
+                  value=""
+                  name="EMAIL"
+                  class="email"
+                  id="mce-EMAIL"
+                  placeholder="email address"
+                  required
+                />
+                <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                <div
+                  style="position: absolute; left: -5000px;"
+                  aria-hidden="true"
+                >
+                  <input
+                    type="text"
+                    name="b_acdf2ad027e3073babce9067d_f3a585f6ba"
+                    tabindex="-1"
+                    value=""
+                  />
+                </div>
+                <div class="clear">
+                  <input
+                    type="submit"
+                    value="Subscribe"
+                    name="subscribe"
+                    id="mc-embedded-subscribe"
+                    class="button"
+                    ng-click="close_signup()"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end: Mailchimp modal -->
 </section>

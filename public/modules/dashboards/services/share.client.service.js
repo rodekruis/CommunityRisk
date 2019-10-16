@@ -16,7 +16,9 @@ angular.module("dashboards").factory("shareService", [
       parent_code,
       viewType,
       disaster,
-      event
+      event,
+      lead_time,
+      current_prev
     ) {
       var currentUrl = location.href;
       var baseUrl = currentUrl.split("?")[0];
@@ -50,6 +52,14 @@ angular.module("dashboards").factory("shareService", [
         urlParameters += "&event=" + event;
       }
 
+      if (lead_time) {
+        urlParameters += "&lead_time=" + lead_time;
+      }
+
+      if (current_prev) {
+        urlParameters += "&current_prev=" + current_prev;
+      }
+
       return baseUrl + separator + urlParameters;
     }
 
@@ -65,8 +75,8 @@ angular.module("dashboards").factory("shareService", [
     /**
      * Copy the value of the #share-url-container element to the users' clipboard
      */
-    function copyToClipboard() {
-      var containerElement = document.getElementById("share-url-container");
+    function copyToClipboard(container) {
+      var containerElement = document.getElementById(container);
 
       containerElement.select();
       document.execCommand("copy");
@@ -99,9 +109,13 @@ angular.module("dashboards").factory("shareService", [
             params_out.parent_code == ""
               ? []
               : params_out.parent_code.split(",");
-          if (params_in.disaster_type) {
+          if (params_out.disaster_type) {
             var disaster_type = params_out.disaster;
             var disaster_name = params_out.event.replace("%20", " ");
+          }
+          if (params_out.lead_time) {
+            var lead_time = params_out.lead_time;
+            var current_prev = params_out.current_prev;
           }
         } else {
           directURLload = false;
@@ -121,6 +135,8 @@ angular.module("dashboards").factory("shareService", [
         parent_codes: parent_codes,
         disaster_type: disaster_type,
         disaster_name: disaster_name,
+        lead_time: lead_time,
+        current_prev: current_prev,
       };
     }
 

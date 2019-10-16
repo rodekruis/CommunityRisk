@@ -291,7 +291,8 @@ An improved drinking-water source is defined as one that, by nature of its const
  
 For more information about elevation data see: Jarvis A., H.I. Reuter, A.  Nelson, E. Guevara, 2008, Hole-filled  seamless SRTM data V4, International  Centre for Tropical  Agriculture (CIAT), available  from http://srtm.csi.cgiar.org.";;;;0;2;;;;;
 1;;PI;;PHL;poi_rc_offices;Red Cross offices;;;decimal0;redcross.png;key-actors;sum;;;;;;;;;;;;;0;3;;;;;point
-1;;CRA;;BDI;perc_agricultural_fields;% agricultural fields ;;;percentage;agriculture.png;other;weighted_avg;land_area;;0;0;;2.2.6;2015;http://www.isteebu.bi/index.php/component/content/category/18-publications;Percentage of fields.;;;;0;1;;;;;
+1;;CRA;;BDI;perc_agricultural_fields;% agricultural fields ;;;percentage;agriculture.png;other;weighted_avg;land_area;;0;0;Other vulnerable groups;2.2.6;2015;http://www.isteebu.bi/index.php/component/content/category/18-publications;Percentage of fields.;;;;0;1;;;;;
 1;;CRA;;BDI;elevation;Elevation;;m;decimal0;;other;weighted_avg;land_area;;0;0;;;;http://srtm.csi.cgiar.org/srtmdata/;"Mean elevation in meters per commune.
  
 For more information about elevation data see: Jarvis A., H.I. Reuter, A.  Nelson, E. Guevara, 2008, Hole-filled  seamless SRTM data V4, International  Centre for Tropical  Agriculture (CIAT), available  from http://srtm.csi.cgiar.org.";;;;0;2;;;;;
+1;;CRA;;PER;bene_state_programs;% beneficiaries state programs;% benificiarios por programas del estado;;percentage;;coping_capacity;weighted_avg;population;bene_state_programs_score;1;0;;;2019;http://sdv.midis.gob.pe/Infomidis/#/;Number of beneficiaries for the programs granted by the state for every 10k people. MIDIS 2019;Número de beneficiarios por los programas que otorga el estado por cada 10k personas. MIDIS 2019;Government;MIDIS;0;3;1;4;;;

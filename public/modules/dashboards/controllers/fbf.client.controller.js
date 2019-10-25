@@ -48,22 +48,6 @@ angular.module("dashboards").controller("FbfController", [
       return $location.path("signin");
     }
 
-    ////////////////////////
-    // SET MAIN VARIABLES //
-    ////////////////////////
-
-    $scope.change_lead_time = function(lead_time) {
-      $scope.lead_time_toggle = 1;
-      $scope.lead_time = lead_time;
-      $scope.initiate();
-    };
-
-    $scope.change_current_prev = function(current_prev) {
-      $scope.current_prev_toggle = 1;
-      $scope.current_prev = current_prev;
-      $scope.initiate();
-    };
-
     //////////////////////
     // DEFINE VARIABLES //
     //////////////////////
@@ -155,9 +139,6 @@ angular.module("dashboards").controller("FbfController", [
         $scope.directURLload = true;
         $scope.admlevel = 2;
         $scope.metric = "population_affected";
-        document
-          .getElementById("level2")
-          .setAttribute("class", "btn btn-secondary btn-active");
       }
 
       //This is the main search-query for PostgreSQL
@@ -165,42 +146,7 @@ angular.module("dashboards").controller("FbfController", [
 
       loadFunction(d);
 
-      prepareStationsData();
-      prepareRcLocationsData();
-      prepareHealthsitesData();
-      prepareWaterpointsData();
-      prepareRoadData();
-      var BASEURL = $scope.lizard
-        ? "https://zambia.lizard.net/wms/"
-        : GEOSERVER_BASEURL;
-      $scope.floodExtentLayer = "".concat(
-        "flood_extent_",
-        $scope.lead_time == "3-day" ? "short_" : "long_",
-        $scope.current_prev == "Current" ? "0" : "1"
-      );
-      if ($scope.lizard) {
-        if ($scope.current_prev == "Current") {
-          $scope.floodExtentLayer =
-            $scope.lead_time == "3-day"
-              ? "red-cross:actual-flood-extent"
-              : "red-cross:flood-extent-7-day-forecast";
-        } else {
-          $scope.floodExtentLayer = "scenarios:7680:depth-max-dtri";
-        }
-      }
-      $scope.add_raster_layer(BASEURL, $scope.floodExtentLayer);
-      $scope.add_raster_layer(BASEURL, "crop_resampled");
-      $scope.add_raster_layer(BASEURL, "hrsl_zmb_pop");
-      $scope.add_raster_layer(BASEURL, "flood_10year");
-      $scope.add_raster_layer(BASEURL, "flood_20year");
-      $scope.add_raster_layer(BASEURL, "cattle");
-      $scope.add_raster_layer(BASEURL, "chicken");
-      $scope.add_raster_layer(BASEURL, "sheep");
-      $scope.add_raster_layer(BASEURL, "goat");
-      $scope.add_raster_layer(BASEURL, "pig");
-
       // Add timeout to give map time to load (only upon first load, not when changing zoom-level)
-
       window.setTimeout(function() {
         $scope.show_raster_layer();
         if (!d) {
@@ -254,6 +200,10 @@ angular.module("dashboards").controller("FbfController", [
     $scope.load_data = function(d, pgData, fbf_admin_data, fbf_metadata) {
       if (!d) {
         d = {};
+        d.trigger_codes = [];
+        d.toggled_poi = {};
+        d.toggled_raster = {};
+        d.layers = {};
         $scope.reload = 0;
       } else {
         $scope.reload = 1;
@@ -494,11 +444,12 @@ angular.module("dashboards").controller("FbfController", [
           $scope.metric = "population";
         }
       }
-      // [FBF-SPECIFIC] Create list of triggered districts (for 'zoom in to all triggered districts' button)
-      $scope.trigger_codes = [];
-      for (var i = 0; i < d.Rapportage.length; i++) {
-        if (d.Rapportage[i].fc_trigger == 1) {
-          $scope.trigger_codes.push(d.Rapportage[i].pcode);
+      // [FBF-SPECIFIC] Create list of triggered districts (for 'zoom in to all triggered wards' button)
+      if (d.trigger_codes.length == 0) {
+        for (var i = 0; i < d.Rapportage.length; i++) {
+          if (d.Rapportage[i].fc_trigger == 1) {
+            d.trigger_codes.push(d.Rapportage[i].pcode);
+          }
         }
       }
 
@@ -758,7 +709,6 @@ angular.module("dashboards").controller("FbfController", [
         .geojson(d.Districts)
         .colors(mapchartColors)
         .colorCalculator(function(d) {
-          console.log;
           return d.sum == 0 && !meta_scorevar[$scope.metric]
             ? "#cccccc"
             : mapChart.colors()(d.sum);
@@ -1067,6 +1017,7 @@ angular.module("dashboards").controller("FbfController", [
             d.Country_meta,
             "level" + (zoom_min + 1) + "_name"
           )[$scope.country_code];
+          $("#level1").addClass("btn-active");
           $scope.initiate(d);
         } else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
           $scope.admlevel = zoom_min + 1;
@@ -1077,30 +1028,29 @@ angular.module("dashboards").controller("FbfController", [
             d.Country_meta,
             "level" + (zoom_min + 2) + "_name"
           )[$scope.country_code];
+          $("#level2").addClass("btn-active");
+          $("#level3").removeClass("btn-active");
           $scope.initiate(d);
         } else if (dest_level === 2 && $scope.admlevel < zoom_min + 1) {
           $scope.admlevel = zoom_min + 1;
           $scope.parent_codes = [];
           $scope.name_selection = $scope.levelB_selection;
-          document
-            .getElementById("level2")
-            .setAttribute("class", "btn btn-secondary btn-active");
+          $("#level1").removeClass("btn-active");
+          $("#level2").addClass("btn-active");
           $scope.initiate(d);
         } else if (
           dest_level === 3 &&
           $scope.admlevel < zoom_min + 2 &&
-          $scope.parent_codes.length == 0
+          $scope.parent_codes.length == 0 &&
+          d.trigger_codes.length > 0
         ) {
           $scope.admlevel = zoom_min + 2;
           //[FBF-specific] Take wards for triggered districts instead of all wards
-          $scope.parent_codes = $scope.trigger_codes; //[];
+          $scope.parent_codes = d.trigger_codes;
           $scope.name_selection = $scope.levelC_selection;
-          document
-            .getElementById("level2")
-            .setAttribute("class", "btn btn-secondary btn-active");
-          document
-            .getElementById("level3")
-            .setAttribute("class", "btn btn-secondary btn-active");
+          $("#level1").removeClass("btn-active");
+          $("#level2").removeClass("btn-active");
+          $("#level3").addClass("btn-active");
           $scope.initiate(d);
         }
 
@@ -1596,302 +1546,373 @@ angular.module("dashboards").controller("FbfController", [
           levelC_selection_pre: $scope.levelC_selection_pre,
         };
       };
-    };
 
-    ////////////////////////
-    /// DEBUG / TESTING ///
-    ///////////////////////
+      ////////////////////////
+      /// DEBUG / TESTING ///
+      ///////////////////////
 
-    $scope.toggle_vector_layer = function() {
-      var vectorLayer = map.getPane("overlayPane");
+      $scope.toggle_vector_layer = function() {
+        var vectorLayer = map.getPane("overlayPane");
 
-      vectorLayer.style.opacity = vectorLayer.style.opacity !== "0" ? 0 : 1;
-    };
+        vectorLayer.style.opacity = vectorLayer.style.opacity !== "0" ? 0 : 1;
+      };
 
-    ////////////////////
-    /// WMS LAYER(S) ///
-    ////////////////////
+      ////////////////////
+      /// WMS LAYER(S) ///
+      ////////////////////
 
-    $scope.rasterLayers = [];
-    $scope.add_raster_layer = function(url, layer) {
-      $scope.rasterLayers[layer] = L.tileLayer.wms(url, {
-        layers: layer,
-        transparent: true,
-        format: "image/png",
-      });
-    };
+      $scope.rasterLayers = [];
+      $scope.add_raster_layer = function(url, layer) {
+        $scope.rasterLayers[layer] = L.tileLayer.wms(url, {
+          layers: layer,
+          transparent: true,
+          format: "image/png",
+        });
+      };
 
-    $scope.show_raster_layer = function(layer) {
-      map.addLayer($scope.rasterLayers[layer]);
-    };
+      $scope.show_raster_layer = function(layer) {
+        map.addLayer($scope.rasterLayers[layer]);
+      };
 
-    $scope.hide_raster_layer = function(layer) {
-      map.removeLayer($scope.rasterLayers[layer]);
-    };
+      $scope.hide_raster_layer = function(layer) {
+        map.removeLayer($scope.rasterLayers[layer]);
+      };
 
-    $scope.toggled = {};
-    $scope.toggle_raster_layer = function(layer) {
-      if (layer == "flood_extent") layer = $scope.floodExtentLayer;
-      if (typeof $scope.toggled[layer] == "undefined") {
-        $scope.toggled[layer] = true;
-      } else {
-        $scope.toggled[layer] = !$scope.toggled[layer];
+      $scope.toggle_raster_layer = function(layer) {
+        if (layer == "flood_extent") layer = $scope.floodExtentLayer;
+        if (typeof d.toggled_raster[layer] == "undefined") {
+          d.toggled_raster[layer] = true;
+        } else {
+          d.toggled_raster[layer] = !d.toggled_raster[layer];
+        }
+        if (d.toggled_raster[layer]) {
+          $scope.show_raster_layer(layer);
+        } else {
+          $scope.hide_raster_layer(layer);
+        }
+      };
+
+      /////////////////////
+      /// POI & MARKERS ///
+      /////////////////////
+
+      $scope.prepareStationsData = function() {
+        AuthData.getPoi(
+          {
+            country: $scope.country_code,
+            // type: "dashboard_forecast_per_station",
+            type: "dashboard_forecast_per_station".concat(
+              $scope.lizard ? "_lizard" : ""
+            ),
+          },
+          function(stations_temp) {
+            var stations = $.grep(stations_temp, function(e) {
+              return (
+                e.properties.current_prev == $scope.current_prev &&
+                e.properties.lead_time == $scope.lead_time
+              );
+            });
+            $scope.prepare_glofas_stations(stations);
+          }
+        );
+      };
+
+      $scope.prepareRcLocationsData = function() {
+        AuthData.getPoi(
+          {
+            country: $scope.country_code,
+            type: "dashboard_redcross_branches",
+          },
+          function(rcLocations) {
+            $scope.prepare_rc_locations(rcLocations);
+          }
+        );
+      };
+
+      $scope.prepareHealthsitesData = function() {
+        AuthData.getPoi(
+          {
+            country: $scope.country_code,
+            type: "dashboard_poi_healthsites",
+          },
+          function(healthLocations) {
+            $scope.prepare_health_locations(healthLocations);
+          }
+        );
+      };
+
+      $scope.prepareWaterpointsData = function() {
+        AuthData.getPoi(
+          {
+            country: $scope.country_code,
+            type: "dashboard_poi_waterpoints",
+          },
+          function(waterpointLocations) {
+            $scope.prepare_waterpoint_locations(waterpointLocations);
+          }
+        );
+      };
+
+      $scope.prepare_glofas_stations = function(stations) {
+        d.layers["poi_glofasLocationsLayer"] = L.layerGroup();
+        stations.forEach(function(item) {
+          if (!item.properties) return;
+          if (item.properties.station_used === 0) return;
+
+          var station = item.properties;
+          var stationTitle =
+            station.station_name + " (" + station.station_code + ")";
+          var stationInfoPopup =
+            "<strong>" +
+            stationTitle +
+            "</strong><br>" +
+            "Avg. forecast level: " +
+            helpers.formatAsType("decimal0", station.fc) +
+            "<br>Trigger-level: " +
+            helpers.formatAsType("decimal0", station.trigger_level) +
+            "<br>Glofas probability: " +
+            helpers.formatAsType("percentage", station.fc_prob) +
+            "";
+          var stationClass = "station";
+
+          if (
+            station.station_used == 1 &&
+            station.fc_trigger == 1 &&
+            station.fc_prob >= 0.6
+          ) {
+            stationClass += " is-triggered-minimum";
+          }
+          if (
+            station.station_used == 1 &&
+            station.fc_trigger == 1 &&
+            station.fc_prob >= 0.7
+          ) {
+            stationClass += " is-triggered-medium";
+          }
+          if (
+            station.station_used == 1 &&
+            station.fc_trigger == 1 &&
+            station.fc_prob >= 0.8
+          ) {
+            stationClass += " is-triggered-maximum";
+          }
+          if (station.station_used == 1 && station.fc_trigger == 0) {
+            stationClass += " is-not-triggered";
+          }
+
+          var stationMarker = geoLayersService.createMarker(
+            item,
+            stationTitle,
+            stationClass
+          );
+
+          stationMarker.addTo(d.layers["poi_glofasLocationsLayer"]);
+          stationMarker.bindPopup(stationInfoPopup);
+        });
+      };
+
+      $scope.prepare_rc_locations = function(rcLocations) {
+        d.layers["poi_rc_officesLocationsLayer"] = L.layerGroup();
+        rcLocations.forEach(function(item) {
+          if (!item.properties) return;
+
+          var location = item.properties;
+          var locationTitle = location.branch_name;
+          var locationInfoPopup =
+            "<strong class='h4'>" +
+            locationTitle +
+            "</strong><br>" +
+            "<strong>" +
+            "President: " +
+            "</strong>" +
+            location.president +
+            "<br>" +
+            "<strong>" +
+            "Volunteers: " +
+            "</strong>" +
+            location.nr_volunteers +
+            "<br>" +
+            "<strong>" +
+            "Address: " +
+            "</strong>" +
+            location.address +
+            "";
+
+          var locationMarker = geoLayersService.createMarker(
+            item,
+            locationTitle,
+            "rc"
+          );
+
+          locationMarker.addTo(d.layers["poi_rc_officesLocationsLayer"]);
+          locationMarker.bindPopup(locationInfoPopup);
+        });
+      };
+
+      $scope.prepare_health_locations = function(healthLocations) {
+        d.layers["healthsitesLocationsLayer"] = L.layerGroup();
+        healthLocations.forEach(function(item) {
+          if (!item.properties) return;
+
+          var location = item.properties;
+          var locationTitle = location.name;
+          var locationInfoPopup =
+            "<strong class='h4'>" +
+            locationTitle +
+            "</strong><br>" +
+            "<strong>" +
+            "Type: " +
+            "</strong>" +
+            location.type +
+            "";
+
+          var locationMarker = geoLayersService.createMarker(
+            item,
+            locationTitle,
+            "health"
+          );
+
+          locationMarker.addTo(d.layers["healthsitesLocationsLayer"]);
+          locationMarker.bindPopup(locationInfoPopup);
+        });
+      };
+
+      $scope.prepare_waterpoint_locations = function(waterpointLocations) {
+        d.layers["waterpointsLocationsLayer"] = L.markerClusterGroup();
+
+        waterpointLocations.forEach(function(item) {
+          if (!item.properties) return;
+
+          var location = item.properties;
+          var locationTitle = location.activity_id;
+          var locationInfoPopup =
+            "<strong class='h4'>" +
+            locationTitle +
+            "</strong><br>" +
+            "<strong>" +
+            "Type: " +
+            "</strong>" +
+            location.water_tech +
+            "";
+
+          var locationMarker = geoLayersService.createMarker(
+            item,
+            locationTitle,
+            "wash"
+          );
+
+          locationMarker.addTo(d.layers["waterpointsLocationsLayer"]);
+          locationMarker.bindPopup(locationInfoPopup);
+        });
+      };
+
+      $scope.toggle_poi_layer = function(layer) {
+        return geoLayersService.toggle_poi_layer(
+          layer,
+          d.toggled_poi,
+          d.layers,
+          map
+        );
+      };
+
+      /////////////////////
+      /// LINES (ROADS) ///
+      /////////////////////
+
+      $scope.prepareRoadData = function() {
+        Data.getTable(
+          {
+            schema: "zmb_fbf",
+            table: "dashboard_roads",
+          },
+          function(roads) {
+            $scope.prepare_roads(roads[0].roads);
+          }
+        );
+      };
+
+      $scope.prepare_roads = function(roads) {
+        d.layers["roadsLocationsLayer"] = L.geoJSON(roads.features, {
+          style: {
+            color: "purple",
+            weight: 500,
+          },
+        });
+      };
+
+      //////////////////////
+      /// PREPARE LAYERS ///
+      //////////////////////
+
+      $scope.prepareStationsData();
+      $scope.prepareRcLocationsData();
+      $scope.prepareHealthsitesData();
+      $scope.prepareWaterpointsData();
+      $scope.prepareRoadData();
+      var BASEURL = $scope.lizard
+        ? "https://zambia.lizard.net/wms/"
+        : GEOSERVER_BASEURL;
+      $scope.floodExtentLayer = "".concat(
+        "flood_extent_",
+        $scope.lead_time == "3-day" ? "short_" : "long_",
+        $scope.current_prev == "Current" ? "0" : "1"
+      );
+      if ($scope.lizard) {
+        if ($scope.current_prev == "Current") {
+          $scope.floodExtentLayer =
+            $scope.lead_time == "3-day"
+              ? "red-cross:actual-flood-extent"
+              : "red-cross:flood-extent-7-day-forecast";
+        } else {
+          $scope.floodExtentLayer = "scenarios:7680:depth-max-dtri";
+        }
       }
-      if ($scope.toggled[layer]) {
-        $scope.show_raster_layer(layer);
-      } else {
-        $scope.hide_raster_layer(layer);
-      }
-    };
+      $scope.add_raster_layer(BASEURL, $scope.floodExtentLayer);
+      $scope.add_raster_layer(BASEURL, "crop_resampled");
+      $scope.add_raster_layer(BASEURL, "hrsl_zmb_pop");
+      $scope.add_raster_layer(BASEURL, "flood_10year");
+      $scope.add_raster_layer(BASEURL, "flood_20year");
+      $scope.add_raster_layer(BASEURL, "cattle");
+      $scope.add_raster_layer(BASEURL, "chicken");
+      $scope.add_raster_layer(BASEURL, "sheep");
+      $scope.add_raster_layer(BASEURL, "goat");
+      $scope.add_raster_layer(BASEURL, "pig");
 
-    /////////////////////
-    /// POI & MARKERS ///
-    /////////////////////
+      // POTENTIALLY USE TO TURN ON TURNED-ON LAYERS AGAIN AFTER SWITCHING SETTINGS
+      // for (var poi_layer in d.toggled_poi){
+      //   d.toggled_poi[poi_layer]=false;
+      //   $scope.toggle_poi_layer(poi_layer);
+      // };
 
-    function prepareStationsData() {
-      AuthData.getPoi(
-        {
-          country: $scope.country_code,
-          // type: "dashboard_forecast_per_station",
-          type: "dashboard_forecast_per_station".concat(
-            $scope.lizard ? "_lizard" : ""
-          ),
-        },
-        function(stations_temp) {
-          var stations = $.grep(stations_temp, function(e) {
-            return (
-              e.properties.current_prev == $scope.current_prev &&
-              e.properties.lead_time == $scope.lead_time
-            );
-          });
-          $scope.prepare_glofas_stations(stations);
-        }
-      );
-    }
+      ////////////////////////
+      // SET MAIN VARIABLES //
+      ////////////////////////
 
-    function prepareRcLocationsData() {
-      AuthData.getPoi(
-        {
-          country: $scope.country_code,
-          type: "dashboard_redcross_branches",
-        },
-        function(rcLocations) {
-          $scope.prepare_rc_locations(rcLocations);
-        }
-      );
-    }
+      $scope.toggles_off = function() {
+        $scope.glofasHidden = false;
+        $scope.floodHidden = false;
+        $scope.healthsitesHidden = false;
+        $scope.waterpointsHidden = false;
+        $scope.roadsHidden = false;
+        $scope.poi_rc_officesHidden = false;
+        $scope.flood_10yearHidden = false;
+        $scope.flood_20yearHidden = false;
+        $scope.hrsl_zmb_popHidden = false;
+        $scope.crop_resampledHidden = false;
+      };
+      $scope.toggles_off();
 
-    function prepareHealthsitesData() {
-      AuthData.getPoi(
-        {
-          country: $scope.country_code,
-          type: "dashboard_poi_healthsites",
-        },
-        function(healthLocations) {
-          $scope.prepare_health_locations(healthLocations);
-        }
-      );
-    }
+      $scope.change_lead_time = function(lead_time) {
+        $scope.lead_time_toggle = 1;
+        $scope.lead_time = lead_time;
+        $scope.initiate(d);
+      };
 
-    function prepareWaterpointsData() {
-      AuthData.getPoi(
-        {
-          country: $scope.country_code,
-          type: "dashboard_poi_waterpoints",
-        },
-        function(waterpointLocations) {
-          $scope.prepare_waterpoint_locations(waterpointLocations);
-        }
-      );
-    }
-
-    $scope.layers = {};
-    $scope.prepare_glofas_stations = function(stations) {
-      $scope.layers["poi_glofasLocationsLayer"] = L.layerGroup();
-      stations.forEach(function(item) {
-        if (!item.properties) return;
-        if (item.properties.station_used === 0) return;
-
-        var station = item.properties;
-        var stationTitle =
-          station.station_name + " (" + station.station_code + ")";
-        var stationInfoPopup =
-          "<strong>" +
-          stationTitle +
-          "</strong><br>" +
-          "Avg. forecast level: " +
-          helpers.formatAsType("decimal0", station.fc) +
-          "<br>Trigger-level: " +
-          helpers.formatAsType("decimal0", station.trigger_level) +
-          "<br>Glofas probability: " +
-          helpers.formatAsType("percentage", station.fc_prob) +
-          "";
-        var stationClass = "station";
-
-        if (
-          station.station_used == 1 &&
-          station.fc_trigger == 1 &&
-          station.fc_prob >= 0.6
-        ) {
-          stationClass += " is-triggered-minimum";
-        }
-        if (
-          station.station_used == 1 &&
-          station.fc_trigger == 1 &&
-          station.fc_prob >= 0.7
-        ) {
-          stationClass += " is-triggered-medium";
-        }
-        if (
-          station.station_used == 1 &&
-          station.fc_trigger == 1 &&
-          station.fc_prob >= 0.8
-        ) {
-          stationClass += " is-triggered-maximum";
-        }
-        if (station.station_used == 1 && station.fc_trigger == 0) {
-          stationClass += " is-not-triggered";
-        }
-
-        var stationMarker = geoLayersService.createMarker(
-          item,
-          stationTitle,
-          stationClass
-        );
-
-        stationMarker.addTo($scope.layers["poi_glofasLocationsLayer"]);
-        stationMarker.bindPopup(stationInfoPopup);
-      });
-    };
-
-    $scope.prepare_rc_locations = function(rcLocations) {
-      $scope.layers["poi_rc_officesLocationsLayer"] = L.layerGroup();
-      rcLocations.forEach(function(item) {
-        if (!item.properties) return;
-
-        var location = item.properties;
-        var locationTitle = location.branch_name;
-        var locationInfoPopup =
-          "<strong class='h4'>" +
-          locationTitle +
-          "</strong><br>" +
-          "<strong>" +
-          "President: " +
-          "</strong>" +
-          location.president +
-          "<br>" +
-          "<strong>" +
-          "Volunteers: " +
-          "</strong>" +
-          location.nr_volunteers +
-          "<br>" +
-          "<strong>" +
-          "Address: " +
-          "</strong>" +
-          location.address +
-          "";
-
-        var locationMarker = geoLayersService.createMarker(
-          item,
-          locationTitle,
-          "rc"
-        );
-
-        locationMarker.addTo($scope.layers["poi_rc_officesLocationsLayer"]);
-        locationMarker.bindPopup(locationInfoPopup);
-      });
-    };
-
-    $scope.prepare_health_locations = function(healthLocations) {
-      $scope.layers["healthsitesLocationsLayer"] = L.layerGroup();
-      healthLocations.forEach(function(item) {
-        if (!item.properties) return;
-
-        var location = item.properties;
-        var locationTitle = location.name;
-        var locationInfoPopup =
-          "<strong class='h4'>" +
-          locationTitle +
-          "</strong><br>" +
-          "<strong>" +
-          "Type: " +
-          "</strong>" +
-          location.type +
-          "";
-
-        var locationMarker = geoLayersService.createMarker(
-          item,
-          locationTitle,
-          "health"
-        );
-
-        locationMarker.addTo($scope.layers["healthsitesLocationsLayer"]);
-        locationMarker.bindPopup(locationInfoPopup);
-      });
-    };
-
-    $scope.prepare_waterpoint_locations = function(waterpointLocations) {
-      // $scope.layers["waterpointsLocationsLayer"] = L.layerGroup();
-      $scope.layers["waterpointsLocationsLayer"] = L.markerClusterGroup();
-
-      waterpointLocations.forEach(function(item) {
-        if (!item.properties) return;
-
-        var location = item.properties;
-        var locationTitle = location.activity_id;
-        var locationInfoPopup =
-          "<strong class='h4'>" +
-          locationTitle +
-          "</strong><br>" +
-          "<strong>" +
-          "Type: " +
-          "</strong>" +
-          location.water_tech +
-          "";
-
-        var locationMarker = geoLayersService.createMarker(
-          item,
-          locationTitle,
-          "wash"
-        );
-
-        locationMarker.addTo($scope.layers["waterpointsLocationsLayer"]);
-        locationMarker.bindPopup(locationInfoPopup);
-      });
-    };
-
-    $scope.toggle_poi_layer = function(layer) {
-      return geoLayersService.toggle_poi_layer(
-        layer,
-        $scope.toggled,
-        $scope.layers,
-        map
-      );
-    };
-
-    /////////////////////
-    /// LINES (ROADS) ///
-    /////////////////////
-
-    function prepareRoadData() {
-      Data.getTable(
-        {
-          schema: "zmb_fbf",
-          table: "dashboard_roads",
-        },
-        function(roads) {
-          $scope.prepare_roads(roads[0].roads);
-        }
-      );
-    }
-
-    $scope.prepare_roads = function(roads) {
-      $scope.layers["roadsLocationsLayer"] = L.geoJSON(roads.features, {
-        style: {
-          color: "purple",
-          weight: 500,
-        },
-      });
+      $scope.change_current_prev = function(current_prev) {
+        $scope.current_prev_toggle = 1;
+        $scope.current_prev = current_prev;
+        $scope.initiate(d);
+      };
     };
   },
 ]);

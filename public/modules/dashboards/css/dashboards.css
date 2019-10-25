@@ -917,18 +917,18 @@ div.dc-chart {
 
 /* start: new styles */
 .btn.btn-secondary.btn-zoomin {
-  background-color: #eeeeee;
-  border-color: #eeeeee;
+  background-color: #d9dcdc;
+  border-color: #d9dcdc;
   color: #000000;
   height: 34px;
-  margin-left: 2px;
+  margin-right: 2px;
   width: 32.6%;
 }
-.btn.btn-secondary.btn-active.btn-zoomin {
+.btn.btn-secondary.btn-zoomin.btn-active {
   background-color: #4c8293;
   border-color: #4c8293;
   color: #ffffff;
-  margin-left: 2px;
+  margin-right: 2px;
   width: 32.6%;
 }
 .btn.btn-secondary.btn-zoomin:hover {

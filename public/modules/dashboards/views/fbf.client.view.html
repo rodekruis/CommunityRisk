@@ -24,7 +24,7 @@
           <button
             type="button"
             class="btn btn-tab btn-map-view active"
-            style="width:42%"
+            style="width:43%; margin-right:1%"
             ng-click="mapShow()"
           >
             <span class="button-label">{{ "Map" | translate }}</span>
@@ -50,7 +50,7 @@
             <button
               type="button"
               class="btn btn-tab btn-3-day active"
-              style="width:20%; margin-right:2%"
+              style="width:21%; margin-right:1%"
               ng-click="change_lead_time('3-day')"
             >
               <i
@@ -64,7 +64,7 @@
             <button
               type="button"
               class="btn btn-tab btn-7-day"
-              style="width:20%; margin-right:2%"
+              style="width:21%; margin-right:1%"
               ng-click="change_lead_time('7-day')"
             >
               <i
@@ -130,8 +130,9 @@
           <button
             id="level1"
             type="button"
-            class="btn btn-secondary btn-zoomin btn-active "
+            class="btn btn-secondary btn-zoomin"
             ng-click="zoom_out(1)"
+            style="margin:0 2px 0 0; padding-left:6px"
           >
             <span class="button-label"
               >{{ "levelA_selection_pre" | translate: translateData()
@@ -141,8 +142,9 @@
           <button
             id="level2"
             type="button"
-            class="btn btn-secondary"
+            class="btn btn-secondary btn-zoomin btn-active"
             ng-click="zoom_out(2)"
+            style="margin:0 2px 0 0; padding-left:6px"
           >
             <span class="button-label"
               >{{ "levelB_selection_pre" | translate: translateData()
@@ -152,9 +154,9 @@
           <button
             id="level3"
             type="button"
-            class="btn btn-secondary"
+            class="btn btn-secondary btn-zoomin"
             ng-click="zoom_out(3)"
-            style="margin-right:0px"
+            style="margin:0 0 0 0; padding-left:6px"
           >
             <span class="button-label"
               >{{ "levelC_selection_pre" | translate: translateData() }}
@@ -167,14 +169,14 @@
             id="flood-toggle"
             type="button"
             class="btn btn-secondary btn-score-lowercase"
-            style="width:49%; margin-right:1%"
-            ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
+            style="width:49.5%; margin-right:0.5%"
           >
             <span ng-show="!floodHidden"
               ><i
                 class="fa fa-toggle-off"
                 style="font-size:15px"
                 aria-hidden="true"
+                ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
               ></i>
               {{ "Show flood extent" | translate }}</span
             >
@@ -183,29 +185,42 @@
                 class="fa fa-toggle-on"
                 style="font-size:15px"
                 aria-hidden="true"
+                ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
               ></i>
               {{ "Hide flood extent" | translate }}</span
             >
-            <!-- <img
-              src="modules/dashboards/img/icon-popup.svg"
-              style="height:17px; color:white"
+            <img
+              src="modules/dashboards/img/icon-popup-white.svg"
+              style="height:17px; color:white; float:right"
               ng-click="info('flood_extent')"
-            /> -->
+            />
           </button>
           <button
             type="button"
             class="btn btn-secondary btn-score-lowercase"
-            style="width:49%; margin-left:1%"
-            ng-click="glofasHidden = !glofasHidden; toggle_poi_layer('poi_glofas')"
+            style="width:49.5%; margin-left:0.5%"
           >
             <span ng-show="!glofasHidden"
-              ><i class="fa fa-toggle-off" aria-hidden="true"></i>
+              ><i
+                class="fa fa-toggle-off"
+                aria-hidden="true"
+                ng-click="glofasHidden=!glofasHidden; toggle_poi_layer('poi_glofas')"
+              ></i>
               {{ "Show GLOFAS stations" | translate }}</span
             >
             <span ng-show="glofasHidden"
-              ><i class="fa fa-toggle-on" aria-hidden="true"></i>
+              ><i
+                class="fa fa-toggle-on"
+                aria-hidden="true"
+                ng-click="glofasHidden=!glofasHidden; toggle_poi_layer('poi_glofas')"
+              ></i>
               {{ "Hide GLOFAS stations" | translate }}</span
             >
+            <img
+              src="modules/dashboards/img/icon-popup-white.svg"
+              style="height:17px; color:white; float:right"
+              ng-click="info('poi_glofas')"
+            />
           </button>
         </div>
         <!-- </div> -->

@@ -43,6 +43,8 @@ angular.module("dashboards").factory("geoLayersService", [
     return {
       createMarker: createMarker,
       toggle_poi_layer: toggle_poi_layer,
+      show_locations: show_locations,
+      hide_locations: hide_locations,
     };
   },
 ]);

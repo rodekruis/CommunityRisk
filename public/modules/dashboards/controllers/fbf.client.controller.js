@@ -1872,11 +1872,11 @@ angular.module("dashboards").controller("FbfController", [
       $scope.add_raster_layer(BASEURL, "hrsl_zmb_pop");
       $scope.add_raster_layer(BASEURL, "flood_10year");
       $scope.add_raster_layer(BASEURL, "flood_20year");
-      $scope.add_raster_layer(BASEURL, "cattle");
-      $scope.add_raster_layer(BASEURL, "chicken");
-      $scope.add_raster_layer(BASEURL, "sheep");
-      $scope.add_raster_layer(BASEURL, "goat");
-      $scope.add_raster_layer(BASEURL, "pig");
+      // $scope.add_raster_layer(BASEURL, "cattle");
+      // $scope.add_raster_layer(BASEURL, "chicken");
+      // $scope.add_raster_layer(BASEURL, "sheep");
+      // $scope.add_raster_layer(BASEURL, "goat");
+      // $scope.add_raster_layer(BASEURL, "pig");
 
       // POTENTIALLY USE TO TURN ON TURNED-ON LAYERS AGAIN AFTER SWITCHING SETTINGS
       // for (var poi_layer in d.toggled_poi){
@@ -1889,9 +1889,10 @@ angular.module("dashboards").controller("FbfController", [
       ////////////////////////
 
       $scope.toggles_off = function() {
+        d.toggled_poi = {};
+        d.toggled_raster = {};
         $scope.glofasHidden = false;
         $scope.floodHidden = false;
-        $scope.healthsitesHidden = false;
         $scope.waterpointsHidden = false;
         $scope.roadsHidden = false;
         $scope.poi_rc_officesHidden = false;

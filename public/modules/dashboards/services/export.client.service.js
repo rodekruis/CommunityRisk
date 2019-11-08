@@ -11,6 +11,16 @@ angular.module("dashboards").factory("exportService", [
      *
      * @returns {String}
      */
+
+    var notUseProperties = [
+      "$delete",
+      "$get",
+      "$query",
+      "$remove",
+      "$save",
+      "toJSON",
+    ];
+
     function createCSV(content, meta_label) {
       var csvFile = "";
 
@@ -24,7 +34,9 @@ angular.module("dashboards").factory("exportService", [
         for (var key in value) {
           if (Object.prototype.hasOwnProperty.call(value, key)) {
             var innerValue = JSON.stringify(value[key]);
-            csvFile += cleanValue(innerValue, key);
+            if (notUseProperties.indexOf(key) == -1) {
+              csvFile += cleanValue(innerValue, key);
+            }
           }
         }
 
@@ -40,8 +52,10 @@ angular.module("dashboards").factory("exportService", [
       for (var key in value) {
         if (Object.prototype.hasOwnProperty.call(value, key)) {
           var label = createLabel(meta_label, key);
-
-          line += cleanValue(label, key);
+          if (notUseProperties.indexOf(key) == -1) {
+            // console.log(label);
+            line += cleanValue(label, key);
+          }
         }
       }
 

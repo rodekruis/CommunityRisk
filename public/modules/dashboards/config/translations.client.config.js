@@ -70,6 +70,8 @@ var static_en = {
   draft: "",
   export_json: "Export (JSON)",
   export_pdf: "Export (PDF)",
+  export_pdf_howto:
+    "Instructions: press Ctrl+P to go to the print dialog. Choose 'landscape' as orientation/layout (under Preferences). Select 'Print to PDF / Save as PDF' under Printer/Destination.",
   signup_mailing: "Sign up to mailing list",
   join_whatsapp: "Join Whatsapp group",
 };

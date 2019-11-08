@@ -189,7 +189,11 @@ angular.module("dashboards").factory("sidebarHtmlService", [
           ].indexOf(record.group) > -1
         ) {
           var div = document.createElement("div");
-          div.setAttribute("class", "row profile-item");
+          if (record.layer_type == "polygon") {
+            div.setAttribute("class", "row profile-item profile-item-hover");
+          } else {
+            div.setAttribute("class", "row profile-item");
+          }
           div.setAttribute("id", "section-" + record.name);
           var parent = document.getElementById(record.group);
           parent.appendChild(div);
@@ -228,6 +232,8 @@ angular.module("dashboards").factory("sidebarHtmlService", [
               "Hidden = !" +
               record.name +
               "Hidden";
+          } else if (record.layer_type == "point-no-locations") {
+            click_fn_string = "";
           } else {
             click_fn_string = "change_indicator('" + record.name + "')";
           }
@@ -249,7 +255,14 @@ angular.module("dashboards").factory("sidebarHtmlService", [
           div.appendChild(div1);
           //$compile(div1)($scope);
           var div2 = document.createElement("div");
-          div2.setAttribute("class", "col col-md-5 col-sm-5 col-xs-5");
+          if (record.layer_type == "point" || record.layer_type == "raster") {
+            div2.setAttribute(
+              "class",
+              "col col-md-5 col-sm-5 col-xs-5 hidden-print needs-compile"
+            );
+          } else {
+            div2.setAttribute("class", "col col-md-5 col-sm-5 col-xs-5");
+          }
           div2.setAttribute("id", record.name);
           if (record.layer_type == "polygon") {
             div2.innerHTML = keyvalue[record.name] + " " + unit;
@@ -257,7 +270,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             record.layer_type == "point" ||
             record.layer_type == "raster"
           ) {
-            div2.innerHTML = "Click to toggle";
+            div2.innerHTML = "Show/hide";
+            div2.setAttribute("ng-click", click_fn_string);
+          } else if (record.layer_type == "point-no-locations") {
+            div2.innerHTML = "No location data";
           } else {
             div2.innerHTML = keyvalue[record.name] + " " + unit;
           }
@@ -273,7 +289,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
           div3.appendChild(button);
           //$compile(button)($scope);
           img = document.createElement("img");
-          img.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
+          img.setAttribute("src", "modules/dashboards/img/icon-popup-new.svg");
           img.setAttribute("style", "height:17px");
           button.appendChild(img);
         } else if (record.group === "other") {
@@ -339,7 +355,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             div3.appendChild(button);
             //$compile(button)($scope);
             var img3 = document.createElement("img");
-            img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
+            img3.setAttribute(
+              "src",
+              "modules/dashboards/img/icon-popup-new.svg"
+            );
             img3.setAttribute("style", "height:17px");
             button.appendChild(img3);
           }
@@ -418,7 +437,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
           div3.appendChild(button);
           //$compile(button)($scope);
           img3 = document.createElement("img");
-          img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
+          img3.setAttribute("src", "modules/dashboards/img/icon-popup-new.svg");
           img3.setAttribute("style", "height:17px");
           button.appendChild(img3);
         }
@@ -537,7 +556,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             div3.appendChild(button);
             //$compile(button)($scope);
             var img3 = document.createElement("img");
-            img3.setAttribute("src", "modules/dashboards/img/icon-popup.svg");
+            img3.setAttribute(
+              "src",
+              "modules/dashboards/img/icon-popup-new.svg"
+            );
             img3.setAttribute("style", "height:17px");
             button.appendChild(img3);
           }

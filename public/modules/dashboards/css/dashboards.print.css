@@ -1,0 +1,114 @@
+/*
+  PRINT styles/overrides:
+*/
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
+    color-adjust: exact !important; /*Firefox*/
+  }
+
+  /* Fix UI-elements visually */
+  .sidebar-wrapper,
+  .leaflet-control-attribution,
+  .card-block,
+  .zoom-level-nav {
+    background: white !important;
+  }
+
+  .sidebar-wrapper-fbf {
+    top: 220px;
+    padding-right: 10px;
+    background: #f3eee3 !important;
+  }
+
+  .card-header {
+    background: #f3f3f3 !important;
+  }
+  .impact-eap-section {
+    background: rgb(221, 221, 221) !important;
+  }
+  .btn-secondary,
+  .btn-tab {
+    background: #d9dcdc !important;
+  }
+
+  .section-active,
+  .btn-tab.active,
+  .zoom-level-nav .btn-active,
+  .btn-score-lowercase,
+  .map-popup {
+    background: #737373 /*#4c8293*/ !important;
+  }
+
+  .section-active div,
+  .btn-score-lowercase span,
+  .toggle-white:before,
+  .btn-active span,
+  .btn-active div a strong,
+  .btn-tab.active,
+  .popup-score,
+  .score-label,
+  .popup-header,
+  .fa-search-plus:before {
+    color: white !important;
+  }
+
+  .tabular-wrapper {
+    overflow: hidden;
+  }
+
+  /* Hide interactive elements */
+  .leaflet-control-zoom,
+  .hdx-3w-info,
+  .info-btn {
+    display: none !important;
+  }
+
+  .legend {
+    background: white !important;
+  }
+  .legend i:first-child {
+    background: #fee5d9 !important;
+  }
+  .legend i:nth-child(3) {
+    background: #fcae91 !important;
+  }
+  .legend i:nth-child(5) {
+    background: #fb6a4a !important;
+  }
+  .legend i:nth-child(7) {
+    background: #de2d26 !important;
+  }
+  .legend i:nth-child(9) {
+    background: #a50f15 !important;
+  }
+
+  .marker-cluster-large div {
+    background-color: rgba(241, 128, 23, 0.6) !important;
+  }
+  .marker-cluster-medium div {
+    background-color: rgba(240, 194, 12, 0.6) !important;
+  }
+  .marker-cluster-small div {
+    background-color: rgba(110, 204, 57, 0.6) !important;
+  }
+  .marker-icon--health,
+  .marker-icon--rc {
+    background-color: white !important;
+  }
+  .marker-icon--health:before,
+  .marker-icon--rc:before {
+    border-top-color: white !important;
+  }
+  .marker-icon--rc:after {
+    color: red !important;
+  }
+  .marker-icon--health:after {
+    color: green !important;
+  }
+
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background: white !important;
+  }
+}

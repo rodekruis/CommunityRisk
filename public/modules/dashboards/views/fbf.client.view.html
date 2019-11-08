@@ -17,10 +17,20 @@
     view-type="view_code"
   ></cr-header>
 
+  <div class="header-for-print hidden visible-print">
+    <img
+      src="modules/core/img/510logo-new.png"
+      class="navbar-brand--logo-img"
+    />
+  </div>
+
   <div class="content-wrapper">
     <div class="zoom-level-nav-wrapper">
       <div class="zoom-level-nav map-views">
-        <div class="btn-group zoom-level view-buttons" role="group">
+        <div
+          class="btn-group zoom-level view-buttons hidden-print"
+          role="group"
+        >
           <button
             type="button"
             class="btn btn-tab btn-map-view active"
@@ -46,55 +56,22 @@
           ></div>
         </div>
         <div class="btn-group zoom-level" role="group">
-          <div class="lead-time-buttons">
-            <button
-              type="button"
-              class="btn btn-tab btn-3-day active"
-              style="width:21%; margin-right:1%"
-              ng-click="change_lead_time('3-day')"
-            >
-              <i
-                id="3-day-signal"
-                class="fa fa-exclamation-circle"
-                style="display: none"
-                aria-hidden="true"
-              ></i>
-              3-day
-            </button>
-            <button
-              type="button"
-              class="btn btn-tab btn-7-day"
-              style="width:21%; margin-right:1%"
-              ng-click="change_lead_time('7-day')"
-            >
-              <i
-                id="7-day-signal"
-                class="fa fa-exclamation-circle"
-                style="display: none"
-                aria-hidden="true"
-              ></i>
-              7-day
-            </button>
-          </div>
-
           <ul
+            id="dateDropdown"
             class="btn btn-secondary btn-active PIbuttons"
-            style="margin-right:0%; width:56%"
+            style="margin-right:0%; width:54%; margin-right:2%"
           >
-            <div class="dropdown PIdropdown" style="background-color: #4C8293">
+            <div
+              class="dropdown PIdropdown"
+              style="background-color: #737373 /*#4c8293*/"
+            >
               <a
                 class="dropdown-toggle PI-button"
                 data-toggle="dropdown"
                 href="#"
               >
-                <i
-                  id="current_prev-signal"
-                  class="fa fa-exclamation-circle"
-                  style="display: none"
-                  aria-hidden="true"
-                ></i>
                 <strong>{{ current_prev }} ({{ date }})</strong>
-                <i class="fa fa-angle-down PI-btn-arrow"></i>
+                <i class="fa fa-angle-down PI-btn-arrow hidden-print"></i>
               </a>
               <ul
                 class="dropdown-menu submenu-items"
@@ -106,12 +83,6 @@
                     class="submenu-item"
                     ng-click="change_current_prev('Current')"
                   >
-                    <i
-                      id="current-signal"
-                      class="fa fa-exclamation-circle"
-                      style="display: none"
-                      aria-hidden="true"
-                    ></i>
                     Current Forecast</a
                   >
                 </li>
@@ -125,6 +96,27 @@
               </ul>
             </div>
           </ul>
+
+          <div class="lead-time-buttons">
+            <button
+              title="Forecast for trigger exceedence in 3 days. Related early actions for this lead-time are..."
+              type="button"
+              class="btn btn-tab btn-3-day active"
+              style="width:21%; margin-left:1%"
+              ng-click="change_lead_time('3-day')"
+            >
+              3-day
+            </button>
+            <button
+              title="Forecast for trigger exceedence in 7 days. Related early actions for this lead-time are ..."
+              type="button"
+              class="btn btn-tab btn-7-day"
+              style="width:21%; margin-left:1%"
+              ng-click="change_lead_time('7-day')"
+            >
+              7-day
+            </button>
+          </div>
         </div>
         <div class="btn-group zoom-level" role="group">
           <button
@@ -132,24 +124,18 @@
             type="button"
             class="btn btn-secondary btn-zoomin"
             ng-click="zoom_out(1)"
-            style="margin:0 2px 0 0; padding-left:6px"
+            style="margin:0 1% 0 0; padding-left:6px"
           >
-            <span class="button-label"
-              >{{ "levelA_selection_pre" | translate: translateData()
-              }}{{ levelA_selection }}</span
-            >
+            <span class="button-label">{{ "Provinces" | translate }}</span>
           </button>
           <button
             id="level2"
             type="button"
             class="btn btn-secondary btn-zoomin btn-active"
             ng-click="zoom_out(2)"
-            style="margin:0 2px 0 0; padding-left:6px"
+            style="margin:0 1% 0 0; padding-left:6px"
           >
-            <span class="button-label"
-              >{{ "levelB_selection_pre" | translate: translateData()
-              }}{{ levelB_selection }}</span
-            >
+            <span class="button-label">{{ "Districts" | translate }}</span>
           </button>
           <button
             id="level3"
@@ -158,10 +144,9 @@
             ng-click="zoom_out(3)"
             style="margin:0 0 0 0; padding-left:6px"
           >
-            <span class="button-label"
-              >{{ "levelC_selection_pre" | translate: translateData() }}
-              {{ levelC_selection }}</span
-            >
+            <span class="button-label">{{
+              "Triggered wards" | translate
+            }}</span>
           </button>
         </div>
         <div class="btn-group zoom-level" role="group">
@@ -171,26 +156,29 @@
             class="btn btn-secondary btn-score-lowercase"
             style="width:49.5%; margin-right:0.5%"
           >
-            <span ng-show="!floodHidden"
+            <span
+              ng-show="!floodHidden"
+              ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
               ><i
-                class="fa fa-toggle-off"
+                class="fa fa-toggle-off toggle-white"
                 style="font-size:15px"
                 aria-hidden="true"
-                ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
               ></i>
               {{ "Show flood extent" | translate }}</span
             >
-            <span ng-show="floodHidden"
+            <span
+              ng-show="floodHidden"
+              ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
               ><i
-                class="fa fa-toggle-on"
+                class="fa fa-toggle-on toggle-white"
                 style="font-size:15px"
                 aria-hidden="true"
-                ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
               ></i>
               {{ "Hide flood extent" | translate }}</span
             >
             <img
-              src="modules/dashboards/img/icon-popup-white.svg"
+              class="hidden-print"
+              src="modules/dashboards/img/icon-popup-new-white.svg"
               style="height:17px; color:white; float:right"
               ng-click="info('flood_extent')"
             />
@@ -200,24 +188,21 @@
             class="btn btn-secondary btn-score-lowercase"
             style="width:49.5%; margin-left:0.5%"
           >
-            <span ng-show="!glofasHidden"
-              ><i
-                class="fa fa-toggle-off"
-                aria-hidden="true"
-                ng-click="glofasHidden=!glofasHidden; toggle_poi_layer('poi_glofas')"
-              ></i>
-              {{ "Show GLOFAS stations" | translate }}</span
+            <span
+              ng-show="!glofasHidden"
+              ng-click="glofasHidden=!glofasHidden; toggle_poi_layer('poi_glofas')"
+              ><i class="fa fa-toggle-off toggle-white" aria-hidden="true"></i>
+              {{ "Show WARMA stations" | translate }}</span
             >
-            <span ng-show="glofasHidden"
-              ><i
-                class="fa fa-toggle-on"
-                aria-hidden="true"
-                ng-click="glofasHidden=!glofasHidden; toggle_poi_layer('poi_glofas')"
-              ></i>
-              {{ "Hide GLOFAS stations" | translate }}</span
+            <span
+              ng-show="glofasHidden"
+              ng-click="glofasHidden=!glofasHidden; toggle_poi_layer('poi_glofas')"
+              ><i class="fa fa-toggle-on toggle-white" aria-hidden="true"></i>
+              {{ "Hide WARMA stations" | translate }}</span
             >
             <img
-              src="modules/dashboards/img/icon-popup-white.svg"
+              class="hidden-print"
+              src="modules/dashboards/img/icon-popup-new-white.svg"
               style="height:17px; color:white; float:right"
               ng-click="info('poi_glofas')"
             />
@@ -228,7 +213,7 @@
         <!-- start: community profiles -->
         <div class="community-profiles-wrapper" style="margin-bottom:-10px">
           <div class="tablearea">
-            <div class="row profile-item" id="section-fc_trigger">
+            <div class="row profile-item" id="section-fc_trigger2">
               <div class="col col-md-1 col-sm-1 col-xs-1">
                 <img
                   class="community-icon"
@@ -237,7 +222,7 @@
               </div>
               <div
                 class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
-                ng-click="change_indicator('fc_trigger')"
+                ng-click="change_indicator('fc_trigger2')"
               >
                 Exposed {{ subtype_selection }}
               </div>
@@ -256,10 +241,10 @@
                   type="button"
                   class="btn-modal info-btn ng-scope"
                   data-toggle="modal"
-                  ng-click="info('fc_trigger')"
+                  ng-click="info('fc_trigger2')"
                 >
                   <img
-                    src="modules/dashboards/img/icon-popup.svg"
+                    src="modules/dashboards/img/icon-popup-new.svg"
                     style="height:17px"
                   />
                 </button>
@@ -290,7 +275,7 @@
                   ng-click="info('population_affected')"
                 >
                   <img
-                    src="modules/dashboards/img/icon-popup.svg"
+                    src="modules/dashboards/img/icon-popup-new.svg"
                     style="height:17px"
                   />
                 </button>
@@ -321,7 +306,7 @@
                   ng-click="info('population')"
                 >
                   <img
-                    src="modules/dashboards/img/icon-popup.svg"
+                    src="modules/dashboards/img/icon-popup-new.svg"
                     style="height:17px"
                   />
                 </button>
@@ -329,29 +314,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="btn-group zoom-level view-buttons" role="group">
-          <button
-            type="button"
-            class="btn btn-secondary btn-score-lowercase"
-            style="width:49%; margin-right:1%"
-          >
-            <span class="button-label"
-              ><strong>{{ "Population affected" | translate }}</strong>
-              <span class="component-score" id="pop_affected_main"></span
-            ></span>
-          </button>
-          <button
-            type="button"
-            class="btn btn-secondary btn-score-lowercase"
-            style="width:49%; margin-left:1%"
-          >
-            <span class="button-label"
-              ><strong>{{ "Total population" | translate }}</strong>
-              <span class="component-score" id="population_main"></span
-            ></span>
-          </button>
-        </div> -->
-        <!-- end: community profiles -->
       </div>
     </div>
 
@@ -361,8 +323,9 @@
       id="demo"
     >
       <button
+        style="display:none"
         type="button"
-        class="btn btn-default btn-sm btn-block ng-hide"
+        class="btn btn-default btn-sm btn-block"
         ng-click="debugHidden = !debugHidden"
       >
         <span ng-show="debugHidden">{{ "Show Debug" | translate }}</span>
@@ -514,15 +477,25 @@
               role="tabpanel"
               aria-labelledby="headingImpact"
             >
-              <div class="impact-eap-section">Impact on Shelter</div>
+              <div class="impact-eap-section">
+                {{ "Shelter" | translate }}
+                <!-- <ul style="font-weight: normal;
+                          font-size: 12px;
+                          margin-bottom: 0;">
+                  <li>Early Action 1</li>
+                  <li>Early Action 2</li>
+                </ul> -->
+              </div>
               <div class="card-block" id="impact-shelter"></div>
-              <div class="impact-eap-section">Impact on Access</div>
+              <div class="impact-eap-section">{{ "Access" | translate }}</div>
               <div class="card-block" id="impact-access"></div>
-              <div class="impact-eap-section">Impact on WASH</div>
+              <div class="impact-eap-section">{{ "WASH" | translate }}</div>
               <div class="card-block" id="impact-wash"></div>
-              <div class="impact-eap-section">Impact on Health</div>
+              <div class="impact-eap-section">{{ "Health" | translate }}</div>
               <div class="card-block" id="impact-health"></div>
-              <div class="impact-eap-section">Impact on Food Security</div>
+              <div class="impact-eap-section">
+                {{ "Food Security" | translate }}
+              </div>
               <div class="card-block" id="impact-food"></div>
             </div>
           </div>
@@ -558,39 +531,6 @@
             </div>
           </div>
 
-          <!-- <div class="card">
-            <div class="card-header level1" role="tab" id="headingCRA">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseCRA"
-                aria-expanded="true"
-                aria-controls="collapseCRA"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >Vulnerability & Coping (CRA)
-                  </span>
-                  <span class="panel-header-description"
-                    >Relevant Risk features (not event-specific)</span
-                  >
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseCRA"
-              class="collapse level1"
-              role="tabpanel"
-              aria-labelledby="headingCRA"
-            >
-              <div class="card-block" id="cra"></div>
-            </div>
-          </div> -->
-
           <div class="card">
             <div class="card-header level1" role="tab" id="headingExposure">
               <a
@@ -605,11 +545,12 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >Total original exposure
+                    >{{ "Original input layers" | translate }}
                   </span>
-                  <span class="panel-header-description"
-                    >Country-wide exposure (not event-specific)</span
-                  >
+                  <span class="panel-header-description">{{
+                    "Flood extents, exposure grids (not event-specific)"
+                      | translate
+                  }}</span>
                 </span>
               </a>
             </div>
@@ -636,7 +577,7 @@
         style="position:absolute; width:100%; height:100%;z-index:0"
       ></div>
       <div id="row-chart-container">
-        <div class="zoom-level-nav sort-nav">
+        <div class="zoom-level-nav sort-nav hidden-print">
           <div class="btn-group zoom-level" role="group">
             <ul
               type="button"
@@ -826,10 +767,28 @@
     </div>
   </div>
 
+  <div id="printModal" tabindex="-1" class="modal hidden-print" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+          </button>
+          <h2 class="h5 modal-title">{{ "export_pdf" | translate }}</h2>
+        </div>
+        <div class="modal-body" style="word-break:break-all">
+          <p>{{ "export_pdf_howto" | translate }}</p>
+          <button onclick="window.print()">
+            {{ "export_pdf" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- start: IE message -->
   <div id="IEmodal" tabindex="-1" class="modal" role="dialog">
     <div class="modal-dialog">
-      <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">

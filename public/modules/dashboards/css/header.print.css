@@ -1,0 +1,12 @@
+/*
+  CR-Header - PRINT styles/overrides:
+*/
+@media print {
+  .header-for-print {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* right: 0; */
+    text-align: center;
+  }
+}

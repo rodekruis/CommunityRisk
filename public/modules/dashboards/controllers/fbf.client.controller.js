@@ -314,7 +314,7 @@ angular.module("dashboards").controller("FbfController", [
           .css("border-color", "red")
           .css("border-width", "medium");
       } else {
-        $(".PI-button").css("border-color", "#737373");
+        $(".PI-button").css("border-color", "#4c8293");
       }
 
       //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)
@@ -328,12 +328,12 @@ angular.module("dashboards").controller("FbfController", [
         if (document.getElementById("level2") && $scope.admlevel < 2) {
           document
             .getElementById("level2")
-            .setAttribute("class", "btn btn-secondary");
+            .setAttribute("class", "btn btn-secondary btn-zoomin");
         }
         if (document.getElementById("level3") && $scope.admlevel < 3) {
           document
             .getElementById("level3")
-            .setAttribute("class", "btn btn-secondary");
+            .setAttribute("class", "btn btn-secondary btn-zoomin");
         }
         $(".sidebar-wrapper-fbf").addClass("in");
         $(document).ready(function() {
@@ -1004,7 +1004,7 @@ angular.module("dashboards").controller("FbfController", [
           $scope.initiate(d);
           document
             .getElementById("level" + ($scope.admlevel - zoom_min + 1))
-            .setAttribute("class", "btn btn-secondary btn-active");
+            .setAttribute("class", "btn btn-secondary btn-zoomin btn-active");
           document.getElementById("mapPopup").style.visibility = "hidden";
           document.getElementById("zoomin_icon").style.visibility = "hidden";
           document.getElementsByClassName("reset-button")[0].style.visibility =
@@ -1064,7 +1064,7 @@ angular.module("dashboards").controller("FbfController", [
         while (admlevel_old - zoom_min > dest_level - 1) {
           document
             .getElementById("level" + (admlevel_old - zoom_min + 1))
-            .setAttribute("class", "btn btn-secondary");
+            .setAttribute("class", "btn btn-secondary btn-zoomin");
           admlevel_old = admlevel_old - 1;
         }
         document.getElementById("mapPopup").style.visibility = "hidden";

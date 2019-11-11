@@ -32,7 +32,7 @@
 .navbar .active > a:focus,
 .navbar .active > a {
   color: #ffffff;
-  background-color: #737373 /*#4c8293*/;
+  background-color: #4c8293 /*#737373*/;
 }
 
 .navbar-right {
@@ -134,7 +134,7 @@
 }
 .navbar-toggler:focus,
 .navbar-toggler:active {
-  outline: thin dotted #737373 /*#4c8293*/;
+  outline: thin dotted #4c8293 /*#737373*/;
 }
 .navbar-toggler:hover,
 .navbar-toggler:focus {
@@ -169,12 +169,12 @@
   padding: 5px 15px;
 }
 #header .dropdown-menu.export-items li a:hover {
-  background: #737373 /*#4c8293*/;
+  background: #4c8293 /*#737373*/;
   color: #ffffff;
 }
 #header .navbar-top-links .dropdown-toggle {
   background: none;
-  color: #737373 /*#4c8293*/;
+  color: #4c8293 /*#737373*/;
   padding: 6px 15px;
   height: 32px;
   line-height: 20px;
@@ -191,7 +191,7 @@
   }
 }
 #header .navbar-top-links .dropdown-toggle:hover {
-  background: #737373 /*#4c8293*/;
+  background: #4c8293 /*#737373*/;
   color: #ffffff;
 }
 #header .dropdown-menu.export-items a {

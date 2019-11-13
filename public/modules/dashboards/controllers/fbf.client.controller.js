@@ -18,6 +18,7 @@ angular.module("dashboards").controller("FbfController", [
   "districtButtonsService",
   "chartService",
   "geoLayersService",
+  "settings",
   "GEOSERVER_BASEURL",
   "DEBUG",
   function(
@@ -38,6 +39,7 @@ angular.module("dashboards").controller("FbfController", [
     districtButtonsService,
     chartService,
     geoLayersService,
+    settings,
     GEOSERVER_BASEURL,
     DEBUG
   ) {
@@ -106,6 +108,11 @@ angular.module("dashboards").controller("FbfController", [
     $scope.lead_time = "7-day";
     $scope.lead_time_toggle = 0;
     $scope.current_prev = "Current";
+    //Header-About items
+    $scope.about_fbf = true;
+    $scope.about_tutorial_fbf = true;
+    $scope.about_link_cra = true;
+    $scope.about_link_eap = true;
 
     ////////////////////////
     // INITIATE DASHBOARD //
@@ -1338,6 +1345,11 @@ angular.module("dashboards").controller("FbfController", [
         $("#printModal").modal("show");
       };
 
+      $("#mc-embedded-subscribe-form").attr(
+        "action",
+        settings.fbf.zmb.mailChimpAction
+      );
+      $("#mc-form-input").attr("name", settings.fbf.zmb.mailChimpName);
       $scope.signup_mailing = function() {
         $("#MailChimpModal").modal("show");
       };
@@ -1346,8 +1358,7 @@ angular.module("dashboards").controller("FbfController", [
       };
 
       $scope.join_whatsapp = function() {
-        $scope.whatsapp_link =
-          "https://chat.whatsapp.com/FH2hls1iOeNJF844L4cOjr";
+        $scope.whatsapp_link = settings.fbf.zmb.whatsAppLink;
         $("#WhatsappModal").modal("show");
       };
       if ($scope.trigger_3day > 0 || $scope.trigger_7day > 0) {

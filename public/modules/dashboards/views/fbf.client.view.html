@@ -14,6 +14,10 @@
     fn-signup-mailing="signup_mailing"
     fn-join-whatsapp="join_whatsapp"
     show-help="true"
+    fn-about-fbf="about_fbf"
+    fn-about-tutorial-fbf="about_tutorial_fbf"
+    fn-about-link-cra="about_link_cra"
+    fn-about-link-eap="about_link_eap"
     view-type="view_code"
   ></cr-header>
 
@@ -209,7 +213,7 @@
                 class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
                 ng-click="change_indicator('fc_trigger2')"
               >
-                Exposed {{ subtype_selection }}
+                {{ "Exposed" | translate }} {{ subtype_selection }}
               </div>
               <div
                 class="col col-md-5 col-sm-5 col-xs-5"
@@ -246,7 +250,7 @@
                 class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
                 ng-click="change_indicator('population_affected')"
               >
-                Exposed Population
+                {{ "Exposed Population" | translate }}
               </div>
               <div
                 class="col col-md-5 col-sm-5 col-xs-5"
@@ -277,7 +281,7 @@
                 class="col col-md-5 col-sm-5 col-xs-5 general-component-label ng-binding ng-scope"
                 ng-click="change_indicator('population')"
               >
-                Total Population
+                {{ "Total Population" | translate }}
               </div>
               <div
                 class="col col-md-5 col-sm-5 col-xs-5"
@@ -819,7 +823,7 @@
           </style>
           <div id="mc_embed_signup">
             <form
-              action="https://global.us20.list-manage.com/subscribe/post?u=acdf2ad027e3073babce9067d&amp;id=f3a585f6ba"
+              action
               method="post"
               id="mc-embedded-subscribe-form"
               name="mc-embedded-subscribe-form"
@@ -844,8 +848,9 @@
                   aria-hidden="true"
                 >
                   <input
+                    id="mc-form-input"
                     type="text"
-                    name="b_acdf2ad027e3073babce9067d_f3a585f6ba"
+                    name
                     tabindex="-1"
                     value=""
                   />

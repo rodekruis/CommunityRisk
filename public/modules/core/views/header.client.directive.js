@@ -18,6 +18,13 @@ angular.module("core").directive("crHeader", [
         fnSignupMailing: "<?",
         fnJoinWhatsapp: "<?",
         showHelp: "<?",
+        fnAboutCra: "<?",
+        fnAboutTutorial: "<?",
+        fnAboutGithub: "<?",
+        fnAboutFbf: "<?",
+        fnAboutTutorialFbf: "<?",
+        fnAboutLinkCra: "<?",
+        fnAboutLinkEap: "<?",
         viewType: "<?",
       },
       controller: [

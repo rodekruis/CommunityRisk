@@ -276,6 +276,7 @@
   color: #4c8293 /*#737373*/;
   float: left;
   width: 21%;
+  margin-left: 1% !important;
 }
 .btn-tab.btn-3-day:hover,
 .btn-tab.btn-3-day.active {
@@ -298,6 +299,7 @@
   color: #4c8293 /*#737373*/;
   float: left;
   width: 21%;
+  margin-left: 1% !important;
 }
 .btn-tab.btn-7-day:hover,
 .btn-tab.btn-7-day.active {
@@ -748,13 +750,19 @@
 
 .PI-button {
   display: block;
-  padding: 3px 3;
+  padding: 6px 0;
   border: 3px 0;
   border-style: solid;
   border-color: #4c8293 /*#737373*/;
   font-size: 12px;
   color: #ffffff;
   background: #4c8293 /*#737373*/;
+  height: 34px;
+}
+@media only screen and (max-width: 767px) {
+  .PI-button {
+    padding: 3px 0;
+  }
 }
 
 .PI-button:hover,
@@ -794,7 +802,7 @@
     top: 0px;
   }
   #row-chart-container.fbf {
-    height: calc(100% - 100px);
+    height: calc(100% - 40px);
     top: 40px;
   }
 }
@@ -958,7 +966,7 @@ div.dc-chart {
   padding-left: 6px;
 }
 #level3 {
-  margin: 0 0 0 0;
+  margin: 0 0 0 0 !important;
 }
 .btn.btn-secondary.btn-zoomin.btn-active {
   background-color: #4c8293 /*#737373*/;
@@ -966,7 +974,7 @@ div.dc-chart {
   color: #ffffff;
   margin-right: 2px;
   width: 32.6%;
-  margin: 0 1% 0 0 !important;
+  margin: 0 1% 0 0;
   padding-left: 6px;
 }
 .btn.btn-secondary.btn-zoomin:hover {

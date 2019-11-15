@@ -1345,11 +1345,9 @@ angular.module("dashboards").controller("FbfController", [
         $("#printModal").modal("show");
       };
 
-      $("#mc-embedded-subscribe-form").attr(
-        "action",
-        settings.fbf.zmb.mailChimpAction
-      );
-      $("#mc-form-input").attr("name", settings.fbf.zmb.mailChimpName);
+      // Set MailChimp-settings
+      $("#mc-embedded-subscribe-form").attr("action", settings.mailChimpAction);
+      $("#mc-form-input").attr("name", settings.mailChimpName);
       $scope.signup_mailing = function() {
         $("#MailChimpModal").modal("show");
       };
@@ -1358,7 +1356,7 @@ angular.module("dashboards").controller("FbfController", [
       };
 
       $scope.join_whatsapp = function() {
-        $scope.whatsapp_link = settings.fbf.zmb.whatsAppLink;
+        $scope.whatsapp_link = settings.whatsAppLink;
         $("#WhatsappModal").modal("show");
       };
       if ($scope.trigger_3day > 0 || $scope.trigger_7day > 0) {

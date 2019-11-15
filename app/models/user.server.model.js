@@ -33,6 +33,7 @@ var attributes = {
 };
 
 var options = {
+  schema: "zmb_fbf",
   freezeTableName: true,
 };
 

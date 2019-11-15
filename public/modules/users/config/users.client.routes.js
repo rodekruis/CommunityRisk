@@ -15,5 +15,9 @@ angular.module("users").config([
         url: "/signin",
         templateUrl: "modules/users/views/signin.client.view.html",
       });
+    // .state("signup", {
+    //   url: "/signup",
+    //   templateUrl: "modules/users/views/signup.client.view.html",
+    // });
   },
 ]);

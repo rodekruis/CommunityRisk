@@ -23,5 +23,9 @@ angular.module("users").controller("AuthenticationController", [
     $scope.signin = function() {
       authRequest("/auth/signin");
     };
+
+    $scope.signup = function() {
+      authRequest("/auth/signup");
+    };
   },
 ]);

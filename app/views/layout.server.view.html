@@ -75,7 +75,7 @@
     </section>
 
     <script>
-      {% if (NODE_ENV !== 'production') %}window.DEBUG = true;{% endif %}
+      {% if (NODE_ENV == 'development') %}window.DEBUG = true;{% endif %}
       window.GEOSERVER_BASEURL = "{{ geoServerBaseUrl }}";
 
       {# Embedding The User Object #}

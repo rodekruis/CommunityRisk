@@ -10,29 +10,29 @@
         <div>
           <div class="container">
             <div class="home-content">
-              <p class="text-center">
-                <img
-                  src="modules/core/img/510logo-part2.png"
-                  style="width:30%"
-                />
-              </p>
               <div class="row">
                 <div class="col-md-12">
                   <div class="col-md-12" id="count-info-home">
                     <h2 class="text-primary text-center">
-                      {{ "cra_intro1" | translate }}
-                      <span
-                        class="js-count-to text-highlight"
-                        data-speed="2500"
-                        data-to="85311"
-                      ></span>
-                      {{ "cra_intro2" | translate }}
-                      <span class="total-count text-highlight"></span>
-                      {{ "cra_intro3" | translate }}
+                      {{
+                        "Forecast-based Financing dashboard Zambia" | translate
+                      }}
                     </h2>
                   </div>
                   <br />
-                  <p>{{ "cra_description" | translate }}</p>
+                  <p>
+                    {{
+                      "This dashboard shows the output of a daily flood
+                    forecasting system. Every day the system takes forecasted
+                    water discharge levels for selected stations in Zambia. If
+                    these levels exceed pre-agreed on
+                    trigger levels, then a flood extent and
+                    exposed population are calculated. The output is always
+                    shown in this dashboard, but also shared via
+                    email-notification in case of a trigger."
+                        | translate
+                    }}
+                  </p>
                 </div>
               </div>
 
@@ -40,41 +40,9 @@
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-4 home--action">
-                      <div class="dropdown">
-                        <button
-                          type="button"
-                          class="dropdown-toggle btn btn-primary btn-block"
-                          data-toggle="dropdown"
-                          aria-controls="country-items"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                        >
-                          {{ "go_to_dashboard" | translate }}
-                          <span class="caret"></span>
-                        </button>
-                        <ul
-                          class="dropdown-menu"
-                          id="country-items"
-                          style="z-index:1001"
-                        >
-                          <li
-                            ng-repeat="country in countriesAvailable"
-                            ng-class="(!$first && country.format !== countriesAvailable[$index-1].format) ? 'border-top border-light margin-t-8 padding-t-8' : ''"
-                          >
-                            <a
-                              ng-click="choose_country(country.country_code)"
-                              ng-href="#!/community_risk"
-                            >
-                              {{ country.country_name }}
-                              <span
-                                ng-if="country.format !== 'all'"
-                                class="pull-right padding-l-8 text-muted"
-                                >{{ country.format }}</span
-                              >
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
+                      <a href="#!/fbf" class="btn btn-primary btn-block">
+                        {{ "Go to dashboard" | translate }}
+                      </a>
                     </div>
                     <div class="col-md-4 home--action">
                       <a href="#!/#about" class="btn btn-primary btn-block">
@@ -93,8 +61,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-12" style="height:500px">
-                  <div id="map-chart-home" style="height:100%;width:100%"></div>
+                <div class="col-md-12" style="height:600px">
+                  <a href="#!/fbf">
+                    <img
+                      src="modules/core/img/screenshot-fbf.png"
+                      style="width:100%"
+                    />
+                  </a>
                 </div>
               </div>
             </div>
@@ -290,56 +263,6 @@
           <li>
             <img
               src="modules/core/img/CRA_slides/Slide6.PNG"
-              style="width: 100%"
-            />
-          </li>
-        </ul>
-      </div>
-      <div class="steps"></div>
-    </div>
-  </section>
-
-  <span class="scroll" id="walkthrough_PI"></span>
-
-  <section class="homepage walkthrough">
-    <div class="container">
-      <h2 class="text-center">Priority Index View: walkthrough</h2>
-
-      <div class="main-img">
-        <ul id="slider_PI">
-          <li>
-            <img
-              src="modules/core/img/PI_slides/Slide1.PNG"
-              style="width: 100%"
-            />
-          </li>
-          <li>
-            <img
-              src="modules/core/img/PI_slides/Slide2.PNG"
-              style="width: 100%"
-            />
-          </li>
-          <li>
-            <img
-              src="modules/core/img/PI_slides/Slide3.PNG"
-              style="width: 100%"
-            />
-          </li>
-          <li>
-            <img
-              src="modules/core/img/PI_slides/Slide4.PNG"
-              style="width: 100%"
-            />
-          </li>
-          <li>
-            <img
-              src="modules/core/img/PI_slides/Slide5.PNG"
-              style="width: 100%"
-            />
-          </li>
-          <li>
-            <img
-              src="modules/core/img/PI_slides/Slide6.PNG"
               style="width: 100%"
             />
           </li>

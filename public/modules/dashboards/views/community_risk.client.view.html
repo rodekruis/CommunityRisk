@@ -44,7 +44,7 @@
     </div>
     <div id="menu-buttons" aria-expanded="false" class="button-nav">
       <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown" style="background:#4C8293">
+        <li class="dropdown" style="background:#4c8293 /*#737373*/">
           <a
             style="color:#fff"
             class="submenu-item text-uppercase"
@@ -130,7 +130,7 @@
                 class="dropdown-toggle export-button"
                 ng-href="#!/#about"
                 target="_blank"
-                >{{ "about_CRA" | translate }}</a
+                >{{ "about_cra" | translate }}</a
               >
             </li>
             <li class="divider"></li>
@@ -139,7 +139,7 @@
                 class="dropdown-toggle export-button"
                 ng-href="#!/#walkthrough_{{ view_code }}"
                 target="_blank"
-                >Tutorial</a
+                >{{ "about_tutorial" | translate }}</a
               >
             </li>
             <li class="divider"></li>
@@ -148,7 +148,7 @@
                 class="dropdown-toggle export-button"
                 ng-href="https://github.com/rodekruis/CommunityRisk"
                 target="_blank"
-                >Github</a
+                >{{ "about_github" | translate }}</a
               >
             </li>
           </ul>
@@ -300,7 +300,7 @@
               ng-click="info('admin')"
             >
               <img
-                src="modules/dashboards/img/icon-popup.svg"
+                src="modules/dashboards/img/icon-popup-new.svg"
                 style="height:17px"
               />
             </button>

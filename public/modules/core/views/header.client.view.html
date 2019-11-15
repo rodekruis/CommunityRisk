@@ -168,23 +168,53 @@
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li>
-              <a ng-href="#!/#about">
+            <li ng-show="fnAboutCra">
+              <a ng-href="#!/#about" ng-click="fnAboutCra()">
                 {{ "about_CRA" | translate }}
               </a>
             </li>
-            <li>
+            <li ng-show="fnAboutTutorial">
               <a ng-href="#!/#walkthrough_{{ viewType }}">
-                {{ "TUTORIAL" | translate }}
+                {{ "about_tutorial" | translate }}
               </a>
             </li>
-            <li role="separator" class="divider"></li>
-            <li>
+            <li ng-show="fnAboutFbf">
+              <a ng-href="#!/#about">
+                {{ "About FBF" | translate }}
+              </a>
+            </li>
+            <li ng-show="fnAboutTutorialFbf">
+              <a ng-href="#!/#walkthrough_{{ viewType }}">
+                {{ "about_tutorial" | translate }}
+              </a>
+            </li>
+            <li
+              role="separator"
+              class="divider"
+              ng-show="fnAboutLinkEap || fnAboutLinkCra"
+            ></li>
+            <li ng-show="fnAboutGithub">
               <a
                 ng-href="https://github.com/rodekruis/CommunityRisk"
                 target="_blank"
               >
-                GitHub: CommunityRisk
+                {{ "about_github" | translate }}
+              </a>
+            </li>
+            <li ng-show="fnAboutLinkEap">
+              <a
+                ng-href="https://docs.google.com/document/d/18SG6UklAYsY5EkVAINnZUH6D_tvry3Jh479mpVTehRU/edit?ts=5da1dba5#heading=h.gjdgxs"
+                target="_blank"
+              >
+                {{ "Link to EAP" | translate }}
+              </a>
+            </li>
+            <li ng-show="fnAboutLinkCra">
+              <a
+                ng-href="http://dashboard.510.global/#!/community_risk?country=ZMB"
+                target="_blank"
+              >
+                {{ "Link to CRA" | translate }}
               </a>
             </li>
           </ul>

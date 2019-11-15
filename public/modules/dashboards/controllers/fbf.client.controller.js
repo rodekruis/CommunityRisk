@@ -18,6 +18,7 @@ angular.module("dashboards").controller("FbfController", [
   "districtButtonsService",
   "chartService",
   "geoLayersService",
+  "settings",
   "GEOSERVER_BASEURL",
   "DEBUG",
   function(
@@ -38,6 +39,7 @@ angular.module("dashboards").controller("FbfController", [
     districtButtonsService,
     chartService,
     geoLayersService,
+    settings,
     GEOSERVER_BASEURL,
     DEBUG
   ) {
@@ -83,14 +85,15 @@ angular.module("dashboards").controller("FbfController", [
     $scope.data_input = "";
     $scope.filters = [];
     $scope.tables = [];
-    $scope.quantileColorDomain_CRA_std = [
-      "#fee5d9",
-      "#fcae91",
-      "#fb6a4a",
-      "#de2d26",
-      "#a50f15",
+    $scope.quantileColorDomain_trigger = ["#d9d9d9", "#969696", "#525252"];
+    $scope.quantileColorDomain_std = [
+      "#d9d9d9",
+      "#bdbdbd",
+      "#969696",
+      "#737373",
+      "#525252",
     ];
-    $scope.quantileColorDomain_CRA_scores = [
+    $scope.quantileColorDomain_scores = [
       "#1a9641",
       "#a6d96a",
       "#f1d121",
@@ -102,9 +105,14 @@ angular.module("dashboards").controller("FbfController", [
     var map;
     $scope.stations = [];
     $scope.rcLocations = [];
-    $scope.lead_time = "3-day";
+    $scope.lead_time = "7-day";
     $scope.lead_time_toggle = 0;
     $scope.current_prev = "Current";
+    //Header-About items
+    $scope.about_fbf = true;
+    $scope.about_tutorial_fbf = true;
+    $scope.about_link_cra = true;
+    $scope.about_link_eap = true;
 
     ////////////////////////
     // INITIATE DASHBOARD //
@@ -138,22 +146,13 @@ angular.module("dashboards").controller("FbfController", [
       if (!$scope.directURLload && !d) {
         $scope.directURLload = true;
         $scope.admlevel = 2;
-        $scope.metric = "population_affected";
+        $scope.metric = "fc_trigger2";
       }
 
       //This is the main search-query for PostgreSQL
       $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 
       loadFunction(d);
-
-      // Add timeout to give map time to load (only upon first load, not when changing zoom-level)
-      window.setTimeout(function() {
-        $scope.show_raster_layer();
-        if (!d) {
-          document.getElementById("flood-toggle").click();
-        }
-        // $scope.show_glofas_stations();
-      }, 2000);
     };
 
     ///////////////
@@ -220,7 +219,7 @@ angular.module("dashboards").controller("FbfController", [
       // 2. Feature data
       d.Rapportage = [];
       for (i = 0; i < d.Districts.features.length; i++) {
-        d.Rapportage[i] = d.Districts.features[i].properties;
+        d.Rapportage.push(d.Districts.features[i].properties);
       }
       d.Rapportage.forEach(function(e) {
         for (var i = 0; i < fbf_admin_data.length; i++) {
@@ -287,7 +286,7 @@ angular.module("dashboards").controller("FbfController", [
           record.lead_time == "3-day" &&
           record.current_prev == $scope.current_prev
         ) {
-          $scope.trigger_3day += record.fc_trigger == 1 ? 1 : 0;
+          $scope.trigger_3day += record.fc_trigger2 > 0 ? 1 : 0;
           $scope.trigger_7day += record.other_lead_time_trigger == 1 ? 1 : 0;
         } else if (
           $scope.lead_time == "7-day" &&
@@ -295,24 +294,35 @@ angular.module("dashboards").controller("FbfController", [
           record.current_prev == $scope.current_prev
         ) {
           $scope.trigger_3day += record.other_lead_time_trigger == 1 ? 1 : 0;
-          $scope.trigger_7day += record.fc_trigger == 1 ? 1 : 0;
+          $scope.trigger_7day += record.fc_trigger2 > 0 ? 1 : 0;
         } else if (
           $scope.current_prev == "Previous" &&
           record.current_prev == "Current"
         ) {
-          $scope.trigger_current += record.fc_trigger == 1 ? 1 : 0;
+          $scope.trigger_current += record.fc_trigger2 > 0 ? 1 : 0;
         }
       }
-      document.getElementById("3-day-signal").style.display =
-        $scope.trigger_3day >= 1 ? "inline" : "none";
-      document.getElementById("7-day-signal").style.display =
-        $scope.trigger_7day >= 1 ? "inline" : "none";
-      document.getElementById("current-signal").style.display =
-        $scope.trigger_current >= 1 ? "inline" : "none";
-      document.getElementById("current_prev-signal").style.display =
-        $scope.trigger_current >= 1 && $scope.current_prev == "Previous"
-          ? "inline"
-          : "none";
+      if ($scope.trigger_3day >= 1 && $scope.lead_time == "7-day") {
+        $(".btn-3-day")
+          .css("border-color", "red")
+          .css("border-width", "medium");
+      } else {
+        $(".btn-7-day").css("border-color", "");
+      }
+      if ($scope.trigger_7day >= 1 && $scope.lead_time == "3-day") {
+        $(".btn-7-day")
+          .css("border-color", "red")
+          .css("border-width", "medium");
+      } else {
+        $(".btn-7-day").css("border-color", "");
+      }
+      if ($scope.trigger_current >= 1 && $scope.current_prev == "Previous") {
+        $(".PI-button")
+          .css("border-color", "red")
+          .css("border-width", "medium");
+      } else {
+        $(".PI-button").css("border-color", "#4c8293");
+      }
 
       //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)
       if ($scope.reload == 0) {
@@ -325,12 +335,12 @@ angular.module("dashboards").controller("FbfController", [
         if (document.getElementById("level2") && $scope.admlevel < 2) {
           document
             .getElementById("level2")
-            .setAttribute("class", "btn btn-secondary");
+            .setAttribute("class", "btn btn-secondary btn-zoomin");
         }
         if (document.getElementById("level3") && $scope.admlevel < 3) {
           document
             .getElementById("level3")
-            .setAttribute("class", "btn btn-secondary");
+            .setAttribute("class", "btn btn-secondary btn-zoomin");
         }
         $(".sidebar-wrapper-fbf").addClass("in");
         $(document).ready(function() {
@@ -447,7 +457,7 @@ angular.module("dashboards").controller("FbfController", [
       // [FBF-SPECIFIC] Create list of triggered districts (for 'zoom in to all triggered wards' button)
       if (d.trigger_codes.length == 0) {
         for (var i = 0; i < d.Rapportage.length; i++) {
-          if (d.Rapportage[i].fc_trigger == 1) {
+          if (d.Rapportage[i].fc_trigger2 > 0) {
             d.trigger_codes.push(d.Rapportage[i].pcode);
           }
         }
@@ -596,8 +606,9 @@ angular.module("dashboards").controller("FbfController", [
           meta_scorevar,
           $scope.metric,
           d,
-          $scope.quantileColorDomain_CRA_std,
-          $scope.quantileColorDomain_CRA_scores
+          $scope.quantileColorDomain_std,
+          $scope.quantileColorDomain_scores,
+          $scope.quantileColorDomain_trigger
         );
       };
       var mapchartColors = $scope.mapchartColors().colorScale;
@@ -653,7 +664,9 @@ angular.module("dashboards").controller("FbfController", [
         "" //actuals
       );
       //Compile clickable elements
-      var compile = $(".component-label, .general-component-label, .info-btn");
+      var compile = $(
+        ".component-label, .general-component-label, .info-btn, .needs-compile"
+      );
       for (i = 0; i < compile.length; i++) {
         $compile(compile[i])($scope);
       }
@@ -662,6 +675,7 @@ angular.module("dashboards").controller("FbfController", [
       if (section_id) {
         section_id.classList.add("section-active");
       }
+      $("#section-poi_other_ngo *").css("color", "lightgrey");
 
       //Define function to update HTML (only executed at other places)
       $scope.updateHTML = function(keyvalue) {
@@ -710,7 +724,7 @@ angular.module("dashboards").controller("FbfController", [
         .colors(mapchartColors)
         .colorCalculator(function(d) {
           return d.sum == 0 && !meta_scorevar[$scope.metric]
-            ? "#cccccc"
+            ? "#fff6e8"
             : mapChart.colors()(d.sum);
         })
         .featureKeyAccessor(function(feature) {
@@ -861,7 +875,7 @@ angular.module("dashboards").controller("FbfController", [
         })
         .colors(mapchartColors)
         .colorCalculator(function(d) {
-          return !d.value.count ? "#cccccc" : mapChart.colors()(d.value.sum);
+          return !d.value.count ? "#fff6e8" : mapChart.colors()(d.value.sum);
         })
         .label(function(d) {
           if (!meta_scorevar[$scope.metric]) {
@@ -997,7 +1011,7 @@ angular.module("dashboards").controller("FbfController", [
           $scope.initiate(d);
           document
             .getElementById("level" + ($scope.admlevel - zoom_min + 1))
-            .setAttribute("class", "btn btn-secondary btn-active");
+            .setAttribute("class", "btn btn-secondary btn-zoomin btn-active");
           document.getElementById("mapPopup").style.visibility = "hidden";
           document.getElementById("zoomin_icon").style.visibility = "hidden";
           document.getElementsByClassName("reset-button")[0].style.visibility =
@@ -1057,7 +1071,7 @@ angular.module("dashboards").controller("FbfController", [
         while (admlevel_old - zoom_min > dest_level - 1) {
           document
             .getElementById("level" + (admlevel_old - zoom_min + 1))
-            .setAttribute("class", "btn btn-secondary");
+            .setAttribute("class", "btn btn-secondary btn-zoomin");
           admlevel_old = admlevel_old - 1;
         }
         document.getElementById("mapPopup").style.visibility = "hidden";
@@ -1135,7 +1149,7 @@ angular.module("dashboards").controller("FbfController", [
           .colors(mapchartColors)
           .colorCalculator(function(d) {
             return d.sum == 0 && !meta_scorevar[$scope.metric]
-              ? "#cccccc"
+              ? "#fff6e8"
               : mapChart.colors()(d.sum);
           })
           .popup(function(d) {
@@ -1176,7 +1190,7 @@ angular.module("dashboards").controller("FbfController", [
           })
           .colors(mapchartColors)
           .colorCalculator(function(d) {
-            return !d.value.count ? "#cccccc" : mapChart.colors()(d.value.sum);
+            return !d.value.count ? "#fff6e8" : mapChart.colors()(d.value.sum);
           })
           .label(function(d) {
             if (!meta_scorevar[$scope.metric]) {
@@ -1328,9 +1342,14 @@ angular.module("dashboards").controller("FbfController", [
       $scope.copyToClipboard = shareService.copyToClipboard;
 
       $scope.export_pdf = function() {
-        // TO DO
+        $("#printModal").modal("show");
       };
 
+      $("#mc-embedded-subscribe-form").attr(
+        "action",
+        settings.fbf.zmb.mailChimpAction
+      );
+      $("#mc-form-input").attr("name", settings.fbf.zmb.mailChimpName);
       $scope.signup_mailing = function() {
         $("#MailChimpModal").modal("show");
       };
@@ -1339,8 +1358,7 @@ angular.module("dashboards").controller("FbfController", [
       };
 
       $scope.join_whatsapp = function() {
-        $scope.whatsapp_link =
-          "https://chat.whatsapp.com/FH2hls1iOeNJF844L4cOjr";
+        $scope.whatsapp_link = settings.fbf.zmb.whatsAppLink;
         $("#WhatsappModal").modal("show");
       };
       if ($scope.trigger_3day > 0 || $scope.trigger_7day > 0) {
@@ -1483,10 +1501,7 @@ angular.module("dashboards").controller("FbfController", [
         for (var i = 0; i < whereGroupSum_scores.top(Infinity).length; i++) {
           values.push(whereGroupSum_scores.top(Infinity)[i].value.sum);
         }
-        if (
-          Math.max.apply(null, values) == Math.min.apply(null, values) ||
-          $scope.metric == "fc_trigger"
-        ) {
+        if (Math.max.apply(null, values) == Math.min.apply(null, values)) {
           $(".legend.leaflet-control").css("display", "none");
         } else {
           $(".legend.leaflet-control").css("display", "block");
@@ -1551,10 +1566,18 @@ angular.module("dashboards").controller("FbfController", [
       /// DEBUG / TESTING ///
       ///////////////////////
 
+      // var vector_toggled=true;
       $scope.toggle_vector_layer = function() {
         var vectorLayer = map.getPane("overlayPane");
-
         vectorLayer.style.opacity = vectorLayer.style.opacity !== "0" ? 0 : 1;
+        // vector_toggled = !vector_toggled;
+        // if (!vector_toggled){
+        //   $('.map-wrapper.leaflet-interactive').css('fill-opacity',0);
+        //   dc.redrawAll();
+        // } else {
+        //   $('.map-wrapper.leaflet-interactive').css('fill-opacity',0.6);
+        //   dc.redrawAll();
+        // }
       };
 
       ////////////////////
@@ -1657,6 +1680,7 @@ angular.module("dashboards").controller("FbfController", [
         d.layers["poi_glofasLocationsLayer"] = L.layerGroup();
         stations.forEach(function(item) {
           if (!item.properties) return;
+          if (!item.geometry) return;
           if (item.properties.station_used === 0) return;
 
           var station = item.properties;
@@ -1666,37 +1690,21 @@ angular.module("dashboards").controller("FbfController", [
             "<strong>" +
             stationTitle +
             "</strong><br>" +
-            "Avg. forecast level: " +
+            "Forecast discharge: " +
             helpers.formatAsType("decimal0", station.fc) +
+            " m<sup>3</sup>/s" +
             "<br>Trigger-level: " +
             helpers.formatAsType("decimal0", station.trigger_level) +
+            " m<sup>3</sup>/s" +
             "<br>Glofas probability: " +
             helpers.formatAsType("percentage", station.fc_prob) +
             "";
           var stationClass = "station";
 
-          if (
-            station.station_used == 1 &&
-            station.fc_trigger == 1 &&
-            station.fc_prob >= 0.6
-          ) {
-            stationClass += " is-triggered-minimum";
+          if (station.station_used == 1 && station.fc_trigger2 > 0) {
+            stationClass += " is-triggered";
           }
-          if (
-            station.station_used == 1 &&
-            station.fc_trigger == 1 &&
-            station.fc_prob >= 0.7
-          ) {
-            stationClass += " is-triggered-medium";
-          }
-          if (
-            station.station_used == 1 &&
-            station.fc_trigger == 1 &&
-            station.fc_prob >= 0.8
-          ) {
-            stationClass += " is-triggered-maximum";
-          }
-          if (station.station_used == 1 && station.fc_trigger == 0) {
+          if (station.station_used == 1 && station.fc_trigger2 == 0) {
             stationClass += " is-not-triggered";
           }
 
@@ -1894,6 +1902,7 @@ angular.module("dashboards").controller("FbfController", [
         $scope.glofasHidden = false;
         $scope.floodHidden = false;
         $scope.waterpointsHidden = false;
+        $scope.healthsitesHidden = false;
         $scope.roadsHidden = false;
         $scope.poi_rc_officesHidden = false;
         $scope.flood_10yearHidden = false;

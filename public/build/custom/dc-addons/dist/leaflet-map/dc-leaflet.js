@@ -716,10 +716,10 @@ dc.leafletLegend = function () {
                         maxValue = _parent.colorDomain()[_parent.colorDomain().length - 1], //_parent.colorDomain().length - 1],
                         palette = _parent.colors().range(),
                         colorLength = _parent.colors().range().length,
-                        delta = (maxValue - minValue) / colorLength,
+                        // delta = (maxValue - minValue) / colorLength,
 						length = _parent.colorDomain().length,
 						step = Math.floor(length/5),
-                        i;
+                        i,j;
 
                     // define grades for legend colours
                     // based on equation in dc.js colorCalculator (before version based on colorMixin)
@@ -730,17 +730,34 @@ dc.leafletLegend = function () {
 						if (grades[i] >= 1000000) {grades[i]=Math.round(grades[i]/100000)/10 + 'M';}
 						else if (grades[i] >= 1000) {grades[i]=Math.round(grades[i]/100)/10 + 'k';}
                     };
-                    labels = ['low risk','','','','high risk'];
+
+                    var fc_trigger = 1;
+                    for (j=0; j < _parent.colorDomain().length;j++){
+                        if ([0,60,70,80].indexOf(_parent.colorDomain()[j]) == -1) {
+                            fc_trigger = 0;
+                        }
+                    }
+
+                    var labels_risk = ['low risk','','','','high risk'];
+                    var labels_trigger = ['Min: >60%','Med: >70%','Max: >80%'];
                     
 					// var div = L.DomUtil.create('div', 'info legend');
                     // loop through our density intervals and generate a label with a colored
                     // square for each interval
-                    this._div.innerHTML = ''; //reset so that legend is not plotted multiple times
+                    if (fc_trigger==1) {
+                        this._div.innerHTML='<i style="background: #fff6e8"></i> No trigger<br>';
+                    } else {
+                        this._div.innerHTML = ''; //reset so that legend is not plotted multiple times
+                    }
                     for (i = 0; i < grades.length; i++) {
-                            if (maxValue <= 10 && minValue >= 0 && maxValue > 1) {
+                            if (fc_trigger==1) {
                                 this._div.innerHTML +=
                                 '<i style="background:' + palette[i] + '"></i> ' +
-                                labels[i] + (i < grades.length - 1 ? '<br>' : '');
+                                labels_trigger[i] + (i < grades.length - 1 ? '<br>' : '');
+                            } else if (maxValue <= 10 && minValue >= 0 && maxValue > 1) {
+                                this._div.innerHTML +=
+                                '<i style="background:' + palette[i] + '"></i> ' +
+                                labels_risk[i] + (i < grades.length - 1 ? '<br>' : '');
                             } else {
                                 this._div.innerHTML +=
                                 '<i style="background:' + palette[i] + '"></i> ' +

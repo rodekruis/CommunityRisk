@@ -642,7 +642,7 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
                     options.opacity = 0.8;
                     options.fillOpacity = 1;                                
                 } else {
-                    options.fillColor = _chart.getColor(0, v.i);
+                    options.fillColor = '#fff6e8'; //_chart.getColor(0, v.i);
                     options.opacity = 0.8;
                     options.fillOpacity = 1;                                
                 }

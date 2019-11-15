@@ -36,7 +36,7 @@
         </li>
       </ul>
       <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown" style="background:#4C8293">
+        <li class="dropdown" style="background:#4c8293 /*#737373*/">
           <a
             style="color:#fff"
             class="submenu-item text-uppercase"
@@ -116,7 +116,7 @@
                 class="dropdown-toggle export-button"
                 ng-href="#!/#walkthrough_{{ view_code }}"
                 target="_blank"
-                >Tutorial</a
+                >{{ "about_tutorial" | translate }}</a
               >
             </li>
             <li class="divider"></li>
@@ -125,7 +125,7 @@
                 class="dropdown-toggle export-button"
                 ng-href="https://github.com/rodekruis/CommunityRisk"
                 target="_blank"
-                >Github</a
+                >{{ "about_github" | translate }}</a
               >
             </li>
           </ul>
@@ -226,7 +226,7 @@
         </div>
         <div class="btn-group zoom-level" role="group">
           <button
-            style="background-color: #4C8293; color:white; border-color:#4C8293; width:100%;"
+            style="background-color: #4c8293 /*#737373*/; color:white; border-color:#4c8293 /*#737373*/; width:100%;"
             type="button"
             class="btn btn-secondary"
           >
@@ -244,7 +244,10 @@
             class="btn btn-secondary btn-active PIbuttons"
             style="margin-right:2%"
           >
-            <div class="dropdown PIdropdown" style="background-color: #4C8293">
+            <div
+              class="dropdown PIdropdown"
+              style="background-color: #4c8293 /*#737373*/"
+            >
               <a
                 class="dropdown-toggle PI-button"
                 data-toggle="dropdown"
@@ -275,7 +278,10 @@
             class="btn btn-secondary btn-active PIbuttons"
             style="margin-right:0%"
           >
-            <div class="dropdown PIdropdown" style="background-color: #4C8293">
+            <div
+              class="dropdown PIdropdown"
+              style="background-color: #4c8293 /*#737373*/"
+            >
               <a
                 class="dropdown-toggle PI-button"
                 data-toggle="dropdown"

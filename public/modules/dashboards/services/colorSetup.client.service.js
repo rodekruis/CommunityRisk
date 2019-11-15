@@ -137,8 +137,9 @@ angular.module("dashboards").factory("colorSetupService", [
      * @param {*} meta_scorevar
      * @param {*} metric
      * @param {*} d
-     * @param {*} quantileColorDomain_CRA_std
-     * @param {*} quantileColorDomain_CRA_scores
+     * @param {*} quantileColorDomain_std
+     * @param {*} quantileColorDomain_scores
+     * @param {*} quantileColorDomain_trigger
      *
      * @returns {Object}
      */
@@ -146,8 +147,9 @@ angular.module("dashboards").factory("colorSetupService", [
       meta_scorevar,
       metric,
       d,
-      quantileColorDomain_CRA_std,
-      quantileColorDomain_CRA_scores
+      quantileColorDomain_std,
+      quantileColorDomain_scores,
+      quantileColorDomain_trigger
     ) {
       var quantile_range = [];
 
@@ -167,10 +169,12 @@ angular.module("dashboards").factory("colorSetupService", [
 
       var colorDomain;
 
-      if (!meta_scorevar[metric]) {
-        colorDomain = quantileColorDomain_CRA_std;
+      if (metric == "fc_trigger2") {
+        colorDomain = quantileColorDomain_trigger;
+      } else if (!meta_scorevar[metric]) {
+        colorDomain = quantileColorDomain_std;
       } else {
-        colorDomain = quantileColorDomain_CRA_scores;
+        colorDomain = quantileColorDomain_scores;
       }
 
       return {

@@ -321,7 +321,7 @@ angular.module("dashboards").controller("FbfController", [
           .css("border-color", "red")
           .css("border-width", "medium");
       } else {
-        $(".PI-button").css("border-color", "#4c8293");
+        $(".PI-button").css("border-color", "#737373");
       }
 
       //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)

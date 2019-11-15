@@ -94,7 +94,7 @@
   position: absolute;
   border: none;
   overflow: hidden;
-  color: #4c8293 /*#737373*/;
+  color: #737373;
 }
 
 .slick-prev {
@@ -173,12 +173,12 @@
 .slick-dots li button:hover,
 .slick-dots li button:focus {
   color: #fff;
-  background: #4c8293 /*#737373*/;
+  background: #737373;
 }
 
 .slick-dots li.slick-active button {
   color: #fff;
-  background: #4c8293 /*#737373*/;
+  background: #737373;
 }
 
 @media only screen and (max-width: 600px) {

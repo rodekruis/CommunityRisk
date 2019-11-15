@@ -75,9 +75,11 @@ module.exports = function() {
 
     // Disable views cache
     app.set("view cache", false);
-  } else if (process.env.NODE_ENV === "production") {
-    app.locals.cache = "memory";
-  } else if (process.env.NODE_ENV === "staging") {
+  } else if (
+    process.env.NODE_ENV === "production" ||
+    process.env.NODE_ENV === "staging" ||
+    process.env.NODE_ENV === "fbf-zambia"
+  ) {
     app.locals.cache = "memory";
   }
 

@@ -31,31 +31,19 @@
     </div>
     <div id="menu-buttons" aria-expanded="false" class="button-nav">
       <ul class="nav navbar-nav navbar-left">
-        <li
+        <!-- <li
           ng-class="['navbar--item', { 'active': (activeSection === 'CRA') }]"
         >
           <a ng-href="#!/community_risk" class="text-uppercase">
             {{ "COMMUNITY_RISK" | translate }}
           </a>
-        </li>
-        <li
-          ng-class="['navbar--item', { 'active': (activeSection === 'IDB') }]"
-        >
-          <a ng-href="#!/impact_database" class="text-uppercase">
-            {{ "IMPACT_DATABASE" | translate }}
-          </a>
-        </li>
-        <li ng-class="['navbar--item', { 'active': (activeSection === 'PI') }]">
-          <a ng-href="#!/priority_index" class="text-uppercase">
-            {{ "PRIORITY_INDEX" | translate }}
-          </a>
-        </li>
+        </li> -->
         <li
           ng-if="enableFbf"
           ng-class="['navbar--item', { 'active': (activeSection === 'FBF') }]"
         >
           <a ng-href="#!/fbf" class="text-uppercase">
-            {{ "FBF" | translate }}
+            {{ "FBF dashboard" | translate }}
           </a>
         </li>
       </ul>

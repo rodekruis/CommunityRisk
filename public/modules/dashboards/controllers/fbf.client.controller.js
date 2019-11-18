@@ -105,7 +105,7 @@ angular.module("dashboards").controller("FbfController", [
     var map;
     $scope.stations = [];
     $scope.rcLocations = [];
-    $scope.lead_time = "7-day";
+    $scope.lead_time = "3-day";
     $scope.lead_time_toggle = 0;
     $scope.current_prev = "Current";
     //Header-About items

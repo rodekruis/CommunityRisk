@@ -25,6 +25,7 @@ angular.module("core").directive("crHeader", [
         fnAboutTutorialFbf: "<?",
         fnAboutLinkCra: "<?",
         fnAboutLinkEap: "<?",
+        showLogin: "<?",
         viewType: "<?",
       },
       controller: [
@@ -36,7 +37,7 @@ angular.module("core").directive("crHeader", [
 
           $scope.enableFbf = DEBUG && $scope.isLoggedIn;
 
-          $scope.showLogin = DEBUG;
+          // $scope.showLogin = true; DEBUG;
         },
       ],
     };

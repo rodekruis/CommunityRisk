@@ -1909,6 +1909,7 @@ angular.module("dashboards").controller("FbfController", [
         $scope.crop_resampledHidden = false;
       };
       $scope.toggles_off();
+      $scope.toggle_raster_layer("flood_extent");
 
       $scope.change_lead_time = function(lead_time) {
         $scope.lead_time_toggle = 1;

@@ -147,7 +147,7 @@
             class="btn btn-secondary btn-score-lowercase"
           >
             <span
-              ng-show="!floodHidden"
+              ng-show="floodHidden"
               ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
               ><i
                 class="fa fa-toggle-off toggle-white"
@@ -157,7 +157,7 @@
               {{ "Show flood extent" | translate }}</span
             >
             <span
-              ng-show="floodHidden"
+              ng-show="!floodHidden"
               ng-click="floodHidden = !floodHidden; toggle_raster_layer('flood_extent')"
               ><i
                 class="fa fa-toggle-on toggle-white"

@@ -72,6 +72,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
     };
 
     var createHTML = function(
+      view_code,
       groups,
       keyvalue,
       tables,
@@ -88,63 +89,68 @@ angular.module("dashboards").factory("sidebarHtmlService", [
       predictions,
       actuals
     ) {
-      var dpi_score = document.getElementById("dpi_score_main");
-      if (dpi_score) {
-        dpi_score.textContent = keyvalue.dpi_score;
-        dpi_score.setAttribute(
-          "class",
-          "component-score " + high_med_low("dpi_score", "dpi_score", "dpi")
+      if (view_code == "CRA") {
+        var dpi_score = document.getElementById("dpi_score_main");
+        if (dpi_score) {
+          dpi_score.textContent = keyvalue.dpi_score;
+          dpi_score.setAttribute(
+            "class",
+            "component-score " + high_med_low("dpi_score", "dpi_score", "dpi")
+          );
+        }
+        var risk_score = document.getElementById("risk_score_main");
+        if (risk_score) {
+          risk_score.textContent = keyvalue.risk_score;
+          risk_score.setAttribute(
+            "class",
+            "component-score " + high_med_low("risk_score", "risk_score")
+          );
+        }
+        var vulnerability_score = document.getElementById(
+          "vulnerability_score_main"
         );
-      }
-      var risk_score = document.getElementById("risk_score_main");
-      if (risk_score) {
-        risk_score.textContent = keyvalue.risk_score;
-        risk_score.setAttribute(
-          "class",
-          "component-score " + high_med_low("risk_score", "risk_score")
+        if (vulnerability_score) {
+          vulnerability_score.textContent = keyvalue.vulnerability_score;
+          vulnerability_score.setAttribute(
+            "class",
+            "component-score " +
+              high_med_low("vulnerability_score", "vulnerability_score")
+          );
+        }
+        var hazard_score = document.getElementById("hazard_score_main");
+        if (hazard_score) {
+          hazard_score.textContent = keyvalue.hazard_score;
+          hazard_score.setAttribute(
+            "class",
+            "component-score " + high_med_low("hazard_score", "hazard_score")
+          );
+        }
+        var coping_score = document.getElementById(
+          "coping_capacity_score_main"
         );
-      }
-      var vulnerability_score = document.getElementById(
-        "vulnerability_score_main"
-      );
-      if (vulnerability_score) {
-        vulnerability_score.textContent = keyvalue.vulnerability_score;
-        vulnerability_score.setAttribute(
-          "class",
-          "component-score " +
-            high_med_low("vulnerability_score", "vulnerability_score")
-        );
-      }
-      var hazard_score = document.getElementById("hazard_score_main");
-      if (hazard_score) {
-        hazard_score.textContent = keyvalue.hazard_score;
-        hazard_score.setAttribute(
-          "class",
-          "component-score " + high_med_low("hazard_score", "hazard_score")
-        );
-      }
-      var coping_score = document.getElementById("coping_capacity_score_main");
-      if (coping_score) {
-        coping_score.textContent = keyvalue.coping_capacity_score;
-        coping_score.setAttribute(
-          "class",
-          "component-score " +
-            high_med_low("coping_capacity_score", "coping_capacity_score")
-        );
+        if (coping_score) {
+          coping_score.textContent = keyvalue.coping_capacity_score;
+          coping_score.setAttribute(
+            "class",
+            "component-score " +
+              high_med_low("coping_capacity_score", "coping_capacity_score")
+          );
+        }
       }
 
-      //New for FBF-view
-      var pop_affected = document.getElementById("pop_affected_main");
-      if (pop_affected) {
-        pop_affected.textContent = keyvalue.population_affected;
-      }
-      var pop_main = document.getElementById("population_main");
-      if (pop_main) {
-        pop_main.textContent = keyvalue.population;
-      }
-      var trigger_main = document.getElementById("trigger_main");
-      if (trigger_main) {
-        trigger_main.textContent = keyvalue.fc_trigger;
+      if (view_code == "FBF") {
+        var pop_affected = document.getElementById("pop_affected_main");
+        if (pop_affected) {
+          pop_affected.textContent = keyvalue.population_affected;
+        }
+        var pop_main = document.getElementById("population_main");
+        if (pop_main) {
+          pop_main.textContent = keyvalue.population;
+        }
+        var trigger_main = document.getElementById("trigger_main");
+        if (trigger_main) {
+          trigger_main.textContent = keyvalue.fc_trigger;
+        }
       }
 
       //Dynamically create HTML-elements for all indicator tables
@@ -292,7 +298,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
           img.setAttribute("src", "modules/dashboards/img/icon-popup-new.svg");
           img.setAttribute("style", "height:17px");
           button.appendChild(img);
-        } else if (record.group === "other") {
+        } else if (
+          record.group === "other" ||
+          record.group.substring(0, 4) == "era-"
+        ) {
           if (
             admlevel == zoom_max &&
             filters.length == 0 &&
@@ -667,7 +676,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
         ) {
           var div2 = document.getElementById(record.name);
           div2.innerHTML = keyvalue[record.name] + " " + unit;
-        } else if (record.group === "other") {
+        } else if (
+          record.group === "other" ||
+          record.group.substring(0, 4) == "era-"
+        ) {
           if (
             admlevel == zoom_max &&
             filters.length == 0 &&
@@ -695,6 +707,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             div1a.innerHTML = keyvalue[record.name] + " " + unit;
           }
         } else if (record.group !== "hide") {
+          console.log(record);
           if (record.group == "dpi") {
             width = d.dpi[0][record.name] * 100;
           } else if (

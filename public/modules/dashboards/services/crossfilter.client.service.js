@@ -104,7 +104,7 @@ angular.module("dashboards").factory("crossfilterService", [
 
       var reduceRemoveAvg = function(metricA, metricB) {
         return function(p, v) {
-          p.count = v[metricA] !== null ? p.count - 1 : p.count;
+          p.count = v[metricA] >= 0 ? p.count - 1 : p.count;
           p.sumOfSub -= v[metricA] * v[metricB];
           p.sumOfTotal -= v[metricB];
           p.finalVal = p.sumOfSub / p.sumOfTotal;

@@ -51,6 +51,13 @@
           </a>
         </li>
         <li
+          ng-class="['navbar--item', { 'active': (activeSection === 'ERA') }]"
+        >
+          <a ng-href="#!/epidemics" class="text-uppercase">
+            {{ "EPIDEMICS" | translate }}
+          </a>
+        </li>
+        <li
           ng-if="enableFbf"
           ng-class="['navbar--item', { 'active': (activeSection === 'FBF') }]"
         >

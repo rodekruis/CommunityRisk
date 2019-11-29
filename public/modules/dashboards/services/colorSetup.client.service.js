@@ -157,7 +157,7 @@ angular.module("dashboards").factory("colorSetupService", [
         quantile_range = d.quantile_range_scores;
       } else {
         for (var i = 0; i < d.Rapportage.length; i++) {
-          if (d.Rapportage[i][metric]) {
+          if (d.Rapportage[i][metric] >= 0) {
             quantile_range.push(d.Rapportage[i][metric]);
             quantile_range.sort(function sortNumber(a, b) {
               return a - b;

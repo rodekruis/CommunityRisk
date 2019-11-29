@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module("dashboards").controller("PriorityIndexController", [
+angular.module("dashboards").controller("EpidemicsController", [
   "$translate",
   "$scope",
   "$rootScope",
@@ -14,8 +14,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
   "crossfilterService",
   "sidebarHtmlService",
   "colorSetupService",
+  "districtButtonsService",
   "chartService",
-  "geoLayersService",
   "DEBUG",
   function(
     $translate,
@@ -31,54 +31,26 @@ angular.module("dashboards").controller("PriorityIndexController", [
     crossfilterService,
     sidebarHtmlService,
     colorSetupService,
+    districtButtonsService,
     chartService,
-    geoLayersService,
     DEBUG
   ) {
-    ////////////////////////
-    // SET MAIN VARIABLES //
-    ////////////////////////
-
-    $scope.change_country = function(country) {
-      $scope.country_code = country;
-      $rootScope.country_code = country;
-      $scope.parent_codes = [];
-      $scope.metric = "";
-      $scope.initiate($rootScope.view_code);
-    };
-    $scope.change_disaster_type = function(disaster_type) {
-      $scope.disaster_type_toggle = 1;
-      $scope.disaster_type = disaster_type;
-      $scope.initiate("PI");
-    };
-    $scope.change_disaster = function(disaster_name) {
-      $scope.disaster_toggle = 1;
-      $scope.disaster_name = disaster_name;
-      $scope.initiate("PI");
-    };
-
     //////////////////////
     // DEFINE VARIABLES //
     //////////////////////
 
     $rootScope.loadCount = 0;
     $scope.reload = 0;
-    $scope.disaster_type_toggle = 0;
-    $scope.disaster_toggle = 0;
     $scope.authentication = Authentication;
     $scope.geom = null;
-    $scope.view_code = "PI";
     $scope.country_code_default = "PHL";
     $scope.country_code = $scope.country_code_default;
-    $scope.admlevel = 3;
+    $scope.view_code = "ERA";
+    $scope.metric = "population";
     if ($rootScope.country_code) {
       $scope.country_code = $rootScope.country_code;
     } else {
       $rootScope.country_code = $scope.country_code_default;
-    }
-    $scope.metric = "";
-    if ($rootScope.disaster_type) {
-      $scope.disaster_type = $rootScope.disaster_type;
     }
     if ($rootScope.view_code) {
       $scope.view_code = $rootScope.view_code;
@@ -89,6 +61,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.metric_desc = "";
     $scope.metric_icon = "modules/dashboards/img/undefined.png";
     $scope.name_selection = "";
+    $scope.name_selection_prev = "";
     $scope.name_popup = "";
     $scope.value_popup = 0;
     $scope.country_selection = "";
@@ -96,26 +69,19 @@ angular.module("dashboards").controller("PriorityIndexController", [
     $scope.data_input = "";
     $scope.filters = [];
     $scope.tables = [];
-    $scope.quantileColorDomain_PI_std = [
-      "#ffffb2",
-      "#fecc5c",
-      "#fd8d3c",
-      "#f03b20",
-      "#bd0026",
-    ];
-    $scope.quantileColorDomain_PI_error = [
-      "#d7191c",
-      "#fdae61",
-      "#ffffbf",
-      "#DA70D6",
-      "#8B008B",
-    ];
     $scope.quantileColorDomain_CRA_std = [
       "#f1eef6",
       "#bdc9e1",
       "#74a9cf",
       "#2b8cbe",
       "#045a8d",
+    ];
+    $scope.quantileColorDomain_CRA_scores = [
+      "#1a9641",
+      "#a6d96a",
+      "#f1d121",
+      "#fd6161",
+      "#d7191c",
     ];
     var mapfilters_length = 0;
     var d_prev = "";
@@ -125,7 +91,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
     // INITIATE DASHBOARD //
     ////////////////////////
 
-    $scope.initiate = function() {
+    $scope.initiate = function(d) {
       //Start loading bar
       helpers.start();
 
@@ -133,10 +99,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
       $("#row-chart-container").hide();
       $("#map-chart").show();
       $scope.chart_show = "map";
-
-      //Read Disaster Database or PI from URL
-      $scope.view_code_PI =
-        location.href.indexOf("priority_index") > -1 ? "PI" : "DDB";
 
       //Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
       var url = shareService.readParameterUrl(location.href);
@@ -148,119 +110,92 @@ angular.module("dashboards").controller("PriorityIndexController", [
         $scope.admlevel = url.admlevel;
         $scope.metric = url.metric;
         $scope.chart_show = url.chart_show;
-        $scope.disaster_type = url.disaster_type;
-        $scope.disaster_name = url.disaster_name;
+        $scope.parent_codes = url.parent_codes;
       }
 
-      Data.getTable(
-        {
-          schema: "metadata",
-          table: "DPI_disaster_metadata",
-        },
-        function(disaster_metadata) {
-          var event = $.grep(disaster_metadata, function(e) {
-            if ($scope.disaster_toggle == 1) {
-              return (
-                e.country_code == $scope.country_code &&
-                e.disaster_type == $scope.disaster_type &&
-                e.pi_ddb == $scope.view_code_PI &&
-                // ((e.name == $scope.disaster_name && e.pi_ddb == "DDB") ||
-                //   e.pi_ddb == "PI")
-                e.name == $scope.disaster_name
-              );
-            } else if ($scope.disaster_type_toggle == 1) {
-              return (
-                e.country_code == $scope.country_code &&
-                e.disaster_type == $scope.disaster_type &&
-                e.pi_ddb == $scope.view_code_PI &&
-                ((e.default_event == 1 && e.pi_ddb == "DDB") ||
-                  e.pi_ddb == "PI")
-              );
-            } else {
-              return (
-                e.country_code == $scope.country_code &&
-                e.pi_ddb == $scope.view_code_PI &&
-                ((e.default_event_country == 1 && e.pi_ddb == "DDB") ||
-                  e.pi_ddb == "PI")
-              );
-            }
-          });
-          if (event.length == 0) {
-            $scope.country_code = $scope.country_code_default;
-            $scope.initiate();
-          }
-          $scope.disaster_type = event[0].disaster_type;
-          $scope.disaster_name = event[0].name;
-          $scope.disaster_name_string = $scope.disaster_name.replace(/_/g, " ");
-          $scope.admlevel = event[0].admin_level;
+      //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only read later in the script currently)
+      if (!$scope.directURLload && !d) {
+        $scope.admlevel = 2;
+      }
 
-          //This is the main search-query for PostgreSQL
-          $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
+      $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 
-          Data.getAll(
-            {
-              admlevel: $scope.admlevel,
-              country: $scope.country_code,
-              parent_codes: $scope.parent_codes_input,
-              view: $scope.view_code,
-              disaster_type: $scope.disaster_type,
-              disaster_name: $scope.disaster_name,
-            },
-            function(pgData) {
-              $scope.load_data(pgData[0]);
-
-              if (
-                $scope.country_code == "PHL" &&
-                $scope.disaster_type == "Typhoon"
-              ) {
-                prepareTrackData(
-                  $scope.country_code,
-                  $scope.disaster_type,
-                  $scope.disaster_name
-                );
-                prepareChapterData($scope.country_code);
-              }
-            }
-          );
-        }
-      );
+      loadFunction(d);
     };
 
     ///////////////
     // LOAD DATA //
     ///////////////
 
-    $scope.load_data = function(pgData) {
-      var d = {};
+    //Get Data
+    var loadFunction = function(d) {
+      Data.getAll(
+        {
+          admlevel: $scope.admlevel,
+          country: $scope.country_code,
+          parent_codes: $scope.parent_codes_input,
+          view: $scope.view_code,
+          disaster_type: "",
+          disaster_name: "",
+        },
+        function(general_data) {
+          Data.getTable(
+            {
+              schema: $scope.country_code + "_datamodel",
+              table: "ERA_data",
+            },
+            function(era_data) {
+              $scope.load_data(d, general_data[0], era_data);
+            }
+          );
+        }
+      );
+    };
+
+    $scope.load_data = function(d, pgData, era_data) {
+      if (!d) {
+        d = {};
+        $scope.reload = 0;
+      } else {
+        $scope.reload = 1;
+      }
       var i;
 
-      // 1. Feature data
-      d.Rapportage = pgData.usp_data.ind;
-
-      // 2. Geo-data
-      var pcode_list = [];
-      for (i = 0; i < d.Rapportage.length; i++) {
-        pcode_list[i] = d.Rapportage[i].pcode;
-      }
+      // 1. Geo-data
       d.Districts = pgData.usp_data.geo;
       d.Districts.features = $.grep(d.Districts.features, function(e) {
-        return pcode_list.indexOf(e.properties.pcode) > -1;
+        return e.properties.pcode !== null;
       });
       $scope.geom = d.Districts;
+
+      // 2. Feature data
+      d.Rapportage = era_data;
+      // d.Rapportage = [];
+      // for (i = 0; i < d.Districts.features.length; i++) {
+      //   d.Rapportage[i] = d.Districts.features[i].properties;
+      // }
+
+      // 3. Data Preparedness Index data
+      d.dpi_temp = pgData.usp_data.dpi;
+      d.dpi = [];
+      if (d.dpi_temp) {
+        for (i = 0; i < d.dpi_temp.length; i++) {
+          if (d.dpi_temp[i].admin_level == $scope.admlevel) {
+            d.dpi[0] = d.dpi_temp[i];
+          }
+        }
+      }
 
       // 4. Variable-metadata
       d.Metadata_full = pgData.usp_data.meta_indicators;
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
-          ((e.view_code.indexOf("PI") !== -1 &&
-            helpers
-              .nullToEmptyString(e.disaster_type)
-              .indexOf($scope.disaster_type) > -1) ||
-            (helpers.nullToEmptyString(e.view_code).indexOf("PI") > -1 &&
-              helpers.nullToEmptyString(e.disaster_type) == "")) &&
+          e.view_code.indexOf("ERA") !== -1 &&
           helpers
             .nullToEmptyString(e.country_code)
-            .indexOf($scope.country_code) > -1
+            .indexOf($scope.country_code) > -1 &&
+          e.admin_level >= $scope.admlevel &&
+          e.admin_level_min <= $scope.admlevel
         );
       });
 
@@ -270,47 +205,44 @@ angular.module("dashboards").controller("PriorityIndexController", [
         return e.country_code == $scope.country_code;
       });
 
-      // 6. Disaster-metadata
-      d.Disaster_meta_full = pgData.usp_data.meta_disaster;
-      d.Disaster_meta = $.grep(d.Disaster_meta_full, function(e) {
-        return (
-          e.disaster_type == $scope.disaster_type &&
-          e.country_code == $scope.country_code
-        );
-      });
-
       DEBUG && console.log(d);
 
-      //Necessary style-change in case sidebar is collapsed when changing countries
-      document.getElementById("mapPopup").style.visibility = "hidden";
-      if (document.getElementById("level2")) {
+      //Clean up some styling (mainly for if you change to new country when you are at a lower zoom-level already)
+      if ($scope.reload == 0) {
         document
-          .getElementById("level2")
-          .setAttribute("class", "btn btn-secondary");
-      }
-      if (document.getElementById("level3")) {
-        document
-          .getElementById("level3")
-          .setAttribute("class", "btn btn-secondary");
-      }
-      document
-        .getElementsByClassName("sidebar-wrapper")[0]
-        .setAttribute("style", "");
-      document.getElementsByClassName("reset-button")[0].style.visibility =
-        "hidden";
-      $(".sidebar-wrapper").addClass("in");
-      $(document).ready(function() {
-        if ($(window).width() < 768) {
-          $(".sidebar-wrapper").removeClass("in");
+          .getElementsByClassName("sidebar-wrapper")[0]
+          .setAttribute("style", "");
+        document.getElementById("mapPopup").style.visibility = "hidden";
+        document.getElementsByClassName("reset-button")[0].style.visibility =
+          "hidden";
+        if (document.getElementById("level2") && $scope.admlevel < 2) {
+          document
+            .getElementById("level2")
+            .setAttribute("class", "btn btn-secondary");
         }
-      });
-      for (i = 0; i < $("#menu-buttons.in").length; i++) {
-        $("#menu-buttons.in")[i].classList.remove("in");
+        if (document.getElementById("level3") && $scope.admlevel < 3) {
+          document
+            .getElementById("level3")
+            .setAttribute("class", "btn btn-secondary");
+        }
+        $(".sidebar-wrapper").addClass("in");
+        $(document).ready(function() {
+          if ($(window).width() < 768) {
+            $(".sidebar-wrapper").removeClass("in");
+          }
+        });
+        for (i = 0; i < $("#menu-buttons.in").length; i++) {
+          $("#menu-buttons.in")[i].classList.remove("in");
+        }
+        $(".view-buttons button.active").removeClass("active");
+        $scope.chart_show == "map"
+          ? $(".view-buttons button.btn-map-view").addClass("active")
+          : $(".view-buttons button.btn-tabular").addClass("active");
+      } else {
+        //Final CSS
+        $(".view-buttons button.active").removeClass("active");
+        $(".view-buttons button.btn-map-view").addClass("active");
       }
-      $(".view-buttons button.active").removeClass("active");
-      $scope.chart_show == "map"
-        ? $(".view-buttons button.btn-map-view").addClass("active")
-        : $(".view-buttons button.btn-tabular").addClass("active");
 
       //Load actual content
       $scope.generateCharts(d);
@@ -321,7 +253,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         }
       });
 
-      // End loading bar
+      // end loading bar
       helpers.complete();
 
       //Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)
@@ -342,17 +274,26 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //set up country metadata
       var country_name = helpers.lookUpByCountryCode(
-        d.Country_meta_full,
+        d.Country_meta,
         "country_name"
       );
       var country_zoom_min = helpers.lookUpByCountryCode(
-        d.Country_meta_full,
+        d.Country_meta,
         "zoomlevel_min"
       );
       var country_zoom_max = helpers.lookUpByCountryCode(
-        d.Country_meta_full,
+        d.Country_meta,
         "zoomlevel_max"
       );
+      var country_default_metric = helpers.lookUpByCountryCode(
+        d.Country_meta,
+        "default_metric"
+      );
+
+      var country_status = helpers.lookUpByCountryCode(
+        d.Country_meta,
+        "format"
+      )[$scope.country_code];
 
       // get the lookup tables
       var lookup = helpers.lookUpProperty($scope.geom, "pcode", "name");
@@ -369,47 +310,116 @@ angular.module("dashboards").controller("PriorityIndexController", [
       // CONFIGURE NEEDED HTML/VARIABLES //
       /////////////////////////////////////
 
+      //Look up country parameters
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
       var zoom_max = Number(country_zoom_max[$scope.country_code]);
-
-      if (!$scope.directURLload) {
-        if ($scope.view_code_PI == "PI") {
-          $scope.metric = "pred_damage_class";
-        } else {
-          $scope.metric = helpers.lookUpByName(
-            d.Disaster_meta,
-            "default_metric"
-          )[$scope.disaster_name];
-        }
-      }
-      $scope.default_metric = helpers.lookUpByName(
-        d.Disaster_meta,
-        "default_metric"
-      )[$scope.disaster_name];
-      $scope.default_metric_label = $scope.default_metric.replace("_", " ");
-
       if ($scope.admlevel === zoom_min) {
         $scope.name_selection = country_name[$scope.country_code];
       }
-
       $scope.metric_label = meta_label[$scope.metric];
       $scope.type_selection =
         $scope.admlevel == zoom_min
           ? "Country"
           : helpers.lookUpByCountryCode(
-              d.Country_meta_full,
+              d.Country_meta,
               "level" + ($scope.admlevel - 1) + "_name"
             )[$scope.country_code];
       $scope.subtype_selection = helpers.lookUpByCountryCode(
-        d.Country_meta_full,
+        d.Country_meta,
         "level" + $scope.admlevel + "_name"
       )[$scope.country_code];
+
+      //Look up default metric, take population if it's not found (i.e.: if not available on lower admin-level)
+      if (!$scope.directURLload) {
+        if ($scope.metric === "") {
+          $scope.metric = country_default_metric[$scope.country_code];
+        } else if (typeof d.Rapportage[0][$scope.metric] == "undefined") {
+          $scope.metric = "population";
+        }
+      }
+
+      //If a country contains only 2 instead of 3 admin-levels
+      if (zoom_max - zoom_min < 2) {
+        document.getElementById("level3").style.visibility = "hidden";
+      } else if (document.getElementById("level3")) {
+        document.getElementById("level3").style.visibility = "visible";
+      }
+
+      //Set the text/color of the district buttons
+      var districtButtons = districtButtonsService.setDistrictButtons(
+        $scope.admlevel,
+        zoom_min,
+        zoom_max,
+        $scope.parent_code,
+        $scope.parent_codes,
+        d,
+        $scope.country_code,
+        $scope.directURLload,
+        $scope.name_selection,
+        $scope.levelB_selection,
+        $scope.levelB_selection_pre,
+        $scope.levelB_codes,
+        $scope.levelB_code,
+        $scope.levelC_selection,
+        $scope.levelC_selection_pre,
+        $scope.levelC_codes,
+        $scope.levelC_code
+      );
+      $scope.levelC_codes = districtButtons.levelC_codes;
+      $scope.levelC_code = districtButtons.levelC_code;
+      $scope.levelC_selection = districtButtons.levelC_selection;
+      $scope.levelC_selection_pre = districtButtons.levelC_selection_pre;
+      $scope.levelB_codes = districtButtons.levelB_codes;
+      $scope.levelB_code = districtButtons.levelB_code;
+      $scope.levelB_selection = districtButtons.levelB_selection;
+      $scope.levelB_selection_pre = districtButtons.levelB_selection_pre;
+      $scope.levelA_selection = districtButtons.levelA_selection;
+      $scope.levelA_selection_pre = districtButtons.levelA_selection_pre;
+
+      //////////////////////////////////
+      // SETUP VIEW STATUS - CRA ONLY //
+      //////////////////////////////////
+
+      function setViewStatus(isVisible) {
+        var viewStatus = document.getElementById("status");
+
+        if (viewStatus) {
+          viewStatus.style.visibility = isVisible ? "visible" : "hidden";
+        }
+      }
+      if (country_status == "template") {
+        setViewStatus(true);
+        $scope.status_title = "Template only";
+        $scope.status_text =
+          "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
+      } else if (country_status == "basic") {
+        setViewStatus(true);
+        $scope.status_title = "Draft version";
+        $scope.status_text =
+          "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
+      } else if (country_status == "all") {
+        var dpi = d.dpi[0].dpi_score;
+        if (dpi > 0.1) {
+          setViewStatus(false);
+          $scope.status_title = "";
+          $scope.status_text = "";
+        } else {
+          setViewStatus(true);
+          $scope.status_title = "Needs data";
+          $scope.status_text =
+            "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
+            "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
+        }
+      }
 
       //////////////////////
       // SETUP INDICATORS //
       //////////////////////
 
+      d.Metadata.sort(function(a, b) {
+        return a.order - b.order;
+      });
       $scope.tables = [];
       var j = 0;
       for (var i = 0; i < d.Metadata.length; i++) {
@@ -418,19 +428,18 @@ angular.module("dashboards").controller("PriorityIndexController", [
         if (record_temp.group !== "admin") {
           record.id = "data-table" + [i + 1];
           record.name = record_temp.variable;
-          record.layer_type = record_temp.layer_type;
           record.group =
-            ["vulnerability", "coping_capacity", "general", "other"].indexOf(
+            ["hazard", "vulnerability", "coping_capacity"].indexOf(
               record_temp.group
-            ) > -1
-              ? "cra_features"
-              : record_temp.group;
+            ) !== -1
+              ? "era-" + record_temp.group
+              : record_temp.group; // ADJUSTED
           record.propertyPath =
             record_temp.agg_method === "sum" ? "value" : "value.finalVal";
           record.dimension = undefined;
           record.weight_var = record_temp.weight_var;
-          record.scorevar_name = "";
-          record.view = "PI";
+          record.scorevar_name = record_temp.scorevar_name;
+          record.view = "CRA";
           $scope.tables[j] = record;
           j = j + 1;
         }
@@ -449,124 +458,61 @@ angular.module("dashboards").controller("PriorityIndexController", [
       var cf = cf_result.cf;
       var whereDimension = cf_result.whereDimension;
       var whereDimension_tab = cf_result.whereDimension_tab;
+      var whereGroupSum = cf_result.whereGroupSum;
+      var whereGroupSum_lookup = cf_result.whereGroupSum_lookup;
+      var cf_scores_metric = cf_result.cf_scores_metric;
       var whereGroupSum_scores = cf_result.whereGroupSum_scores;
       var whereGroupSum_scores_tab = cf_result.whereGroupSum_scores_tab;
       var all = cf_result.all;
       var dimensions = cf_result.dimensions;
+      var dimensions_scores = cf_result.dimensions_scores;
       $scope.tables = cf_result.tables;
 
-      ///////////////////////////
-      /// Priority Index ONLY ///
-      ///////////////////////////
-
-      //Create total statistics per disaster
-      $scope.actuals = helpers.lookUpByName(d.Disaster_meta, "actuals")[
-        $scope.disaster_name
-      ];
-      $scope.predictions = helpers.lookUpByName(d.Disaster_meta, "predictions")[
-        $scope.disaster_name
-      ];
-      $scope.metric_label = meta_label[$scope.metric];
-      if ($scope.actuals == "yes" && $scope.predictions == "no") {
-        $scope.type_text =
-          "This historical " +
-          $scope.disaster_type.toLowerCase() +
-          " was used to develop this model, but was never used to make predictions at the time.";
-      } else if ($scope.actuals == "yes" && $scope.predictions == "yes") {
-        $scope.type_text =
-          "For this " +
-          $scope.disaster_type.toLowerCase() +
-          ", priority areas were predicted using the model, and actual damage was collected later, so prediction errors can be measured.";
-      } else if ($scope.actuals == "no" && $scope.predictions == "yes") {
-        $scope.type_text =
-          "For this " +
-          $scope.disaster_type.toLowerCase() +
-          ", priority areas were predicted using the model, but actual damage is not yet collected, so prediction errors cannot be measured yet.";
-      }
-      $scope.start_date = helpers.lookUpByName(d.Disaster_meta, "startdate")[
-        $scope.disaster_name
-      ];
-      $scope.end_date =
-        $scope.disaster_type == "Typhoon"
-          ? "to " +
-            helpers.lookUpByName(d.Disaster_meta, "enddate")[
-              $scope.disaster_name
-            ]
-          : "";
-
-      var total_damage_temp;
-      var total_intensity;
-      if ($scope.view_code_PI == "DDB") {
-        total_damage_temp =
-          dimensions[$scope.default_metric].top(1)[0].value > 0
-            ? dimensions[$scope.default_metric].top(1)[0].value
-            : 0;
-        $scope.total_damage = helpers.dec0Format(total_damage_temp);
-        $scope.total_potential = helpers.dec0Format(
-          dimensions[$scope.default_metric.concat("_potential")].top(1)[0].value
-        );
-        total_intensity =
-          total_damage_temp /
-          dimensions[$scope.default_metric.concat("_potential")].top(1)[0]
-            .value;
-        isNaN(total_intensity)
-          ? ($scope.total_intensity = helpers.percFormat(0))
-          : ($scope.total_intensity = helpers.percFormat(total_intensity));
-      } else {
-        total_damage_temp = 0;
-        $scope.total_damage = helpers.dec0Format(total_damage_temp);
-        $scope.total_potential = 1;
-        total_intensity = total_damage_temp / 1;
-        isNaN(total_intensity)
-          ? ($scope.total_intensity = helpers.percFormat(0))
-          : ($scope.total_intensity = helpers.percFormat(total_intensity));
-      }
-
-      //Fill the event-dropdown in the sidebar
-      var events = document.getElementById("events");
-      var drop_events = document.getElementsByClassName("event-drop");
-      while (drop_events[0]) {
-        drop_events[0].parentNode.removeChild(drop_events[0]);
-      }
-      for (i = 0; i < d.Disaster_meta.length; i++) {
-        record = d.Disaster_meta[i];
-        if (
-          record.disaster_type == $scope.disaster_type &&
-          (($scope.view_code_PI == "DDB" && record.actuals == "yes") ||
-            ($scope.view_code_PI == "PI" && record.predictions == "yes"))
-        ) {
-          var li = document.createElement("li");
-          events.appendChild(li);
-          var a = document.createElement("a");
-          a.setAttribute("ng-click", "change_disaster('" + record.name + "')");
-          a.setAttribute("class", "event-drop");
-          if (record.startdate && $scope.view_code_PI == "DDB") {
-            var len = record.startdate.length;
-            a.innerHTML =
-              record.name.replace(/_/g, " ") +
-              " (" +
-              record.startdate.substr(len - 4, len) +
-              ")";
-          } else {
-            a.innerHTML = record.name.replace(/_/g, " ");
-          }
-          li.appendChild(a);
-          $compile(a)($scope);
-        }
-      }
+      // Create value-lookup function
+      $scope.genLookup_value = function() {
+        var lookup_value = {};
+        whereGroupSum_lookup.top(Infinity).forEach(function(e) {
+          lookup_value[e.key] = e.value.count == 0 ? "No data" : e.value.sum;
+        });
+        return lookup_value;
+      };
 
       /////////////////
       // COLOR SETUP //
       /////////////////
 
+      //Define thresholds for colors-scales. They are stored in d, because the thresholds are carried when zooming in to deeper admin-level.
+      d = colorSetupService.setupThresholds(
+        $scope.admlevel,
+        zoom_min,
+        $scope.directURLload,
+        d,
+        meta_scorevar
+      );
+
+      //Define a function which determines the right color based on value
+      var high_med_low = function(ind, ind_score, group) {
+        return colorSetupService.high_med_low(
+          ind,
+          ind_score,
+          group,
+          $scope.admlevel,
+          zoom_max,
+          $scope.filters,
+          d,
+          d_prev,
+          dimensions_scores
+        );
+      };
+
       //Define the colorScaale used in the chart. Additionally a quantile_max is returned for later use.
       $scope.mapchartColors = function() {
-        return colorSetupService.mapchartColors_PI(
+        return colorSetupService.mapchartColors(
+          meta_scorevar,
           $scope.metric,
           d,
           $scope.quantileColorDomain_CRA_std,
-          $scope.quantileColorDomain_PI_std,
-          $scope.quantileColorDomain_PI_error
+          $scope.quantileColorDomain_CRA_scores
         );
       };
       var mapchartColors = $scope.mapchartColors().colorScale;
@@ -593,23 +539,28 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //Create all initial HTML for sidebar
       var groups = [
-        "predictions",
-        "damage",
-        "pred_error",
-        "disaster",
-        "geographic",
-        "cra_features",
-        "key-actors",
+        "general",
+        "era-vulnerability",
+        "era-hazard",
+        "era-coping_capacity",
       ];
-      sidebarHtmlService.createHTML_PI(
+      sidebarHtmlService.createHTML(
+        $scope.view_code,
         groups,
         keyvalue,
         $scope.tables,
+        $scope.admlevel,
+        zoom_max,
+        $scope.filters,
         meta_icon,
         meta_unit,
-        meta_label,
-        $scope.predictions,
-        $scope.actuals
+        dimensions,
+        dimensions_scores,
+        d,
+        d_prev,
+        high_med_low,
+        "", //predictions
+        "" //actuals
       );
       //Compile clickable elements
       var compile = $(".component-label, .general-component-label, .info-btn");
@@ -624,12 +575,20 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //Define function to update HTML (only executed at other places)
       $scope.updateHTML = function(keyvalue) {
-        return sidebarHtmlService.updateHTML_PI(
+        return sidebarHtmlService.updateHTML(
           keyvalue,
           $scope.tables,
+          $scope.admlevel,
+          zoom_max,
+          $scope.filters,
           meta_unit,
-          $scope.predictions,
-          $scope.actuals
+          dimensions,
+          dimensions_scores,
+          d,
+          d_prev,
+          high_med_low,
+          "", //predictions
+          "" //actuals
         );
       };
 
@@ -660,56 +619,37 @@ angular.module("dashboards").controller("PriorityIndexController", [
         .geojson(d.Districts)
         .colors(mapchartColors)
         .colorCalculator(function(d) {
-          var colors;
-          if ($scope.metric.indexOf("damage_class") > -1) {
-            colors = $scope.quantileColorDomain_PI_std;
-            if (d.sum == 1) {
-              return colors[0];
-            } else if (d.sum == 2) {
-              return colors[1];
-            } else if (d.sum == 3) {
-              return colors[2];
-            } else if (d.sum == 4) {
-              return colors[3];
-            } else if (d.sum == 5) {
-              return colors[4];
-            }
-          } else if ($scope.metric == "pred_error_damage") {
-            colors = $scope.quantileColorDomain_PI_error;
-            if (!d.count) {
-              return "#cccccc";
-            } else if (d.sum <= -3) {
-              return colors[0];
-            } else if (d.sum == -2) {
-              return colors[1];
-            } else if (Math.abs(d.sum) <= 1) {
-              return colors[2];
-            } else if (d.sum == 2) {
-              return colors[3];
-            } else if (d.sum >= 3) {
-              return colors[4];
-            }
-          } else {
-            return !d.count ? "#cccccc" : mapChart.colors()(d.sum);
-          }
+          return d.count == 0 ? "#cccccc" : mapChart.colors()(d.sum);
         })
         .featureKeyAccessor(function(feature) {
           return feature.properties.pcode;
         })
         .popup(function(d) {
-          return lookup[d.key].concat(
-            " - ",
-            meta_label[$scope.metric],
-            ": ",
-            helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
-            " ",
-            meta_unit[$scope.metric]
-          );
+          if (!meta_scorevar[$scope.metric]) {
+            return lookup[d.key].concat(
+              " - ",
+              meta_label[$scope.metric],
+              ": ",
+              helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
+              " ",
+              meta_unit[$scope.metric]
+            );
+          } else {
+            return lookup[d.key].concat(
+              " - ",
+              meta_label[$scope.metric],
+              ": ",
+              helpers.formatAsType(
+                meta_format[$scope.metric],
+                $scope.genLookup_value()[d.key]
+              )
+            );
+          }
         })
         .renderPopup(true)
         .turnOnControls(true)
         .legend(dc.leafletLegend().position("topright"))
-        //Set up what happens when clicking on the map (popup appearing mainly)
+        //Set up what happens when clicking on the map
         .on("filtered", function(chart) {
           $scope.filters = chart.filters();
           var keyvalue;
@@ -754,13 +694,15 @@ angular.module("dashboards").controller("PriorityIndexController", [
                     meta_format[$scope.metric],
                     record[$scope.metric]
                   );
-                  $scope.value_popup_unit = meta_unit[$scope.metric];
+                  $scope.value_popup_unit = helpers.nullToEmptyString(
+                    meta_unit[$scope.metric]
+                  );
                   break;
                 }
               }
               $scope.metric_label = meta_label[$scope.metric];
             });
-            //In Firefox event is not a global variable >> Not figured out how to fix this, so gave the popup a fixed position in FF only
+            //In Firefox event is not a global variable >> Not figured out how to fix this, so use a separate function (see below)
             if ($(window).width() < 768) {
               popup.style.left = "5px";
               popup.style.bottom = "8%";
@@ -770,8 +712,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
               popup.style.top =
                 Math.min($(window).height() - 210, event.pageY) + "px";
             } else {
-              popup.style.left = "390px";
-              popup.style.top = "110px";
+              popup.style.left = $scope.posx + "px";
+              popup.style.top = $scope.posy + "px";
             }
             popup.style.visibility = "visible";
             if ($scope.admlevel < zoom_max && $scope.view_code !== "PI") {
@@ -784,6 +726,17 @@ angular.module("dashboards").controller("PriorityIndexController", [
             .getElementById("section-" + $scope.metric)
             .classList.add("section-active");
         });
+
+      //Special Firefox function to retrieve click-coordinates
+      $scope.FF_mouse_coordinates = function(e) {
+        e = e || window.event;
+        if (e.pageX || e.pageY) {
+          $scope.posx = e.pageX;
+          $scope.posy = e.pageY;
+        }
+      };
+      var mapElem = document.getElementById("map-chart");
+      mapElem.addEventListener("click", $scope.FF_mouse_coordinates, false);
 
       /////////////////////
       // ROW CHART SETUP //
@@ -806,7 +759,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
         .dimension(whereDimension_tab)
         .group(whereGroupSum_scores_tab)
         .ordering(function(d) {
-          return isNaN(d.value.sum) ? 0 : -d.value.sum;
+          return isNaN($scope.genLookup_value()[d.key])
+            ? 999999999 - d.value.sum
+            : -d.value.sum;
         })
         .fixedBarHeight(barheight)
         .valueAccessor(function(d) {
@@ -814,39 +769,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
         })
         .colors(mapchartColors)
         .colorCalculator(function(d) {
-          var colors;
-
-          if ($scope.metric.indexOf("damage_class") > -1) {
-            colors = $scope.quantileColorDomain_PI_std;
-            if (d.value.sum == 1) {
-              return colors[0];
-            } else if (d.value.sum == 2) {
-              return colors[1];
-            } else if (d.value.sum == 3) {
-              return colors[2];
-            } else if (d.value.sum == 4) {
-              return colors[3];
-            } else if (d.value.sum == 5) {
-              return colors[4];
-            }
-          } else if ($scope.metric == "pred_error_damage") {
-            colors = $scope.quantileColorDomain_PI_error;
-            if (!d.value.count) {
-              return "#cccccc";
-            } else if (d.value.sum <= -3) {
-              return colors[0];
-            } else if (d.value.sum == -2) {
-              return colors[1];
-            } else if (Math.abs(d.value.sum) <= 1) {
-              return colors[2];
-            } else if (d.value.sum == 2) {
-              return colors[3];
-            } else if (d.value.sum >= 3) {
-              return colors[4];
-            }
-          } else {
-            return !d.value.count ? "#cccccc" : mapChart.colors()(d.value.sum);
-          }
+          return !d.value.count ? "#cccccc" : mapChart.colors()(d.value.sum);
         })
         .label(function(d) {
           if (!meta_scorevar[$scope.metric]) {
@@ -854,30 +777,35 @@ angular.module("dashboards").controller("PriorityIndexController", [
               .formatAsType(meta_format[$scope.metric], d.value.sum)
               .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
           } else {
-            return helpers
-              .dec2Format(d.value.sum)
-              .concat(" / 10 - ", lookup[d.key]);
+            if ($scope.genLookup_value()[d.key] == "No data") {
+              return "No data - ".concat(lookup[d.key]);
+            } else {
+              return helpers
+                .formatAsType(
+                  meta_format[$scope.metric],
+                  $scope.genLookup_value()[d.key]
+                )
+                .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
+            }
           }
         })
         .title(function(d) {
           if (!meta_scorevar[$scope.metric]) {
-            return helpers
-              .nullToEmptyString(lookup[d.key])
-              .concat(
-                " - ",
-                meta_label[$scope.metric],
-                ": ",
-                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
-                " ",
-                meta_unit[$scope.metric]
-              );
+            return lookup[d.key].concat(
+              " - ",
+              meta_label[$scope.metric],
+              ": ",
+              helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
+              " ",
+              meta_unit[$scope.metric]
+            );
           } else {
-            // return lookup[d.key].concat(
-            //   " - ",
-            //   meta_label[$scope.metric],
-            //   " (0-10): ",
-            //   helpers.dec2Format(d.value.sum)
-            // );
+            return lookup[d.key].concat(
+              " - ",
+              meta_label[$scope.metric],
+              " (0-10): ",
+              helpers.dec2Format(d.value.sum)
+            );
           }
         })
         .on("filtered", function(chart) {
@@ -950,6 +878,122 @@ angular.module("dashboards").controller("PriorityIndexController", [
       // MAP RELATED FUNCTIONS //
       ///////////////////////////
 
+      $scope.zoom_in = function() {
+        if ($scope.filters.length > 0 && $scope.admlevel < zoom_max) {
+          $scope.admlevel = $scope.admlevel + 1;
+          $scope.parent_code_prev = $scope.parent_code;
+          $scope.name_selection_prev = $scope.name_selection;
+          $scope.parent_codes = $scope.filters;
+          $scope.name_selection =
+            $scope.filters.length > 1
+              ? "Multiple " +
+                helpers.lookUpByCountryCode(
+                  d.Country_meta,
+                  "level" + ($scope.admlevel - 1) + "_name"
+                )[$scope.country_code]
+              : lookup[$scope.parent_codes[0]];
+          if ($scope.admlevel == zoom_max) {
+            for (var i = 0; i < d.Rapportage.length; i++) {
+              var record = d.Rapportage[i];
+              if (record.pcode === $scope.filters[0]) {
+                d_prev = record;
+                break;
+              }
+            }
+          }
+          $scope.filters = [];
+          $scope.initiate(d);
+          document
+            .getElementById("level" + ($scope.admlevel - zoom_min + 1))
+            .setAttribute("class", "btn btn-secondary btn-active");
+          document.getElementById("mapPopup").style.visibility = "hidden";
+          document.getElementById("zoomin_icon").style.visibility = "hidden";
+          document.getElementsByClassName("reset-button")[0].style.visibility =
+            "hidden";
+          mapfilters_length = 0;
+        }
+      };
+
+      //Functions for zooming out
+      $scope.zoom_out = function(dest_level) {
+        var admlevel_old = $scope.admlevel;
+        if (
+          zoom_min == 1 ||
+          $scope.country_code == "MWI" ||
+          $scope.country_code == "MOZ"
+        ) {
+          if (dest_level === 1 && $scope.admlevel > zoom_min) {
+            $scope.admlevel = zoom_min;
+            $scope.parent_codes = [];
+            $scope.levelB_selection_pre = "all_yes";
+            $scope.levelB_selection = helpers.lookUpByCountryCode(
+              d.Country_meta,
+              "level" + (zoom_min + 1) + "_name"
+            )[$scope.country_code];
+            $scope.initiate(d);
+          } else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
+            $scope.admlevel = zoom_min + 1;
+            $scope.parent_codes = $scope.levelB_codes;
+            $scope.name_selection = $scope.name_selection_prev;
+            $scope.levelC_selection_pre = "all_yes";
+            $scope.levelC_selection = helpers.lookUpByCountryCode(
+              d.Country_meta,
+              "level" + (zoom_min + 2) + "_name"
+            )[$scope.country_code];
+            $scope.initiate(d);
+          } else if (dest_level === 2 && $scope.admlevel < zoom_min + 1) {
+            $scope.admlevel = zoom_min + 1;
+            $scope.parent_codes = [];
+            $scope.name_selection = $scope.levelB_selection;
+            document
+              .getElementById("level2")
+              .setAttribute("class", "btn btn-secondary btn-active");
+            $scope.initiate(d);
+          } else if (
+            dest_level === 3 &&
+            $scope.admlevel < zoom_min + 2 &&
+            $scope.parent_codes.length == 0
+          ) {
+            $scope.admlevel = zoom_min + 2;
+            $scope.parent_codes = [];
+            $scope.name_selection = $scope.levelC_selection;
+            document
+              .getElementById("level2")
+              .setAttribute("class", "btn btn-secondary btn-active");
+            document
+              .getElementById("level3")
+              .setAttribute("class", "btn btn-secondary btn-active");
+            $scope.initiate(d);
+          }
+        } else {
+          if (dest_level === 1 && $scope.admlevel > zoom_min) {
+            $scope.admlevel = zoom_min;
+            $scope.parent_codes = [];
+            $scope.initiate(d);
+          } else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
+            $scope.admlevel = zoom_min + 1;
+            $scope.parent_codes = $scope.levelB_codes;
+            $scope.name_selection = $scope.name_selection_prev;
+            $scope.initiate(d);
+          }
+        }
+
+        while (admlevel_old - zoom_min > dest_level - 1) {
+          document
+            .getElementById("level" + (admlevel_old - zoom_min + 1))
+            .setAttribute("class", "btn btn-secondary");
+          admlevel_old = admlevel_old - 1;
+        }
+        document.getElementById("mapPopup").style.visibility = "hidden";
+        document.getElementById("zoomin_icon").style.visibility = "hidden";
+
+        $scope.mapShow();
+      };
+
+      /////////////////////////////////
+      // MAP & ROW RELATED FUNCTIONS //
+      /////////////////////////////////
+
       $scope.change_indicator = function(id) {
         var section_id = document.getElementById("section-" + $scope.metric);
         if (section_id) {
@@ -959,7 +1003,29 @@ angular.module("dashboards").controller("PriorityIndexController", [
         $scope.metric_label = meta_label[id];
         var mapchartColors = $scope.mapchartColors().colorScale;
         $scope.quantile_max = $scope.mapchartColors().quantile_max;
-        var cf_scores_metric = $scope.metric;
+        cf_scores_metric = !meta_scorevar[$scope.metric]
+          ? $scope.metric
+          : meta_scorevar[$scope.metric];
+        whereGroupSum.dispose();
+        whereGroupSum = whereDimension.group().reduceSum(function(d) {
+          return d[$scope.metric];
+        });
+        whereGroupSum_lookup.dispose();
+        whereGroupSum_lookup = whereDimension.group().reduce(
+          function(p, v) {
+            p.count = v[$scope.metric] !== null ? p.count + 1 : p.count;
+            p.sum = p.sum + v[$scope.metric];
+            return p;
+          },
+          function(p, v) {
+            p.count = v[$scope.metric] !== null ? p.count - 1 : p.count;
+            p.sum = p.sum - v[$scope.metric];
+            return p;
+          },
+          function() {
+            return { count: 0, sum: 0 };
+          }
+        );
         whereGroupSum_scores.dispose();
         whereGroupSum_scores = whereDimension.group().reduce(
           function(p, v) {
@@ -996,48 +1062,29 @@ angular.module("dashboards").controller("PriorityIndexController", [
           .group(whereGroupSum_scores)
           .colors(mapchartColors)
           .colorCalculator(function(d) {
-            var colors;
-            if ($scope.metric.indexOf("damage_class") > -1) {
-              colors = $scope.quantileColorDomain_PI_std;
-              if (d.sum == 1) {
-                return colors[0];
-              } else if (d.sum == 2) {
-                return colors[1];
-              } else if (d.sum == 3) {
-                return colors[2];
-              } else if (d.sum == 4) {
-                return colors[3];
-              } else if (d.sum == 5) {
-                return colors[4];
-              }
-            } else if ($scope.metric == "pred_error_damage") {
-              colors = $scope.quantileColorDomain_PI_error;
-              if (!d.count) {
-                return "#cccccc";
-              } else if (d.sum <= -3) {
-                return colors[0];
-              } else if (d.sum == -2) {
-                return colors[1];
-              } else if (Math.abs(d.sum) <= 1) {
-                return colors[2];
-              } else if (d.sum == 2) {
-                return colors[3];
-              } else if (d.sum >= 3) {
-                return colors[4];
-              }
-            } else {
-              return !d.count ? "#cccccc" : mapChart.colors()(d.sum);
-            }
+            return d.count == 0 ? "#cccccc" : mapChart.colors()(d.sum);
           })
           .popup(function(d) {
-            return lookup[d.key].concat(
-              " - ",
-              meta_label[$scope.metric],
-              ": ",
-              helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
-              " ",
-              helpers.nullToEmptyString(meta_unit[$scope.metric])
-            );
+            if (!meta_scorevar[$scope.metric]) {
+              return lookup[d.key].concat(
+                " - ",
+                meta_label[$scope.metric],
+                ": ",
+                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
+                " ",
+                meta_unit[$scope.metric]
+              );
+            } else {
+              return lookup[d.key].concat(
+                " - ",
+                meta_label[$scope.metric],
+                ": ",
+                helpers.formatAsType(
+                  meta_format[$scope.metric],
+                  $scope.genLookup_value()[d.key]
+                )
+              );
+            }
           });
 
         var xAxis = meta_scorevar[$scope.metric]
@@ -1046,47 +1093,16 @@ angular.module("dashboards").controller("PriorityIndexController", [
         rowChart
           .group(whereGroupSum_scores_tab)
           .ordering(function(d) {
-            return isNaN(d.value.sum) ? 0 : -d.value.sum;
+            return isNaN($scope.genLookup_value()[d.key])
+              ? 999999999
+              : -d.value.sum;
           })
           .valueAccessor(function(d) {
-            return isNaN(d.value.sum) ? 0 : d.value.sum;
+            return isNaN($scope.genLookup_value()[d.key]) ? "" : d.value.sum;
           })
           .colors(mapchartColors)
           .colorCalculator(function(d) {
-            var colors;
-            if ($scope.metric.indexOf("damage_class") > -1) {
-              colors = $scope.quantileColorDomain_PI_std;
-              if (d.value.sum == 1) {
-                return colors[0];
-              } else if (d.value.sum == 2) {
-                return colors[1];
-              } else if (d.value.sum == 3) {
-                return colors[2];
-              } else if (d.value.sum == 4) {
-                return colors[3];
-              } else if (d.value.sum == 5) {
-                return colors[4];
-              }
-            } else if ($scope.metric == "pred_error_damage") {
-              colors = $scope.quantileColorDomain_PI_error;
-              if (!d.value.count) {
-                return "#cccccc";
-              } else if (d.value.sum <= -3) {
-                return colors[0];
-              } else if (d.value.sum == -2) {
-                return colors[1];
-              } else if (Math.abs(d.value.sum) <= 1) {
-                return colors[2];
-              } else if (d.value.sum == 2) {
-                return colors[3];
-              } else if (d.value.sum >= 3) {
-                return colors[4];
-              }
-            } else {
-              return !d.value.count
-                ? "#cccccc"
-                : mapChart.colors()(d.value.sum);
-            }
+            return !d.value.count ? "#cccccc" : mapChart.colors()(d.value.sum);
           })
           .label(function(d) {
             if (!meta_scorevar[$scope.metric]) {
@@ -1094,9 +1110,16 @@ angular.module("dashboards").controller("PriorityIndexController", [
                 .formatAsType(meta_format[$scope.metric], d.value.sum)
                 .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
             } else {
-              return helpers
-                .dec2Format(d.value.sum)
-                .concat(" / 10 - ", lookup[d.key]);
+              if ($scope.genLookup_value()[d.key] == "No data") {
+                return "No data - ".concat(lookup[d.key]);
+              } else {
+                return helpers
+                  .formatAsType(
+                    meta_format[$scope.metric],
+                    $scope.genLookup_value()[d.key]
+                  )
+                  .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
+              }
             }
           })
           .title(function(d) {
@@ -1125,6 +1148,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
               .domain([0, xAxis])
           );
         dc.redrawAll();
+
         document.getElementById("mapPopup").style.visibility = "hidden";
         document.getElementById("zoomin_icon").style.visibility = "hidden";
         document
@@ -1132,28 +1156,13 @@ angular.module("dashboards").controller("PriorityIndexController", [
           .classList.add("section-active");
       };
 
-      //Make sure that when opening another accordion-panel, the current one collapses
-      var acc = document.getElementsByClassName("card-header level1");
-      var active = document.getElementsByClassName("collapse level1 in")[0];
-
-      for (i = 0; i < acc.length; i++) {
-        acc[i].onclick = function() {
-          var active_new = document.getElementById(
-            this.id.replace("heading", "collapse")
-          );
-          if (active.id !== active_new.id) {
-            active.classList.remove("in");
-          }
-          active = active_new;
-        };
-      }
-
-      /////////////////////
-      // OTHER FUNCTIONS //
-      /////////////////////
+      ////////////////////////////
+      // SIDEBAR: INFO FUNCTION //
+      ////////////////////////////
 
       //Function to open the modal with information on indicator
       $scope.info = function(id) {
+        $scope.metric_info = id;
         if (id !== "admin") {
           $scope.metric_label = meta_label[id];
         }
@@ -1167,14 +1176,52 @@ angular.module("dashboards").controller("PriorityIndexController", [
         $("#infoModal").modal("show");
       };
 
+      /////////////////////////////////
+      // SIDEBAR: ACCORDION FUNCTION //
+      /////////////////////////////////
+
+      //Make sure that when opening another accordion-panel, the current one collapses
+      var acc = document.getElementsByClassName("card-header level1");
+      var active = document.getElementsByClassName("collapse level1 in")[0];
+      for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function() {
+          var active_new = document.getElementById(
+            this.id.replace("heading", "collapse")
+          );
+          if (active.id !== active_new.id) {
+            active.classList.remove("in");
+          }
+          active = active_new;
+        };
+      }
+
+      //////////////////////////////
+      // HEADER FUNCTIONS //////////
+      //////////////////////////////
+
+      $scope.open_status = function() {
+        $("#statusModal").modal("show");
+      };
+
+      $scope.open_DPI = function() {
+        $("#statusModal").modal("hide");
+        $(".collapse.level1.in").removeClass("in");
+        $("#collapseZero").addClass("in");
+        setTimeout(function() {
+          $("#dpi-card").addClass("dpi-card-highlight");
+        }, 100);
+        setTimeout(function() {
+          $(" #dpi-card").removeClass("dpi-card-highlight");
+        }, 1000);
+      };
+
+      //////////////////////////////
+      // HEADER: EXPORT FUNCTIONS //
+      //////////////////////////////
+
       //Export to GEOJSON
       $scope.export_geojson = function() {
         exportService.exportAsGeoJSON(d.Districts);
-      };
-
-      //Export to JSON
-      $scope.export_json = function() {
-        exportService.exportAsJSON(d.Rapportage);
       };
 
       //Export to CSV function
@@ -1188,9 +1235,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
           $scope.admlevel,
           $scope.metric,
           $scope.parent_codes,
-          $scope.chart_show,
-          $scope.disaster_type,
-          $scope.disaster_name
+          $scope.chart_show
         );
         $("#URLModal").modal("show");
       };
@@ -1233,6 +1278,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
           $scope.click_filter = false;
           $scope.coming_from_tab = true;
+          rowChart.filter(null);
           $scope.click_filter = true;
           $scope.coming_from_tab = false;
         }
@@ -1258,6 +1304,7 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
         $scope.click_filter = false;
         $scope.coming_from_map = true;
+        mapChart.filter(null);
         $scope.click_filter = true;
         $scope.coming_from_map = false;
 
@@ -1297,9 +1344,6 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       //Render all dc-charts and -tables
       dc.renderAll();
-      $scope.reload = 1;
-      $scope.disaster_type_toggle = 0;
-      $scope.disaster_toggle = 0;
 
       map = mapChart.map();
       function zoomToGeom(geom) {
@@ -1327,85 +1371,34 @@ angular.module("dashboards").controller("PriorityIndexController", [
         "+country_code",
       ]);
 
-      var ul;
-      var formats;
-
-      //Create dropdown list of countries HTML
-      ul = document.getElementById("country-items");
-      while (ul.childElementCount > 0) {
-        ul.removeChild(ul.lastChild);
-      }
-      formats = [];
-      var countries = [];
-      for (i = 0; i < d.Disaster_meta_full.length; i++) {
-        if (
-          d.Disaster_meta_full[i].country_code !== null &&
-          countries.indexOf(d.Disaster_meta_full[i].country_code) <= -1 &&
-          (($scope.view_code_PI == "DDB" &&
-            d.Disaster_meta_full[i].actuals == "yes") ||
-            ($scope.view_code_PI == "PI" &&
-              d.Disaster_meta_full[i].predictions == "yes"))
-        ) {
-          countries.push(d.Disaster_meta_full[i].country_code);
-
-          record = d.Disaster_meta_full[i];
+      //Create HTML
+      if ($scope.view_code == "CRA") {
+        var ul = document.getElementById("country-items");
+        while (ul.childElementCount > 0) {
+          ul.removeChild(ul.lastChild);
+        }
+        var formats = [];
+        for (i = 0; i < d.Country_meta_full.length; i++) {
+          record = d.Country_meta_full[i];
 
           if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
             var li2 = document.createElement("li");
             li2.setAttribute("class", "divider");
             ul.appendChild(li2);
           }
-          li = document.createElement("li");
+          var li = document.createElement("li");
           ul.appendChild(li);
-          a = document.createElement("a");
+          var a = document.createElement("a");
           a.setAttribute("class", "submenu-item");
           a.setAttribute(
             "ng-click",
             "change_country('" + record.country_code + "')"
           );
           a.setAttribute("role", "button");
-          a.innerHTML = helpers.lookUpByCountryCode(
-            d.Country_meta_full,
-            "country_name"
-          )[record.country_code];
-          $compile(a)($scope);
-          li.appendChild(a);
-
-          formats.push(record.format);
-        }
-      }
-      //Create dropdown list of disaster types HTML
-      ul = document.getElementById("disaster-type-items");
-      while (ul.childElementCount > 0) {
-        ul.removeChild(ul.lastChild);
-      }
-      formats = [];
-      var disaster_types = [];
-      for (i = 0; i < d.Disaster_meta_full.length; i++) {
-        if (
-          d.Disaster_meta_full[i].country_code == $scope.country_code &&
-          d.Disaster_meta_full[i].pi_ddb == $scope.view_code_PI &&
-          disaster_types.indexOf(d.Disaster_meta_full[i].disaster_type) <= -1
-        ) {
-          disaster_types.push(d.Disaster_meta_full[i].disaster_type);
-
-          record = d.Disaster_meta_full[i];
-
-          if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
-            li2 = document.createElement("li");
-            li2.setAttribute("class", "divider");
-            ul.appendChild(li2);
-          }
-          li = document.createElement("li");
-          ul.appendChild(li);
-          a = document.createElement("a");
-          a.setAttribute("class", "submenu-item");
-          a.setAttribute(
-            "ng-click",
-            "change_disaster_type('" + record.disaster_type + "')"
-          );
-          a.setAttribute("role", "button");
-          a.innerHTML = record.disaster_type;
+          a.innerHTML =
+            record.format == "all"
+              ? record.country_name
+              : record.country_name + " (" + record.format + ")";
           $compile(a)($scope);
           li.appendChild(a);
 
@@ -1429,20 +1422,25 @@ angular.module("dashboards").controller("PriorityIndexController", [
       var languages_es = ["PER", "ECU"];
       var languages_fr = ["MLI"];
       var languages_all = [].concat(languages_es, languages_fr);
+
       if (languages_all.indexOf($scope.country_code) > -1) {
         $("#language-selector").show();
-        if (languages_fr.indexOf($scope.country_code) > -1) {
-          $scope.changeLanguage("fr");
-          document.getElementById("language-selector-es").style.display =
-            "none";
-          document.getElementById("language-selector-fr").style.display =
-            "block";
-        } else if (languages_es.indexOf($scope.country_code) > -1) {
-          $scope.changeLanguage("es");
-          document.getElementById("language-selector-es").style.display =
-            "block";
-          document.getElementById("language-selector-fr").style.display =
-            "none";
+        if ($scope.reload == 1 && $scope.language == "en") {
+          $scope.changeLanguage("en");
+        } else {
+          if (languages_fr.indexOf($scope.country_code) > -1) {
+            $scope.changeLanguage("fr");
+            document.getElementById("language-selector-es").style.display =
+              "none";
+            document.getElementById("language-selector-fr").style.display =
+              "block";
+          } else if (languages_es.indexOf($scope.country_code) > -1) {
+            $scope.changeLanguage("es");
+            document.getElementById("language-selector-es").style.display =
+              "block";
+            document.getElementById("language-selector-fr").style.display =
+              "none";
+          }
         }
       } else {
         $("#language-selector").hide();
@@ -1455,145 +1453,11 @@ angular.module("dashboards").controller("PriorityIndexController", [
           metric_label_popup: $scope.metric_info,
           metric_desc: "desc_" + $scope.metric_info,
           subtype_selection: $scope.subtype_selection,
+          levelA_selection_pre: $scope.levelA_selection_pre,
           levelB_selection_pre: $scope.levelB_selection_pre,
           levelC_selection_pre: $scope.levelC_selection_pre,
         };
       };
-
-      ///////////////////
-      /// FINAL STUFF ///
-      ///////////////////
-
-      //Final CSS
-      $(".sidebar-wrapper").addClass("in");
-      $(document).ready(function() {
-        if ($(window).width() < 768) {
-          $(".sidebar-wrapper").removeClass("in");
-        }
-      });
-    };
-
-    ////////////////////////
-    /// POI & TRACK DATA ///
-    ////////////////////////
-
-    function prepareChapterData(country_code) {
-      Data.getTable(
-        {
-          schema: country_code + "_datamodel",
-          table: "Indicators_poi_RC_chapters",
-        },
-        function(chapters) {
-          $scope.prepare_rc_locations(chapters);
-        }
-      );
-    }
-
-    $scope.layers = {};
-    $scope.prepare_rc_locations = function(rcLocations) {
-      $scope.layers["poi_rc_officesLocationsLayer"] = L.layerGroup();
-      rcLocations.forEach(function(item) {
-        if (!item.properties) return;
-
-        var location = item.properties;
-        var locationTitle = location.name;
-        var locationInfoPopup =
-          "<strong class='h4'>" +
-          locationTitle +
-          "</strong><br>" +
-          "<strong>" +
-          "Type: " +
-          "</strong>" +
-          location.type +
-          "<br>" +
-          "<strong>" +
-          "Chairman: " +
-          "</strong>" +
-          location.chairman +
-          "<br>" +
-          "<strong>" +
-          "Address: " +
-          "</strong>" +
-          location.address +
-          "";
-
-        var locationMarker = geoLayersService.createMarker(
-          item,
-          locationTitle,
-          "rc"
-        );
-
-        locationMarker.addTo($scope.layers["poi_rc_officesLocationsLayer"]);
-        locationMarker.bindPopup(locationInfoPopup);
-      });
-    };
-
-    $scope.toggled = {};
-    $scope.toggle_poi_layer = function(layer) {
-      return geoLayersService.toggle_poi_layer(
-        layer,
-        $scope.toggled,
-        $scope.layers,
-        map
-      );
-    };
-
-    // $scope.show_locations = function(poi_layer) {
-    //   map.addLayer(poi_layer);
-    // };
-    // $scope.hide_locations = function(poi_layer) {
-    //   map.removeLayer(poi_layer);
-    // };
-    // $scope.toggle_poi_layer = function(layer) {
-    //   if (typeof $scope.toggled[layer] == "undefined") {
-    //     $scope.toggled[layer] = true;
-    //   } else {
-    //     $scope.toggled[layer] = !$scope.toggled[layer];
-    //   }
-
-    //   var layer_full = layer + "LocationsLayer";
-    //   if ($scope.toggled[layer]) {
-    //     $scope.show_locations($scope.layers[layer_full]);
-    //   } else {
-    //     $scope.hide_locations($scope.layers[layer_full]);
-    //   }
-    // };
-    // $scope.toggle_poi_layer('poi_rc_offices');
-
-    function prepareTrackData(country_code, disaster_type, disaster_name) {
-      Data.getTable(
-        {
-          schema: country_code + "_datamodel",
-          table: "PI_" + disaster_type + "_tracks",
-        },
-        function(tracks_input) {
-          var tracks = tracks_input.filter(function(item) {
-            return item.disaster_name == disaster_name;
-          });
-          $scope.prepare_tracks(tracks[0].tracks);
-        }
-      );
-    }
-
-    $scope.prepare_tracks = function(tracks) {
-      $scope.tracks_obs = tracks.features[0];
-      $scope.tracks_fc = tracks.features[1];
-      $scope.tracksObsLayer = L.geoJSON($scope.tracks_obs, {
-        style: {
-          color: "#444444",
-          weight: 500,
-        },
-      });
-      $scope.tracksFcLayer = L.geoJSON($scope.tracks_fc, {
-        style: {
-          color: "#444444",
-          weight: 500,
-          dashArray: "5,10",
-        },
-      });
-
-      map.addLayer($scope.tracksObsLayer);
-      map.addLayer($scope.tracksFcLayer);
     };
   },
 ]);

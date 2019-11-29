@@ -199,7 +199,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
       d.Metadata_full = pgData.usp_data.meta_indicators;
       d.Metadata = $.grep(d.Metadata_full, function(e) {
         return (
-          (e.view_code == "CRA" || e.view_code == "CRA,PI") &&
+          e.view_code.indexOf("CRA") !== -1 &&
           helpers
             .nullToEmptyString(e.country_code)
             .indexOf($scope.country_code) > -1 &&
@@ -552,6 +552,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
         "other",
       ];
       sidebarHtmlService.createHTML(
+        $scope.view_code,
         groups,
         keyvalue,
         $scope.tables,

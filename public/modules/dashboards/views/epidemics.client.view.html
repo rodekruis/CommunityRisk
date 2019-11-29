@@ -1,216 +1,21 @@
 <section
   class="section-expand"
-  data-ng-controller="CommunityRiskController"
+  data-ng-controller="EpidemicsController"
   data-ng-init="initiate()"
 >
-  <nav id="header" class="navbar bg-white navbar-fixed-top" role="navigation">
-    <div class="navbar-header">
-      <a
-        class="navbar-brand"
-        style="padding-left:10px; padding-top:3px"
-        ng-click="changeLanguage('en')"
-        href="/#!/"
-      >
-        <img
-          src="modules/core/img/510logo-new.png"
-          style="height:45px; float:left"
-        />
-      </a>
-      <ul
-        id="status"
-        class="nav navbar-top-links2 navbar-left"
-        style="max-width:130px"
-      >
-        <li class="dropdown">
-          <a
-            class="submenu-item text-uppercase"
-            style="color:red"
-            ng-click="open_status()"
-            >{{ status_title }}</a
-          >
-        </li>
-      </ul>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#menu-buttons"
-        aria-controls="menu-buttons"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-    <div id="menu-buttons" aria-expanded="false" class="button-nav">
-      <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown" style="background:#4c8293 /*#737373*/">
-          <a
-            style="color:#fff"
-            class="submenu-item text-uppercase"
-            ng-href="#!/community_risk"
-          >
-            {{ "COMMUNITY_RISK" | translate }}
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown">
-          <a class="submenu-item text-uppercase" ng-href="#!/impact_database">
-            {{ "IMPACT_DATABASE" | translate }}
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown">
-          <a class="submenu-item text-uppercase" ng-href="#!/priority_index">
-            {{ "PRIORITY_INDEX" | translate }}
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown">
-          <a class="submenu-item text-uppercase" ng-href="#!/epidemics">
-            {{ "EPIDEMICS" | translate }}
-          </a>
-        </li>
-      </ul>
-
-      <ul
-        class="nav navbar-top-links navbar-right"
-        style="display:none"
-        id="language-selector"
-      >
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle export-button text-uppercase"
-            data-toggle="dropdown"
-            href="#"
-          >
-            <img src="modules/core/img/LanguageIcon.svg" style="width:20px" />
-            <i class="fa fa-angle-down export-btn-arrow"></i>
-          </a>
-          <ul class="dropdown-menu export-items">
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-click="changeLanguage('en')"
-                target="_blank"
-                >English</a
-              >
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a
-                id="language-selector-es"
-                class="dropdown-toggle export-button"
-                ng-click="changeLanguage('es')"
-                target="_blank"
-                >Español</a
-              >
-            </li>
-            <li>
-              <a
-                id="language-selector-fr"
-                class="dropdown-toggle export-button"
-                ng-click="changeLanguage('fr')"
-                target="_blank"
-                >Français</a
-              >
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle export-button text-uppercase"
-            data-toggle="dropdown"
-            href="#"
-          >
-            {{ "HOW_IT_WORKS" | translate }}
-            <i class="fa fa-angle-down export-btn-arrow"></i>
-          </a>
-          <ul class="dropdown-menu export-items">
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-href="#!/#about"
-                target="_blank"
-                >{{ "about_CRA" | translate }}</a
-              >
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-href="#!/#walkthrough_{{ view_code }}"
-                target="_blank"
-                >{{ "about_tutorial" | translate }}</a
-              >
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-href="https://github.com/rodekruis/CommunityRisk"
-                target="_blank"
-                >{{ "about_github" | translate }}</a
-              >
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle export-button text-uppercase"
-            data-toggle="dropdown"
-            href="#"
-          >
-            {{ "EXPORT" | translate }}
-            <i class="fa fa-angle-down export-btn-arrow"></i>
-          </a>
-          <ul class="dropdown-menu export-items">
-            <li>
-              <a ng-click="share_country_URL()">{{
-                "share_country_url" | translate
-              }}</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a ng-click="share_URL()">{{ "share_url" | translate }}</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a ng-click="export_csv()">{{ "export_csv" | translate }}</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a ng-click="export_geojson()">{{
-                "export_geojson" | translate
-              }}</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-
-      <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle export-button text-uppercase"
-            data-toggle="dropdown"
-            href="#"
-          >
-            {{ country_selection }}
-            <!-- {{ "COUNTRY" | translate }} -->
-            <i class="fa fa-angle-down export-btn-arrow"></i>
-          </a>
-          <ul class="dropdown-menu submenu-items" id="country-items"></ul>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <cr-header
+    active-section="ERA"
+    show-view-status="false"
+    show-share-export="true"
+    fn-share-url="share_URL"
+    fn-export-csv="export_csv"
+    fn-export-geojson="export_geojson"
+    fn-export-pdf="export_pdf"
+    show-help="true"
+    fn-about-cra="true"
+    fn-about-tutorial="true"
+    view-type="CRA"
+  ></cr-header>
 
   <div class="content-wrapper">
     <div class="zoom-level-nav-wrapper">
@@ -339,40 +144,6 @@
           aria-multiselectable="true"
         >
           <div class="card">
-            <div class="card-header level1" role="tab" id="headingOne">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseOne"
-                aria-expanded="true"
-                aria-controls="collapseOne"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/risk_score.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >{{ "risk_score" | translate }} -
-                    <span class="component-score" id="risk_score_main"></span>
-                    <span class="score-helptext">/10</span>
-                  </span>
-                  <span class="panel-header-description">{{
-                    "risk_score_tag" | translate
-                  }}</span>
-                </span>
-              </a>
-            </div>
-
-            <div
-              id="collapseOne"
-              class="collapse level1 in"
-              role="tabpanel"
-              aria-labelledby="headingOne"
-            >
-              <div class="card-block" id="scores"></div>
-            </div>
-          </div>
-          <div class="card">
             <div class="card-header level1" role="tab" id="headingThree">
               <a
                 data-toggle="collapse"
@@ -386,9 +157,7 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >{{ "hazard_score" | translate }} -
-                    <span class="component-score" id="hazard_score_main"></span>
-                    <span class="score-helptext">/10</span>
+                    >{{ "hazard_score" | translate }}
                   </span>
                   <span class="panel-header-description">{{
                     "hazard_score_tag" | translate
@@ -398,11 +167,11 @@
             </div>
             <div
               id="collapseThree"
-              class="collapse level1"
+              class="collapse in level1"
               role="tabpanel"
               aria-labelledby="headingThree"
             >
-              <div class="card-block" id="hazard">
+              <div class="card-block" id="era-hazard">
                 <!-- Hazard components set up as the ones above. -->
               </div>
             </div>
@@ -421,12 +190,7 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >{{ "vulnerability_score" | translate }} -
-                    <span
-                      class="component-score"
-                      id="vulnerability_score_main"
-                    ></span>
-                    <span class="score-helptext">/10</span>
+                    >{{ "vulnerability_score" | translate }}
                   </span>
                   <span class="panel-header-description">{{
                     "vulnerability_score_tag" | translate
@@ -440,7 +204,7 @@
               role="tabpanel"
               aria-labelledby="headingTwo"
             >
-              <div class="card-block" id="vulnerability">
+              <div class="card-block" id="era-vulnerability">
                 <!-- Vulnerability components set up as the ones above. -->
               </div>
             </div>
@@ -459,12 +223,7 @@
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
-                    >{{ "coping_capacity_score" | translate }} -
-                    <span
-                      class="component-score"
-                      id="coping_capacity_score_main"
-                    ></span>
-                    <span class="score-helptext">/10</span>
+                    >{{ "coping_capacity_score" | translate }}
                   </span>
                   <span class="panel-header-description">{{
                     "coping_score_tag" | translate
@@ -478,74 +237,9 @@
               role="tabpanel"
               aria-labelledby="headingFour"
             >
-              <div class="card-block" id="coping_capacity">
+              <div class="card-block" id="era-coping_capacity">
                 <!-- Coping capacity indicators set up as the ones above. -->
               </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header level1" role="tab" id="headingFive">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseFive"
-                aria-expanded="true"
-                aria-controls="collapseFive"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/other_variables.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title">{{
-                    "other_variables" | translate
-                  }}</span>
-                  <span class="panel-header-description">{{
-                    "other_variables_tag" | translate
-                  }}</span>
-                </span>
-              </a>
-            </div>
-            <div
-              id="collapseFive"
-              class="collapse level1"
-              role="tabpanel"
-              aria-labelledby="headingFive"
-            >
-              <div class="card-block" id="other"></div>
-            </div>
-          </div>
-          <div class="card"></div>
-          <div class="card" id="dpi-card">
-            <div class="card-header last level1" role="tab" id="headingZero">
-              <a
-                data-toggle="collapse"
-                data-parent="#accordion"
-                href="#collapseZero"
-                aria-expanded="true"
-                aria-controls="collapseZero"
-              >
-                <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/dpi.png" />
-                </span>
-                <span class="panel-header-content">
-                  <span class="panel-header-title"
-                    >{{ "data_preparedness_index" | translate }} -
-                    <span class="component-score" id="dpi_score_main"></span>
-                    <span class="score-helptext"></span>
-                  </span>
-                  <span class="panel-header-description">{{
-                    "dpi_tag" | translate
-                  }}</span>
-                </span>
-              </a>
-            </div>
-            <div
-              id="collapseZero"
-              class="collapse level1"
-              role="tabpanel"
-              aria-labelledby="headingZero"
-            >
-              <div class="card-block" id="dpi"></div>
             </div>
           </div>
         </div>
@@ -619,9 +313,8 @@
             type="button"
             class="btn-modal"
             data-toggle="modal"
-            ng-click="zoom_in()"
           >
-            <i class="fa fa-search-plus pull-right big-icon"></i>
+            <!-- <i class="fa fa-search-plus pull-right big-icon"></i> -->
           </button>
         </div>
         <div class="popup-score">

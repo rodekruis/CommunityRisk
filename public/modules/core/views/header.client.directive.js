@@ -25,7 +25,7 @@ angular.module("core").directive("crHeader", [
         fnAboutTutorialFbf: "<?",
         fnAboutLinkCra: "<?",
         fnAboutLinkEap: "<?",
-        viewType: "<?",
+        viewType: "@",
       },
       controller: [
         "$scope",

@@ -11,8 +11,13 @@
   .sidebar-wrapper,
   .leaflet-control-attribution,
   .card-block,
-  .zoom-level-nav {
+  .zoom-level-nav,
+  .row-chart-container,
+  .tabular-wrapper {
     background: white !important;
+  }
+  .tabular-wrapper {
+    top: 0;
   }
 
   .sidebar-wrapper-fbf {
@@ -68,19 +73,19 @@
     background: white !important;
   }
   .legend i:first-child {
-    background: #fee5d9 !important;
+    background: #d9d9d9 !important;
   }
   .legend i:nth-child(3) {
-    background: #fcae91 !important;
+    background: #bdbdbd !important;
   }
   .legend i:nth-child(5) {
-    background: #fb6a4a !important;
+    background: #969696 !important;
   }
   .legend i:nth-child(7) {
-    background: #de2d26 !important;
+    background: #737373 !important;
   }
   .legend i:nth-child(9) {
-    background: #a50f15 !important;
+    background: #525252 !important;
   }
 
   .marker-cluster-large div {

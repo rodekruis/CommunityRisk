@@ -23,10 +23,7 @@
   ></cr-header>
 
   <div class="header-for-print hidden visible-print">
-    <img
-      src="modules/core/img/510logo-new.png"
-      class="navbar-brand--logo-img"
-    />
+    <img src="modules/core/img/email-logo.png" class="navbar-brand--logo-img" />
   </div>
 
   <div class="content-wrapper">
@@ -95,7 +92,7 @@
 
           <div class="lead-time-buttons">
             <button
-              title="Forecast for trigger exceedence in 3 days. Related early actions for this lead-time are..."
+              title="Forecast for trigger exceedence in 3 days. See EAP for related early actions for this lead-time. (Link under 'How it works'.)"
               type="button"
               class="btn btn-tab btn-3-day active"
               ng-click="change_lead_time('3-day')"
@@ -103,7 +100,7 @@
               3-day
             </button>
             <button
-              title="Forecast for trigger exceedence in 7 days. Related early actions for this lead-time are ..."
+              title="Forecast for trigger exceedence in 7 days. See EAP for related early actions for this lead-time. (Link under 'How it works'.)"
               type="button"
               class="btn btn-tab btn-7-day"
               ng-click="change_lead_time('7-day')"
@@ -659,9 +656,8 @@
         </div>
         <div class="modal-body">
           <p>
-            <strong>{{ "year_source" | translate }}:</strong>
-            <span ng-show="metric_year">{{ metric_year }}</span>
-            <span class="text-muted" ng-show="!metric_year">-</span>
+            <strong>{{ "desc_source" | translate }}:</strong>
+            {{ "metric_desc" | translate: translateData }}
           </p>
           <br />
           <p>
@@ -674,11 +670,6 @@
               {{ metric_source }}
             </a>
             <span class="text-muted" ng-show="!metric_source">-</span>
-          </p>
-          <br />
-          <p>
-            <strong>{{ "desc_source" | translate }}:</strong>
-            {{ "metric_desc" | translate: translateData }}
           </p>
         </div>
       </div>
@@ -768,6 +759,8 @@
         </div>
         <div class="modal-body" style="word-break:break-all">
           <p>{{ "export_pdf_howto" | translate }}</p>
+          <br />
+          <p>{{ "export_pdf_howto2" | translate }}</p>
           <button onclick="window.print()">
             {{ "export_pdf" | translate }}
           </button>

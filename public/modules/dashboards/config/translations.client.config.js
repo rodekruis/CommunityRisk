@@ -72,7 +72,9 @@ var static_en = {
   export_json: "Export (JSON)",
   export_pdf: "Export (PDF)",
   export_pdf_howto:
-    "Instructions: press Ctrl+P to go to the print dialog. Choose 'landscape' as orientation/layout (under Preferences). Select 'Print to PDF / Save as PDF' under Printer/Destination.",
+    "This option lets you print to PDF, using your browser's printer-dialog, but it automatically hides/adapts features that are not relevant for printing. Make sure to choose 'landscape' as orientation/layout (under Preferences). Select 'Print to PDF / Save as PDF' under Printer/Destination.",
+  export_pdf_howto2:
+    "Alternatively, you can make a printscreen, using for example the 'Snipping Tool' on your computer.",
   signup_mailing: "Sign up to mailing list",
   join_whatsapp: "Join WhatsApp group",
 };

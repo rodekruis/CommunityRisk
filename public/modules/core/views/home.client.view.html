@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-md-4 home--action">
                       <a
-                        href="#!/#walkthrough_FBF"
+                        href="#!/#tutorial_FBF"
                         class="btn btn-primary btn-block"
                       >
                         {{ "HOW_IT_WORKS" | translate }}
@@ -85,6 +85,10 @@
       <div class="row">
         <div class="col-xs-12 about--block">
           <h2 class="text-center">About the FBF-system and dashboard</h2>
+
+          <p>
+            To fill in..
+          </p>
         </div>
       </div>
       <div class="row">
@@ -93,7 +97,7 @@
             <div class="media-left">
               <img
                 alt=""
-                src="modules/core/img/analysis.svg"
+                src="modules/core/img/open_data.png"
                 width="50"
                 height="50"
                 class="media-object"
@@ -101,24 +105,10 @@
             </div>
             <div class="media-body">
               <h3 class="h4 media-heading">
-                {{ "1. Trigger Levels from Historical Analysis" | translate }}
+                1. Step A
               </h3>
               <p>
-                For selected water-discharge measuring stations in Zambia,
-                historical data on water-discharge levels (m3/s) was collected.
-                This was combined with historical data on where and when floods
-                were recorded in Zambia. This combination of data leads to two
-                outcomes: (1) which levels of water discharge lead to floods, or
-                what is the 'trigger-level'. These levels were established per
-                station in close collaboratoin with the Trigger Working Group.
-                (2) where do floods occur, when a certain station passes the
-                trigger. This leads to a mapping of which districts are
-                associated with which stations. See the
-                <a
-                  href="https://docs.google.com/document/d/18SG6UklAYsY5EkVAINnZUH6D_tvry3Jh479mpVTehRU/edit?ts=5da1dba5#heading=h.gjdgxs"
-                  >EAP</a
-                >
-                for more information on this and the following steps.
+                To fill in..
               </p>
             </div>
           </div>
@@ -128,7 +118,7 @@
             <div class="media-left">
               <img
                 alt=""
-                src="modules/core/img/calendar.svg"
+                src="modules/core/img/data-integration.png"
                 width="50"
                 height="50"
                 class="media-object"
@@ -136,81 +126,16 @@
             </div>
             <div class="media-body">
               <h3 class="h4 media-heading">
-                {{ "2. Daily incoming forecast" | translate }}
+                2. Step B
               </h3>
               <p>
-                {{
-                  "For all the stations where trigger-levels were established, now daily forecast data is coming in on predicted water discharge for 3 days from now and for 7 days from now.
-                  (These two lead-times are chosen, because they correspond to relevant timeframes to perform chosen Early Actions.) For each station, the forecasted water discharge is compared
-                  to the trigger-level. If it's exceeded, then a trigger is passed for that station. In turn, this means that a trigger is for the districts associated with that station."
-                    | translate
-                }}
+                To fill in..
               </p>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12 col-md-6 about--block">
-          <div class="media">
-            <div class="media-left">
-              <img
-                alt=""
-                src="modules/core/img/flood.svg"
-                width="50"
-                height="50"
-                class="media-object"
-              />
-            </div>
-            <div class="media-body">
-              <h3 class="h4 media-heading">
-                {{ "3. Establish Flood Extent" | translate }}
-              </h3>
-              <p>
-                {{
-                  "For each district where the trigger is passed, the exact forecasted water discharge is judged to determine the Return Period of the associated flood:
-                  the higher the value, the higher the Return Period. If a district has (e.g.) a predicted flood with Return Period 10 years, then for that district a portion of the 
-                  national 10-year Return Period flood extent map is taken. This is done for all districts, after which all portions are pasted back together to form one flood extent map.
-                  In this map some districts might have a 10-year Return Period flood extent, some might have a 20-year Return Period flood extent (etc.) and some districts will have no flood.   
-                  "
-                    | translate
-                }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-12 col-md-6 about--block">
-          <div class="media">
-            <div class="media-left">
-              <img
-                alt=""
-                src="modules/core/img/exp_population.svg"
-                width="50"
-                height="50"
-                class="media-object"
-              />
-            </div>
-            <div class="media-body">
-              <h3 class="h4 media-heading">
-                {{ "4. Establish Exposure" | translate }}
-              </h3>
-              <p>
-                The flood extent maps is combined with a population exposure
-                grid. This way, the exact number of people living inside the
-                forecasted flood extent can be counted. This forms the 'Exposed
-                population'. The same procedure is followed for Cropland and
-                Livestock. Other exposure-layers - such as roads, health sites
-                and waterpoints - are available in the dashboard, for the user
-                to visually compare with the flood extent.
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-              </p>
-            </div>
-          </div>
-        </div>
         <div class="col-xs-12 col-md-6 about--block">
           <div class="media">
             <div class="media-left">
@@ -224,14 +149,10 @@
             </div>
             <div class="media-body">
               <h3 class="h4 media-heading">
-                {{ "5. Data visualized in dashboard" | translate }}
+                3. Step C
               </h3>
               <p>
-                {{
-                  "The outcomes of this daily run are uploaded to this dashboard (flood or no flood). This implies that most days of the year, this dashboard will reflect a no-flood scenario. 
-                  See below for a tutorial on how to use the dashboard."
-                    | translate
-                }}
+                To fill in..
               </p>
             </div>
           </div>
@@ -241,7 +162,7 @@
             <div class="media-left">
               <img
                 alt=""
-                src="modules/core/img/email.svg"
+                src="modules/core/img/data-prioritization.png"
                 width="50"
                 height="50"
                 class="media-object"
@@ -249,14 +170,10 @@
             </div>
             <div class="media-body">
               <h3 class="h4 media-heading">
-                {{ "6. Email notification system" | translate }}
+                4. Step D
               </h3>
               <p>
-                {{
-                  "If a trigger is passed, even for only 1 district, then an email notification is sent to the email-list. 
-                  The email will contain basic information, and includes a link to this dashboard for more information. In the dashboard, new users can sign up to this emailing list."
-                    | translate
-                }}
+                To fill in..
               </p>
             </div>
           </div>
@@ -265,7 +182,7 @@
     </div>
   </section>
 
-  <span class="scroll" id="walkthrough_FBF"></span>
+  <span class="scroll" id="tutorial_FBF"></span>
 
   <section class="homepage walkthrough">
     <div class="container">

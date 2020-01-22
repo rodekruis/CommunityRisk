@@ -1205,25 +1205,38 @@ angular.module("dashboards").controller("FbfController", [
               : mapChart.colors()(d.sum);
           })
           .popup(function(d) {
-            if (!meta_scorevar[$scope.metric]) {
-              return lookup[d.key].concat(
-                " - ",
-                meta_label[$scope.metric],
-                ": ",
-                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
-                " ",
-                meta_unit[$scope.metric]
-              );
+            if ($scope.metric == "fc_trigger2") {
+              if (d.value.sum == 80) {
+                var alert = "Maximum alert";
+              } else if (d.value.sum == 70) {
+                alert = "Medium alert";
+              } else if (d.value.sum == 60) {
+                alert = "Minium alert";
+              } else {
+                alert = "No alert";
+              }
+              return lookup[d.key].concat(": ", alert);
             } else {
-              return lookup[d.key].concat(
-                " - ",
-                meta_label[$scope.metric],
-                ": ",
-                helpers.formatAsType(
-                  meta_format[$scope.metric],
-                  $scope.genLookup_value()[d.key]
-                )
-              );
+              if (!meta_scorevar[$scope.metric]) {
+                return lookup[d.key].concat(
+                  " - ",
+                  meta_label[$scope.metric],
+                  ": ",
+                  helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
+                  " ",
+                  meta_unit[$scope.metric]
+                );
+              } else {
+                return lookup[d.key].concat(
+                  " - ",
+                  meta_label[$scope.metric],
+                  ": ",
+                  helpers.formatAsType(
+                    meta_format[$scope.metric],
+                    $scope.genLookup_value()[d.key]
+                  )
+                );
+              }
             }
           });
 
@@ -1245,40 +1258,71 @@ angular.module("dashboards").controller("FbfController", [
             return !d.value.count ? "#fff6e8" : mapChart.colors()(d.value.sum);
           })
           .label(function(d) {
-            if (!meta_scorevar[$scope.metric]) {
-              return helpers
-                .formatAsType(meta_format[$scope.metric], d.value.sum)
-                .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
-            } else {
-              if ($scope.genLookup_value()[d.key] == "No data") {
-                return "No data - ".concat(lookup[d.key]);
+            if ($scope.metric == "fc_trigger2") {
+              if (d.value.sum == 80) {
+                var alert = "Maximum alert";
+              } else if (d.value.sum == 70) {
+                alert = "Medium alert";
+              } else if (d.value.sum == 60) {
+                alert = "Minium alert";
               } else {
+                alert = "No alert";
+              }
+              return alert.concat(" - ", lookup[d.key]);
+            } else {
+              if (!meta_scorevar[$scope.metric]) {
                 return helpers
-                  .formatAsType(
-                    meta_format[$scope.metric],
-                    $scope.genLookup_value()[d.key]
-                  )
+                  .formatAsType(meta_format[$scope.metric], d.value.sum)
                   .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
+              } else {
+                if ($scope.genLookup_value()[d.key] == "No data") {
+                  return "No data - ".concat(lookup[d.key]);
+                } else {
+                  return helpers
+                    .formatAsType(
+                      meta_format[$scope.metric],
+                      $scope.genLookup_value()[d.key]
+                    )
+                    .concat(
+                      " ",
+                      meta_unit[$scope.metric],
+                      " - ",
+                      lookup[d.key]
+                    );
+                }
               }
             }
           })
           .title(function(d) {
-            if (!meta_scorevar[$scope.metric]) {
-              return lookup[d.key].concat(
-                " - ",
-                meta_label[$scope.metric],
-                ": ",
-                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
-                " ",
-                meta_unit[$scope.metric]
-              );
+            if ($scope.metric == "fc_trigger2") {
+              if (d.value.sum == 80) {
+                var alert = "Maximum alert";
+              } else if (d.value.sum == 70) {
+                alert = "Medium alert";
+              } else if (d.value.sum == 60) {
+                alert = "Minium alert";
+              } else {
+                alert = "No alert";
+              }
+              return lookup[d.key].concat(": ", alert);
             } else {
-              return lookup[d.key].concat(
-                " - ",
-                meta_label[$scope.metric],
-                " (0-10): ",
-                helpers.dec2Format(d.value.sum)
-              );
+              if (!meta_scorevar[$scope.metric]) {
+                return lookup[d.key].concat(
+                  " - ",
+                  meta_label[$scope.metric],
+                  ": ",
+                  helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
+                  " ",
+                  meta_unit[$scope.metric]
+                );
+              } else {
+                return lookup[d.key].concat(
+                  " - ",
+                  meta_label[$scope.metric],
+                  " (0-10): ",
+                  helpers.dec2Format(d.value.sum)
+                );
+              }
             }
           })
           .x(

@@ -23,6 +23,7 @@ angular.module("core").directive("crHeader", [
         fnAboutGithub: "<?",
         fnAboutFbf: "<?",
         fnAboutTutorialFbf: "<?",
+        fnAboutEarlyActions: "<?",
         fnAboutLinkCra: "<?",
         fnAboutLinkEap: "<?",
         showLogin: "<?",

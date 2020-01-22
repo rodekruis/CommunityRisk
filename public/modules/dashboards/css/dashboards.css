@@ -610,8 +610,8 @@
   text-transform: uppercase;
 }
 .map-popup .popup-score {
-  font-size: 35px;
-  text-transform: uppercase;
+  font-size: 25px;
+  /* text-transform: uppercase; */
 }
 .map-popup .popup-score .score-unit {
   font-size: 20px;
@@ -1059,11 +1059,17 @@ div.dc-chart {
 .marker-icon--station.is-triggered:before {
   border-top-color: #d7301f;
 }
+.marker-icon--station.is-not-triggered-above-50pct {
+  background-color: #eadc5b;
+}
+.marker-icon--station.is-not-triggered-above-50pct:before {
+  border-top-color: #eadc5b;
+}
 .marker-icon--station.is-not-triggered {
-  background-color: #d9d9d9;
+  background-color: #a5d4a1;
 }
 .marker-icon--station.is-not-triggered:before {
-  border-top-color: #d9d9d9;
+  border-top-color: #a5d4a1;
 }
 .marker-icon--station:hover,
 .marker-icon--station:focus {

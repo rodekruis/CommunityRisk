@@ -731,25 +731,38 @@ angular.module("dashboards").controller("FbfController", [
           return feature.properties.pcode;
         })
         .popup(function(d) {
-          if (!meta_scorevar[$scope.metric]) {
-            return lookup[d.key].concat(
-              " - ",
-              meta_label[$scope.metric],
-              ": ",
-              helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
-              " ",
-              meta_unit[$scope.metric]
-            );
+          if ($scope.metric == "fc_trigger2") {
+            if (d.value.sum == 80) {
+              var alert = "Maximum alert";
+            } else if (d.value.sum == 70) {
+              alert = "Medium alert";
+            } else if (d.value.sum == 60) {
+              alert = "Minium alert";
+            } else {
+              alert = "No alert";
+            }
+            return lookup[d.key].concat(": ", alert);
           } else {
-            return lookup[d.key].concat(
-              " - ",
-              meta_label[$scope.metric],
-              ": ",
-              helpers.formatAsType(
-                meta_format[$scope.metric],
-                $scope.genLookup_value()[d.key]
-              )
-            );
+            if (!meta_scorevar[$scope.metric]) {
+              return lookup[d.key].concat(
+                " - ",
+                meta_label[$scope.metric],
+                ": ",
+                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
+                " ",
+                meta_unit[$scope.metric]
+              );
+            } else {
+              return lookup[d.key].concat(
+                " - ",
+                meta_label[$scope.metric],
+                ": ",
+                helpers.formatAsType(
+                  meta_format[$scope.metric],
+                  $scope.genLookup_value()[d.key]
+                )
+              );
+            }
           }
         })
         .renderPopup(true)
@@ -796,14 +809,27 @@ angular.module("dashboards").controller("FbfController", [
                 if (
                   record.pcode === $scope.filters[$scope.filters.length - 1]
                 ) {
-                  $scope.value_popup = helpers.formatAsType(
-                    meta_format[$scope.metric],
-                    record[$scope.metric]
-                  );
-                  $scope.value_popup_unit = helpers.nullToEmptyString(
-                    meta_unit[$scope.metric]
-                  );
-                  break;
+                  if ($scope.metric == "fc_trigger2") {
+                    if (record[$scope.metric] == 80) {
+                      var alert = "Maximum alert";
+                    } else if (record[$scope.metric] == 70) {
+                      alert = "Medium alert";
+                    } else if (record[$scope.metric] == 60) {
+                      alert = "Minimum alert";
+                    } else {
+                      alert = "No alert";
+                    }
+                    $scope.value_popup = alert;
+                  } else {
+                    $scope.value_popup = helpers.formatAsType(
+                      meta_format[$scope.metric],
+                      record[$scope.metric]
+                    );
+                    $scope.value_popup_unit = helpers.nullToEmptyString(
+                      meta_unit[$scope.metric]
+                    );
+                    break;
+                  }
                 }
               }
               $scope.metric_label = meta_label[$scope.metric];
@@ -878,40 +904,66 @@ angular.module("dashboards").controller("FbfController", [
           return !d.value.count ? "#fff6e8" : mapChart.colors()(d.value.sum);
         })
         .label(function(d) {
-          if (!meta_scorevar[$scope.metric]) {
-            return helpers
-              .formatAsType(meta_format[$scope.metric], d.value.sum)
-              .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
-          } else {
-            if ($scope.genLookup_value()[d.key] == "No data") {
-              return "No data - ".concat(lookup[d.key]);
+          if ($scope.metric == "fc_trigger2") {
+            if (d.value.sum == 80) {
+              var alert = "Maximum alert";
+            } else if (d.value.sum == 70) {
+              alert = "Medium alert";
+            } else if (d.value.sum == 60) {
+              alert = "Minium alert";
             } else {
+              alert = "No alert";
+            }
+            return alert.concat(" - ", lookup[d.key]);
+          } else {
+            if (!meta_scorevar[$scope.metric]) {
               return helpers
-                .formatAsType(
-                  meta_format[$scope.metric],
-                  $scope.genLookup_value()[d.key]
-                )
+                .formatAsType(meta_format[$scope.metric], d.value.sum)
                 .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
+            } else {
+              if ($scope.genLookup_value()[d.key] == "No data") {
+                return "No data - ".concat(lookup[d.key]);
+              } else {
+                return helpers
+                  .formatAsType(
+                    meta_format[$scope.metric],
+                    $scope.genLookup_value()[d.key]
+                  )
+                  .concat(" ", meta_unit[$scope.metric], " - ", lookup[d.key]);
+              }
             }
           }
         })
         .title(function(d) {
-          if (!meta_scorevar[$scope.metric]) {
-            return lookup[d.key].concat(
-              " - ",
-              meta_label[$scope.metric],
-              ": ",
-              helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
-              " ",
-              meta_unit[$scope.metric]
-            );
+          if ($scope.metric == "fc_trigger2") {
+            if (d.value.sum == 80) {
+              var alert = "Maximum alert";
+            } else if (d.value.sum == 70) {
+              alert = "Medium alert";
+            } else if (d.value.sum == 60) {
+              alert = "Minium alert";
+            } else {
+              alert = "No alert";
+            }
+            return lookup[d.key].concat(": ", alert);
           } else {
-            return lookup[d.key].concat(
-              " - ",
-              meta_label[$scope.metric],
-              " (0-10): ",
-              helpers.dec2Format(d.value.sum)
-            );
+            if (!meta_scorevar[$scope.metric]) {
+              return lookup[d.key].concat(
+                " - ",
+                meta_label[$scope.metric],
+                ": ",
+                helpers.formatAsType(meta_format[$scope.metric], d.value.sum),
+                " ",
+                meta_unit[$scope.metric]
+              );
+            } else {
+              return lookup[d.key].concat(
+                " - ",
+                meta_label[$scope.metric],
+                " (0-10): ",
+                helpers.dec2Format(d.value.sum)
+              );
+            }
           }
         })
         .on("filtered", function(chart) {
@@ -1345,6 +1397,10 @@ angular.module("dashboards").controller("FbfController", [
         $("#printModal").modal("show");
       };
 
+      $scope.about_early_actions = function() {
+        $("#EarlyActionsModal").modal("show");
+      };
+
       // Set MailChimp-settings
       $("#mc-embedded-subscribe-form").attr("action", settings.mailChimpAction);
       $("#mc-form-input").attr("name", settings.mailChimpName);
@@ -1694,16 +1750,21 @@ angular.module("dashboards").controller("FbfController", [
             "<br>Trigger-level: " +
             helpers.formatAsType("decimal0", station.trigger_level) +
             " m<sup>3</sup>/s" +
+            "<br>% towards trigger: " +
+            helpers.formatAsType("percentage", station.fc_perc) +
             "<br>Glofas probability: " +
             helpers.formatAsType("percentage", station.fc_prob) +
             "";
           var stationClass = "station";
 
-          if (station.station_used == 1 && station.fc_trigger2 > 0) {
-            stationClass += " is-triggered";
-          }
-          if (station.station_used == 1 && station.fc_trigger2 == 0) {
-            stationClass += " is-not-triggered";
+          if (station.station_used == 1) {
+            if (station.fc_trigger2 > 0) {
+              stationClass += " is-triggered";
+            } else if (station.fc_perc >= 0.5) {
+              stationClass += " is-not-triggered-above-50pct";
+            } else if (station.fc_perc < 0.5) {
+              stationClass += " is-not-triggered";
+            }
           }
 
           var stationMarker = geoLayersService.createMarker(

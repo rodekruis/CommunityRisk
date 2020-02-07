@@ -1412,6 +1412,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
           formats.push(record.format);
         }
       }
+      $("#country-selection-span").text($scope.country_selection);
 
       //////////////////////////////////////
       /// TRANSLATION TO OTHER LANGUAGES ///

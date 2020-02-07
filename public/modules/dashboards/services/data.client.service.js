@@ -28,9 +28,21 @@ angular.module("dashboards").factory("Data", [
       );
     }
 
+    function getEraData(options, success) {
+      return $resource("/data/era").query(
+        {
+          country: options.country,
+          admlevel: options.admlevel,
+          pcodes: options.pcodes,
+        },
+        success
+      );
+    }
+
     return {
       getAll: getAll,
       getTable: getTable,
+      getEraData: getEraData,
     };
   },
 ]);

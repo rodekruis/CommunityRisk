@@ -1374,6 +1374,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
           formats.push(record.format);
         }
       }
+      $("#country-selection-span").text($scope.country_selection);
+
       //Create dropdown list of disaster types HTML
       ul = document.getElementById("disaster-type-items");
       while (ul.childElementCount > 0) {

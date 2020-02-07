@@ -52,6 +52,7 @@
         </li>
         <li
           ng-class="['navbar--item', { 'active': (activeSection === 'ERA') }]"
+          ng-show="showEpidemics"
         >
           <a ng-href="#!/epidemics" class="text-uppercase">
             {{ "EPIDEMICS" | translate }}
@@ -67,6 +68,17 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" ng-show="showCountrySelector">
+          <a
+            class="dropdown-toggle export-button text-uppercase"
+            data-toggle="dropdown"
+            href="#"
+          >
+            <span id="country-selection-span"></span>
+            <i class="fa fa-angle-down export-btn-arrow"></i>
+          </a>
+          <ul class="dropdown-menu submenu-items" id="country-items"></ul>
+        </li>
         <li class="dropdown navbar--item" ng-show="showShareExport">
           <a
             href="#"
@@ -226,7 +238,54 @@
             </li>
           </ul>
         </li>
-        <li class="navbar--item" ng-if="showLogin">
+
+        <ul
+          class="nav navbar-top-links navbar-right"
+          style="display:none; margin-top: 0"
+          id="language-selector"
+          ng-show="showLanguages"
+        >
+          <li class="dropdown">
+            <a
+              class="dropdown-toggle export-button text-uppercase"
+              data-toggle="dropdown"
+              href="#"
+            >
+              <img src="modules/core/img/LanguageIcon.svg" style="width:20px" />
+              <i class="fa fa-angle-down export-btn-arrow"></i>
+            </a>
+            <ul class="dropdown-menu export-items">
+              <li>
+                <a
+                  class="dropdown-toggle export-button"
+                  ng-click="fnChangeLanguage('en')"
+                  target="_blank"
+                  >English</a
+                >
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a
+                  id="language-selector-es"
+                  class="dropdown-toggle export-button"
+                  ng-click="fnChangeLanguage('es')"
+                  target="_blank"
+                  >Español</a
+                >
+              </li>
+              <li>
+                <a
+                  id="language-selector-fr"
+                  class="dropdown-toggle export-button"
+                  ng-click="fnChangeLanguage('fr')"
+                  target="_blank"
+                  >Français</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <li class="navbar--item" ng-if="showLogin" ng-show="showLogin">
           <a ng-href="#!/signin" ng-if="!isLoggedIn" class="text-uppercase">
             {{ "SIGN_IN" | translate }}
           </a>

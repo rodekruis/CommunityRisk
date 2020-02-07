@@ -247,12 +247,13 @@ angular.module("dashboards").config(function($translateProvider, DataProvider) {
   $translateProvider.fallbackLanguage("en");
   $translateProvider.useSanitizeValueStrategy("escape");
 
-  d3.dsv(
-    ";",
-    "text/plain; charset=ISO-8859-1"
-  )("modules/dashboards/data/metadata_prototype.csv", function(cra_metadata) {
-    translateFunction(cra_metadata);
-  });
+  // d3.dsv(
+  //   ";",
+  //   "text/plain; charset=ISO-8859-1"
+  // )("modules/dashboards/data/metadata_prototype.csv", function(cra_metadata) {
+  //   translateFunction(cra_metadata);
+  // });
+
   if (location.href.indexOf("fbf") > -1) {
     DataProvider.$get().getTable(
       {
@@ -261,6 +262,16 @@ angular.module("dashboards").config(function($translateProvider, DataProvider) {
       },
       function(fbf_metadata) {
         translateFunction(fbf_metadata);
+      }
+    );
+  } else {
+    DataProvider.$get().getTable(
+      {
+        schema: "metadata",
+        table: "CRA_metadata",
+      },
+      function(cra_metadata) {
+        translateFunction(cra_metadata);
       }
     );
   }

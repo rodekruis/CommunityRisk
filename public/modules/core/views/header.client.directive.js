@@ -9,6 +9,7 @@ angular.module("core").directive("crHeader", [
         showViewStatus: "=",
         viewStatusTitle: "=",
         fnOpenViewStatus: "<?",
+        showCountrySelector: "<?",
         showShareExport: "<?",
         fnShareUrl: "<?",
         fnShareCountryUrl: "<?",
@@ -26,6 +27,9 @@ angular.module("core").directive("crHeader", [
         fnAboutLinkCra: "<?",
         fnAboutLinkEap: "<?",
         viewType: "@",
+        showLogin: "<?",
+        showLanguages: "<?",
+        fnChangeLanguage: "<?",
       },
       controller: [
         "$scope",

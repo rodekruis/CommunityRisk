@@ -35,6 +35,18 @@ angular.module("dashboards").controller("EpidemicsController", [
     chartService,
     DEBUG
   ) {
+    ////////////////////////
+    // SET MAIN VARIABLES //
+    ////////////////////////
+
+    $scope.change_country = function(country) {
+      $scope.country_code = country;
+      $rootScope.country_code = country;
+      $scope.parent_codes = [];
+      $scope.metric = "population";
+      $scope.initiate($rootScope.view_code);
+    };
+
     //////////////////////
     // DEFINE VARIABLES //
     //////////////////////
@@ -115,8 +127,9 @@ angular.module("dashboards").controller("EpidemicsController", [
 
       //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only read later in the script currently)
       if (!$scope.directURLload && !d) {
-        $scope.admlevel = 2;
+        $scope.admlevel = $scope.country_code == "PHL" ? 2 : 1;
       }
+      $scope.multipleAdminLevels = $scope.country_code == "MLI" ? true : false;
 
       $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 
@@ -139,10 +152,11 @@ angular.module("dashboards").controller("EpidemicsController", [
           disaster_name: "",
         },
         function(general_data) {
-          Data.getTable(
+          Data.getEraData(
             {
-              schema: $scope.country_code + "_datamodel",
-              table: "ERA_data",
+              country: $scope.country_code,
+              admlevel: $scope.admlevel,
+              pcodes: $scope.parent_codes_input,
             },
             function(era_data) {
               $scope.load_data(d, general_data[0], era_data);
@@ -560,7 +574,8 @@ angular.module("dashboards").controller("EpidemicsController", [
         d_prev,
         high_med_low,
         "", //predictions
-        "" //actuals
+        "", //actuals
+        $scope.country_code
       );
       //Compile clickable elements
       var compile = $(".component-label, .general-component-label, .info-btn");
@@ -1161,6 +1176,9 @@ angular.module("dashboards").controller("EpidemicsController", [
       ////////////////////////////
 
       //Function to open the modal with information on indicator
+      if (!$scope.metric_info) {
+        $scope.metric_info = $scope.metric;
+      }
       $scope.info = function(id) {
         $scope.metric_info = id;
         if (id !== "admin") {
@@ -1372,15 +1390,15 @@ angular.module("dashboards").controller("EpidemicsController", [
       ]);
 
       //Create HTML
-      if ($scope.view_code == "CRA") {
-        var ul = document.getElementById("country-items");
-        while (ul.childElementCount > 0) {
-          ul.removeChild(ul.lastChild);
-        }
-        var formats = [];
-        for (i = 0; i < d.Country_meta_full.length; i++) {
-          record = d.Country_meta_full[i];
-
+      var ERA_countries = ["PHL", "MLI"];
+      var ul = document.getElementById("country-items");
+      while (ul.childElementCount > 0) {
+        ul.removeChild(ul.lastChild);
+      }
+      var formats = [];
+      for (i = 0; i < d.Country_meta_full.length; i++) {
+        record = d.Country_meta_full[i];
+        if (ERA_countries.indexOf(record.country_code) > -1) {
           if (formats.indexOf(record.format) <= -1 && formats.length > 0) {
             var li2 = document.createElement("li");
             li2.setAttribute("class", "divider");
@@ -1405,6 +1423,7 @@ angular.module("dashboards").controller("EpidemicsController", [
           formats.push(record.format);
         }
       }
+      $("#country-selection-span").text($scope.country_selection);
 
       //////////////////////////////////////
       /// TRANSLATION TO OTHER LANGUAGES ///
@@ -1449,9 +1468,23 @@ angular.module("dashboards").controller("EpidemicsController", [
 
       $scope.translateData = function() {
         return {
-          metric_label: $scope.metric,
-          metric_label_popup: $scope.metric_info,
-          metric_desc: "desc_" + $scope.metric_info,
+          metric_label: helpers.checkSingleCountry(
+            $scope.metric,
+            d,
+            $scope.country_code
+          ),
+          metric_label_popup: helpers.checkSingleCountry(
+            $scope.metric_info,
+            d,
+            $scope.country_code
+          ),
+          metric_desc: "desc_".concat(
+            helpers.checkSingleCountry(
+              $scope.metric_info,
+              d,
+              $scope.country_code
+            )
+          ),
           subtype_selection: $scope.subtype_selection,
           levelA_selection_pre: $scope.levelA_selection_pre,
           levelB_selection_pre: $scope.levelB_selection_pre,

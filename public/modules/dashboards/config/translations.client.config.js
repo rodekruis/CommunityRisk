@@ -215,17 +215,40 @@ angular.module("dashboards").config(function($translateProvider, DataProvider) {
     var descriptions_fr = {};
 
     for (var i = 0; i < metadata.length; i++) {
-      labels_en[metadata[i].variable] = metadata[i].label;
-      descriptions_en["desc_" + metadata[i].variable] = metadata[i].description;
-      if (metadata[i].label_espanol) {
-        labels_es[metadata[i].variable] = metadata[i].label_espanol;
-        descriptions_es["desc_" + metadata[i].variable] =
-          metadata[i].description_espanol;
-      }
-      if (metadata[i].label_french) {
-        labels_fr[metadata[i].variable] = metadata[i].label_french;
-        descriptions_fr["desc_" + metadata[i].variable] =
-          metadata[i].description_french;
+      if (metadata[i].country_code.indexOf(",") > -1) {
+        labels_en[metadata[i].variable] = metadata[i].label;
+        descriptions_en["desc_" + metadata[i].variable] =
+          metadata[i].description;
+        if (metadata[i].label_espanol) {
+          labels_es[metadata[i].variable] = metadata[i].label_espanol;
+          descriptions_es["desc_" + metadata[i].variable] =
+            metadata[i].description_espanol;
+        }
+        if (metadata[i].label_french) {
+          labels_fr[metadata[i].variable] = metadata[i].label_french;
+          descriptions_fr["desc_" + metadata[i].variable] =
+            metadata[i].description_french;
+        }
+      } else {
+        labels_en[metadata[i].variable + "_" + metadata[i].country_code] =
+          metadata[i].label;
+        descriptions_en[
+          "desc_" + metadata[i].variable + "_" + metadata[i].country_code
+        ] = metadata[i].description;
+        if (metadata[i].label_espanol) {
+          labels_es[metadata[i].variable + "_" + metadata[i].country_code] =
+            metadata[i].label_espanol;
+          descriptions_es[
+            "desc_" + metadata[i].variable + "_" + metadata[i].country_code
+          ] = metadata[i].description_espanol;
+        }
+        if (metadata[i].label_french) {
+          labels_fr[metadata[i].variable + "_" + metadata[i].country_code] =
+            metadata[i].label_french;
+          descriptions_fr[
+            "desc_" + metadata[i].variable + "_" + metadata[i].country_code
+          ] = metadata[i].description_french;
+        }
       }
     }
 
@@ -247,12 +270,13 @@ angular.module("dashboards").config(function($translateProvider, DataProvider) {
   $translateProvider.fallbackLanguage("en");
   $translateProvider.useSanitizeValueStrategy("escape");
 
-  d3.dsv(
-    ";",
-    "text/plain; charset=ISO-8859-1"
-  )("modules/dashboards/data/metadata_prototype.csv", function(cra_metadata) {
-    translateFunction(cra_metadata);
-  });
+  // d3.dsv(
+  //   ";",
+  //   "text/plain; charset=ISO-8859-1"
+  // )("modules/dashboards/data/metadata_prototype.csv", function(cra_metadata) {
+  //   translateFunction(cra_metadata);
+  // });
+
   if (location.href.indexOf("fbf") > -1) {
     DataProvider.$get().getTable(
       {
@@ -261,6 +285,16 @@ angular.module("dashboards").config(function($translateProvider, DataProvider) {
       },
       function(fbf_metadata) {
         translateFunction(fbf_metadata);
+      }
+    );
+  } else {
+    DataProvider.$get().getTable(
+      {
+        schema: "metadata",
+        table: "DPI_metadata",
+      },
+      function(cra_metadata) {
+        translateFunction(cra_metadata);
       }
     );
   }

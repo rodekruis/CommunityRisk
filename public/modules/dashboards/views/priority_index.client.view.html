@@ -3,204 +3,24 @@
   data-ng-controller="PriorityIndexController"
   data-ng-init="initiate('PI')"
 >
-  <nav id="header" class="navbar bg-white navbar-fixed-top" role="navigation">
-    <div class="navbar-header">
-      <a
-        class="navbar-brand"
-        style="padding-left:10px; padding-top:3px"
-        href="/#!/"
-      >
-        <img
-          src="modules/core/img/510logo-new.png"
-          style="height:45px; float:left"
-        />
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#menu-buttons"
-        aria-controls="menu-buttons"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-    <div id="menu-buttons" aria-expanded="false" class="button-nav">
-      <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown">
-          <a class="submenu-item text-uppercase" ng-href="#!/community_risk">
-            {{ "COMMUNITY_RISK" | translate }}
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown">
-          <a class="submenu-item text-uppercase" ng-href="#!/impact_database">
-            {{ "IMPACT_DATABASE" | translate }}
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown" style="background:#4c8293 /*#737373*/">
-          <a
-            style="color:#fff"
-            class="submenu-item text-uppercase"
-            ng-href="#!/priority_index"
-          >
-            {{ "PRIORITY_INDEX" | translate }}
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-left">
-        <li class="dropdown">
-          <a class="submenu-item text-uppercase" ng-href="#!/epidemics">
-            {{ "EPIDEMICS" | translate }}
-          </a>
-        </li>
-      </ul>
-
-      <ul
-        class="nav navbar-top-links navbar-right"
-        style="display:none"
-        id="language-selector"
-      >
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle export-button text-uppercase"
-            data-toggle="dropdown"
-            href="#"
-          >
-            <img src="modules/core/img/LanguageIcon.svg" style="width:20px" />
-            <i class="fa fa-angle-down export-btn-arrow"></i>
-          </a>
-          <ul class="dropdown-menu export-items">
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-click="changeLanguage('en')"
-                target="_blank"
-                >English</a
-              >
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-click="changeLanguage('es')"
-                target="_blank"
-                >Español</a
-              >
-            </li>
-          </ul>
-        </li>
-      </ul>
-
-      <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle export-button"
-            data-toggle="dropdown"
-            href="#"
-          >
-            HOW IT WORKS
-            <i class="fa fa-angle-down export-btn-arrow"></i>
-          </a>
-          <ul class="dropdown-menu export-items">
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-href="#!/#walkthrough_{{ view_code }}"
-                target="_blank"
-                >{{ "about_tutorial" | translate }}</a
-              >
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-href="https://data.humdata.org/dataset/philippines-typhoon-mangkhut-priority-index-forecasted-damage"
-                target="_blank"
-                >HDX methodology (Mangkhut)</a
-              >
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a
-                class="dropdown-toggle export-button"
-                ng-href="https://github.com/rodekruis/CommunityRisk"
-                target="_blank"
-                >{{ "about_github" | translate }}</a
-              >
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle export-button"
-            data-toggle="dropdown"
-            href="#"
-          >
-            EXPORT
-            <i class="fa fa-angle-down export-btn-arrow"></i>
-          </a>
-          <ul class="dropdown-menu export-items">
-            <li>
-              <a ng-click="share_country_URL()">{{
-                "share_country_url" | translate
-              }}</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a ng-click="share_URL()">{{ "share_url" | translate }}</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a ng-click="export_csv()">{{ "export_csv" | translate }}</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a ng-click="export_json()">{{ "export_json" | translate }}</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-
-      <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle export-button"
-            data-toggle="dropdown"
-            href="#"
-          >
-            COUNTRY
-            <i class="fa fa-angle-down export-btn-arrow"></i>
-          </a>
-          <ul class="dropdown-menu submenu-items" id="country-items">
-            <li>
-              <a
-                class="submenu-item"
-                ng-click="change_country('PHL')"
-                role="button"
-                >Philippines</a
-              >
-            </li>
-            <li>
-              <a
-                class="submenu-item"
-                ng-click="change_country('NPL')"
-                role="button"
-                >Nepal</a
-              >
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <cr-header
+    active-section="PI"
+    show-view-status="false"
+    show-country-selector="false"
+    show-share-export="true"
+    fn-share-url="share_URL"
+    fn-share-country-url="share_country_URL"
+    fn-export-csv="export_csv"
+    fn-export-geojson="export_geojson"
+    fn-export-pdf="export_pdf"
+    show-help="true"
+    fn-about-cra="false"
+    fn-about-tutorial="true"
+    view-type="PI"
+    show-login="false"
+    show-languages="true"
+    fn-change-language="changeLanguage"
+  ></cr-header>
 
   <div class="content-wrapper">
     <div class="zoom-level-nav-wrapper">

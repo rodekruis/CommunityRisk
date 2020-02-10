@@ -6,8 +6,11 @@
   <cr-header
     active-section="ERA"
     show-view-status="false"
+    show-epidemics="true"
+    show-country-selector="true"
     show-share-export="true"
     fn-share-url="share_URL"
+    fn-share-country-url="share_country_URL"
     fn-export-csv="export_csv"
     fn-export-geojson="export_geojson"
     fn-export-pdf="export_pdf"
@@ -15,6 +18,9 @@
     fn-about-cra="true"
     fn-about-tutorial="true"
     view-type="CRA"
+    show-login="false"
+    show-languages="true"
+    fn-change-language="changeLanguage"
   ></cr-header>
 
   <div class="content-wrapper">
@@ -153,7 +159,10 @@
                 aria-controls="collapseThree"
               >
                 <span class="panel-header-icon">
-                  <img src="modules/dashboards/img/cyclone_wind.png" />
+                  <img
+                    class="logo-img"
+                    src="modules/dashboards/img/epidemic.svg"
+                  />
                 </span>
                 <span class="panel-header-content">
                   <span class="panel-header-title"
@@ -309,12 +318,14 @@
         <div class="popup-header">
           {{ name_popup }}
           <button
+            ng-show="multipleAdminLevels"
             id="zoomin_icon"
             type="button"
             class="btn-modal"
             data-toggle="modal"
+            ng-click="zoom_in()"
           >
-            <!-- <i class="fa fa-search-plus pull-right big-icon"></i> -->
+            <i class="fa fa-search-plus pull-right big-icon"></i>
           </button>
         </div>
         <div class="popup-score">

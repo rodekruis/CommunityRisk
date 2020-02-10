@@ -609,7 +609,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
         meta_unit,
         meta_label,
         $scope.predictions,
-        $scope.actuals
+        $scope.actuals,
+        $scope.country_code,
+        d
       );
       //Compile clickable elements
       var compile = $(".component-label, .general-component-label, .info-btn");
@@ -1153,6 +1155,9 @@ angular.module("dashboards").controller("PriorityIndexController", [
       /////////////////////
 
       //Function to open the modal with information on indicator
+      if (!$scope.metric_info) {
+        $scope.metric_info = $scope.metric;
+      }
       $scope.info = function(id) {
         if (id !== "admin") {
           $scope.metric_label = meta_label[id];
@@ -1374,6 +1379,8 @@ angular.module("dashboards").controller("PriorityIndexController", [
           formats.push(record.format);
         }
       }
+      $("#country-selection-span").text($scope.country_selection);
+
       //Create dropdown list of disaster types HTML
       ul = document.getElementById("disaster-type-items");
       while (ul.childElementCount > 0) {
@@ -1451,9 +1458,23 @@ angular.module("dashboards").controller("PriorityIndexController", [
 
       $scope.translateData = function() {
         return {
-          metric_label: $scope.metric,
-          metric_label_popup: $scope.metric_info,
-          metric_desc: "desc_" + $scope.metric_info,
+          metric_label: helpers.checkSingleCountry(
+            $scope.metric,
+            d,
+            $scope.country_code
+          ),
+          metric_label_popup: helpers.checkSingleCountry(
+            $scope.metric_info,
+            d,
+            $scope.country_code
+          ),
+          metric_desc: "desc_".concat(
+            helpers.checkSingleCountry(
+              $scope.metric_info,
+              d,
+              $scope.country_code
+            )
+          ),
           subtype_selection: $scope.subtype_selection,
           levelB_selection_pre: $scope.levelB_selection_pre,
           levelC_selection_pre: $scope.levelC_selection_pre,

@@ -127,6 +127,24 @@ angular.module("dashboards").factory("helpers", [
       }
     }
 
+    /**
+     * Determine if variable is single or multi-country (needed for translation)
+     *
+     * @param {String} metric
+     * @param {Object} d
+     * @param {Number} country_code
+     */
+    function checkSingleCountry(metric, d, country_code) {
+      var country_code_meta;
+      for (var i = 0; i < d.Metadata.length; i++) {
+        if (d.Metadata[i].variable === metric) {
+          country_code_meta = d.Metadata[i].country_code;
+        }
+      }
+      var singleCountry = country_code_meta.indexOf(",") > -1 ? false : true;
+      return metric.concat(singleCountry ? "_".concat(country_code) : "");
+    }
+
     return {
       start: start,
       complete: complete,
@@ -139,6 +157,7 @@ angular.module("dashboards").factory("helpers", [
       dec2Format: dec2Format,
       percFormat: percFormat,
       formatAsType: formatAsType,
+      checkSingleCountry: checkSingleCountry,
     };
   },
 ]);

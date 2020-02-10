@@ -1253,6 +1253,9 @@ angular.module("dashboards").controller("FbfController", [
       ////////////////////////////
 
       //Function to open the modal with information on indicator
+      if (!$scope.metric_info) {
+        $scope.metric_info = $scope.metric;
+      }
       $scope.info = function(id) {
         $scope.metric_info = id;
         if (id !== "admin") {
@@ -1550,9 +1553,23 @@ angular.module("dashboards").controller("FbfController", [
 
       $scope.translateData = function() {
         return {
-          metric_label: $scope.metric,
-          metric_label_popup: $scope.metric_info,
-          metric_desc: "desc_" + $scope.metric_info,
+          metric_label: helpers.checkSingleCountry(
+            $scope.metric,
+            d,
+            $scope.country_code
+          ),
+          metric_label_popup: helpers.checkSingleCountry(
+            $scope.metric_info,
+            d,
+            $scope.country_code
+          ),
+          metric_desc: "desc_".concat(
+            helpers.checkSingleCountry(
+              $scope.metric_info,
+              d,
+              $scope.country_code
+            )
+          ),
           subtype_selection: $scope.subtype_selection,
           levelA_selection_pre: $scope.levelA_selection_pre,
           levelB_selection_pre: $scope.levelB_selection_pre,

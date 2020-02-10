@@ -76,6 +76,27 @@ exports.getTable = function(req, res, next) {
   });
 };
 
+exports.getEraData = function(req, res, next) {
+  console.log("Getting ERA data:", req.query);
+
+  pool.connect(function(err, client, release) {
+    if (err) return next(err);
+
+    client.query(
+      {
+        text: "SELECT usp_era($1::text, $2::int, $3::text[]);",
+        values: [req.query.country, req.query.admlevel, req.query.pcodes],
+      },
+      function(err, result) {
+        if (err) return next(err);
+
+        res.jsonp(result.rows[0].usp_era);
+        release();
+      }
+    );
+  });
+};
+
 /**
  * Map authorization middleware
  */

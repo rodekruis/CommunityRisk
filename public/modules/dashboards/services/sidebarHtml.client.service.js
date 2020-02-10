@@ -87,7 +87,8 @@ angular.module("dashboards").factory("sidebarHtmlService", [
       d_prev,
       high_med_low,
       predictions,
-      actuals
+      actuals,
+      country_code
     ) {
       if (view_code == "CRA") {
         var dpi_score = document.getElementById("dpi_score_main");
@@ -247,7 +248,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
           if (record.layer_type == "point" || record.layer_type == "raster") {
             div1.innerHTML =
               '{{ "' +
-              record.name +
+              helpers.checkSingleCountry(record.name, d, country_code) +
               '" | translate }} \
                           <i ng-show="!' +
               record.name +
@@ -256,7 +257,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
               record.name +
               'Hidden" class="fa fa-toggle-on" style="font-size:15px" aria-hidden="true"></i>';
           } else {
-            div1.innerHTML = '{{ "' + record.name + '" | translate }}';
+            div1.innerHTML =
+              '{{ "' +
+              helpers.checkSingleCountry(record.name, d, country_code) +
+              '" | translate }}';
           }
           div.appendChild(div1);
           //$compile(div1)($scope);
@@ -341,7 +345,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
               "ng-click",
               "change_indicator('" + record.name + "')"
             );
-            div1.innerHTML = "{{ '" + record.name + "' | translate }}";
+            div1.innerHTML =
+              "{{ '" +
+              helpers.checkSingleCountry(record.name, d, country_code) +
+              "' | translate }}";
             //$compile(div1)($scope);
             div.appendChild(div1);
             var div1a = document.createElement("div");
@@ -408,7 +415,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
               "change_indicator('" + record.name + "')"
             );
           }
-          div1.innerHTML = "{{ '" + record.name + "' | translate }}";
+          div1.innerHTML =
+            "{{ '" +
+            helpers.checkSingleCountry(record.name, d, country_code) +
+            "' | translate }}";
           //$compile(div1)($scope);
           div.appendChild(div1);
           div1a = document.createElement("div");
@@ -461,7 +471,9 @@ angular.module("dashboards").factory("sidebarHtmlService", [
       meta_unit,
       meta_label,
       predictions,
-      actuals
+      actuals,
+      country_code,
+      d
     ) {
       //Dynamically create HTML-elements for all indicator tables
       var groupElements = {};
@@ -536,7 +548,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             if (record.layer_type == "point") {
               div1.innerHTML =
                 '{{ "' +
-                record.name +
+                helpers.checkSingleCountry(record.name, d, country_code) +
                 '" | translate }} \
                             <i ng-show="!' +
                 record.name +
@@ -545,7 +557,10 @@ angular.module("dashboards").factory("sidebarHtmlService", [
                 record.name +
                 'Hidden" class="fa fa-toggle-on" style="font-size:15px" aria-hidden="true"></i>';
             } else {
-              div1.innerHTML = '{{ "' + record.name + '" | translate }}';
+              div1.innerHTML =
+                '{{ "' +
+                helpers.checkSingleCountry(record.name, d, country_code) +
+                '" | translate }}';
             }
             //$compile(div1)($scope);
             div.appendChild(div1);
@@ -707,7 +722,6 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             div1a.innerHTML = keyvalue[record.name] + " " + unit;
           }
         } else if (record.group !== "hide") {
-          console.log(record);
           if (record.group == "dpi") {
             width = d.dpi[0][record.name] * 100;
           } else if (

@@ -135,12 +135,13 @@ angular.module("dashboards").factory("helpers", [
      * @param {Number} country_code
      */
     function checkSingleCountry(metric, d, country_code) {
-      var singleCountry =
-        d.Metadata.find((i) => i.variable === metric).country_code.indexOf(
-          ","
-        ) > -1
-          ? false
-          : true;
+      var country_code_meta;
+      for (var i = 0; i < d.Metadata.length; i++) {
+        if (d.Metadata[i].variable === metric) {
+          country_code_meta = d.Metadata[i].country_code;
+        }
+      }
+      var singleCountry = country_code_meta.indexOf(",") > -1 ? false : true;
       return metric.concat(singleCountry ? "_".concat(country_code) : "");
     }
 

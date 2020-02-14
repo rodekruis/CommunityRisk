@@ -3,7 +3,19 @@
     <div class="navbar-header">
       <a class="navbar-brand navbar-brand--logo" href="/#!/">
         <img
-          src="modules/core/img/510logo-new.png"
+          src="modules/core/img/{{ headerLogo }}"
+          class="navbar-brand--logo-img"
+        />
+      </a>
+      <a ng-if="headerLogo2" class="navbar-brand navbar-brand--logo">
+        <img
+          src="modules/core/img/{{ headerLogo2 }}"
+          class="navbar-brand--logo-img"
+        />
+      </a>
+      <a ng-if="headerLogo3" class="navbar-brand navbar-brand--logo">
+        <img
+          src="modules/core/img/{{ headerLogo3 }}"
           class="navbar-brand--logo-img"
         />
       </a>

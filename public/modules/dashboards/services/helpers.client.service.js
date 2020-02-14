@@ -132,7 +132,7 @@ angular.module("dashboards").factory("helpers", [
      *
      * @param {String} metric
      * @param {Object} d
-     * @param {Number} country_code
+     * @param {String} country_code
      */
     function checkSingleCountry(metric, d, country_code) {
       var country_code_meta;

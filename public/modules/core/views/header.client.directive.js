@@ -5,7 +5,11 @@ angular.module("core").directive("crHeader", [
       replace: true,
       templateUrl: "modules/core/views/header.client.view.html",
       scope: {
+        headerLogo: "@",
+        headerLogo2: "<?",
+        headerLogo3: "<?",
         activeSection: "@",
+        showEpidemics: "<?",
         showViewStatus: "=",
         viewStatusTitle: "=",
         fnOpenViewStatus: "<?",

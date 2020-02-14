@@ -55,7 +55,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
     $scope.reload = 0;
     $scope.authentication = Authentication;
     $scope.geom = null;
-    $scope.country_code_default = "UGA";
+    $scope.country_code_default = "PHL";
     $scope.country_code = $scope.country_code_default;
     $scope.view_code = "CRA";
     $scope.metric = "";

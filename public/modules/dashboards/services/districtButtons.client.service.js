@@ -30,7 +30,11 @@ angular.module("dashboards").factory("districtButtonsService", [
         "level" + zoom_min + "_name"
       )[country_code];
       levelB_selection_pre = "all_no";
-      if (zoom_min == 1 || country_code == "MWI" || country_code == "MOZ") {
+      if (
+        zoom_min == 1
+        // || country_code == "MWI"
+        // || country_code == "MOZ"
+      ) {
         //Apply different classes for this case
         $("#level2").addClass("btn-zoomin");
         $("#level3").addClass("btn-zoomin");
@@ -92,6 +96,45 @@ angular.module("dashboards").factory("districtButtonsService", [
           levelC_selection = name_selection;
           levelC_code = parent_code;
         }
+      } else if (country_code === "MWI" || country_code === "MOZ") {
+        //Apply different classes for this case
+        $("#level2").addClass("btn-zoomin");
+        $("#level3").addClass("btn-zoomin");
+
+        if (admlevel == zoom_min) {
+          levelB_selection_pre = "all_yes";
+          levelB_selection = helpers.lookUpByCountryCode(
+            d.Country_meta,
+            "level" + (zoom_min + 1) + "_name"
+          )[country_code];
+          levelB_code = "";
+          levelB_codes = [];
+        } else if (admlevel < zoom_max && parent_codes.length > 0) {
+          levelB_selection = name_selection;
+          levelB_codes = parent_codes;
+        } else if (admlevel < zoom_max && parent_codes.length == 0) {
+          //This is the direct URL-link case
+          levelB_selection_pre = "all_yes";
+          levelB_selection = helpers.lookUpByCountryCode(
+            d.Country_meta,
+            "level" + (zoom_min + 1) + "_name"
+          )[country_code];
+          levelB_code = "";
+          levelB_codes = [];
+        } else if (admlevel == zoom_max && parent_codes.length == 0) {
+          //This is the direct URL-link case
+          levelB_selection_pre = "all_yes";
+          levelB_selection = helpers.lookUpByCountryCode(
+            d.Country_meta,
+            "level" + (zoom_min + 1) + "_name"
+          )[country_code];
+          levelB_code = "";
+          levelB_codes = [];
+        }
+
+        levelC_selection_pre = admlevel < zoom_max ? undefined : "all_yes";
+        levelC_selection = admlevel < zoom_max ? undefined : name_selection;
+        levelC_code = admlevel < zoom_max ? "" : parent_code;
       } else {
         //Apply different classes for this case
         $("#level2").removeClass("btn-zoomin");
@@ -104,6 +147,7 @@ angular.module("dashboards").factory("districtButtonsService", [
           levelB_selection = name_selection;
           levelB_codes = parent_codes;
         }
+        levelC_selection_pre = admlevel < zoom_max ? undefined : "all_yes";
         levelC_selection = admlevel < zoom_max ? undefined : name_selection;
         levelC_code = admlevel < zoom_max ? "" : parent_code;
       }

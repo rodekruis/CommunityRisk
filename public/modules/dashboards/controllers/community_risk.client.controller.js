@@ -55,7 +55,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
     $scope.reload = 0;
     $scope.authentication = Authentication;
     $scope.geom = null;
-    $scope.country_code_default = "PHL";
+    $scope.country_code_default = "UGA";
     $scope.country_code = $scope.country_code_default;
     $scope.view_code = "CRA";
     $scope.metric = "";
@@ -125,7 +125,7 @@ angular.module("dashboards").controller("CommunityRiskController", [
         $scope.parent_codes = url.parent_codes;
       }
 
-      //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only readed later in the script currently)
+      //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only read later in the script currently)
       if (!$scope.directURLload && !d) {
         $scope.admlevel = $scope.view_code == "CRA" ? 1 : 3;
         if (
@@ -926,9 +926,9 @@ angular.module("dashboards").controller("CommunityRiskController", [
       $scope.zoom_out = function(dest_level) {
         var admlevel_old = $scope.admlevel;
         if (
-          zoom_min == 1 ||
-          $scope.country_code == "MWI" ||
-          $scope.country_code == "MOZ"
+          zoom_min == 1
+          // || $scope.country_code == "MWI"
+          // || $scope.country_code == "MOZ"
         ) {
           if (dest_level === 1 && $scope.admlevel > zoom_min) {
             $scope.admlevel = zoom_min;
@@ -970,6 +970,38 @@ angular.module("dashboards").controller("CommunityRiskController", [
               .setAttribute("class", "btn btn-secondary btn-active");
             document
               .getElementById("level3")
+              .setAttribute("class", "btn btn-secondary btn-active");
+            $scope.initiate(d);
+          }
+        } else if (
+          $scope.country_code === "MWI" ||
+          $scope.country_code === "MOZ"
+        ) {
+          if (dest_level === 1 && $scope.admlevel > zoom_min) {
+            $scope.admlevel = zoom_min;
+            $scope.parent_codes = [];
+            $scope.levelB_selection_pre = "all_yes";
+            $scope.levelB_selection = helpers.lookUpByCountryCode(
+              d.Country_meta,
+              "level" + (zoom_min + 1) + "_name"
+            )[$scope.country_code];
+            $scope.initiate(d);
+          } else if (dest_level === 2 && $scope.admlevel > zoom_min + 1) {
+            $scope.admlevel = zoom_min + 1;
+            $scope.parent_codes = $scope.levelB_codes;
+            $scope.name_selection = $scope.name_selection_prev;
+            $scope.levelC_selection_pre = "all_yes";
+            $scope.levelC_selection = helpers.lookUpByCountryCode(
+              d.Country_meta,
+              "level" + (zoom_min + 2) + "_name"
+            )[$scope.country_code];
+            $scope.initiate(d);
+          } else if (dest_level === 2 && $scope.admlevel < zoom_min + 1) {
+            $scope.admlevel = zoom_min + 1;
+            $scope.parent_codes = [];
+            $scope.name_selection = $scope.levelB_selection;
+            document
+              .getElementById("level2")
               .setAttribute("class", "btn btn-secondary btn-active");
             $scope.initiate(d);
           }

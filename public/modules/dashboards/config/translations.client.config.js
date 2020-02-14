@@ -291,7 +291,7 @@ angular.module("dashboards").config(function($translateProvider, DataProvider) {
     DataProvider.$get().getTable(
       {
         schema: "metadata",
-        table: "DPI_metadata",
+        table: "CRA_metadata",
       },
       function(cra_metadata) {
         translateFunction(cra_metadata);

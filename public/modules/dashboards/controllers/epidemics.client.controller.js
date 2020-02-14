@@ -59,11 +59,11 @@ angular.module("dashboards").controller("EpidemicsController", [
     $scope.country_code = $scope.country_code_default;
     $scope.view_code = "ERA";
     $scope.metric = "population";
-    if ($rootScope.country_code) {
-      $scope.country_code = $rootScope.country_code;
-    } else {
-      $rootScope.country_code = $scope.country_code_default;
-    }
+    // if ($rootScope.country_code) {
+    //   $scope.country_code = $rootScope.country_code;
+    // } else {
+    //   $rootScope.country_code = $scope.country_code_default;
+    // }
     if ($rootScope.view_code) {
       $scope.view_code = $rootScope.view_code;
     }

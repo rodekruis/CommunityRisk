@@ -1272,6 +1272,11 @@ angular.module("dashboards").controller("CommunityRiskController", [
         exportService.exportAsCSV(d.Rapportage, meta_label);
       };
 
+      //Export to PDF function
+      $scope.export_pdf = function() {
+        $("#printModal").modal("show");
+      };
+
       $scope.share_URL = function() {
         $scope.shareable_URL = shareService.createFullUrl(
           $scope.country_code,
@@ -1404,6 +1409,11 @@ angular.module("dashboards").controller("CommunityRiskController", [
       } else if ($scope.chart_show == "row") {
         $scope.tabularShow();
       }
+
+      L.control.scale().addTo(map);
+      var scale_child = $(".leaflet-control-scale")[0];
+      var scale_parent = $(".leaflet-bottom.leaflet-right")[0];
+      scale_parent.insertBefore(scale_child, scale_parent.childNodes[0]);
 
       var zoom_child = $(".leaflet-control-zoom")[0];
       var zoom_parent = $(".leaflet-bottom.leaflet-right")[0];

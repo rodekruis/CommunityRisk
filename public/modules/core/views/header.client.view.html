@@ -9,13 +9,13 @@
       </a>
       <a ng-if="headerLogo2" class="navbar-brand navbar-brand--logo">
         <img
-          src="modules/core/img/{{ headerLogo2 }}"
+          ng-src="modules/core/img/{{ headerLogo2 }}"
           class="navbar-brand--logo-img"
         />
       </a>
       <a ng-if="headerLogo3" class="navbar-brand navbar-brand--logo">
         <img
-          src="modules/core/img/{{ headerLogo3 }}"
+          ng-src="modules/core/img/{{ headerLogo3 }}"
           class="navbar-brand--logo-img"
         />
       </a>
@@ -45,6 +45,7 @@
       <ul class="nav navbar-nav navbar-left">
         <li
           ng-class="['navbar--item', { 'active': (activeSection === 'CRA') }]"
+          ng-show="showNormalViews"
         >
           <a ng-href="#!/community_risk" class="text-uppercase">
             {{ "COMMUNITY_RISK" | translate }}
@@ -52,12 +53,16 @@
         </li>
         <li
           ng-class="['navbar--item', { 'active': (activeSection === 'IDB') }]"
+          ng-show="showNormalViews"
         >
           <a ng-href="#!/impact_database" class="text-uppercase">
             {{ "IMPACT_DATABASE" | translate }}
           </a>
         </li>
-        <li ng-class="['navbar--item', { 'active': (activeSection === 'PI') }]">
+        <li
+          ng-class="['navbar--item', { 'active': (activeSection === 'PI') }]"
+          ng-show="showNormalViews"
+        >
           <a ng-href="#!/priority_index" class="text-uppercase">
             {{ "PRIORITY_INDEX" | translate }}
           </a>

@@ -9,6 +9,7 @@ angular.module("core").directive("crHeader", [
         headerLogo2: "<?",
         headerLogo3: "<?",
         activeSection: "@",
+        showNormalViews: "<?",
         showEpidemics: "<?",
         showViewStatus: "=",
         viewStatusTitle: "=",

@@ -72,7 +72,7 @@ var static_en = {
   export_json: "Export (JSON)",
   export_pdf: "Export (PDF)",
   export_pdf_howto:
-    "Instructions: press Ctrl+P to go to the print dialog. Choose 'landscape' as orientation/layout (under Preferences). Select 'Print to PDF / Save as PDF' under Printer/Destination.",
+    "This option is not currently implemented. But please be aware that you can always make a printscreen, using for example 'Snipping Tool' on your computer. The result will be practically as good as you would reach with a direct 'Export to PDF' function here.",
   signup_mailing: "Sign up to mailing list",
   join_whatsapp: "Join WhatsApp group",
 };
@@ -129,7 +129,7 @@ var static_es = {
   cra_description:
     "El propósito de la acción humanitaria es aliviar el sufrimiento de las personas afectadas por desastres. Sin embargo, los actores humanitarios no siempre pueden llegar a todas las personas necesitadas debido a los fondos limitados. Es por esto que se deben identificar las áreas geográficas más afectadas por crisis o desastres humanitarios y, dentro de esas áreas, las personas que están más necesitadas. Actualmente, este proceso de priorización requiere tiempo y puede ser subjetivo. La plataforma de Evaluación de riesgos de la comunidad propone una solución alternativa basada en datos.",
   language: "Idioma",
-  all_yes: "Todos ",
+  all_yes: "",
   all_no: "",
   data_preparedness_index: "Índice de preparación de datos",
   dpi_tag: "Integridad, actualidad y calidad de las fuentes",
@@ -139,6 +139,7 @@ var static_es = {
   draft_warning: "",
   draft: "",
   export_json: "Exportar (JSON)",
+  export_pdf: "Exportar (PDF)",
 };
 
 var static_fr = {
@@ -154,10 +155,11 @@ var static_fr = {
   share_url: "Partager la configuration actuelle (URL)",
   export_csv: "Exporter (CSV)",
   export_geojson: "Exporter (GEOJSON)",
+  export_pdf: "Exporter (PDF)",
   COUNTRY: "Pays",
   Map: "Carte",
   Tab: "Onglet",
-  selected: " sélectionné",
+  selected: " sélectionnée(s)",
   hit: " ",
   Select_all: "Tout sélectionner",
   risk_score_tag: "Indice global de risque",
@@ -191,7 +193,7 @@ var static_fr = {
   about_tutorial: "Tutoriel",
   about_github: "Github",
   share_country_url: "Partager le pays actuel (URL)",
-  all_yes: "Tout ",
+  all_yes: "",
   all_no: "",
   data_preparedness_index: "Statut des données disponibles",
   dpi_tag: "Degré d'actualité, qualité et exhaustivité des données",

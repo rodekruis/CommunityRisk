@@ -601,7 +601,7 @@ dc.leafletMarkerChart = function (parent, chartGroup) {
  ***************************/
 
 
-dc.leafletChoroplethChart = function (parent, chartGroup) {
+dc.leafletChoroplethChart = function (parent, chartGroup, language) {
     "use strict";
     var _chart = dc.colorChart(dc.leafletChart({}));
 
@@ -619,6 +619,8 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
         'fillOpacity': 0,
         'weight': 1
     };
+
+    language = typeof language !== 'undefined' ? language : 'en';
 
     var _featureKey = function (feature) {
         return feature.key;
@@ -674,8 +676,17 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
                 return this._div;
             };
 
+        var hoverText;
+        if (language == 'en') {
+            hoverText = 'Hover for name';
+        } else if (language == 'fr') {
+            hoverText = 'Survolez pour le nom';
+        } else {
+            hoverText = 'Hover for name';
+        }
+
         _info.update = function (name) {
-                this._div.innerHTML = (name ? name: 'Hover for name');
+                this._div.innerHTML = (name ? name: hoverText);
             };
 
         _info.addTo(_chart.map());

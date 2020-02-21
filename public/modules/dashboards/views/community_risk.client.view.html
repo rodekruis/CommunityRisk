@@ -7,6 +7,7 @@
     header-logo="510logo-new.png"
     active-section="CRA"
     show-view-status="false"
+    show-normal-views="true"
     show-country-selector="true"
     show-share-export="true"
     fn-share-url="share_URL"
@@ -531,6 +532,22 @@
         <div class="modal-body" style="word-break:break-all">
           <p>{{ status_text }}</p>
           <button ng-click="open_DPI()">Inspect Data Preparedness Index</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="printModal" tabindex="-1" class="modal hidden-print" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+          </button>
+          <h2 class="h5 modal-title">{{ "export_pdf" | translate }}</h2>
+        </div>
+        <div class="modal-body">
+          <p>{{ "export_pdf_howto" | translate }}</p>
         </div>
       </div>
     </div>

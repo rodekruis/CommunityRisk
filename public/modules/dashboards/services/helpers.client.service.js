@@ -141,8 +141,10 @@ angular.module("dashboards").factory("helpers", [
           country_code_meta = d.Metadata[i].country_code;
         }
       }
-      var singleCountry = country_code_meta.indexOf(",") > -1 ? false : true;
-      return metric.concat(singleCountry ? "_".concat(country_code) : "");
+      if (country_code_meta) {
+        var singleCountry = country_code_meta.indexOf(",") > -1 ? false : true;
+        return metric.concat(singleCountry ? "_".concat(country_code) : "");
+      }
     }
 
     return {

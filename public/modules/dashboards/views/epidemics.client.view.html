@@ -69,8 +69,9 @@
           <button
             id="level1"
             type="button"
-            class="btn btn-secondary btn-zoomin btn-active "
+            class="btn btn-secondary btn-zoomin btn-active"
             ng-click="zoom_out(1)"
+            style="width:24%"
           >
             <span class="button-label">
               {{ "levelA_selection_pre" | translate: translateData()
@@ -82,6 +83,7 @@
             type="button"
             class="btn btn-secondary"
             ng-click="zoom_out(2)"
+            style="width:24%"
           >
             <span class="button-label"
               >{{ "levelB_selection_pre" | translate: translateData()
@@ -93,12 +95,22 @@
             type="button"
             class="btn btn-secondary"
             ng-click="zoom_out(3)"
-            style="margin-right:0px"
+            style="width:24%"
           >
             <span class="button-label"
               >{{ "levelC_selection_pre" | translate: translateData()
               }}{{ levelC_selection }}</span
             >
+          </button>
+          <button
+            ng-if="country_code==='MLI'"
+            id="level4"
+            type="button"
+            class="btn btn-secondary"
+            ng-click="zoom_out(4)"
+            style="margin-left: 1% !important; width:24%; margin-right:0px"
+          >
+            <span class="button-label">Aires de santé</span>
           </button>
         </div>
         <!-- </div> -->
@@ -322,7 +334,7 @@
         <div class="popup-header">
           {{ name_popup }}
           <button
-            ng-show="multipleAdminLevels"
+            ng-show="topdownZoomin"
             id="zoomin_icon"
             type="button"
             class="btn-modal"

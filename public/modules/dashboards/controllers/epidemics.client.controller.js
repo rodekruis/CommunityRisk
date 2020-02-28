@@ -55,7 +55,7 @@ angular.module("dashboards").controller("EpidemicsController", [
     $scope.reload = 0;
     $scope.authentication = Authentication;
     $scope.geom = null;
-    $scope.country_code_default = "PHL";
+    $scope.country_code_default = "MLI";
     $scope.country_code = $scope.country_code_default;
     $scope.view_code = "ERA";
     $scope.metric = "population";
@@ -129,7 +129,7 @@ angular.module("dashboards").controller("EpidemicsController", [
       if (!$scope.directURLload && !d) {
         $scope.admlevel = $scope.country_code == "PHL" ? 2 : 1;
       }
-      $scope.multipleAdminLevels = $scope.country_code == "MLI" ? true : false;
+      $scope.topdownZoomin = false; // $scope.country_code == "MLI" ? true : false;
 
       $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 
@@ -239,6 +239,11 @@ angular.module("dashboards").controller("EpidemicsController", [
             .getElementById("level3")
             .setAttribute("class", "btn btn-secondary");
         }
+        if (document.getElementById("level4") && $scope.admlevel < 4) {
+          document
+            .getElementById("level4")
+            .setAttribute("class", "btn btn-secondary");
+        }
         $(".sidebar-wrapper").addClass("in");
         $(document).ready(function() {
           if ($(window).width() < 768) {
@@ -304,11 +309,6 @@ angular.module("dashboards").controller("EpidemicsController", [
         "default_metric"
       );
 
-      var country_status = helpers.lookUpByCountryCode(
-        d.Country_meta,
-        "format"
-      )[$scope.country_code];
-
       // get the lookup tables
       var lookup = helpers.lookUpProperty($scope.geom, "pcode", "name");
       var meta_label = helpers.genLookup_meta(d.Metadata, "label");
@@ -327,7 +327,10 @@ angular.module("dashboards").controller("EpidemicsController", [
       //Look up country parameters
       $scope.country_selection = country_name[$scope.country_code];
       var zoom_min = Number(country_zoom_min[$scope.country_code]);
-      var zoom_max = Number(country_zoom_max[$scope.country_code]);
+      var zoom_max =
+        $scope.country_code === "MLI"
+          ? 4
+          : Number(country_zoom_max[$scope.country_code]);
       if ($scope.admlevel === zoom_min) {
         $scope.name_selection = country_name[$scope.country_code];
       }
@@ -390,42 +393,6 @@ angular.module("dashboards").controller("EpidemicsController", [
       $scope.levelB_selection_pre = districtButtons.levelB_selection_pre;
       $scope.levelA_selection = districtButtons.levelA_selection;
       $scope.levelA_selection_pre = districtButtons.levelA_selection_pre;
-
-      //////////////////////////////////
-      // SETUP VIEW STATUS - CRA ONLY //
-      //////////////////////////////////
-
-      function setViewStatus(isVisible) {
-        var viewStatus = document.getElementById("status");
-
-        if (viewStatus) {
-          viewStatus.style.visibility = isVisible ? "visible" : "hidden";
-        }
-      }
-      if (country_status == "template") {
-        setViewStatus(true);
-        $scope.status_title = "Template only";
-        $scope.status_text =
-          "This dashboard is only a template with administrative boundaries and population data. It is yet to be filled with actual risk data";
-      } else if (country_status == "basic") {
-        setViewStatus(true);
-        $scope.status_title = "Draft version";
-        $scope.status_text =
-          "This dashboard is filled with a limited number of indicators only, which need to be checked in terms of quality and use. Not to be used for external sharing and/or drawing conclusions yet.";
-      } else if (country_status == "all") {
-        var dpi = d.dpi[0].dpi_score;
-        if (dpi > 0.1) {
-          setViewStatus(false);
-          $scope.status_title = "";
-          $scope.status_text = "";
-        } else {
-          setViewStatus(true);
-          $scope.status_title = "Needs data";
-          $scope.status_text =
-            "The Data Preparedness Index of the risk framework for this administrative level falls below the threshold for meaningful interpretation. " +
-            "It needs either more, newer or better data sources. The indicators that are included (e.g. population, poverty) can still be used on their own.";
-        }
-      }
 
       //////////////////////
       // SETUP INDICATORS //
@@ -895,8 +862,17 @@ angular.module("dashboards").controller("EpidemicsController", [
 
       $scope.zoom_in = function() {
         if ($scope.filters.length > 0 && $scope.admlevel < zoom_max) {
+          // if ($scope.filters[0] === 'ML09' && $scope.filters.length === 1) {
+          //   $scope.admlevel = $scope.admlevel + 2;
+          //   $scope.name_selection_prev = 'Bamako';
+          //   $scope.parent_codes = ['ML0901'];
+          // } else {
+          //   $scope.admlevel = $scope.admlevel + 1;
+          //   $scope.name_selection_prev = $scope.name_selection;
+          //   $scope.parent_codes = $scope.filters;
+          // }
           $scope.admlevel = $scope.admlevel + 1;
-          $scope.parent_code_prev = $scope.parent_code;
+          // $scope.parent_code_prev = $scope.parent_code;
           $scope.name_selection_prev = $scope.name_selection;
           $scope.parent_codes = $scope.filters;
           $scope.name_selection =
@@ -921,6 +897,11 @@ angular.module("dashboards").controller("EpidemicsController", [
           document
             .getElementById("level" + ($scope.admlevel - zoom_min + 1))
             .setAttribute("class", "btn btn-secondary btn-active");
+          // if ($scope.filters[0] === 'ML09' && $scope.filters.length === 1) {
+          //   document
+          //   .getElementById("level" + ($scope.admlevel - zoom_min + 2))
+          //   .setAttribute("class", "btn btn-secondary btn-active");
+          // }
           document.getElementById("mapPopup").style.visibility = "hidden";
           document.getElementById("zoomin_icon").style.visibility = "hidden";
           document.getElementsByClassName("reset-button")[0].style.visibility =
@@ -966,7 +947,7 @@ angular.module("dashboards").controller("EpidemicsController", [
             $scope.initiate(d);
           } else if (
             dest_level === 3 &&
-            $scope.admlevel < zoom_min + 2 &&
+            $scope.admlevel !== zoom_min + 2 &&
             $scope.parent_codes.length == 0
           ) {
             $scope.admlevel = zoom_min + 2;
@@ -977,6 +958,24 @@ angular.module("dashboards").controller("EpidemicsController", [
               .setAttribute("class", "btn btn-secondary btn-active");
             document
               .getElementById("level3")
+              .setAttribute("class", "btn btn-secondary btn-active");
+            $scope.initiate(d);
+          } else if (
+            dest_level === 4 &&
+            $scope.admlevel < zoom_min + 3 &&
+            $scope.parent_codes.length == 0
+          ) {
+            $scope.admlevel = zoom_min + 3;
+            $scope.parent_codes = [];
+            $scope.name_selection = $scope.levelC_selection;
+            document
+              .getElementById("level2")
+              .setAttribute("class", "btn btn-secondary btn-active");
+            document
+              .getElementById("level3")
+              .setAttribute("class", "btn btn-secondary btn-active");
+            document
+              .getElementById("level4")
               .setAttribute("class", "btn btn-secondary btn-active");
             $scope.initiate(d);
           }

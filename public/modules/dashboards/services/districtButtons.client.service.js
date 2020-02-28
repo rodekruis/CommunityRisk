@@ -38,6 +38,7 @@ angular.module("dashboards").factory("districtButtonsService", [
         //Apply different classes for this case
         $("#level2").addClass("btn-zoomin");
         $("#level3").addClass("btn-zoomin");
+        $("#level4").addClass("btn-zoomin");
 
         if (admlevel == zoom_min) {
           levelB_selection_pre = "all_yes";

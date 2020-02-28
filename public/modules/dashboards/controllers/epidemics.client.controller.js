@@ -127,7 +127,7 @@ angular.module("dashboards").controller("EpidemicsController", [
 
       //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only read later in the script currently)
       if (!$scope.directURLload && !d) {
-        $scope.admlevel = $scope.country_code == "PHL" ? 2 : 1;
+        $scope.admlevel = $scope.country_code == "PHL" ? 3 : 1;
       }
       $scope.multipleAdminLevels = $scope.country_code == "MLI" ? true : false;
 
@@ -443,9 +443,14 @@ angular.module("dashboards").controller("EpidemicsController", [
           record.id = "data-table" + [i + 1];
           record.name = record_temp.variable;
           record.group =
-            ["hazard", "vulnerability", "coping_capacity"].indexOf(
-              record_temp.group
-            ) !== -1
+            [
+              "hazard",
+              "vulnerability",
+              "coping_capacity",
+              "exposure",
+              "susceptibility",
+              "scores",
+            ].indexOf(record_temp.group) !== -1
               ? "era-" + record_temp.group
               : record_temp.group; // ADJUSTED
           record.propertyPath =
@@ -457,6 +462,24 @@ angular.module("dashboards").controller("EpidemicsController", [
           $scope.tables[j] = record;
           j = j + 1;
         }
+      }
+
+      if ($scope.country_code === "PHL") {
+        $scope.scores = true;
+        $scope.exposure = true;
+        $scope.susceptibility = true;
+
+        $scope.hazard = false;
+        $scope.vulnerability = false;
+        $scope.coping_capacity = false;
+      } else if ($scope.country_code === "MLI") {
+        $scope.scores = false;
+        $scope.exposure = false;
+        $scope.susceptibility = false;
+
+        $scope.hazard = true;
+        $scope.vulnerability = true;
+        $scope.coping_capacity = true;
       }
 
       ///////////////////////
@@ -554,9 +577,12 @@ angular.module("dashboards").controller("EpidemicsController", [
       //Create all initial HTML for sidebar
       var groups = [
         "general",
+        "era-scores",
         "era-vulnerability",
         "era-hazard",
         "era-coping_capacity",
+        "era-exposure",
+        "era-susceptibility",
       ];
       sidebarHtmlService.createHTML(
         $scope.view_code,

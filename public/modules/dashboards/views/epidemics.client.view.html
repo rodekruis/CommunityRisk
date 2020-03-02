@@ -91,6 +91,7 @@
             >
           </button>
           <button
+            ng-if="country_code==='MLI'"
             id="level3"
             type="button"
             class="btn btn-secondary"
@@ -165,7 +166,39 @@
           role="tablist"
           aria-multiselectable="true"
         >
-          <div class="card">
+          <div class="card" ng-show="scores">
+            <div class="card-header level1" role="tab" id="headingOne">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/risk_score.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title"
+                    >{{ "risk_score" | translate }}
+                  </span>
+                  <span class="panel-header-description">{{
+                    "risk_score_tag" | translate
+                  }}</span>
+                </span>
+              </a>
+            </div>
+            <div
+              id="collapseOne"
+              class="collapse in level1"
+              role="tabpanel"
+              aria-labelledby="headingOne"
+            >
+              <div class="card-block" id="era-scores"></div>
+            </div>
+          </div>
+
+          <div class="card" ng-show="hazard">
             <div class="card-header level1" role="tab" id="headingThree">
               <a
                 data-toggle="collapse"
@@ -201,7 +234,8 @@
               </div>
             </div>
           </div>
-          <div class="card">
+
+          <div class="card" ng-show="vulnerability">
             <div class="card-header level1" role="tab" id="headingTwo">
               <a
                 data-toggle="collapse"
@@ -234,7 +268,8 @@
               </div>
             </div>
           </div>
-          <div class="card">
+
+          <div class="card" ng-show="coping_capacity">
             <div class="card-header level1" role="tab" id="headingFour">
               <a
                 data-toggle="collapse"
@@ -265,6 +300,70 @@
               <div class="card-block" id="era-coping_capacity">
                 <!-- Coping capacity indicators set up as the ones above. -->
               </div>
+            </div>
+          </div>
+
+          <div class="card" ng-show="exposure">
+            <div class="card-header level1" role="tab" id="headingFive">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseFive"
+                aria-expanded="true"
+                aria-controls="collapseFive"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/exposure index.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title"
+                    >{{ "Exposure score" | translate }}
+                  </span>
+                  <span class="panel-header-description">{{
+                    "Exposure attributes" | translate
+                  }}</span>
+                </span>
+              </a>
+            </div>
+            <div
+              id="collapseFive"
+              class="collapse level1"
+              role="tabpanel"
+              aria-labelledby="headingFive"
+            >
+              <div class="card-block" id="era-exposure"></div>
+            </div>
+          </div>
+
+          <div class="card" ng-show="susceptibility">
+            <div class="card-header level1" role="tab" id="headingSix">
+              <a
+                data-toggle="collapse"
+                data-parent="#accordion"
+                href="#collapseSix"
+                aria-expanded="true"
+                aria-controls="collapseSix"
+              >
+                <span class="panel-header-icon">
+                  <img src="modules/dashboards/img/susceptibility index.png" />
+                </span>
+                <span class="panel-header-content">
+                  <span class="panel-header-title"
+                    >{{ "Susceptibility score" | translate }}
+                  </span>
+                  <span class="panel-header-description">{{
+                    "Susceptibility attributes" | translate
+                  }}</span>
+                </span>
+              </a>
+            </div>
+            <div
+              id="collapseSix"
+              class="collapse level1"
+              role="tabpanel"
+              aria-labelledby="headingSix"
+            >
+              <div class="card-block" id="era-susceptibility"></div>
             </div>
           </div>
         </div>

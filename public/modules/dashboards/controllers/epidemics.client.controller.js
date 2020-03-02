@@ -125,11 +125,33 @@ angular.module("dashboards").controller("EpidemicsController", [
         $scope.parent_codes = url.parent_codes;
       }
 
-      //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only read later in the script currently)
-      if (!$scope.directURLload && !d) {
-        $scope.admlevel = $scope.country_code == "PHL" ? 2 : 1;
+      //Set some country-specific settings, can be done better in future
+      if ($scope.country_code === "PHL") {
+        if (!$scope.directURLload && !d) {
+          $scope.admlevel = 2;
+        }
+        $scope.topdownZoomin = $scope.admlevel === 2 ? true : false;
+
+        $scope.scores = true;
+        $scope.exposure = true;
+        $scope.susceptibility = true;
+        $scope.hazard = false;
+        $scope.vulnerability = false;
+        $scope.coping_capacity = false;
+      } else if ($scope.country_code === "MLI") {
+        $scope.topdownZoomin = false;
+
+        if (!$scope.directURLload && !d) {
+          $scope.admlevel = 1;
+        }
+
+        $scope.scores = false;
+        $scope.exposure = false;
+        $scope.susceptibility = false;
+        $scope.hazard = true;
+        $scope.vulnerability = true;
+        $scope.coping_capacity = true;
       }
-      $scope.topdownZoomin = false; // $scope.country_code == "MLI" ? true : false;
 
       $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 
@@ -410,9 +432,14 @@ angular.module("dashboards").controller("EpidemicsController", [
           record.id = "data-table" + [i + 1];
           record.name = record_temp.variable;
           record.group =
-            ["hazard", "vulnerability", "coping_capacity"].indexOf(
-              record_temp.group
-            ) !== -1
+            [
+              "hazard",
+              "vulnerability",
+              "coping_capacity",
+              "exposure",
+              "susceptibility",
+              "scores",
+            ].indexOf(record_temp.group) !== -1
               ? "era-" + record_temp.group
               : record_temp.group; // ADJUSTED
           record.propertyPath =
@@ -521,9 +548,12 @@ angular.module("dashboards").controller("EpidemicsController", [
       //Create all initial HTML for sidebar
       var groups = [
         "general",
+        "era-scores",
         "era-vulnerability",
         "era-hazard",
         "era-coping_capacity",
+        "era-exposure",
+        "era-susceptibility",
       ];
       sidebarHtmlService.createHTML(
         $scope.view_code,

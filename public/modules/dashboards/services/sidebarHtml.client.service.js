@@ -192,7 +192,7 @@ angular.module("dashboards").factory("sidebarHtmlService", [
             "impact-food",
             "key-actors",
             "general",
-            "exposure",
+            "fbf-exposure",
           ].indexOf(record.group) > -1
         ) {
           var div = document.createElement("div");

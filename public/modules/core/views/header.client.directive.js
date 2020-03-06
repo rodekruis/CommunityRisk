@@ -14,6 +14,7 @@ angular.module("core").directive("crHeader", [
         fnShareCountryUrl: "<?",
         fnExportCsv: "<?",
         fnExportGeojson: "<?",
+        fnExportFloodExtent: "<?",
         fnExportPdf: "<?",
         fnSignupMailing: "<?",
         fnJoinWhatsapp: "<?",

@@ -124,10 +124,21 @@ angular.module("dashboards").factory("exportService", [
       triggerDownload(exportData, "export.json", "application/json");
     }
 
+    function exportFloodExtent(lead_time) {
+      var layer =
+        lead_time === "3-day" ? "flood_extent_short_0" : "flood_extent_long_0";
+      var url =
+        "https://zambia.510.global/geoserver/fbf/wms?service=WMS&version=1.1.0&request=GetMap&layers=fbf:" +
+        layer +
+        "&styles=&bbox=21.99937,-18.062808782755706,33.7057,-8.22436&width=768&height=645&srs=EPSG:4326&format=image%2Fgeotiff";
+      window.location.href = url;
+    }
+
     return {
       exportAsCSV: exportAsCSV,
       exportAsGeoJSON: exportAsJSON,
       exportAsJSON: exportAsJSON,
+      exportFloodExtent: exportFloodExtent,
     };
   },
 ]);

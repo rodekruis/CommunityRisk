@@ -111,6 +111,20 @@
                 {{ "export_geojson" | translate }}
               </a>
             </li>
+            <li
+              ng-show="fnExportFloodExtent"
+              class="li-disabled"
+              id="export-flood-extent"
+            >
+              <a
+                href=""
+                role="button"
+                aria-haspopup="true"
+                ng-click="fnExportFloodExtent()"
+              >
+                {{ "Export flood extent (GEOTIFF)" | translate }}
+              </a>
+            </li>
             <li ng-show="fnExportPdf">
               <a
                 href=""

@@ -1408,6 +1408,11 @@ angular.module("dashboards").controller("FbfController", [
         exportService.exportAsGeoJSON(d.Districts);
       };
 
+      //Export Flood extent
+      $scope.export_floodextent = function() {
+        exportService.exportFloodExtent($scope.lead_time);
+      };
+
       //Export to CSV function
       $scope.export_csv = function() {
         exportService.exportAsCSV(d.Rapportage, meta_label);
@@ -1459,8 +1464,12 @@ angular.module("dashboards").controller("FbfController", [
         $scope.whatsapp_link = settings.whatsAppLink;
         $("#WhatsappModal").modal("show");
       };
-      if ($scope.trigger_3day > 0 || $scope.trigger_7day > 0) {
+      if (
+        ($scope.trigger_3day > 0 && $scope.lead_time === "3-day") ||
+        ($scope.trigger_7day > 0 && $scope.lead_time === "7-day")
+      ) {
         $("#join-whatsapp").removeClass("li-disabled");
+        $("#export-flood-extent").removeClass("li-disabled");
       }
 
       ///////////////////////////////////

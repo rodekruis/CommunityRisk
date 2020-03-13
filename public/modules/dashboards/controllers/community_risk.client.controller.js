@@ -142,6 +142,8 @@ angular.module("dashboards").controller("CommunityRiskController", [
             loadFunction(d);
           }
         );
+      } else {
+        loadFunction(d);
       }
     };
 

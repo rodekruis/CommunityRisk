@@ -125,20 +125,24 @@ angular.module("dashboards").controller("CommunityRiskController", [
         $scope.parent_codes = url.parent_codes;
       }
 
-      //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only read later in the script currently)
-      if (!$scope.directURLload && !d) {
-        $scope.admlevel = $scope.view_code == "CRA" ? 1 : 3;
-        if (
-          $scope.view_code == "CRA" &&
-          ["PHL", "MWI", "NPL", "LKA", "MOZ"].indexOf($scope.country_code) > -1
-        ) {
-          $scope.admlevel = 2;
-        } //These countries have a different min zoom-level: code better in future.
-      }
-
       $scope.parent_codes_input = "{" + $scope.parent_codes.join(",") + "}";
 
-      loadFunction(d);
+      //Set some exceptions, can be done better in future (i.e. reading from metadata, BUT metadata is only read later in the script currently)
+      if (!$scope.directURLload && !d) {
+        Data.getTable(
+          {
+            schema: "metadata",
+            table: "DPI_country_metadata",
+          },
+          function(country_metadata) {
+            var country = $.grep(country_metadata, function(e) {
+              return e.country_code === $scope.country_code;
+            });
+            $scope.admlevel = country[0].zoomlevel_min;
+            loadFunction(d);
+          }
+        );
+      }
     };
 
     ///////////////

@@ -98,11 +98,17 @@ angular.module("dashboards").factory("districtButtonsService", [
       if (country_code === "MWI" || country_code === "MOZ") {
         $("#level2").prop("disabled", false);
         $("#level3").prop("disabled", true);
+        if (admlevel == zoom_max) {
+          $("#level3").prop("disabled", false);
+        }
       } else if (zoom_min > 1) {
         $("#level2").prop("disabled", true);
         $("#level3").prop("disabled", true);
-        if (admlevel == zoom_max) {
+        if (admlevel >= zoom_min + 1) {
           $("#level2").prop("disabled", false);
+        }
+        if (admlevel == zoom_max) {
+          $("#level3").prop("disabled", false);
         }
       }
       //Function that colors/fills the level2/level3 buttons (top-left) when coming in at higher level through direct URL

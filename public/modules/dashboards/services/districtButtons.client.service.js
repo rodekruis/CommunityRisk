@@ -30,127 +30,80 @@ angular.module("dashboards").factory("districtButtonsService", [
         "level" + zoom_min + "_name"
       )[country_code];
       levelB_selection_pre = "all_no";
-      if (
-        zoom_min == 1
-        // || country_code == "MWI"
-        // || country_code == "MOZ"
-      ) {
-        //Apply different classes for this case
-        $("#level2").addClass("btn-zoomin");
-        $("#level3").addClass("btn-zoomin");
-        $("#level4").addClass("btn-zoomin");
 
-        if (admlevel == zoom_min) {
-          levelB_selection_pre = "all_yes";
-          levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[country_code];
-          levelB_code = "";
-          levelB_codes = [];
-        } else if (admlevel < zoom_max && parent_codes.length > 0) {
-          levelB_selection = name_selection;
-          levelB_codes = parent_codes;
-        } else if (admlevel < zoom_max && parent_codes.length == 0) {
-          //This is the direct URL-link case
-          levelB_selection_pre = "all_yes";
-          levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[country_code];
-          levelB_code = "";
-          levelB_codes = [];
-        } else if (admlevel == zoom_max && parent_codes.length == 0) {
-          //This is the direct URL-link case
-          levelB_selection_pre = "all_yes";
-          levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[country_code];
-          levelB_code = "";
-          levelB_codes = [];
-        }
-        if (admlevel < zoom_max) {
-          levelC_selection_pre =
-            parent_codes.length == 0 ? "all_yes" : undefined;
-          levelC_selection =
-            parent_codes.length == 0
-              ? helpers.lookUpByCountryCode(
-                  d.Country_meta,
-                  "level" + (zoom_min + 2) + "_name"
-                )[country_code]
-              : undefined;
-          levelC_code = "";
-        } else if (admlevel == zoom_max && parent_codes.length == 0) {
-          //This is the direct URL-link case
-          levelC_selection_pre =
-            parent_codes.length == 0 ? "all_yes" : undefined;
-          levelC_selection =
-            parent_codes.length == 0
-              ? helpers.lookUpByCountryCode(
-                  d.Country_meta,
-                  "level" + (zoom_min + 2) + "_name"
-                )[country_code]
-              : undefined;
-          levelC_code = "";
-        } else if (parent_codes.length > 0) {
-          levelC_selection = name_selection;
-          levelC_code = parent_code;
-        }
-      } else if (country_code === "MWI" || country_code === "MOZ") {
-        //Apply different classes for this case
-        $("#level2").addClass("btn-zoomin");
-        $("#level3").addClass("btn-zoomin");
+      //Reset disabled
+      $("#level2").prop("disabled", false);
+      $("#level3").prop("disabled", false);
+      //Apply different classes for this case
+      $("#level2").addClass("btn-zoomin");
+      $("#level3").addClass("btn-zoomin");
+      $("#level4").addClass("btn-zoomin");
 
-        if (admlevel == zoom_min) {
-          levelB_selection_pre = "all_yes";
-          levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[country_code];
-          levelB_code = "";
-          levelB_codes = [];
-        } else if (admlevel < zoom_max && parent_codes.length > 0) {
-          levelB_selection = name_selection;
-          levelB_codes = parent_codes;
-        } else if (admlevel < zoom_max && parent_codes.length == 0) {
-          //This is the direct URL-link case
-          levelB_selection_pre = "all_yes";
-          levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[country_code];
-          levelB_code = "";
-          levelB_codes = [];
-        } else if (admlevel == zoom_max && parent_codes.length == 0) {
-          //This is the direct URL-link case
-          levelB_selection_pre = "all_yes";
-          levelB_selection = helpers.lookUpByCountryCode(
-            d.Country_meta,
-            "level" + (zoom_min + 1) + "_name"
-          )[country_code];
-          levelB_code = "";
-          levelB_codes = [];
-        }
+      if (admlevel == zoom_min) {
+        levelB_selection_pre = "all_yes";
+        levelB_selection = helpers.lookUpByCountryCode(
+          d.Country_meta,
+          "level" + (zoom_min + 1) + "_name"
+        )[country_code];
+        levelB_code = "";
+        levelB_codes = [];
+      } else if (admlevel < zoom_max && parent_codes.length > 0) {
+        levelB_selection = name_selection;
+        levelB_codes = parent_codes;
+      } else if (admlevel < zoom_max && parent_codes.length == 0) {
+        //This is the direct URL-link case
+        levelB_selection_pre = "all_yes";
+        levelB_selection = helpers.lookUpByCountryCode(
+          d.Country_meta,
+          "level" + (zoom_min + 1) + "_name"
+        )[country_code];
+        levelB_code = "";
+        levelB_codes = [];
+      } else if (admlevel == zoom_max && parent_codes.length == 0) {
+        //This is the direct URL-link case
+        levelB_selection_pre = "all_yes";
+        levelB_selection = helpers.lookUpByCountryCode(
+          d.Country_meta,
+          "level" + (zoom_min + 1) + "_name"
+        )[country_code];
+        levelB_code = "";
+        levelB_codes = [];
+      }
+      if (admlevel < zoom_max) {
+        levelC_selection_pre = parent_codes.length == 0 ? "all_yes" : undefined;
+        levelC_selection =
+          parent_codes.length == 0
+            ? helpers.lookUpByCountryCode(
+                d.Country_meta,
+                "level" + (zoom_min + 2) + "_name"
+              )[country_code]
+            : undefined;
+        levelC_code = "";
+      } else if (admlevel == zoom_max && parent_codes.length == 0) {
+        //This is the direct URL-link case
+        levelC_selection_pre = parent_codes.length == 0 ? "all_yes" : undefined;
+        levelC_selection =
+          parent_codes.length == 0
+            ? helpers.lookUpByCountryCode(
+                d.Country_meta,
+                "level" + (zoom_min + 2) + "_name"
+              )[country_code]
+            : undefined;
+        levelC_code = "";
+      } else if (parent_codes.length > 0) {
+        levelC_selection = name_selection;
+        levelC_code = parent_code;
+      }
 
-        levelC_selection_pre = admlevel < zoom_max ? undefined : "all_yes";
-        levelC_selection = admlevel < zoom_max ? undefined : name_selection;
-        levelC_code = admlevel < zoom_max ? "" : parent_code;
-      } else {
-        //Apply different classes for this case
-        $("#level2").removeClass("btn-zoomin");
-        $("#level3").removeClass("btn-zoomin");
-
-        if (admlevel == zoom_min) {
-          levelB_selection = undefined;
-          levelB_codes = [];
-        } else if (admlevel <= zoom_max && levelB_selection == undefined) {
-          levelB_selection = name_selection;
-          levelB_codes = parent_codes;
+      if (country_code === "MWI" || country_code === "MOZ") {
+        $("#level2").prop("disabled", false);
+        $("#level3").prop("disabled", true);
+      } else if (zoom_min > 1) {
+        $("#level2").prop("disabled", true);
+        $("#level3").prop("disabled", true);
+        if (admlevel == zoom_max) {
+          $("#level2").prop("disabled", false);
         }
-        levelC_selection_pre = admlevel < zoom_max ? undefined : "all_yes";
-        levelC_selection = admlevel < zoom_max ? undefined : name_selection;
-        levelC_code = admlevel < zoom_max ? "" : parent_code;
       }
       //Function that colors/fills the level2/level3 buttons (top-left) when coming in at higher level through direct URL
       if (directURLload) {

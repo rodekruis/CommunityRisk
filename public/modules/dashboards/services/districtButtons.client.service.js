@@ -32,7 +32,9 @@ angular.module("dashboards").factory("districtButtonsService", [
       levelB_selection_pre = "all_no";
 
       //Reset disabled
+      $("#level2").removeAttr("title");
       $("#level2").prop("disabled", false);
+      $("#level3").removeAttr("title");
       $("#level3").prop("disabled", false);
       //Apply different classes for this case
       $("#level2").addClass("btn-zoomin");
@@ -95,19 +97,28 @@ angular.module("dashboards").factory("districtButtonsService", [
         levelC_code = parent_code;
       }
 
+      var disabledMsg =
+        "This function is disabled. Use the zoom-in by area functionality instead. Click on one (or more) areas in the map, and click the zoom-in icon in the popup to zoom in.";
       if (country_code === "MWI" || country_code === "MOZ") {
         $("#level2").prop("disabled", false);
+        $("#level2").removeAttr("title");
         $("#level3").prop("disabled", true);
+        $("#level3").prop("title", disabledMsg);
         if (admlevel == zoom_max) {
+          $("#level3").removeAttr("title");
           $("#level3").prop("disabled", false);
         }
       } else if (zoom_min > 1) {
         $("#level2").prop("disabled", true);
+        $("#level2").prop("title", disabledMsg);
         $("#level3").prop("disabled", true);
+        $("#level3").prop("title", disabledMsg);
         if (admlevel >= zoom_min + 1) {
+          $("#level2").removeAttr("title");
           $("#level2").prop("disabled", false);
         }
         if (admlevel == zoom_max) {
+          $("#level3").removeAttr("title");
           $("#level3").prop("disabled", false);
         }
       }

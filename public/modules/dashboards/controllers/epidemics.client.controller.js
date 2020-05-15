@@ -145,7 +145,7 @@ angular.module("dashboards").controller("EpidemicsController", [
           $scope.admlevel = 1;
         }
 
-        $scope.scores = false;
+        $scope.scores = true;
         $scope.exposure = false;
         $scope.susceptibility = false;
         $scope.hazard = true;

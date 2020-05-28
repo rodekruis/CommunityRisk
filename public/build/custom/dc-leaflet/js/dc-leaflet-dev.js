@@ -11,14 +11,14 @@ dc.leafletChart = function (_chart) {
 
 	var _createLeaflet = function(root) {
         return L.map(root.node(),_mapOptions);
-    }; 
-	
+    };
+
     var _tiles = function (map) {
         L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
     };
-	
+
 	_chart.createLeaflet = function(_) {
         if(!arguments.length) {
             return _createLeaflet;
@@ -625,10 +625,10 @@ dc.leafletChoroplethChart = function (parent, chartGroup, language) {
     var _featureKey = function (feature) {
         return feature.key;
     };
-    
+
     function isSelectedGeo(d) {
         return _chart.hasFilter(d.key);
-    }    
+    }
 
     var _featureStyle = function (feature) {
         var options = _chart.featureOptions();
@@ -642,17 +642,17 @@ dc.leafletChoroplethChart = function (parent, chartGroup, language) {
                 if (isSelectedGeo(v.d)) {
                     options.fillColor = _chart.getColor(v.d.value, v.i);
                     options.opacity = 0.8;
-                    options.fillOpacity = 1;                                
+                    options.fillOpacity = 1;
                 } else {
                     options.fillColor = '#fff6e8'; //_chart.getColor(0, v.i);
                     options.opacity = 0.8;
-                    options.fillOpacity = 1;                                
+                    options.fillOpacity = 1;
                 }
             } else {
                 options.fillColor = _chart.getColor(v.d.value, v.i);
                 options.opacity = 0.8;
-                options.fillOpacity = 1;                 
-            }           
+                options.fillOpacity = 1;
+            }
         }
         return options;
     };
@@ -680,7 +680,7 @@ dc.leafletChoroplethChart = function (parent, chartGroup, language) {
         if (language == 'en') {
             hoverText = 'Hover for name';
         } else if (language == 'fr') {
-            hoverText = 'Survolez pour le nom';
+            hoverText = 'Survoler pour le nom';
         } else {
             hoverText = 'Hover for name';
         }
@@ -690,7 +690,7 @@ dc.leafletChoroplethChart = function (parent, chartGroup, language) {
             };
 
         _info.addTo(_chart.map());
-                
+
         _chart.map().addLayer(_geojsonLayer);
     };
 
@@ -763,14 +763,14 @@ dc.leafletChoroplethChart = function (parent, chartGroup, language) {
         var v = _dataMap[_chart.featureKeyAccessor()(feature)];
         if (v && v.d) {
             layer.key = v.d.key;
-            if (_chart.renderPopup()) {             
+            if (_chart.renderPopup()) {
                 //layer.bindPopup(_chart.popup()(v.d, feature));
                 layer.on("mouseover",function(){
                     _info.update(_chart.popup()(v.d, feature));
                 });
                 layer.on("mouseout",function(){
                     _info.update();
-                });                
+                });
             }
             if (_chart.brushOn()) {
                 layer.on("click", selectFilter);

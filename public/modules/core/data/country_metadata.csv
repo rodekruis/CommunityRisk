@@ -12,6 +12,7 @@ MOZ;Mozambique;2;3;Provinces;Districts;Postos;;risk_score;basic
 VNM;Vietnam;1;3;Provinces;Districts;Wards;;population;template
 KEN;Kenya;1;3;Counties;Subcounties;Wards;;risk_score;basic
 ETH;Ethiopia;1;3;Regions;Zones;Woreda;;risk_score;basic
-UGA;Uganda;1;3;Subregions;Districts;Subcounties;;risk_score;all
+UGA;Uganda;2;4;Subregions;Districts;Subcounties;Parishes;risk_score;all
 HTI;Haiti;1;3;Departments;Communes;Sections;;risk_score;basic
 BDI;Burundi;1;2;Provinces;Communes;;;risk_score;basic
+ZWE;Zimbabwe;1;3;Provinces;Districts;Wards;;risk_score;all

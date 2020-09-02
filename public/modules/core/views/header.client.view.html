@@ -13,15 +13,9 @@
       <a class="navbar-brand navbar-brand--logo" href="/#!/">
         <img src="modules/core/img/zrcs.png" class="navbar-brand--logo-img" />
       </a>
-
-      <button
-        type="button"
-        class="navbar-btn btn btn-outline-danger text-uppercase text-danger"
-        ng-click="fnOpenViewStatus()"
-        ng-show="showViewStatus && viewStatusTitle && fnOpenViewStatus"
-      >
-        {{ viewStatusTitle }}
-      </button>
+      <a class="navbar-brand navbar-brand--logo" href="/#!/">
+        <img src="modules/core/img/zmd.png" class="navbar-brand--logo-img" />
+      </a>
 
       <button
         class="navbar-toggler"
@@ -36,22 +30,6 @@
       </button>
     </div>
     <div id="menu-buttons" aria-expanded="false" class="button-nav">
-      <ul class="nav navbar-nav navbar-left">
-        <!-- <li
-          ng-class="['navbar--item', { 'active': (activeSection === 'CRA') }]"
-        >
-          <a ng-href="#!/community_risk" class="text-uppercase">
-            {{ "COMMUNITY_RISK" | translate }}
-          </a>
-        </li> -->
-        <li
-          ng-class="['navbar--item', { 'active': (activeSection === 'FBF') }]"
-        >
-          <a ng-href="#!/fbf" class="text-uppercase">
-            {{ "FBF dashboard" | translate }}
-          </a>
-        </li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown navbar--item" ng-show="showShareExport">
           <a

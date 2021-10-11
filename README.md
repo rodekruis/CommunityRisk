@@ -1,3 +1,8 @@
+# [ARCHIVED]
+
+This branch is specifically about the old FBF Zambia product, which used to be visible on https://fbf-zambia.510.global.
+This product is no longer live and is now taken over by the [IBF-system](https://github.com/rodekruis/IBF-system)
+
 # CommunityRisk Dashboard
 The Community Risk Assessment dashboard is a data-driven solution to identify the geographic areas that are most affected by a humanitarian disaster or crisis and the individuals that are most in need.
 

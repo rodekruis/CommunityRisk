@@ -76,6 +76,8 @@ var static_en = {
     "This option is not currently implemented. But please be aware that you can always make a printscreen, using for example 'Snipping Tool' on your computer. The result will be practically as good as you would reach with a direct 'Export to PDF' function here.",
   signup_mailing: "Sign up to mailing list",
   join_whatsapp: "Join WhatsApp group",
+  warning_banner:
+    "Please be warned that this product has not been updated recently. Some datasets may still be valuable, but others are not. Browse through the indicators with the info-icon, to find out more about the source and the date. Contact ibf-support@510.global for any questions.",
 };
 
 var static_es = {
@@ -141,6 +143,8 @@ var static_es = {
   draft: "",
   export_json: "Exportar (JSON)",
   export_pdf: "Exportar (PDF)",
+  warning_banner:
+    "Tenga en cuenta que este producto no se ha actualizado recientemente. Algunos conjuntos de datos pueden seguir siendo valiosos, pero otros no. Navegue a través de los indicadores con el ícono de información para obtener más información sobre la fuente y la fecha. Póngase en contacto con ibf-support@510.global si tiene alguna pregunta.",
 };
 
 var static_fr = {
@@ -207,6 +211,8 @@ var static_fr = {
     "Le tableau de bord ne contient que peu d'indicateurs qui ont besoin d'un contrôle de qualité et d'usage. Ces informations ne doivent pas encore être utilisées pour communication externe ou pour tirer des conclusions.",
   draft: "Version temporaire",
   export_json: "Exporter (JSON)",
+  warning_banner:
+    "Veuillez noter que ce produit n'a pas été mis à jour récemment. Certains ensembles de données peuvent encore être utiles, mais d'autres ne le sont pas. Parcourez les indicateurs avec l'icône d'information, pour en savoir plus sur la source et la date. Contactez ibf-support@510.global pour toute question.",
 };
 
 angular.module("dashboards").config(function($translateProvider, DataProvider) {

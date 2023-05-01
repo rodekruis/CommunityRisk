@@ -49,16 +49,32 @@
   justify-content: center;
 }
 
-#warning-text {
+#warning-text,
+#warning-text-mobile {
   padding: 0 3px 0 3px;
   color: white;
   font-weight: 400;
-  font-size: 14px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+#warning-text {
+  font-size: 14px;
+}
+#warning-text-mobile {
+  font-size: 12px;
+}
+@media only screen and (max-width: 500px) {
+  #warning-text {
+    display: none;
+  }
+}
+@media only screen and (min-width: 500px) {
+  #warning-text-mobile {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 1200px) {

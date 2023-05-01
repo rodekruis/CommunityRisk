@@ -41,7 +41,7 @@
 }
 
 #warning-banner {
-  background-color: #d7191c;
+  background-color: #f6cfcd;
   height: 50px;
   display: flex;
   align-items: center;
@@ -52,7 +52,6 @@
 #warning-text,
 #warning-text-mobile {
   padding: 0 3px 0 3px;
-  color: white;
   font-weight: 400;
   display: -webkit-box;
   -webkit-line-clamp: 2;

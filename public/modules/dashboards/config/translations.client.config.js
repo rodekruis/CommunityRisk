@@ -77,9 +77,9 @@ var static_en = {
   signup_mailing: "Sign up to mailing list",
   join_whatsapp: "Join WhatsApp group",
   warning_banner:
-    "Warning: Some map layers may be outdated. Click the info icon on each indicator for source and date. Contact ibf-support@510.global for questions.",
+    "Attention: data on this platform is not being updated. Click the info icon on each indicator for source and date. Contact ibf-support@510.global for questions.",
   warning_banner_mobile:
-    "Warning: Some map layers may be outdated. Contact ibf-support@510.global for questions.",
+    "Attention: data on this platform is not being updated. Contact ibf-support@510.global for questions.",
 };
 
 var static_es = {
@@ -146,9 +146,9 @@ var static_es = {
   export_json: "Exportar (JSON)",
   export_pdf: "Exportar (PDF)",
   warning_banner:
-    "Advertencia: Algunas capas de mapas pueden estar desactualizadas. Haga clic en el ícono de información en cada indicador para la fuente y la fecha. Póngase en contacto con ibf-support@510.global si tiene preguntas.",
+    "Atención: los datos de esta plataforma no se están actualizando. Haga clic en el ícono de información en cada indicador para la fuente y la fecha. Póngase en contacto con ibf-support@510.global si tiene preguntas.",
   warning_banner_mobile:
-    "Advertencia: Algunas capas de mapas pueden estar desactualizadas. Póngase en contacto con ibf-support@510.global si tiene preguntas.",
+    "Atención: los datos de esta plataforma no se están actualizando. Póngase en contacto con ibf-support@510.global si tiene preguntas.",
 };
 
 var static_fr = {
@@ -216,9 +216,9 @@ var static_fr = {
   draft: "Version temporaire",
   export_json: "Exporter (JSON)",
   warning_banner:
-    "Attention : Certaines couches de carte peuvent être obsolètes. Cliquez sur l'icône d'information sur chaque indicateur pour la source et la date. Contactez ibf-support@510.global pour toute question.",
+    "Attention: les données de cette plateforme ne sont pas mises à jour. Cliquez sur l'icône d'information sur chaque indicateur pour la source et la date. Contactez ibf-support@510.global pour toute question.",
   warning_banner_mobile:
-    "Attention : Certaines couches de carte peuvent être obsolètes. Contactez ibf-support@510.global pour toute question.",
+    "Attention: les données de cette plateforme ne sont pas mises à jour. Contactez ibf-support@510.global pour toute question.",
 };
 
 angular.module("dashboards").config(function($translateProvider, DataProvider) {
